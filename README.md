@@ -1,1 +1,1 @@
-# eth2.0-masterclass
+# cadCAD Edu Eth2.0 MasterClass
