@@ -4,11 +4,18 @@
 TODO: description
 
 ## Table of Contents
+* [Experiments](#experiments)
 * [Development](#development)
 * [Tests](#tests)
 * [Jupyter Lab Environment](#jupyter-lab-environment)
 
 ---
+
+## Experiments
+
+```bash
+python3 -m experiments.run
+```
 
 ## Development
 

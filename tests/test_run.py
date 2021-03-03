@@ -1,4 +1,4 @@
-from run import run
+from experiments.run import run
 
 
 def test_run():
