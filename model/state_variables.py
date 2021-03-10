@@ -9,8 +9,7 @@ initial_state = {
     'eth_supply':  112_000_000, # Units: ETH
     'eth_staked': 0, # Units: ETH
 
-    'network_issuance': 0,
-    'supply_inflation': 0,
+    'supply_inflation': 0, # Units: %
 
     # Validators
     # NOTE Why is average effective balance static?
@@ -23,7 +22,6 @@ initial_state = {
 
     # Rewards and penalties
     'validating_rewards': 0,
-    # TODO
     'base_reward': 0,
     'penalties': 0,
 
@@ -39,4 +37,10 @@ initial_state = {
     # Slashing
     'amount_slashed': 0,
     'whistleblower_rewards': 0,
+
+    # Accounting
+    'total_revenue': 0,
+    'total_profit': 0,
+    'revenue_yields': 0,
+    'profit_yields': 0,
 }

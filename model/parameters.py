@@ -1,9 +1,23 @@
+import numpy as np
+import pandas as pd
+from stochastic import processes
+
+import model.simulation as simulation
 from model.constants import gwei
+
+
+# See https://stochastic.readthedocs.io/en/latest/continuous.html
+rng = np.random.default_rng(1)
+
+eth_price_process = processes.continuous.BrownianExcursion(t=simulation.TIMESTEPS, rng=rng)
+
+eth_price_samples = eth_price_process.sample(simulation.TIMESTEPS)
+eth_staked_samples = np.linspace(524_288, 33_600_000, simulation.TIMESTEPS)
 
 parameters = {
     # Stochastic processes
-    'eth_price_process': [lambda _run, _timestep: 300], # Units: ETH
-    'eth_staked_process': [lambda _run, _timestep: 524_288], # Units: ETH
+    'eth_price_process': [lambda _run, timestep: 1000 + eth_price_samples[timestep] / max(eth_price_samples) * 1000], # Units: ETH
+    'eth_staked_process': [lambda _run, timestep: eth_staked_samples[timestep]], # Units: ETH
 
     # See blueprint model 'Variables and Model Assumptions'
     # Uppercase used for all parameters from Eth2 specification

@@ -2,6 +2,7 @@ import model.parts.ethereum as ethereum
 import model.parts.validators as validators
 import model.parts.proof_of_stake as proof_of_stake
 import model.parts.slashing as slashing
+import model.parts.accounting as accounting
 
 
 state_update_blocks = [
@@ -66,10 +67,15 @@ state_update_blocks = [
     {
         'policies': {
             'issuance': ethereum.policy_network_issuance,
+            'yields': accounting.policy_calculate_yields,
         },
         'variables': {
             'supply_inflation': ethereum.update_supply_inflation,
             'eth_supply': ethereum.update_eth_supply,
+            'total_revenue': accounting.update_total_revenue,
+            'total_profit': accounting.update_total_profit,
+            'revenue_yields': accounting.update_revenue_yields,
+            'profit_yields': accounting.update_profit_yields,
         }
-    }
+    },
 ]
