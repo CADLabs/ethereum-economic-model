@@ -33,9 +33,14 @@ pip install -r requirements.txt
 
 To run the tests using Pytest:
 ```bash
+source venv/bin/activate
 python3 -m pytest tests
 ```
 
 ## Jupyter Lab Environment
 
-TODO
+To setup your Jupyter Kernel within your virtual environment:
+```bash
+source venv/bin/activate
+python -m ipykernel install --user --name python-eth2 --display-name "Python (Eth2)"
+```

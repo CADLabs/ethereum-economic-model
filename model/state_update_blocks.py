@@ -36,6 +36,24 @@ state_update_blocks = [
     },
     {
         'policies': {
+            'casper_ffg_vote': proof_of_stake.policy_casper_ffg_vote,
+            'lmd_ghost_vote': proof_of_stake.policy_lmd_ghost_vote,
+            'block_proposal': proof_of_stake.policy_block_proposal,
+        },
+        'variables': {
+            # Casper FFG vote
+            'ffg_source_reward': proof_of_stake.update_ffg_source_reward,
+            'ffg_target_reward': proof_of_stake.update_ffg_target_reward,
+            # LMD Ghost vote
+            'ffg_head_reward': proof_of_stake.update_ffg_head_reward,
+            'block_attester_reward': proof_of_stake.update_block_attester_reward,
+            'block_proposer_reward': proof_of_stake.update_block_proposer_reward,
+            # Total validating rewards
+            'validating_rewards': proof_of_stake.update_validating_rewards,
+        }
+    },
+    {
+        'policies': {
             'penalties': proof_of_stake.policy_penalties,
             'slashing': slashing.policy_slashing,
         },
@@ -45,4 +63,13 @@ state_update_blocks = [
             'whistleblower_rewards': slashing.update_whistleblower_rewards,
         }
     },
+    {
+        'policies': {
+            'issuance': ethereum.policy_network_issuance,
+        },
+        'variables': {
+            'supply_inflation': ethereum.update_supply_inflation,
+            'eth_supply': ethereum.update_eth_supply,
+        }
+    }
 ]

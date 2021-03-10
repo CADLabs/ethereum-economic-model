@@ -1,4 +1,4 @@
-from radcad import Model, Simulation, Experiment
+from radcad import Model, Simulation, Experiment, Engine
 import pandas as pd
 
 from model.parameters import parameters
@@ -12,6 +12,7 @@ RUNS = 1
 model = Model(params=parameters, initial_state=initial_state, state_update_blocks=state_update_blocks)
 simulation = Simulation(model=model, timesteps=TIMESTEPS, runs=RUNS)
 experiment = Experiment([simulation])
+experiment.engine = Engine(drop_substeps=True)
 
 
 def run(experiment=experiment):

@@ -15,6 +15,8 @@ parameters = {
     'MAX_EFFECTIVE_BALANCE':  [32 * gwei], # Units: Gwei
     'SLOTS_PER_EPOCH': [32], # Units: slots
     'EFFECTIVE_BALANCE_INCREMENT': [1 * gwei], # Units: Gwei
+    # Rewards
+    'PROPOSER_REWARD_QUOTIENT': [8],
     # Slashing
     'WHISTLEBLOWER_REWARD_QUOTIENT': [512],
     'MIN_SLASHING_PENALTY_QUOTIENT': [32],

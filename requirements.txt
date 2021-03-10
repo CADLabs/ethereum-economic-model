@@ -1,2 +1,4 @@
 pytest
 radcad==0.6.0
+ipykernel
+matplotlib
