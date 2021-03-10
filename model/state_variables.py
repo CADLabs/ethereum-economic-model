@@ -43,4 +43,8 @@ initial_state = {
     'total_profit': 0,
     'revenue_yields': 0,
     'profit_yields': 0,
+
+    # EIP1559
+    'total_basefee': 0,
+    'total_tips_to_validators': 0,
 }

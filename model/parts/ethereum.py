@@ -17,12 +17,11 @@ def policy_network_issuance(params, substep, state_history, previous_state):
     penalties = previous_state['penalties']
     amount_slashed = previous_state['amount_slashed']
     
-    # TODO implement EIP1559
-    basefee = 0
-    tips_to_validators = 0
+    total_basefee = previous_state['total_basefee']
+    total_tips_to_validators = previous_state['total_tips_to_validators']
 
-    rewards_for_online_validators = validating_rewards + whistleblower_rewards - penalties + tips_to_validators
-    network_issuance = rewards_for_online_validators - amount_slashed - basefee - tips_to_validators
+    rewards_for_online_validators = validating_rewards + whistleblower_rewards - penalties + total_tips_to_validators
+    network_issuance = rewards_for_online_validators - amount_slashed - total_basefee - total_tips_to_validators
     network_issuance_eth = network_issuance / 1e9
 
     return {
@@ -34,7 +33,7 @@ def policy_network_issuance(params, substep, state_history, previous_state):
 def update_supply_inflation(params, substep, state_history, previous_state, policy_input):
     eth_supply = previous_state['eth_supply']
     network_issuance_eth = policy_input['network_issuance_eth']
-    
+
     supply_inflation = (network_issuance_eth * constants.epochs_per_year) / eth_supply
     return 'supply_inflation', supply_inflation
 

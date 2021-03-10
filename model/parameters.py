@@ -42,4 +42,10 @@ parameters = {
 
     # Rewards, penalties, and slashing
     'slashing_events_per_1000_epochs': [1], # Units: 1 / 1000 epochs
+
+    # EIP1559
+    'eip1559_basefee': [5e9], # Units: Gwei
+    'eip1559_avg_tip_amount': [1e9], # Units: Gwei
+    'eip1559_avg_transactions_per_day': [688078],
+    'eip1559_avg_gas_per_transaction': [73123], # Units: Gas
 }

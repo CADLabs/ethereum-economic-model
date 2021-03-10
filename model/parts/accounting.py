@@ -9,11 +9,10 @@ def policy_calculate_yields(params, substep, state_history, previous_state):
     validating_rewards = previous_state['validating_rewards']
     whistleblower_rewards = previous_state['whistleblower_rewards']
     penalties = previous_state['penalties']
-    # EIP1559
-    tips_to_validators = 0 # TODO implement EIP1559
+    total_tips_to_validators = previous_state['total_tips_to_validators']
     total_costs = 0 # TODO implement validator costs
 
-    rewards_for_online_validators = validating_rewards + whistleblower_rewards - penalties + tips_to_validators
+    rewards_for_online_validators = validating_rewards + whistleblower_rewards - penalties + total_tips_to_validators
     
     total_revenue = number_of_validators * rewards_for_online_validators / gwei * eth_price
     total_profit = total_revenue - total_costs

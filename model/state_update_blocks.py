@@ -3,6 +3,7 @@ import model.parts.validators as validators
 import model.parts.proof_of_stake as proof_of_stake
 import model.parts.slashing as slashing
 import model.parts.accounting as accounting
+import model.parts.eip1559 as eip1559
 
 
 state_update_blocks = [
@@ -62,6 +63,15 @@ state_update_blocks = [
             'penalties': proof_of_stake.update_penalties,
             'amount_slashed': slashing.update_amount_slashed,
             'whistleblower_rewards': slashing.update_whistleblower_rewards,
+        }
+    },
+    {
+        'policies': {
+            'eip1559': eip1559.policy_eip1559,
+        },
+        'variables': {
+            'total_basefee': eip1559.update_total_basefee,
+            'total_tips_to_validators': eip1559.update_total_tips_to_validators
         }
     },
     {
