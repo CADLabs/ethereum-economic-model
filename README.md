@@ -38,4 +38,17 @@ python3 -m pytest tests
 
 ## Jupyter Lab Environment
 
-TODO
+## Jupyter kernel
+
+```bash
+python3 -m ipykernel install --user --name python3-edu-eth2-masterclass
+```
+
+## Plotly Jupyter Lab support
+
+See https://plotly.com/python/getting-started/
+
+```bash
+pip install jupyterlab "ipywidgets>=7.5"
+jupyter labextension install jupyterlab-plotly@4.14.3
+```
