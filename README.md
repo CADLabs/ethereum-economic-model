@@ -52,3 +52,12 @@ See https://plotly.com/python/getting-started/
 pip install jupyterlab "ipywidgets>=7.5"
 jupyter labextension install jupyterlab-plotly@4.14.3
 ```
+
+# Contributors
+
+* [BenSchZA](https://github.com/BenSchZA)
+* [danlessa](https://github.com/danlessa)
+* [JGBSci](https://github.com/JGBSci)
+* [marthendalnunes](https://github.com/marthendalnunes)
+* [rogervs](https://github.com/rogervs/)
+* [ShrutiApiah](https://github.com/ShrutiAppiah)
