@@ -8,13 +8,25 @@ import model.parts.eip1559 as eip1559
 
 state_update_blocks = [
     {
-        'policies': {},
+        'description': '''
+            Exogenous Ethereum processes:
+            * ETH price update
+            * Staking of ETH for new validators
+        ''',
+        'policies': {
+            'staking': validators.policy_staking,
+        },
         'variables': {
             'eth_price': ethereum.update_eth_price,
             'eth_staked': ethereum.update_eth_staked,
         }
     },
     {
+       'description': '''
+            Validator processes:
+            * New validators
+            * Online and offline validators
+        ''',
         'policies': {
             'policy_validators': validators.policy_validators,
         },
@@ -25,47 +37,65 @@ state_update_blocks = [
         }
     },
     {
+        'description': '''
+            Calculation and update of validator average effective balance
+        ''',
         'policies': {},
         'variables': {
+            # TODO: refactor according to diff spec
             'average_effective_balance': validators.update_average_effective_balance,
         }
     },
     {
+        'description': '''
+            Calculation and update of base reward
+        ''',
         'policies': {},
         'variables': {
+            # TODO: refactor according to diff spec
             'base_reward': proof_of_stake.update_base_reward,
         }
     },
     {
+        'description': '''
+            Beacon chain block proposal and attestation processes, rewards, and penalties
+        ''',
         'policies': {
+            'block_proposal': proof_of_stake.policy_block_proposal,
             'casper_ffg_vote': proof_of_stake.policy_casper_ffg_vote,
             'lmd_ghost_vote': proof_of_stake.policy_lmd_ghost_vote,
-            'block_proposal': proof_of_stake.policy_block_proposal,
+            'penalties': proof_of_stake.policy_penalties,
         },
         'variables': {
             # Casper FFG vote
-            'ffg_source_reward': proof_of_stake.update_ffg_source_reward,
-            'ffg_target_reward': proof_of_stake.update_ffg_target_reward,
+            'source_reward': proof_of_stake.update_source_reward,
+            'target_reward': proof_of_stake.update_target_reward,
             # LMD Ghost vote
-            'ffg_head_reward': proof_of_stake.update_ffg_head_reward,
+            # TODO: refactor according to diff spec state variable naming
+            'head_reward': proof_of_stake.update_head_reward,
             'block_attester_reward': proof_of_stake.update_block_attester_reward,
             'block_proposer_reward': proof_of_stake.update_block_proposer_reward,
-            # Total validating rewards
+            # Total validating rewards and penalties
             'validating_rewards': proof_of_stake.update_validating_rewards,
+            'validating_penalties': proof_of_stake.update_validating_penalties,
         }
     },
     {
+        'description': '''
+            Validator slashing process, rewards, and penalties
+        ''',
         'policies': {
-            'penalties': proof_of_stake.policy_penalties,
             'slashing': slashing.policy_slashing,
         },
         'variables': {
-            'penalties': proof_of_stake.update_penalties,
             'amount_slashed': slashing.update_amount_slashed,
             'whistleblower_rewards': slashing.update_whistleblower_rewards,
         }
     },
     {
+        'description': '''
+            EIP1559 process
+        ''',
         'policies': {
             'eip1559': eip1559.policy_eip1559,
         },
@@ -75,6 +105,9 @@ state_update_blocks = [
         }
     },
     {
+        'description': '''
+            Accounting of Ethereum issuance, inflation, and validator yields
+        ''',
         'policies': {
             'issuance': ethereum.policy_network_issuance,
             'yields': accounting.policy_calculate_yields,

@@ -1,5 +1,4 @@
 import model.constants as constants
-from model.constants import gwei
 
 
 def policy_calculate_yields(params, substep, state_history, previous_state):
@@ -8,13 +7,13 @@ def policy_calculate_yields(params, substep, state_history, previous_state):
     number_of_validators = previous_state['number_of_validators']
     validating_rewards = previous_state['validating_rewards']
     whistleblower_rewards = previous_state['whistleblower_rewards']
-    penalties = previous_state['penalties']
+    validating_penalties = previous_state['validating_penalties']
     total_tips_to_validators = previous_state['total_tips_to_validators']
     total_costs = 0 # TODO implement validator costs
 
-    rewards_for_online_validators = validating_rewards + whistleblower_rewards - penalties + total_tips_to_validators
+    rewards_for_online_validators = validating_rewards + whistleblower_rewards - validating_penalties + total_tips_to_validators
     
-    total_revenue = number_of_validators * rewards_for_online_validators / gwei * eth_price
+    total_revenue = number_of_validators * rewards_for_online_validators / constants.gwei * eth_price
     total_profit = total_revenue - total_costs
     revenue_yields = total_revenue * constants.epochs_per_year / eth_staked
     profit_yields = total_profit * constants.epochs_per_year / eth_staked

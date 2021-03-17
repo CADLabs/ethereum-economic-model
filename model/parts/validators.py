@@ -1,6 +1,12 @@
 import model.constants as constants
-from model.constants import gwei
 
+
+def policy_staking(params, substep, state_history, previous_state):
+    staked_eth = params['eth_staked_process'](previous_state['run'], previous_state['timestep']) - previous_state['eth_staked']
+
+    return {
+        'staked_eth': staked_eth
+    }
 
 def policy_validators(params, substep, state_history, previous_state):
     # Calculate the net validators uptime
@@ -30,13 +36,13 @@ def update_number_of_validators_offline(params, substep, state_history, previous
 
 def update_average_effective_balance(params, substep, state_history, previous_state, policy_input):
     effective_balance_increment = params['EFFECTIVE_BALANCE_INCREMENT']
+    max_effective_balance = params['MAX_EFFECTIVE_BALANCE']
 
     eth_staked = previous_state['eth_staked']
     number_of_validators = previous_state['number_of_validators']
-    max_effective_balance = params['MAX_EFFECTIVE_BALANCE']
 
     # TODO check balance == eth_staked at aggregate
     # TODO confirm effective balance multiplied by both online and offline validators
-    average_effective_balance = min(eth_staked * gwei - eth_staked * gwei % effective_balance_increment, max_effective_balance * number_of_validators) / number_of_validators
+    average_effective_balance = min(eth_staked * constants.gwei - eth_staked * constants.gwei % effective_balance_increment, max_effective_balance * number_of_validators) / number_of_validators
 
     return 'average_effective_balance', average_effective_balance
