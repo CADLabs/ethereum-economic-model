@@ -14,7 +14,9 @@ def update_base_reward(params, substep, state_history, previous_state, policy_in
 
     # State Variables
     eth_staked = previous_state['eth_staked']
-    average_effective_balance = previous_state['average_effective_balance']
+
+    # Policy Signals
+    average_effective_balance = policy_input['average_effective_balance']
     
     # Calculate base reward
     base_reward_per_validator = (min(average_effective_balance, max_effective_balance) * base_reward_factor) \

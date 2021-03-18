@@ -38,21 +38,13 @@ state_update_blocks = [
     },
     {
         'description': '''
-            Calculation and update of validator average effective balance
+            Calculation and update of validator average effective balance & base reward
         ''',
-        'policies': {},
+        'policies': {
+            'average_effective_balance': validators.policy_average_effective_balance,
+        },
         'variables': {
-            # TODO: refactor according to diff spec
             'average_effective_balance': validators.update_average_effective_balance,
-        }
-    },
-    {
-        'description': '''
-            Calculation and update of base reward
-        ''',
-        'policies': {},
-        'variables': {
-            # TODO: refactor according to diff spec
             'base_reward': proof_of_stake.update_base_reward,
         }
     },
@@ -71,7 +63,6 @@ state_update_blocks = [
             'source_reward': proof_of_stake.update_source_reward,
             'target_reward': proof_of_stake.update_target_reward,
             # LMD Ghost vote
-            # TODO: refactor according to diff spec state variable naming
             'head_reward': proof_of_stake.update_head_reward,
             'block_attester_reward': proof_of_stake.update_block_attester_reward,
             'block_proposer_reward': proof_of_stake.update_block_proposer_reward,
@@ -106,6 +97,23 @@ state_update_blocks = [
     },
     {
         'description': '''
+            Accounting of validator costs and online validator rewards
+        ''',
+        'policies': {
+            'validator_costs': accounting.policy_validator_costs,
+        },
+        'variables': {
+            'total_online_validator_rewards': accounting.update_total_online_validator_rewards,
+            'validator_count_distribution': accounting.update_validator_count_distribution,
+            'validator_hardware_costs': accounting.update_validator_hardware_costs,
+            'validator_cloud_costs': accounting.update_validator_cloud_costs,
+            'validator_third_party_costs': accounting.update_validator_third_party_costs,
+            'validator_costs': accounting.update_validator_costs,
+            'total_network_costs': accounting.update_total_network_costs,
+        }
+    },
+    {
+        'description': '''
             Accounting of Ethereum issuance, inflation, and validator yields
         ''',
         'policies': {
@@ -115,10 +123,15 @@ state_update_blocks = [
         'variables': {
             'supply_inflation': ethereum.update_supply_inflation,
             'eth_supply': ethereum.update_eth_supply,
+            'validator_eth_staked': accounting.update_validator_eth_staked,
+            'validator_revenue': accounting.update_validator_revenue,
+            'validator_profit': accounting.update_validator_profit,
+            'validator_revenue_yields': accounting.update_validator_revenue_yields,
+            'validator_profit_yields': accounting.update_validator_profit_yields,
             'total_revenue': accounting.update_total_revenue,
             'total_profit': accounting.update_total_profit,
-            'revenue_yields': accounting.update_revenue_yields,
-            'profit_yields': accounting.update_profit_yields,
+            'total_revenue_yields': accounting.update_total_revenue_yields,
+            'total_profit_yields': accounting.update_total_profit_yields,
         }
     },
 ]

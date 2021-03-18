@@ -4,7 +4,7 @@ import pandas as pd
 from model.parameters import parameters
 from model.state_variables import initial_state
 from model.state_update_blocks import state_update_blocks
-from model.simulation import TIMESTEPS, MONTE_CARLO_RUNS
+from model.simulation_configuration import TIMESTEPS, MONTE_CARLO_RUNS
 
 
 model = Model(params=parameters, initial_state=initial_state, state_update_blocks=state_update_blocks)
