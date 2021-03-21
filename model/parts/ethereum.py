@@ -9,7 +9,8 @@ def policy_network_issuance(params, substep, state_history, previous_state):
     total_online_validator_rewards = previous_state['total_online_validator_rewards']
 
     # Calculate network issuance in Gwei and ETH
-    network_issuance = total_online_validator_rewards - amount_slashed - total_basefee - total_tips_to_validators
+    network_issuance = total_online_validator_rewards - amount_slashed - total_basefee
+    network_issuance -= total_tips_to_validators # total_online_validator_rewards includes tips to validators, which is not issuance
     network_issuance_eth = network_issuance / constants.gwei
 
     return {

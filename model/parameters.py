@@ -79,8 +79,7 @@ parameters = Parameters(
     validator_power_uptime = [0.999],
     validator_technical_uptime = [0.982],
 
-    # TODO accesibility first
-    # TODO namedtuple class, list of predefined instances + list comprehension
+    # TODO Configuration using namedtuple class, list of predefined instances + list comprehension. Accesibility first priority!
     validator_percentage_distribution = [np.array([
         0.37, # DIY Hardware
         0.13, # DIY Cloud
@@ -108,6 +107,7 @@ parameters = Parameters(
         0.0, # StaaS Full
         0.0, # StaaS Self-Custodied
     ], dtype=float)],
+    # Percentage of total online validator rewards
     validator_third_party_costs_per_epoch = [np.array([
         0.0, # DIY Hardware
         0.0, # DIY Cloud
