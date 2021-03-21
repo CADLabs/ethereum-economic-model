@@ -39,8 +39,28 @@ python3 -m pytest tests
 
 ## Jupyter Lab Environment
 
+### Jupyter kernel
+
 To setup your Jupyter Kernel within your virtual environment:
 ```bash
 source venv/bin/activate
-python -m ipykernel install --user --name python-eth2 --display-name "Python (Eth2)"
+python3 -m ipykernel install --user --name python-eth2 --display-name "Python (Eth2)"
 ```
+
+### Plotly Jupyter Lab support
+
+See https://plotly.com/python/getting-started/
+
+```bash
+pip install jupyterlab "ipywidgets>=7.5"
+jupyter labextension install jupyterlab-plotly@4.14.3
+```
+
+# Contributors
+
+* [BenSchZA](https://github.com/BenSchZA)
+* [danlessa](https://github.com/danlessa)
+* [JGBSci](https://github.com/JGBSci)
+* [marthendalnunes](https://github.com/marthendalnunes)
+* [rogervs](https://github.com/rogervs/)
+* [ShrutiApiah](https://github.com/ShrutiAppiah)
