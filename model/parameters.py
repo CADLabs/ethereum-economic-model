@@ -50,6 +50,7 @@ class Parameters(TypedDict, total=True):
 
     # Rewards, penalties, and slashing
     slashing_events_per_1000_epochs: List[int]
+    number_of_validating_penalties: List[int]
 
     # EIP1559
     eip1559_basefee: List[Gwei]
@@ -78,6 +79,8 @@ parameters = Parameters(
     validator_power_uptime = [0.999],
     validator_technical_uptime = [0.982],
 
+    # TODO accesibility first
+    # TODO namedtuple class, list of predefined instances + list comprehension
     validator_percentage_distribution = [np.array([
         0.37, # DIY Hardware
         0.13, # DIY Cloud
@@ -116,6 +119,7 @@ parameters = Parameters(
     ], dtype=float)],
 
     slashing_events_per_1000_epochs = [1], # Units: 1 / 1000 epochs
+    number_of_validating_penalties = [3],
 
     eip1559_basefee = [0],
     eip1559_avg_tip_amount = [0],

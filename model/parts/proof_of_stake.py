@@ -2,8 +2,79 @@ import math
 import model.constants as constants
 
 
-def update_base_reward(params, substep, state_history, previous_state, policy_input):
+def policy_penalties(params, substep, state_history, previous_state):
+    # State Variables
+    base_reward = previous_state['base_reward']
+    number_of_validators_offline = previous_state['number_of_validators_offline']
+
+    # Calculate validating penalties
+    validating_penalties = base_reward * number_of_validators_offline * params['number_of_validating_penalties']
+
+    return {
+        'validating_penalties': validating_penalties
+    }
+
+def policy_casper_ffg_vote(params, substep, state_history, previous_state):
+    # State Variables
+    base_reward = previous_state['base_reward']
+    number_of_validators = previous_state['number_of_validators']
+    validators_offline_pct = previous_state['number_of_validators_offline'] / number_of_validators
+
+    # Calculate source and target reward
+    source_reward = (1 - validators_offline_pct) * base_reward * number_of_validators
+    target_reward = source_reward
+
+    return {
+        'source_reward': source_reward,
+        'target_reward': target_reward,
+    }
+
+def approximate_inclusion_distance(number_of_validators, validators_offline_pct):
+    '''Approximate Inclusion Distance
+    See derivation: https://github.com/hermanjunge/eth2-reward-simulation/blob/master/assumptions.md#attester-incentives
     '''
+    inclusion_distance = 1 / (1 - validators_offline_pct)
+    inclusion_distance *= math.log(1 - validators_offline_pct) / validators_offline_pct * number_of_validators
+    return inclusion_distance
+
+def policy_lmd_ghost_vote(params, substep, state_history, previous_state):
+    # Parameters
+    proposer_reward_quotient = params['PROPOSER_REWARD_QUOTIENT']
+
+    # State Variables
+    base_reward = previous_state['base_reward']
+    number_of_validators = previous_state['number_of_validators']
+    validators_offline_pct = previous_state['number_of_validators_offline'] / number_of_validators
+
+    head_reward = (1 - validators_offline_pct) * base_reward * number_of_validators
+
+    # Inclusion delay reward
+    inclusion_distance = approximate_inclusion_distance(number_of_validators, validators_offline_pct)
+    block_attester_reward = (1 - 1 / proposer_reward_quotient) * base_reward * (1 / inclusion_distance)
+    
+    return {
+        'head_reward': head_reward,
+        'block_attester_reward': block_attester_reward,
+    }
+
+def policy_block_proposal(params, substep, state_history, previous_state):
+    # Parameters
+    proposer_reward_quotient = params['PROPOSER_REWARD_QUOTIENT']
+
+    # State Variables
+    base_reward = previous_state['base_reward']
+    number_of_validators = previous_state['number_of_validators']
+    validators_offline_pct = previous_state['number_of_validators_offline'] / number_of_validators
+    
+    inclusion_distance = approximate_inclusion_distance(number_of_validators, validators_offline_pct)
+    block_proposer_reward = (1 / proposer_reward_quotient) * base_reward * (1 / inclusion_distance)
+    
+    return {
+        'block_proposer_reward': block_proposer_reward
+    }
+
+def update_base_reward(params, substep, state_history, previous_state, policy_input):
+    '''Update Base Reward
     Calculate and update base reward state variable
     '''
 
@@ -25,81 +96,8 @@ def update_base_reward(params, substep, state_history, previous_state, policy_in
     
     return 'base_reward', base_reward_per_validator
 
-def policy_penalties(params, substep, state_history, previous_state):
-    base_reward = previous_state['base_reward']
-    number_of_validators_offline = previous_state['number_of_validators_offline']
-
-    validating_penalties = base_reward * number_of_validators_offline * 3
-
-    return {
-        'validating_penalties': validating_penalties
-    }
-
-def update_validating_penalties(params, substep, state_history, previous_state, policy_input):
-    return 'validating_penalties', policy_input['validating_penalties']
-
-def policy_casper_ffg_vote(params, substep, state_history, previous_state):
-    base_reward = previous_state['base_reward']
-    number_of_validators = previous_state['number_of_validators']
-    validators_offline_pct = previous_state['number_of_validators_offline'] / number_of_validators
-
-    source_reward = (1 - validators_offline_pct) * base_reward * number_of_validators
-    target_reward = source_reward
-
-    return {
-        'source_reward': source_reward,
-        'target_reward': target_reward,
-    }
-
-def policy_lmd_ghost_vote(params, substep, state_history, previous_state):
-    proposer_reward_quotient = params['PROPOSER_REWARD_QUOTIENT']
-
-    base_reward = previous_state['base_reward']
-    number_of_validators = previous_state['number_of_validators']
-    validators_offline_pct = previous_state['number_of_validators_offline'] / number_of_validators
-
-    head_reward = (1 - validators_offline_pct) * base_reward * number_of_validators
-
-    # Inclusion delay reward
-    block_attester_reward = (1 - 1 / proposer_reward_quotient) * base_reward * (1 - validators_offline_pct) \
-        * (math.log(1 - validators_offline_pct) / ((1 - validators_offline_pct) - 1) * number_of_validators)
-    
-    return {
-        'head_reward': head_reward,
-        'block_attester_reward': block_attester_reward,
-    }
-
-def policy_block_proposal(params, substep, state_history, previous_state):
-    proposer_reward_quotient = params['PROPOSER_REWARD_QUOTIENT']
-
-    base_reward = previous_state['base_reward']
-    number_of_validators = previous_state['number_of_validators']
-    validators_offline_pct = previous_state['number_of_validators_offline'] / number_of_validators
-    
-    # See derivation: https://github.com/hermanjunge/eth2-reward-simulation/blob/master/assumptions.md#attester-incentives
-    block_proposer_reward = (1 / proposer_reward_quotient) * base_reward * (1 - validators_offline_pct) \
-        * (math.log(1 - validators_offline_pct) / ((1 - validators_offline_pct) - 1) * number_of_validators)
-    
-    return {
-        'block_proposer_reward': block_proposer_reward
-    }
-
-def update_block_proposer_reward(params, substep, state_history, previous_state, policy_input):
-    return 'block_proposer_reward', policy_input['block_proposer_reward']
-
-def update_block_attester_reward(params, substep, state_history, previous_state, policy_input):
-    return 'block_attester_reward', policy_input['block_attester_reward']
-
-def update_source_reward(params, substep, state_history, previous_state, policy_input):
-    return 'source_reward', policy_input['source_reward']
-
-def update_target_reward(params, substep, state_history, previous_state, policy_input):
-    return 'target_reward', policy_input['target_reward']
-
-def update_head_reward(params, substep, state_history, previous_state, policy_input):
-    return 'head_reward', policy_input['head_reward']
-
 def update_validating_rewards(params, substep, state_history, previous_state, policy_input):
+    # Policy Signals
     block_proposer_reward = policy_input['block_proposer_reward']
     block_attester_reward = policy_input['block_attester_reward']
 
@@ -107,5 +105,7 @@ def update_validating_rewards(params, substep, state_history, previous_state, po
     target_reward = policy_input['target_reward']
     head_reward = policy_input['head_reward']
 
+    # Calculate total validating rewards
     validating_rewards = block_proposer_reward + block_attester_reward + source_reward + target_reward + head_reward
+
     return 'validating_rewards', validating_rewards

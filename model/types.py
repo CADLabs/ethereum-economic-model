@@ -1,3 +1,8 @@
+import numpy as np
+
+
+Uninitialized = np.nan
+
 Percentage = float
 
 Gas = int

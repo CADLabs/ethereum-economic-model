@@ -2,7 +2,7 @@ from typing import TypedDict
 import numpy as np
 
 import model.constants as constants
-from model.types import Gwei, ETH, USD, USD_per_ETH, Percentage
+from model.types import Gwei, ETH, USD, USD_per_ETH, Percentage, Uninitialized
 
 
 number_of_validator_types = 7
@@ -65,16 +65,13 @@ class StateVariables(TypedDict, total=True):
 
 
 initial_state = StateVariables(
-    # NOTE for states that are either dependent on parameters for initialization, or are stochastic processes, is initializing them here to zero and in state update function intuitive?
-    # NOTE one option: distinction of initial state vs. state variables, with state_variables.update(initial_state)
+    # TODO use np.nan for unintialized/unknown initial values
     eth_price = 0,
     eth_supply = 112_000_000,
     eth_staked = 0,
     supply_inflation = 0,
 
     average_effective_balance = 32 * constants.gwei,
-    # NOTE See comment above re. initialization
-    # Initialized in state update function
     number_of_validators = 0,
     number_of_validators_online = 0,
     number_of_validators_offline = 0,
@@ -96,7 +93,6 @@ initial_state = StateVariables(
     total_basefee = 0,
     total_tips_to_validators = 0,
 
-    # TODO
     validator_eth_staked = np.zeros((number_of_validator_types,1), dtype=int),
     validator_revenue = np.zeros((number_of_validator_types,1), dtype=int),
     validator_profit = np.zeros((number_of_validator_types,1), dtype=int),
