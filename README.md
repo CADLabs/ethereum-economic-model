@@ -21,6 +21,13 @@ python3 -m experiments.run
 
 ## Development
 
+### Requirements
+
+* Python versions: tested with 3.7, 3.8
+* Python dependencies: tested against versions in `requirements.txt`
+
+### Setup
+
 To setup a Python 3 development environment:
 ```bash
 # Create a virtual environment using Python 3 venv module
