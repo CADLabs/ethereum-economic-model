@@ -8,6 +8,8 @@ TODO: description
 * [Development](#development)
 * [Tests](#tests)
 * [Jupyter Lab Environment](#jupyter-lab-environment)
+* [Change Log](#change-log)
+* [Contributors](#contributors)
 
 ---
 
@@ -56,11 +58,10 @@ pip install jupyterlab "ipywidgets>=7.5"
 jupyter labextension install jupyterlab-plotly@4.14.3
 ```
 
+# Change Log
+
+See [CHANGELOG.md](CHANGELOG.md) for notable changes and versions.
+
 # Contributors
 
-* [BenSchZA](https://github.com/BenSchZA)
-* [danlessa](https://github.com/danlessa)
-* [JGBSci](https://github.com/JGBSci)
-* [marthendalnunes](https://github.com/marthendalnunes)
-* [rogervs](https://github.com/rogervs/)
-* [ShrutiApiah](https://github.com/ShrutiAppiah)
+See [CONTRIBUTORS.md](CONTRIBUTORS.md) for contributions to this project repo.
