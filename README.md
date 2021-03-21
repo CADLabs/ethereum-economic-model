@@ -33,6 +33,7 @@ pip install -r requirements.txt
 
 To run the tests using Pytest:
 ```bash
+source venv/bin/activate
 python3 -m pytest tests
 ```
 
@@ -40,8 +41,10 @@ python3 -m pytest tests
 
 ### Jupyter kernel
 
+To setup your Jupyter Kernel within your virtual environment:
 ```bash
-python3 -m ipykernel install --user --name python3-edu-eth2-masterclass
+source venv/bin/activate
+python3 -m ipykernel install --user --name python-eth2 --display-name "Python (Eth2)"
 ```
 
 ### Plotly Jupyter Lab support

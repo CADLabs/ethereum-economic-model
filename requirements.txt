@@ -1,2 +1,7 @@
 pytest
 radcad==0.6.0
+ipykernel
+matplotlib
+plotly==4.14.3
+stochastic
+typing_extensions==3.7.4.3
