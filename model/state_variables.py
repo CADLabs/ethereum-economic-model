@@ -1,4 +1,4 @@
-from typing import TypedDict
+from model import TypedDict
 import numpy as np
 
 import model.constants as constants

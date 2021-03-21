@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from stochastic import processes
-from typing import TypedDict, List, Callable
+from model import TypedDict, List, Callable
 
 import model.simulation_configuration as simulation
 import model.constants as constants
