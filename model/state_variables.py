@@ -1,11 +1,16 @@
-from model.types import TypedDict
 import numpy as np
 
 import model.constants as constants
-from model.types import Gwei, ETH, USD, USD_per_ETH, Percentage, Uninitialized
-
-
-number_of_validator_types = 7
+from model.types import (
+    Gwei,
+    ETH,
+    USD,
+    USD_per_ETH,
+    Percentage,
+    Uninitialized,
+    TypedDict,
+)
+from model.parameters import validator_types
 
 
 class StateVariables(TypedDict, total=True):
@@ -64,8 +69,13 @@ class StateVariables(TypedDict, total=True):
     total_network_costs: USD
 
 
+# Get number of validator types for initializing Numpy array size
+number_of_validator_types = len(validator_types)
+
+# TODO use np.nan for unintialized/unknown initial values
+# NOTE https://numpy.org/doc/stable/reference/generated/numpy.nan_to_num.html
+
 initial_state = StateVariables(
-    # TODO use np.nan for unintialized/unknown initial values
     eth_price=0,
     eth_supply=112_000_000,
     eth_staked=0,

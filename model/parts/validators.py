@@ -1,5 +1,7 @@
+import numpy as np
+from pytest import approx
+
 import model.constants as constants
-from model.parameters import Parameters
 
 
 def policy_staking(params, substep, state_history, previous_state):
@@ -36,13 +38,15 @@ def policy_validators(params, substep, state_history, previous_state):
     number_of_validators = eth_staked / (average_effective_balance / constants.gwei)
 
     # Calculate the number of validators online and offline using validators uptime
-    number_of_validators_online: int = number_of_validators * validators_uptime
-    number_of_validators_offline: int = (
-        number_of_validators - number_of_validators_online
+    number_of_validators_online = number_of_validators * validators_uptime
+    number_of_validators_offline = number_of_validators - number_of_validators_online
+
+    # Assert expected conditions are valid
+    assert (
+        number_of_validators
+        == number_of_validators_online + number_of_validators_offline
     )
 
-    # TODO check int type, integer division, possibly round up/down
-    # TODO assert precision
     return {
         "number_of_validators": number_of_validators,
         "number_of_validators_online": number_of_validators_online,

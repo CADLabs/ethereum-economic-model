@@ -1,22 +1,23 @@
 import numpy as np
 import pandas as pd
 from stochastic import processes
-from model.types import TypedDict, List, Callable
 
 import model.simulation_configuration as simulation
 import model.constants as constants
-from model.types import Run, Timestep, Percentage, Gwei, Gas, ETH
-
-
-# See https://stochastic.readthedocs.io/en/latest/continuous.html
-rng = np.random.default_rng(1)
-
-eth_price_process = processes.continuous.BrownianExcursion(
-    t=simulation.TIMESTEPS, rng=rng
+from model.types import (
+    Run,
+    Timestep,
+    Percentage,
+    Gwei,
+    Gas,
+    ETH,
+    USD_per_epoch,
+    Percentage_per_epoch,
+    ValidatorType,
+    TypedDict,
+    List,
+    Callable,
 )
-
-eth_price_samples = eth_price_process.sample(simulation.TIMESTEPS)
-eth_staked_samples = np.linspace(524_288, 33_600_000, simulation.TIMESTEPS)
 
 
 class Parameters(TypedDict, total=True):
@@ -61,6 +62,56 @@ class Parameters(TypedDict, total=True):
     eip1559_avg_gas_per_transaction: List[Gas]
 
 
+# Configure stochastic ETH price and staking processes
+# See https://stochastic.readthedocs.io/en/latest/continuous.html
+# Create Random Number Generator (RNG) with a seed of 1
+rng = np.random.default_rng(1)
+eth_price_process = processes.continuous.BrownianExcursion(
+    t=simulation.TIMESTEPS, rng=rng
+)
+eth_price_samples = eth_price_process.sample(simulation.TIMESTEPS)
+eth_staked_samples = np.linspace(524_288, 33_600_000, simulation.TIMESTEPS)
+
+# Configure validator type distribution
+validator_types = [
+    ValidatorType(
+        type="diy_hardware",
+        percentage_distribution=0.37,
+        hardware_costs_per_epoch=0.0014,
+    ),
+    ValidatorType(
+        type="diy_cloud",
+        percentage_distribution=0.13,
+        cloud_costs_per_epoch=0.00027,
+    ),
+    ValidatorType(
+        type="pool_staas",
+        percentage_distribution=0.27,
+        third_party_costs_per_epoch=0.12,
+    ),
+    ValidatorType(
+        type="pool_hardware",
+        percentage_distribution=0.05,
+        hardware_costs_per_epoch=0.0007,
+    ),
+    ValidatorType(
+        type="pool_cloud",
+        percentage_distribution=0.02,
+        cloud_costs_per_epoch=0.00136,
+    ),
+    ValidatorType(
+        type="staas_full",
+        percentage_distribution=0.08,
+        third_party_costs_per_epoch=0.15,
+    ),
+    ValidatorType(
+        type="staas_self_custodied",
+        percentage_distribution=0.08,
+        third_party_costs_per_epoch=0.12,
+    ),
+]
+
+# Configure parameters and parameter sweeps
 parameters = Parameters(
     eth_price_process=[
         lambda _run, timestep: 1000
@@ -81,62 +132,30 @@ parameters = Parameters(
     validator_internet_uptime=[0.999],
     validator_power_uptime=[0.999],
     validator_technical_uptime=[0.982],
-    # TODO Configuration using namedtuple class, list of predefined instances + list comprehension. Accesibility first priority!
+    # Using list comprehension, map the validator types to each parameter
     validator_percentage_distribution=[
         np.array(
-            [
-                0.37,  # DIY Hardware
-                0.13,  # DIY Cloud
-                0.27,  # Pool StaaS
-                0.05,  # Pool Hardware
-                0.02,  # Pool Cloud
-                0.08,  # StaaS Full
-                0.08,  # StaaS Self-Custodied
-            ],
-            dtype=float,
+            [validator.percentage_distribution for validator in validator_types],
+            dtype=Percentage,
         )
     ],
     validator_hardware_costs_per_epoch=[
         np.array(
-            [
-                0.0014,  # DIY Hardware
-                0.0,  # DIY Cloud
-                0.0,  # Pool StaaS
-                0.0007,  # Pool Hardware
-                0.0,  # Pool Cloud
-                0.0,  # StaaS Full
-                0.0,  # StaaS Self-Custodied
-            ],
-            dtype=float,
+            [validator.hardware_costs_per_epoch for validator in validator_types],
+            dtype=USD_per_epoch,
         )
     ],
     validator_cloud_costs_per_epoch=[
         np.array(
-            [
-                0.0,  # DIY Hardware
-                0.00027,  # DIY Cloud
-                0.0,  # Pool StaaS
-                0.0,  # Pool Hardware
-                0.00136,  # Pool Cloud
-                0.0,  # StaaS Full
-                0.0,  # StaaS Self-Custodied
-            ],
-            dtype=float,
+            [validator.cloud_costs_per_epoch for validator in validator_types],
+            dtype=USD_per_epoch,
         )
     ],
     # Percentage of total online validator rewards
     validator_third_party_costs_per_epoch=[
         np.array(
-            [
-                0.0,  # DIY Hardware
-                0.0,  # DIY Cloud
-                0.12,  # Pool StaaS
-                0.0,  # Pool Hardware
-                0.0,  # Pool Cloud
-                0.15,  # StaaS Full
-                0.12,  # StaaS Self-Custodied
-            ],
-            dtype=float,
+            [validator.third_party_costs_per_epoch for validator in validator_types],
+            dtype=Percentage_per_epoch,
         )
     ],
     slashing_events_per_1000_epochs=[1],  # Units: 1 / 1000 epochs
