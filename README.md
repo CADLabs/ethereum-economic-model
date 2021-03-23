@@ -11,6 +11,14 @@ TODO: description
 * [Change Log](#change-log)
 * [Contributors](#contributors)
 
+## Directory Structure
+* [data/](data/): datasets used in model (e.g. for stochastic processes)
+* [docs/](docs/): work-in-progress documentation of model software architecture
+* [experiments/](experiments/): experiment workflow configuration and execution
+* [model/](model/): model structure, parts, and configuration
+* [notebooks/](notebooks/): experiment analysis notebooks
+* [tests/](tests/): unit and integration tests for model and notebooks
+
 ---
 
 ## Experiments
