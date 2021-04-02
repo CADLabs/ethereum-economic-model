@@ -30,11 +30,7 @@ class Parameters(TypedDict, total=True):
     BASE_REWARD_FACTOR: List[int]
     BASE_REWARDS_PER_EPOCH: List[int]
 
-    MAX_COMMITTEES_PER_SLOT: List[int]
-    TARGET_COMMITTEE_SIZE: List[int]
-    MAX_VALIDATORS_PER_COMMITTEE: List[int]
     MAX_EFFECTIVE_BALANCE: List[Gwei]
-    SLOTS_PER_EPOCH: List[int]
     EFFECTIVE_BALANCE_INCREMENT: List[int]
 
     # Rewards and penalties
@@ -57,7 +53,7 @@ class Parameters(TypedDict, total=True):
 
     # EIP1559
     eip1559_basefee: List[Gwei]
-    eip1559_avg_tip_amount: List[Gwei]
+    eip1559_avg_tip_amount: List[Percentage]
     eip1559_avg_transactions_per_day: List[int]
     eip1559_avg_gas_per_transaction: List[Gas]
 
@@ -120,11 +116,7 @@ parameters = Parameters(
     eth_staked_process=[lambda _run, timestep: eth_staked_samples[timestep]],
     BASE_REWARD_FACTOR=[64],
     BASE_REWARDS_PER_EPOCH=[4],
-    MAX_COMMITTEES_PER_SLOT=[64],
-    TARGET_COMMITTEE_SIZE=[128],
-    MAX_VALIDATORS_PER_COMMITTEE=[2048],
     MAX_EFFECTIVE_BALANCE=[32 * constants.gwei],
-    SLOTS_PER_EPOCH=[32],  # Units: slots
     EFFECTIVE_BALANCE_INCREMENT=[1 * constants.gwei],
     PROPOSER_REWARD_QUOTIENT=[8],
     WHISTLEBLOWER_REWARD_QUOTIENT=[512],
@@ -160,8 +152,9 @@ parameters = Parameters(
     ],
     slashing_events_per_1000_epochs=[1],  # Units: 1 / 1000 epochs
     number_of_validating_penalties=[3],
-    eip1559_basefee=[0],
-    eip1559_avg_tip_amount=[0],
+    # TODO determine basefee and tip amount process or average
+    eip1559_basefee=[0], # Default: 1 * constants.gwei
+    eip1559_avg_tip_amount=[0], # Default: 0.01
     eip1559_avg_transactions_per_day=[688078],
     eip1559_avg_gas_per_transaction=[73123],
 )

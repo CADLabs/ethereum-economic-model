@@ -1,9 +1,7 @@
 import model.parts.ethereum as ethereum
 import model.parts.validators as validators
 import model.parts.proof_of_stake as proof_of_stake
-import model.parts.slashing as slashing
-import model.parts.accounting as accounting
-import model.parts.eip1559 as eip1559
+import model.parts.metrics as metrics
 from model.utils import update_from_signal
 
 
@@ -19,7 +17,7 @@ state_update_blocks = [
         },
         "variables": {
             "eth_price": ethereum.update_eth_price,
-            "eth_staked": ethereum.update_eth_staked,
+            "eth_staked": validators.update_eth_staked,
         },
     },
     {
@@ -83,7 +81,7 @@ state_update_blocks = [
             Validator slashing process, rewards, and penalties
         """,
         "policies": {
-            "slashing": slashing.policy_slashing,
+            "slashing": proof_of_stake.policy_slashing,
         },
         "variables": {
             "amount_slashed": update_from_signal("amount_slashed"),
@@ -92,10 +90,10 @@ state_update_blocks = [
     },
     {
         "description": """
-            EIP1559 process
+            Ethereum EIP1559 process
         """,
         "policies": {
-            "eip1559": eip1559.policy_eip1559,
+            "eip1559": ethereum.policy_eip1559,
         },
         "variables": {
             "total_basefee": update_from_signal("total_basefee"),
@@ -104,13 +102,21 @@ state_update_blocks = [
     },
     {
         "description": """
+            Online validator reward aggregation
+        """,
+        "policies": {},
+        "variables": {
+            "total_online_validator_rewards": metrics.update_total_online_validator_rewards,
+        }
+    },
+    {
+        "description": """
             Accounting of validator costs and online validator rewards
         """,
         "policies": {
-            "validator_costs": accounting.policy_validator_costs,
+            "metric_validator_costs": metrics.policy_validator_costs,
         },
         "variables": {
-            "total_online_validator_rewards": accounting.update_total_online_validator_rewards,
             "validator_count_distribution": update_from_signal(
                 "validator_count_distribution"
             ),
@@ -129,11 +135,13 @@ state_update_blocks = [
         """,
         "policies": {
             "issuance": ethereum.policy_network_issuance,
-            "yields": accounting.policy_calculate_yields,
+            "yields": metrics.policy_calculate_yields,
         },
         "variables": {
-            "supply_inflation": ethereum.update_supply_inflation,
+            # State Updates
             "eth_supply": ethereum.update_eth_supply,
+            # Metrics
+            "supply_inflation": metrics.update_supply_inflation,
             "validator_eth_staked": update_from_signal("validator_eth_staked"),
             "validator_revenue": update_from_signal("validator_revenue"),
             "validator_profit": update_from_signal("validator_profit"),

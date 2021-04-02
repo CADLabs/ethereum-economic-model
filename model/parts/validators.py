@@ -4,6 +4,15 @@ from pytest import approx
 import model.constants as constants
 
 
+'''
+# Validators
+
+* Implementation of the validator staking process
+* Implementation of the new, online, and offline validator processes
+* Calculation of the validator average effective balance
+'''
+
+
 def policy_staking(params, substep, state_history, previous_state):
     # Parameters
     eth_staked_process = params["eth_staked_process"]
@@ -35,10 +44,10 @@ def policy_validators(params, substep, state_history, previous_state):
     )
 
     # Calculate the number of validators using ETH staked
-    number_of_validators = eth_staked / (average_effective_balance / constants.gwei)
+    number_of_validators = int(round(eth_staked / (average_effective_balance / constants.gwei)))
 
     # Calculate the number of validators online and offline using validators uptime
-    number_of_validators_online = number_of_validators * validators_uptime
+    number_of_validators_online = int(round(number_of_validators * validators_uptime))
     number_of_validators_offline = number_of_validators - number_of_validators_online
 
     # Assert expected conditions are valid
@@ -77,3 +86,13 @@ def policy_average_effective_balance(params, substep, state_history, previous_st
     average_effective_balance /= number_of_validators
 
     return {"average_effective_balance": average_effective_balance}
+
+
+def update_eth_staked(params, substep, state_history, previous_state, policy_input):
+    eth_supply = previous_state["eth_supply"]
+    eth_staked = previous_state["eth_staked"]
+    staked_eth = policy_input["staked_eth"]
+
+    assert eth_staked + staked_eth <= eth_supply, "ETH staked can't be more than ETH supply"
+
+    return "eth_staked", eth_staked + staked_eth
