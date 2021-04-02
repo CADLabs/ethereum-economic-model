@@ -153,8 +153,8 @@ parameters = Parameters(
     slashing_events_per_1000_epochs=[1],  # Units: 1 / 1000 epochs
     number_of_validating_penalties=[3],
     # TODO determine basefee and tip amount process or average
-    eip1559_basefee=[0], # Default: 1 * constants.gwei
-    eip1559_avg_tip_amount=[0], # Default: 0.01
+    eip1559_basefee=[0],  # Default: 1 * constants.gwei
+    eip1559_avg_tip_amount=[0],  # Default: 0.01
     eip1559_avg_transactions_per_day=[688078],
     eip1559_avg_gas_per_transaction=[73123],
 )

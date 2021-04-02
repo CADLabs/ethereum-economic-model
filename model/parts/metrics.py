@@ -1,12 +1,12 @@
 import model.constants as constants
 
 
-'''
+"""
 # Metrics
 
 * Calculation of validator operational costs
 * Calculation of validator revenue, profit, and yield metrics
-'''
+"""
 
 
 def policy_validator_costs(params, substep, state_history, previous_state):
@@ -83,10 +83,14 @@ def policy_calculate_yields(params, substep, state_history, previous_state):
     )
     validator_profit = validator_revenue - validator_costs
     validator_revenue_yields = (
-        validator_revenue * constants.epochs_per_year / (validator_eth_staked * eth_price)
+        validator_revenue
+        * constants.epochs_per_year
+        / (validator_eth_staked * eth_price)
     )
     validator_profit_yields = (
-        validator_profit * constants.epochs_per_year / (validator_eth_staked * eth_price)
+        validator_profit
+        * constants.epochs_per_year
+        / (validator_eth_staked * eth_price)
     )
 
     # Calculate the total metrics

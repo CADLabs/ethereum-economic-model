@@ -93,7 +93,7 @@ state_update_blocks = [
             Ethereum EIP1559 process
         """,
         "policies": {
-            "eip1559": ethereum.policy_eip1559,
+            "eip1559": ethereum.policy_eip1559_transaction_pricing,
         },
         "variables": {
             "total_basefee": update_from_signal("total_basefee"),
@@ -107,7 +107,7 @@ state_update_blocks = [
         "policies": {},
         "variables": {
             "total_online_validator_rewards": metrics.update_total_online_validator_rewards,
-        }
+        },
     },
     {
         "description": """

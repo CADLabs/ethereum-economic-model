@@ -2,12 +2,12 @@ import math
 import model.constants as constants
 
 
-'''
+"""
 # Proof of Stake
 
 * Calculation of PoS attestation and block proposal rewards and penalties
 * Calculation of PoS slashing penalties
-'''
+"""
 
 
 def policy_penalties(params, substep, state_history, previous_state):
@@ -20,9 +20,7 @@ def policy_penalties(params, substep, state_history, previous_state):
 
     # Calculate validating penalties
     validating_penalties = (
-        base_reward
-        * number_of_validators_offline
-        * number_of_validating_penalties
+        base_reward * number_of_validators_offline * number_of_validating_penalties
     )
 
     return {"validating_penalties": validating_penalties}
@@ -34,9 +32,7 @@ def policy_casper_ffg_vote(params, substep, state_history, previous_state):
     number_of_validators = previous_state["number_of_validators"]
     number_of_validators_offline = previous_state["number_of_validators_offline"]
 
-    validators_offline_pct = (
-        number_of_validators_offline / number_of_validators
-    )
+    validators_offline_pct = number_of_validators_offline / number_of_validators
 
     # Calculate source and target reward
     source_reward = (1 - validators_offline_pct) * base_reward * number_of_validators
@@ -54,7 +50,7 @@ def approximate_inclusion_distance(number_of_validators, validators_offline_pct)
     """
     if validators_offline_pct == 0:
         return 1
-    
+
     inclusion_distance_denominator = 1 - validators_offline_pct
     inclusion_distance_denominator *= (
         math.log(1 - validators_offline_pct)
@@ -73,9 +69,7 @@ def policy_lmd_ghost_vote(params, substep, state_history, previous_state):
     number_of_validators = previous_state["number_of_validators"]
     number_of_validators_offline = previous_state["number_of_validators_offline"]
 
-    validators_offline_pct = (
-        number_of_validators_offline / number_of_validators
-    )
+    validators_offline_pct = number_of_validators_offline / number_of_validators
 
     head_reward = (1 - validators_offline_pct) * base_reward * number_of_validators
 
@@ -102,9 +96,7 @@ def policy_block_proposal(params, substep, state_history, previous_state):
     number_of_validators = previous_state["number_of_validators"]
     number_of_validators_offline = previous_state["number_of_validators_offline"]
 
-    validators_offline_pct = (
-        number_of_validators_offline / number_of_validators
-    )
+    validators_offline_pct = number_of_validators_offline / number_of_validators
 
     inclusion_distance = approximate_inclusion_distance(
         number_of_validators, validators_offline_pct

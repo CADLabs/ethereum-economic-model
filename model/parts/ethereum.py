@@ -1,11 +1,11 @@
 import model.constants as constants
 
 
-'''
+"""
 # Ethereum
 
 * Basic policies and mechanisms shared between the Eth1 and Eth2 systems
-'''
+"""
 
 
 def policy_network_issuance(params, substep, state_history, previous_state):
@@ -17,7 +17,11 @@ def policy_network_issuance(params, substep, state_history, previous_state):
 
     # Calculate network issuance in Gwei and ETH
     # total_online_validator_rewards includes tips to validators, which is not issuance, and is removed
-    network_issuance = (total_online_validator_rewards - total_tips_to_validators) - amount_slashed - total_basefee
+    network_issuance = (
+        (total_online_validator_rewards - total_tips_to_validators)
+        - amount_slashed
+        - total_basefee
+    )
     network_issuance_eth = network_issuance / constants.gwei
 
     return {
@@ -26,8 +30,8 @@ def policy_network_issuance(params, substep, state_history, previous_state):
     }
 
 
-def policy_eip1559(params, substep, state_history, previous_state):
-    """EIP1559 Mechanism
+def policy_eip1559_transaction_pricing(params, substep, state_history, previous_state):
+    """EIP1559 Transaction Pricing Mechanism
     A transaction pricing mechanism that includes fixed-per-block network fee
     that is burned and dynamically expands/contracts block sizes to deal with transient congestion.
 
