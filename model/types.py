@@ -1,5 +1,7 @@
 import numpy as np
 import sys
+
+# See https://docs.python.org/3/library/dataclasses.html
 from dataclasses import dataclass
 
 

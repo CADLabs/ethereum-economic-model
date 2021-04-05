@@ -1,6 +1,14 @@
 import model.constants as constants
 
 
+"""
+# Metrics
+
+* Calculation of validator operational costs
+* Calculation of validator revenue, profit, and yield metrics
+"""
+
+
 def policy_validator_costs(params, substep, state_history, previous_state):
     # Parameters
     validator_percentage_distribution = params["validator_percentage_distribution"]
@@ -75,17 +83,25 @@ def policy_calculate_yields(params, substep, state_history, previous_state):
     )
     validator_profit = validator_revenue - validator_costs
     validator_revenue_yields = (
-        validator_revenue * constants.epochs_per_year / (eth_staked * eth_price)
+        validator_revenue
+        * constants.epochs_per_year
+        / (validator_eth_staked * eth_price)
     )
     validator_profit_yields = (
-        validator_profit * constants.epochs_per_year / (eth_staked * eth_price)
+        validator_profit
+        * constants.epochs_per_year
+        / (validator_eth_staked * eth_price)
     )
 
     # Calculate the total metrics
     total_revenue = validator_revenue.sum(axis=0)
     total_profit = total_revenue - total_network_costs
-    total_revenue_yields = validator_revenue_yields.sum(axis=0)
-    total_profit_yields = validator_profit_yields.sum(axis=0)
+    total_revenue_yields = (
+        total_revenue * constants.epochs_per_year / (eth_staked * eth_price)
+    )
+    total_profit_yields = (
+        total_profit * constants.epochs_per_year / (eth_staked * eth_price)
+    )
 
     return {
         # TODO move ETH staked
@@ -121,3 +137,14 @@ def update_total_online_validator_rewards(
     )
 
     return "total_online_validator_rewards", total_online_validator_rewards
+
+
+def update_supply_inflation(
+    params, substep, state_history, previous_state, policy_input
+):
+    eth_supply = previous_state["eth_supply"]
+    network_issuance_eth = policy_input["network_issuance_eth"]
+
+    supply_inflation = (network_issuance_eth * constants.epochs_per_year) / eth_supply
+
+    return "supply_inflation", supply_inflation
