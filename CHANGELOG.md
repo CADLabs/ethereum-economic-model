@@ -9,9 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Test for Proof of Stake inclusion distance
 
 ### Changed
-- Removed unused system parameters
 - Reformatting of model code according to Black/PEP8 standards
 - Minor refactors after milestone 1 mathematical specification submission
+
+### Removed
+- Removed unused system parameters
 
 ## [0.1.0] - 2021-03-21
 ### Added
