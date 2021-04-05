@@ -1,101 +1,82 @@
-# EDP Phase 2: System Design
+# EDP Phase 2: System Design (Milestones 1/2)
+
+This document is a subsection of the [Milestone 1 deliverable](https://docs.google.com/document/d/1XGI1IMFWfvsz8tp9OoGuXTTtleMoNpTvqonnJT-7gA0/edit#) in the educational project “cadCAD Masterclass: Eth2 Validator Economics” by cadCAD Edu in collaboration with the Ethereum Foundation Robust Incentives Group.
+
 
 ## Table of Contents
 
-* [Mathematical Specification](#Model-Specification)
-    * [Overview](#Overview)
-    * [State Variables](#State-Variables)
-    * [Exogenous Processes](#Exogenous-Processes)
+* [Mathematical Specification](#Model-Specification) (Milestone 1)
+    * [Notation](#Notation)
+    * [System States](#State-Variables)
+    * [System Inputs](#Environmental-Processes)
     * [System Parameters](#System-Parameters)
-    * [Mechanisms](#Mechanisms)
+    * [State Update Logic / Differential Specification](#State-Update-Logic)
     * [System Metrics](#System-Metrics)
-* [cadCAD Systems Model](#cadCAD-Systems-Model) (project phase 2)
+* [cadCAD Systems Model](#cadCAD-Systems-Model) (Milestone 2)
 
 # Mathematical Specification
 
-## Overview
+This Mathematical Specification articulates the relevant Eth2 validator economics system dynamics as a [state-space representation](https://en.wikipedia.org/wiki/State-space_representation). Given the iterative nature of dynamical systems modeling work, we expect to make adjustments to this Mathematical Secification as we build and validate the cadCAD model.
 
-The **Mathematical Specification** defines the model as follows:
-1. [State Variables](#State-Variables): the definition of State Variables as part of the [state-space representation](#State-space-Representation) of the system
-2. [Exogenous Processes](#Exogenous-Processes): the inputs of the system that don't depend on internal system states
-3. [System Parameters](#System-Parameters): the parameters that define the configuration of the system, referred to in the derivation of **Mechanisms** and **System Metrics**
-4. [Mechanisms](#Mechanisms): the mathematical definition of system state transitions that update the State Variables, later integrated into cadCAD Policies and State Update Functions
-5. [System Metrics](#System-Metrics): the outputs of the system that depend on the system **State Variables**, and measure the performance and KPIs of the system
 
-### State-space Representation
+### Level of Aggregation
 
-A **state-space representation** is a formal mathematical model of a system as a set of input, output, and state variables related by first-order differential equations. These variables evolve over time in a way that depends on the current value of the state variables, as well as any inputs to the system. At each timestep there is a state transition, otherwise known as a State Update Function in the cadCAD generalized dynamical systems paradigm. [[1]](https://en.wikipedia.org/wiki/State-space_representation)
+Although cadCAD technically supports several computational modeling paradigms (e.g. agent-based modeling, population-level modeling, system dynamics modeling, hybrid modeling, etc.) we adopt an aggregate system dynamics lense in our MVP educational model. Rather than modelling the behaviour of individual agents, we consider what is often called a "representative agent" in economics literature. This allows us to apply aggregation and approximation for groups of agents or in our case, validator environments.
 
-### Aggregation and Approximation
+### Statistical Approximations
 
-We refer to the model as an aggregate system dynamics model, because rather than modelling behaviour of individual agents, we consider what is often called a "representative agent" in economics literature. This allows us to apply aggregation and approximation for groups of agents, or in this case validator types (e.g. cloud, DIY, StaaS). 
+The aggregate system dynamics point of view led us to make several statistical approximations, e.g.:
 
-For the purpose of the model a number of statistical approximations will be made, for example:
-* Calculating an "average effective balance" instead of using an agent level per validator effective balance
-* Determining the number of validators offline using expected uptime metrics
-* Approximating a per-epoch inclusion distance using a formula derived by GitHub user @hermanjunge and used in the Hoban/Borgers model that depends on the number of offline validators
+* Expected uptime metrics: We use aggregate expected uptime metric assumptions as per survey data by [Hoban/Borgers' Economic Model](https://drive.google.com/file/d/1pwt-EdnjhDLc_Mi2ydHus0_Cm14rs1Aq/view).
+* Per-epoch inclusion distance: We approximate per-epoch inclusion distance as per [Hoban/Borgers' Economic Model](https://drive.google.com/file/d/1pwt-EdnjhDLc_Mi2ydHus0_Cm14rs1Aq/view), using a formula derived by [@hermanjunge](https://github.com/hermanjunge/eth2-reward-simulation/blob/master/assumptions.md#attester-incentives).
 
-### Granularity
+### Epoch-level Granularity
 
-Unless specified otherwise all state variables, metrics, and parameters are time-dependent and calculated at per-epoch granularity. For ease of notation, units of time will be assumed implicitly. An exception to the per-epoch granularity is certain metrics that are annualized, such as the ETH supply inflation rate.
+Unless specified otherwise, all State Variables, System Metrics, and System Parameters are time-dependent and calculated at per-epoch granularity. For ease of notation, units of time will be assumed implicitly. In the model implementation, calculations can be aggregated across epochs where necessary - for example for performance reasons.
 
-In the model implementation, the calculations could be aggregated across epochs where necessary - for example for performance reasons.
+## Notation
 
-### Notation
-
-The following notation is used in the mathematical specification:
+The Mathematical Specification uses the following notation:
 * A list / vector of units or in calculations is represented using the matrix symbol: $\begin{bmatrix} x \end{bmatrix}$
 * A list or vector variable is represented using the vector symbol: $\vec{x}$
 * A $\Rightarrow$ symbol represents a function that returns a value, ignoring the arguments. For example a Python lambda function `lambda x: 1` would be represented as: $\Rightarrow 1$
 * The superscript $S^+$ is used to define a state transition from state $S$ at the current epoch $e$, to the state at the next epoch $e + 1$
 
-The following domain notation is used in the mathematical specification:
+The following domain notation is used in the Mathematical Specification:
 * $\mathbb{Z}$ - positive and negative integers
 * $\mathbb{R}$ - positive and negative real numbers 
 * $\mathbb{Z}^+$ - positive integers
 * $\mathbb{R}^-$ - negative real numbers
 * etc.
 
-## State Variables
+## System States
 
-To create a state-space representation of the system, we first define the state variables. The state-space is a data structure that consists of all possible values of states (i.e the state variables). A state is the point in the state-space that represents a particular configuration of the system.
+To create a state-space representation, we first describe the system's [state space](https://www.google.com/search?q=state+space+state+variables&oq=state+space+state+variables&aqs=chrome..69i57.4591j0j1&sourceid=chrome&ie=UTF-8) in the form of a set of State Variables. A state space is a data structure that consists of all possible values of State Variables. The state of the system can be represented as a state vector within the state space.
 
-To properly mathematically define the state variables, parameters, and metrics, the domain and range, as well as units have been included. In the case of the system parameters, the expected default values have been included too. The variable column values are direct referrences to the to-be-built cadCAD model code.
+For reasons of clarity and comprehensibility we categorize State Variables as follows: Constants State Variables, ETH State Variables, Validator State Variables, Reward and Penalty State Variables, EIP1559 State Variables, and System Metric State Variables.  
 
-The following constants are referred to in the specification:
+We define the State Variables' domain, range, and units. The "variable" column values are direct referrences to the to-be-built cadCAD model code.
 
-| Name | Symbol | Domain | Unit | Variable | Value |
-| -------- | -------- | -------- | -------- | --------| --------|
-| Epochs per year | $E_{year}$ | $\mathbb{Z}^+$ | $\text{epochs}$ | `epochs_per_year` | 82180 |
-| Epochs per day | $E_{day}$ | $\mathbb{Z}^+$ | $\text{epochs}$ | `epochs_per_day` | 225 |
-
-### Ethereum States
-
-To represent the Ethereum ETH token state, we define three state variables - the current spot price, total token supply, and the total ETH staked in the PoS system:
+### ETH State Variables
 
 | Name | Symbol | Domain | Unit | Variable | Description |
 | -------- | -------- | -------- | -------- | -------- | --------|
-| ETH Price | $P$ | $\mathbb{R}^+$ | $$/\text{ETH}$ | `eth_price` | The current ETH price sample from an exogenous process (an external data feed) |
-| ETH Supply | $S$ | $\mathbb{R}^+$ | $\text{ETH}$ | `eth_supply` | Ethereum supply with inflation/deflation |
+| ETH Price | $P$ | $\mathbb{R}^+$ | $$/\text{ETH}$ | `eth_price` | ETH spot price sample (from exogenous process) |
+| ETH Supply | $S$ | $\mathbb{R}^+$ | $\text{ETH}$ | `eth_supply` | ETH supply with inflation/deflation |
 | ETH Staked | $X$ | $\mathbb{R}^+$ | $\text{ETH}$ |`eth_staked` | Total ETH staked by all validators |
 
-### Validator States
+### Validator State Variables
 
-To represent validators entering the system through a process of staking, and keep track of their holdings in the PoS system, we define the following state variables:
 
 | Name | Symbol | Domain | Unit | Variable |
 | -------- | -------- | -------- | -------- | --------|
-| Number of validators | $V$ | $\mathbb{R}^+$ | None | `number_of_validators` |
-| Number of validators online | $V_{online}$ | $\mathbb{R}^+$ | None | `number_of_validators_online` |
-| Number of validators offline | $V_{offline}$ | $\mathbb{R}^+$ | None | `number_of_validators_offline` |
-| Average effective balance | $\bar{B}$ | $\mathbb{R}^+$ | $\text{Gwei}$ | `average_effective_balance` |
+| # Validators | $V$ | $\mathbb{R}^+$ | None | `number_of_validators` |
+| # Validators Online | $V_{online}$ | $\mathbb{R}^+$ | None | `number_of_validators_online` |
+| # Validators Offline | $V_{offline}$ | $\mathbb{R}^+$ | None | `number_of_validators_offline` |
+| Average Effective Balance | $\bar{B}$ | $\mathbb{R}^+$ | $\text{Gwei}$ | `average_effective_balance` |
 | Validator ETH Staked | $\vec{\sigma}$ | $\mathbb{R}^+$ | $[\text{ETH}]$ | `validator_eth_staked` |
 
-### PoS Rewards and Penalties States
-
-To allocate and account for PoS system rewards and penalties, there are a number of state variables to consider. In general, there are two types of state variables defined - individual state variables such as the target reward `r_t` that represent the total per-epoch value for a specific reward type, and aggregate state variables such as validating rewards `R_v` that account for the value of all rewards of a specific type per-epoch.
-
-Within the system, all rewards and penalties are stored in $\text{Gwei}$, before being converted to ETH and $ when calculating metrics.
+### Reward and Penalty State Variables
 
 | Name | Symbol | Domain | Unit | Variable |
 | -------- | -------- | -------- | -------- | --------|
@@ -111,20 +92,17 @@ Within the system, all rewards and penalties are stored in $\text{Gwei}$, before
 | Validating Penalties | $Z_v$ | $\mathbb{R}^+$ | $\text{Gwei}$ | `validating_penalties` |
 | Total Online Validator Rewards | $R_o$ | $\mathbb{R}^+$ | $\text{Gwei}$ | `total_online_validator_rewards` |
 
-### EIP1559 States
+### EIP1559 State Variables
 
 | Name | Symbol | Domain | Unit | Variable |
 | -------- | -------- | -------- | -------- | --------|
 | Total Basefee | $F$ | $\mathbb{R}^+$ | $\text{Gwei}$ | `total_basefee` |
 | Total Tips to Validators | $T$ | $\mathbb{R}^+$ | $\text{Gwei}$ | `total_tips_to_validators` |
 
-### Metric States
+### System Metric State Variables
 
-Metrics are key performance indicators (KPIs) of the system - in this case of the total network performance as well as the distribution across different validator types.
+We first define System Metrics on the level of the following 7 validator environments, using Numpy array matrix alegbra:
 
-The following metrics are calculated per validator type using Numpy array matrix algebra, before being aggregated.
-
-There are 7 different validator types:
 1. DIY Hardware
 2. DIY Cloud
 3. Pool StaaS
@@ -133,7 +111,11 @@ There are 7 different validator types:
 6. StaaS Full
 7. StaaS Self-Custodied
 
-The validator metrics have the following form:
+We then define network level System Metrics through aggregation.
+
+#### Validator Environment Level
+
+The State Variables in this category have the following vector form:
 
 \begin{bmatrix}
 \text{DIY Hardware}\\
@@ -153,9 +135,9 @@ The validator metrics have the following form:
 | Validator Third-Party Costs | $\vec{C}_{third-party}$ | $\mathbb{R}^+$ | $[\%]$ | `validator_third_party_costs` |
 | Validator Costs | $\vec{C}$ | $\mathbb{R}^+$ | [$] | `validator_costs` |
 
-### Aggregate Metric States
+#### Aggregate Network Level
 
-The vector form of the metrics per validator type are then aggregated into scalar values for a system metric. For example, the validator costs $\vec{C}$ becomes the total network costs $C$ when summed over all 7 validator types.
+The above validator environment level System Metrics are then aggregated into scalar values to define aggregate network level system metrics. For example, the validator costs $\vec{C}$ becomes the total network costs $C$ when summed over all 7 validator types.
 
 | Name | Symbol | Domain | Unit | Variable |
 | -------- | -------- | -------- | -------- | --------|
@@ -166,70 +148,38 @@ The vector form of the metrics per validator type are then aggregated into scala
 | Total Revenue Yields | $Y_r$ | $\mathbb{R}$ | $\%$ | `total_revenue_yields` |
 | Total Profit Yields | $Y_p$ | $\mathbb{R}$ | $\%$ | `total_profit_yields` |
 
-## Exogenous Processes
+## System Inputs
 
-By selecting state variables as part of a state space representation, we have defined a system boundary. Exogenous processes produce inputs to our model that exist outside this boundary, and are not dependent on the system states.
+By defining State Variables we have defined the system's state space and with it, system boundaries. System inputs are not dependent on the system's State Variables. Their logic is defined by Policy Functions in our cadCAD model, and they update the model's State Variables via State Update Functions.
 
-We have three possible exogenous processes:
-
-1. ETH price process that updates $P$
-2. ETH supply process that updates $S$
-3. ETH staked process that updates $X$
+We describe two environmental processes as System Inputs, updating the ETH Price and ETH Staked State Variables.
 
 ### ETH Price
 
-Eventually, when the adoption of Eth2 is significant, we could expect validator staking to influence the velocity of money in the Ethereum ecosystem. For the purpose of this model, we've asumed this isn't the case, and that the ETH price can be modelled as an exogenous process.
 
-:::warning
-**Assumption**: Staking has no significant influence on the ETH price while ETH staked forms an insignificant portion of the total ETH supply.
-:::
+For the MVP implementation of our model we use tiered ETH price levels to represent the relevant spectrum of market conditions, similar to [Hoban/Borgers' Economic Model](https://drive.google.com/file/d/1pwt-EdnjhDLc_Mi2ydHus0_Cm14rs1Aq/view). We also plan the option for the user to manually select ETH price ranges to emulate custom scenarios.
 
-### ETH Supply
-
-The ETH supply inflation is currently based on miner block rewards. When EIP1559 is introduced this will introduce an additional deflationary monetary policy. The Eth2 system PoS rewards and penalties will introduce a nominal inflation rate expected to be lower than the current Eth1 system, the price to maintain security of the system being much lower.
-
-For the purpose of this model, we've assumed the system is operating post-merge, and that EIP1559 has been implemented. Because of this, there is no exogenous process of inflation from miner block rewards.
-
-:::warning
-**Assumption**: The system is operating post-merge, and EIP1559 has been implemented. Thus there is no inflation due to miner block rewards.
-:::
-
-We list ETH supply here to validate our decision to not introduce an exogenous process for ETH supply, but in future versions this could be reconsidered. The impact of ETH supply volatility, network congestion via EIP1559 and a changing basefee, could also be investigated. 
+This environmental process, represented in the model as a Python lambda function, is called at each epoch with the current run and timestep, and returns an ETH price sample to update the ETH Price state variable during runtime.
 
 ### ETH Staked
 
-For the purpose of the model, we assume the amount of ETH staked in the system is not dependent on the current model state.
+For the MVP implementation of our model we assume a representative agent that remains within the system once entered, and we use a monotonically increasing function as a standard adoption model.  We also plan the option for the user to manually select define ETH staked levels to emulate custom scenarios. 
 
-:::warning
-**Assumption**: ETH staked is not dependent on the current model state.
-:::
+This environmental process, represented in the model as a Python lambda function, is called at each epoch with the current run and timestep, and returns the change in ETH staked to update the ETH Staked state variable during runtime.
 
-In reality, the staking of ETH into the system, and eventually out of the system when Eth2 if fully operational, is likely to be dependent on a number of feedback loops within the system - actors will make informed decisions based on both internal system states and exogenous states. Capital efficient investors will likely act to optimize their investment yields, and a minority will act to secure the system. Time and data will tell how best to model these dynamics and extend the current model.
-
-Initially we'll assume a representative agent that remains within the system once staked, and an ETH staking process that follows an adoption model.
+In future model implementations, we could imagine adding feedback loops from State Variables. For instance, capital efficient validators will likely stake and unstake ETH based on the development of validator returns.
 
 ## System Parameters
 
-Parameters are used as configurable variables in the logic of policies and mechanisms, often when performing calculations. An example of a parameter would be the `BASE_REWARD_FACTOR`, used to calculate and update the base reward state. In a cadCAD model, parameters are lists of Python types that can be swept, or in the case of a stochastic process used to perform a Monte Carlo simulation.
+System Parameters are used as configurable variables as part of the model's System Input (Policy Function) and State Update (State Update Function) logic. An example of a parameter would be the `BASE_REWARD_FACTOR`, used to calculate and update the base reward state variable. 
 
-All parameters in this model can be tweaked by users of the model, but for the purpose of experimentation we've set defaults, and will likely sweep parameters within reasonable ranges around these defaults.
+In a cadCAD model, parameters are lists of Python types that can be swept, or in the case of a stochastic process used to perform a Monte Carlo simulation. For the purpose of experimentation we've set defaults, and will sweep parameters within reasonable ranges around these defaults.
 
-### Exogenous Processes
+For reasons of clarity and comprehensibility we categorize parameters as: Eth2 Official Specification Parameters, 
 
-The following exogenous processes are configured using parameters, and update the corresponding state variables during runtime.
+### Eth2 Official Specification System Parameters
 
-For example: at each epoch, the `eth_price_process` parameter, which is a Python lambda function, is called with the current run and timestep, and returns an ETH price sample, which would be used to update the state variable `eth_price`.
-
-| Variable | Unit | Description |
-| -------- | -------- | -------- |
-| `eth_price_process` | $\Rightarrow \text{ETH}$ | A process in the form of a lambda function that takes the current run, timestep and returns an ETH price sample |
-| `eth_staked_process` | $\Rightarrow \Delta \text{ETH}$ | A process that returns the change in total ETH staked |
-
-### Eth2 Specification Parameters
-
-The following parameters are the relevant parameters from the Eth2 specification.
-
-All parameters from the Eth2 specification use uppercase snake-case variable naming, such as `BASE_REWARD_FACTOR`.
+All System Parameters in this category use uppercase snake-case variable naming for easy recognition, such as `BASE_REWARD_FACTOR`.
 
 | Variable | Default Value | Unit |
 | -------- | -------- | -------- |
@@ -241,32 +191,28 @@ All parameters from the Eth2 specification use uppercase snake-case variable nam
 | `WHISTLEBLOWER_REWARD_QUOTIENT` | `512` | None |
 | `MIN_SLASHING_PENALTY_QUOTIENT` | `32` | None |
 
-### Validator Configuration Parameters
+### Validator Environment System Parameters
 
-The following parameters are used in the configuration of validator types and operation.
 
 | Variable | Unit | Description |
 | -------- | -------- | -------- |
-| `validator_internet_uptime` | $\%$ | The expected average uptime due to internet issues |
-| `validator_power_uptime` | $\%$ | The expected average uptime due to power issues |
-| `validator_technical_uptime` | $\%$ | The expected average uptime due to technical constraints |
 | `validator_percentage_distribution` | $\begin{bmatrix} \% \end{bmatrix}$ | The distribution of the total number of validators per validator type |
 | `validator_hardware_costs_per_epoch` | $$\begin{bmatrix} \$ \end{bmatrix}$$ | The per-epoch costs for DIY hardware infrastructure per validator type |
 | `validator_cloud_costs_per_epoch` | $$\begin{bmatrix} \$ \end{bmatrix}$$ | The per-epoch costs for cloud computing resources per validator type |
 | `validator_third_party_costs_per_epoch` | $\begin{bmatrix} \% \end{bmatrix}$ | A percentage value of the total validator rewards that goes to third-party service providers as a fee per validator type |
 
-### Validation Parameters
-
-The following parameters are used by the Eth2 PoS policies and mechanisms.
+### Validator Performance System Parameters
 
 | Variable | Default Value | Unit | Description |
 | -------- | -------- | -------- | -------- |
+| `validator_internet_uptime` |99.9| $\%$ | The expected average uptime due to internet issues |
+| `validator_power_uptime` |99.9| $\%$ | The expected average uptime due to power issues |
+| `validator_technical_uptime` |98.2| $\%$ | The expected average uptime due to technical constraints |
 | `slashing_events_per_1000_epochs` | `1` | $\frac{1}{1000}\text{epochs}$ | The expected number of validator actions that result in slashing per 1000 epochs |
 | `number_of_validating_penalties` | `3` | None | The total number of validation penalty types |
 
-### EIP1559 Parameters
+### EIP1559 System Parameters
 
-The following parameters are used by the Ethereum EIP1559 transaction pricing subsystem to approximate basefees and tips.
 
 | Variable | Default Value | Unit | Description |
 | -------- | -------- | -------- | -------- |
@@ -275,28 +221,28 @@ The following parameters are used by the Ethereum EIP1559 transaction pricing su
 | `eip1559_avg_transactions_per_day` | `688078` | None | Average transactions per day over past 6 months. To be validated during model implementation. |
 | `eip1559_avg_gas_per_transaction` | `73123` | $\text{Gas}$ | Average transaction gas over past 6 months. To be validated during model implementation. |
 
-## Mechanisms
+## State Update Logic
 
-Once we have a data structure for our model, in the form of a state-space representation and the associated state variables, we can define the mechanisms that update that state over time.
+After defining the model's state space in the form of System States, we describe their state update logic, represented as cadCAD policy and State Update Functions (also called "mechanisms" sometimes)
 
-To visualize the architecture of these mechanisms, we use a differential specification diagram, otherwise known as a "cadCAD Canvas" at cadCAD Edu. This diagram will accompany the derivation of the mathematical specification of the model mechanisms.
+To visualize the state update logic, we use a differential specification diagram (also known as a "cadCAD Canvas" at cadCAD Edu). This diagram will accompany the derivation of the Mathematical Specification of the model mechanisms.
 
-A differential specification diagram has a number of components, to summarize:
-* A set of columns called Partial State Update Blocks, that represent the sequence of state transitions within a single timestep (epoch in our model)
-* Within each Partial State Update Block multiple state updates can occur in parallel, but each State Update Function is responsible for updating the value of a single State Variable
-* Policies define decisions and processes within the model output signals as inputs to State Update Functions that update the specific State Variable
-* The first row contains the input states to the model Policies and State Update Functions
-* The second row contains the Policies of the model
-* The third row contains the State Update Functions
-* The fourth and fifth rows contain the State Variables and Metrics that the State Update Functions update
-
-![](https://i.imgur.com/FNPkqIz.png =300x)
+The [model's cadCAD Canvas / Differential Specification](https://lucid.app/lucidchart/invitations/accept/07b715e4-80c9-4901-8ba7-f3309e52a38d?viewport_loc=41%2C-239%2C5380%2C3206%2CQe-m-rCpJ8RS) is accessible via LucidChart. Below is an illustrative screenshot. 
 
 ![](https://i.imgur.com/vGaNGf3.png)
 
-The following mechanisms are categorized according to the differential specification, in the same order of operations. The execution of these mechanisms in order would represent the state transition from one epoch to the next.
+We describe the state update logic along the columns of the model's cadCAD Canvas' columns, also known as "Partial State Update Blocks" (PSUB). One round of execution of these Partial State Update Blocks would represent the state transition from one epoch to the next.
 
-### Exogenous Processes
+#### Constants
+
+The following constants are used in the derivation of the State Update Logic.
+
+| Name | Symbol | Domain | Unit | Variable | Value |
+| -------- | -------- | -------- | -------- | --------| --------|
+| Epochs per year | $E_{year}$ | $\mathbb{Z}^+$ | $\text{epochs}$ | `epochs_per_year` | 82180 |
+| Epochs per day | $E_{day}$ | $\mathbb{Z}^+$ | $\text{epochs}$ | `epochs_per_day` | 225 |
+
+### PSUB 1: Environmental Processes
 
 :::info
 These are the ETH price and ETH staked processes, defined in the model specification, that update the ETH price and ETH staked at each timestep.
@@ -312,7 +258,7 @@ $$
 X = \sum_{i=1}^{V}{\sigma_{ij}}
 $$
 
-### Validators
+### PSUB 2: Validators
 
 :::info
 Validators entering the system are driven by the total ETH staked in the system, and online and offline validators are approximated statistically.
@@ -335,7 +281,7 @@ The following mathematical pseudo-code is used to calculate the aggregate averag
 \end{aligned}
 \end{equation}
 
-### Base Reward
+### PSUB 3: Base Reward
 
 :::info
 The base reward is updated at each timestep according to the average effective balance and the amount of ETH staked in the system.
@@ -347,7 +293,7 @@ $$
 \beta = \text{min}(\bar{B}, \text{MAX_EFFECTIVE_BALANCE}) \times \frac{\text{BASE_REWARD_FACTOR}}{\sqrt{X \times 10^9} \times \text{BASE_REWARDS_PER_EPOCH}}
 $$
 
-### Block Proposal and Attestation
+### PSUB 4: Block Proposal and Attestation
 
 :::info
 The rewards and penalties from PoS block proposal and attestation are approximated and aggregated across all validators at each epoch.
@@ -396,7 +342,7 @@ $$
 R_o = R_v + R_w + T - Z_v
 $$
 
-### Slashing
+### PSUB 5: Slashing
 
 :::info
 Slashing is performed and whistleblower rewards distributed, approximated using the total number of offline validators.
@@ -414,7 +360,7 @@ $$
 \psi = \frac{\bar{B}}{\text{MIN_SLASHING_PENALTY_QUOTIENT}} \times \frac{\text{slashing_events_per_1000_epochs}}{1000}
 $$
 
-### EIP1559 Sub-system
+### PSUB 6: EIP1559 Sub-system
 
 :::info
 The total basefee and tips to validators are calculated at each timestep, according to average expected transaction rates.
@@ -430,17 +376,17 @@ $$
 T = \frac{\text{eip1559_avg_transactions_per_day}}{E_{day}} \times \text{eip1559_avg_gas_per_transaction} \\ \times \text{eip1559_avg_tip_amount} 
 $$
 
+
+
+
+The following state-update logic for system metric State Variables can also be performend in post-processing, to improve run-time performance.
+
+
 ## System Metrics
 
+System Metrics are computed from State Variables in order to assess the performance of the system. The calculation of our System Metrics is also represented in the [model's cadCAD Canvas / Differential Specification](https://lucid.app/lucidchart/invitations/accept/07b715e4-80c9-4901-8ba7-f3309e52a38d?viewport_loc=41%2C-239%2C5380%2C3206%2CQe-m-rCpJ8RS) and accessible via LucidChart. Below is an illustrative screenshot. 
+
 ![](https://i.imgur.com/VTiLNne.png)
-
-The system metrics are calculated in three stages, in three partial state update blocks:
-
-* Reward Aggregation
-* Validator Cost Aggregation
-* Accounting and Metrics
-
-The metrics of the system can also be calculated in post-processing, to improve run-time performance.
 
 #### Network Costs
 
@@ -488,4 +434,4 @@ $$Y_p = \frac{K_p \times E_{year}}{X \times P} \qquad (\%)$$
 
 # cadCAD Systems Model
 
-Completed in project phase 2.
+To be implemented as part of project Milestone 2.
