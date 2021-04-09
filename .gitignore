@@ -133,3 +133,4 @@ dmypy.json
 .pyre/
 
 .vscode/
+scratchpad.py
