@@ -1,5 +1,7 @@
 import math
 import model.constants as constants
+from model.types import Gwei
+import model.parts.spec as spec
 
 
 """
@@ -10,7 +12,7 @@ import model.constants as constants
 """
 
 
-def policy_penalties(params, substep, state_history, previous_state):
+def policy_attestation_penalties(params, substep, state_history, previous_state):
     # Parameters
     number_of_validating_penalties = params["number_of_validating_penalties"]
 
@@ -26,162 +28,144 @@ def policy_penalties(params, substep, state_history, previous_state):
     return {"validating_penalties": validating_penalties}
 
 
-def policy_casper_ffg_vote(params, substep, state_history, previous_state):
+def policy_attestation_rewards(params, substep, state_history, previous_state):
+    # Parameters
+    TIMELY_SOURCE_WEIGHT = params["TIMELY_SOURCE_WEIGHT"]
+    TIMELY_TARGET_WEIGHT = params["TIMELY_TARGET_WEIGHT"]
+    TIMELY_HEAD_WEIGHT = params["TIMELY_HEAD_WEIGHT"]
+    WEIGHT_DENOMINATOR = params["WEIGHT_DENOMINATOR"]
+
     # State Variables
     base_reward = previous_state["base_reward"]
-    number_of_validators = previous_state["number_of_validators"]
-    number_of_validators_offline = previous_state["number_of_validators_offline"]
+    number_of_validators_online = previous_state["number_of_validators_online"]
 
-    validators_offline_pct = number_of_validators_offline / number_of_validators
+    # Calculate source reward
+    # All submitted attestations have to match source vote
+    source_reward = (TIMELY_SOURCE_WEIGHT / WEIGHT_DENOMINATOR) * base_reward
+    # Aggregation over all active validators
+    source_reward *= number_of_validators_online
 
-    # Calculate source and target reward
-    source_reward = (1 - validators_offline_pct) * base_reward * number_of_validators
-    target_reward = source_reward
+    # Calculate target reward
+    target_reward = (TIMELY_TARGET_WEIGHT / WEIGHT_DENOMINATOR) * base_reward
+    # Aggregation over all active validators
+    target_reward *= number_of_validators_online
+
+    # Calculate head reward
+    head_reward = (TIMELY_HEAD_WEIGHT / WEIGHT_DENOMINATOR) * base_reward
+    # Aggregation over all active validators
+    head_reward *= number_of_validators_online
 
     return {
         "source_reward": source_reward,
         "target_reward": target_reward,
+        "head_reward": head_reward,
     }
 
 
-def approximate_inclusion_distance(number_of_validators, validators_offline_pct):
-    """Approximate Inclusion Distance
-    See derivation: https://github.com/hermanjunge/eth2-reward-simulation/blob/master/assumptions.md#attester-incentives
-    """
-    if validators_offline_pct == 0:
-        return 1
-
-    inclusion_distance_denominator = 1 - validators_offline_pct
-    inclusion_distance_denominator *= (
-        math.log(1 - validators_offline_pct)
-        / ((1 - validators_offline_pct) - 1)
-        * number_of_validators
-    )
-    return 1 / inclusion_distance_denominator
-
-
-def policy_lmd_ghost_vote(params, substep, state_history, previous_state):
+def policy_sync_committee(params, substep, state_history, previous_state):
     # Parameters
-    proposer_reward_quotient = params["PROPOSER_REWARD_QUOTIENT"]
+    SYNC_COMMITTEE_SIZE = params["SYNC_COMMITTEE_SIZE"]
+    SLOTS_PER_EPOCH = params["SLOTS_PER_EPOCH"]
+    SYNC_REWARD_WEIGHT = params["SYNC_REWARD_WEIGHT"]
+    WEIGHT_DENOMINATOR = params["WEIGHT_DENOMINATOR"]
 
     # State Variables
     base_reward = previous_state["base_reward"]
-    number_of_validators = previous_state["number_of_validators"]
-    number_of_validators_offline = previous_state["number_of_validators_offline"]
+    number_of_validators_online = previous_state["number_of_validators_online"]
 
-    validators_offline_pct = number_of_validators_offline / number_of_validators
+    # Calculate aggregate sync reward
+    sync_reward = (SYNC_REWARD_WEIGHT / WEIGHT_DENOMINATOR) * (1 / SLOTS_PER_EPOCH) * (1 / SYNC_COMMITTEE_SIZE) * base_reward
+    # Aggregation over all committee members over all slots in one epoch
+    sync_reward *= SYNC_COMMITTEE_SIZE * SLOTS_PER_EPOCH
+    # Aggregation over all active validators
+    sync_reward *= number_of_validators_online
 
-    head_reward = (1 - validators_offline_pct) * base_reward * number_of_validators
-
-    # Inclusion delay reward
-    inclusion_distance = approximate_inclusion_distance(
-        number_of_validators, validators_offline_pct
-    )
-    block_attester_reward = (
-        (1 - 1 / proposer_reward_quotient) * base_reward * (1 / inclusion_distance)
-    )
-
-    return {
-        "head_reward": head_reward,
-        "block_attester_reward": block_attester_reward,
-    }
+    return {"sync_reward": sync_reward}
 
 
 def policy_block_proposal(params, substep, state_history, previous_state):
     # Parameters
-    proposer_reward_quotient = params["PROPOSER_REWARD_QUOTIENT"]
+    PROPOSER_REWARD_QUOTIENT = params["PROPOSER_REWARD_QUOTIENT"]
+    WEIGHT_DENOMINATOR = params["WEIGHT_DENOMINATOR"]
+    TIMELY_SOURCE_WEIGHT = params["TIMELY_SOURCE_WEIGHT"]
+    TIMELY_TARGET_WEIGHT = params["TIMELY_TARGET_WEIGHT"]
+    TIMELY_HEAD_WEIGHT = params["TIMELY_HEAD_WEIGHT"]
+    SYNC_REWARD_WEIGHT = params["SYNC_REWARD_WEIGHT"]
 
     # State Variables
-    base_reward = previous_state["base_reward"]
-    number_of_validators = previous_state["number_of_validators"]
-    number_of_validators_offline = previous_state["number_of_validators_offline"]
+    source_reward = previous_state["source_reward"]
+    target_reward = previous_state["target_reward"]
+    head_reward = previous_state["head_reward"]
+    sync_reward = previous_state["sync_reward"]
 
-    validators_offline_pct = number_of_validators_offline / number_of_validators
-
-    inclusion_distance = approximate_inclusion_distance(
-        number_of_validators, validators_offline_pct
-    )
-    block_proposer_reward = (
-        (1 / proposer_reward_quotient) * base_reward * (1 / inclusion_distance)
-    )
-
+    # Calculate block proposer reward
+    block_proposer_reward = (1 / PROPOSER_REWARD_QUOTIENT) * (source_reward + target_reward + head_reward + sync_reward)
+    # Normalize by the sum of weights so that proposer rewards are 1/8th of base reward
+    block_proposer_reward *= (WEIGHT_DENOMINATOR / (TIMELY_SOURCE_WEIGHT + TIMELY_TARGET_WEIGHT + TIMELY_HEAD_WEIGHT + SYNC_REWARD_WEIGHT))
+    
     return {"block_proposer_reward": block_proposer_reward}
 
 
 def policy_slashing(params, substep, state_history, previous_state):
     # Parameters
-    whistleblower_reward_quotient = params["WHISTLEBLOWER_REWARD_QUOTIENT"]
-    min_slashing_penalty_quotient = params["MIN_SLASHING_PENALTY_QUOTIENT"]
     slashing_events_per_1000_epochs = params["slashing_events_per_1000_epochs"]
-
-    # State Variables
-    average_effective_balance = previous_state["average_effective_balance"]
 
     # Calculate total number of slashing events in current epoch
     number_of_slashing_events = slashing_events_per_1000_epochs / 1000
 
-    # Calculate amount slashed and whistleblower rewards for current epoch
-    amount_slashed = (
-        average_effective_balance
-        / min_slashing_penalty_quotient
-        * number_of_slashing_events
-    )
-    whistleblower_rewards = (
-        average_effective_balance
-        / whistleblower_reward_quotient
-        * number_of_slashing_events
-    )
+    # Calculate amount slashed, whistleblower reward, and proposer reward for a single slashing event
+    amount_slashed, whistleblower_reward, proposer_reward = spec.slash_validator(params, previous_state)
+
+    # Scale slashed and rewards by the number of slashing events per epoch
+    amount_slashed *= number_of_slashing_events
+    whistleblower_reward *= number_of_slashing_events
+    proposer_reward *= number_of_slashing_events
 
     return {
         "amount_slashed": amount_slashed,
-        "whistleblower_rewards": whistleblower_rewards,
+        "whistleblower_rewards": whistleblower_reward + proposer_reward,
     }
 
 
-def update_base_reward(params, substep, state_history, previous_state, policy_input):
+def update_base_reward(params, substep, state_history, previous_state, policy_input) -> (str, Gwei):
     """Update Base Reward
     Calculate and update base reward state variable
     """
 
-    # Parameters
-    max_effective_balance = params["MAX_EFFECTIVE_BALANCE"]
-    base_reward_factor = params["BASE_REWARD_FACTOR"]
-    base_rewards_per_epoch = params["BASE_REWARDS_PER_EPOCH"]
+    # Get base reward per validator
+    base_reward_per_validator: Gwei = spec.get_base_reward(params, previous_state)
 
-    # State Variables
-    eth_staked = previous_state["eth_staked"]
-
-    # Policy Signals
-    average_effective_balance = policy_input["average_effective_balance"]
-
-    # Calculate base reward
-    base_reward_per_validator = (
-        (min(average_effective_balance, max_effective_balance) * base_reward_factor)
-        // math.sqrt(eth_staked * constants.gwei)
-        // base_rewards_per_epoch
-    )
-
-    return "base_reward", base_reward_per_validator
+    return "base_reward", Gwei(base_reward_per_validator)
 
 
 def update_validating_rewards(
     params, substep, state_history, previous_state, policy_input
 ):
-    # Policy Signals
-    block_proposer_reward = policy_input["block_proposer_reward"]
-    block_attester_reward = policy_input["block_attester_reward"]
+    # State Variables
+    block_proposer_reward = previous_state["block_proposer_reward"]
+    sync_reward = previous_state["sync_reward"]
 
-    source_reward = policy_input["source_reward"]
-    target_reward = policy_input["target_reward"]
-    head_reward = policy_input["head_reward"]
+    source_reward = previous_state["source_reward"]
+    target_reward = previous_state["target_reward"]
+    head_reward = previous_state["head_reward"]
+
+    base_reward = previous_state["base_reward"]
+    number_of_validators_online = previous_state["number_of_validators_online"]
 
     # Calculate total validating rewards
     validating_rewards = (
         block_proposer_reward
-        + block_attester_reward
         + source_reward
         + target_reward
         + head_reward
+        + sync_reward
     )
+
+    # Check validating reward conditions
+    total_reward = number_of_validators_online * base_reward
+    assert sync_reward == (1 / 8) * total_reward
+    assert block_proposer_reward == (1 / 8) * total_reward
+    assert source_reward + target_reward + head_reward == (3 / 4) * total_reward
+    assert validating_rewards <= total_reward
 
     return "validating_rewards", validating_rewards

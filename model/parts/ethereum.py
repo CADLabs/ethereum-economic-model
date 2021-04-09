@@ -21,12 +21,10 @@ def policy_network_issuance(params, substep, state_history, previous_state):
         (total_online_validator_rewards - total_tips_to_validators)
         - amount_slashed
         - total_basefee
-    )
-    network_issuance_eth = network_issuance / constants.gwei
+    ) / constants.gwei
 
     return {
         "network_issuance": network_issuance,
-        "network_issuance_eth": network_issuance_eth,
     }
 
 
@@ -72,6 +70,6 @@ def update_eth_price(params, substep, state_history, previous_state, policy_inpu
 
 def update_eth_supply(params, substep, state_history, previous_state, policy_input):
     eth_supply = previous_state["eth_supply"]
-    network_issuance_eth = policy_input["network_issuance_eth"]
+    network_issuance = policy_input["network_issuance"]
 
-    return "eth_supply", eth_supply + network_issuance_eth
+    return "eth_supply", eth_supply + network_issuance

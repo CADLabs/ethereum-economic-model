@@ -74,8 +74,7 @@ def policy_average_effective_balance(params, substep, state_history, previous_st
     eth_staked = previous_state["eth_staked"]
     number_of_validators = previous_state["number_of_validators"]
 
-    # TODO check balance == eth_staked at aggregate
-    # TODO confirm effective balance multiplied by both online and offline validators
+    # Calculate average effective balance
     total_effective_balance = (
         eth_staked * constants.gwei
         - eth_staked * constants.gwei % effective_balance_increment

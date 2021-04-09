@@ -119,8 +119,8 @@ def policy_calculate_yields(params, substep, state_history, previous_state):
     }
 
 
-def update_total_online_validator_rewards(
-    params, substep, state_history, previous_state, policy_input
+def policy_total_online_validator_rewards(
+    params, substep, state_history, previous_state
 ):
     # State Variables
     validating_rewards = previous_state["validating_rewards"]
@@ -136,6 +136,14 @@ def update_total_online_validator_rewards(
         + total_tips_to_validators
     )
 
+    return {"total_online_validator_rewards": total_online_validator_rewards}
+
+
+def update_total_online_validator_rewards(
+    params, substep, state_history, previous_state, policy_input
+):
+    total_online_validator_rewards = policy_input["total_online_validator_rewards"]
+
     return "total_online_validator_rewards", total_online_validator_rewards
 
 
@@ -143,8 +151,8 @@ def update_supply_inflation(
     params, substep, state_history, previous_state, policy_input
 ):
     eth_supply = previous_state["eth_supply"]
-    network_issuance_eth = policy_input["network_issuance_eth"]
+    network_issuance = policy_input["network_issuance"]
 
-    supply_inflation = (network_issuance_eth * constants.epochs_per_year) / eth_supply
+    supply_inflation = (network_issuance * constants.epochs_per_year) / eth_supply
 
     return "supply_inflation", supply_inflation

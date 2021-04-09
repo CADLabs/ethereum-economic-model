@@ -32,11 +32,19 @@ class Parameters(TypedDict, total=True):
 
     MAX_EFFECTIVE_BALANCE: List[Gwei]
     EFFECTIVE_BALANCE_INCREMENT: List[int]
+    SLOTS_PER_EPOCH: List[int]
+    SYNC_COMMITTEE_SIZE: List[int]
 
     # Rewards and penalties
     PROPOSER_REWARD_QUOTIENT: List[int]
     WHISTLEBLOWER_REWARD_QUOTIENT: List[int]
     MIN_SLASHING_PENALTY_QUOTIENT: List[int]
+    TIMELY_HEAD_WEIGHT: List[int]
+    TIMELY_SOURCE_WEIGHT: List[int]
+    TIMELY_TARGET_WEIGHT: List[int]
+    SYNC_REWARD_WEIGHT: List[int]
+    PROPOSER_WEIGHT: List[int]
+    WEIGHT_DENOMINATOR: List[int]
 
     # Validator parameters
     validator_internet_uptime: List[Percentage]
@@ -120,7 +128,15 @@ parameters = Parameters(
     EFFECTIVE_BALANCE_INCREMENT=[1 * constants.gwei],
     PROPOSER_REWARD_QUOTIENT=[8],
     WHISTLEBLOWER_REWARD_QUOTIENT=[512],
-    MIN_SLASHING_PENALTY_QUOTIENT=[32],
+    MIN_SLASHING_PENALTY_QUOTIENT=[2**6],
+    TIMELY_HEAD_WEIGHT=[12],
+    TIMELY_SOURCE_WEIGHT=[12],
+    TIMELY_TARGET_WEIGHT=[24],
+    SYNC_REWARD_WEIGHT=[8],
+    PROPOSER_WEIGHT=[8],
+    WEIGHT_DENOMINATOR=[64],
+    SLOTS_PER_EPOCH=[32],
+    SYNC_COMMITTEE_SIZE=[2**10],
     validator_internet_uptime=[0.999],
     validator_power_uptime=[0.999],
     validator_technical_uptime=[0.982],

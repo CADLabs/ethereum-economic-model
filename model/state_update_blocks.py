@@ -5,7 +5,7 @@ import model.parts.metrics as metrics
 from model.utils import update_from_signal
 
 
-state_update_blocks = [
+_state_update_blocks = [
     {
         "description": """
             Exogenous Ethereum processes:
@@ -55,23 +55,38 @@ state_update_blocks = [
     },
     {
         "description": """
-            Beacon chain block proposal and attestation processes, rewards, and penalties
+            Sync committee and attestation rewards
+        """,
+        "policies": {
+            "casper_ffg_vote": proof_of_stake.policy_attestation_rewards,
+            "sync_committee": proof_of_stake.policy_sync_committee,
+        },
+        "variables": {
+            "source_reward": update_from_signal("source_reward"),
+            "target_reward": update_from_signal("target_reward"),
+            "head_reward": update_from_signal("head_reward"),
+            "sync_reward": update_from_signal("sync_reward"),
+        }
+    },
+    {
+        "description": """
+            Block proposal rewards
         """,
         "policies": {
             "block_proposal": proof_of_stake.policy_block_proposal,
-            "casper_ffg_vote": proof_of_stake.policy_casper_ffg_vote,
-            "lmd_ghost_vote": proof_of_stake.policy_lmd_ghost_vote,
-            "penalties": proof_of_stake.policy_penalties,
         },
         "variables": {
-            # Casper FFG vote
-            "source_reward": update_from_signal("source_reward"),
-            "target_reward": update_from_signal("target_reward"),
-            # LMD Ghost vote
-            "head_reward": update_from_signal("head_reward"),
-            "block_attester_reward": update_from_signal("block_attester_reward"),
             "block_proposer_reward": update_from_signal("block_proposer_reward"),
-            # Total validating rewards and penalties
+        },
+    },
+    {
+        "description": """
+            Total validating rewards and penalties
+        """,
+        "policies": {
+            "penalties": proof_of_stake.policy_attestation_penalties,
+        },
+        "variables": {
             "validating_rewards": proof_of_stake.update_validating_rewards,
             "validating_penalties": update_from_signal("validating_penalties"),
         },
@@ -102,17 +117,23 @@ state_update_blocks = [
     },
     {
         "description": """
-            Online validator reward aggregation
+            Online validator reward aggregation, and accounting of Ethereum issuance & inflation 
         """,
-        "policies": {},
+        "policies": {
+            "calculate_total_online_validator_rewards": metrics.policy_total_online_validator_rewards,
+            "issuance": ethereum.policy_network_issuance,
+        },
         "variables": {
             "total_online_validator_rewards": metrics.update_total_online_validator_rewards,
+            "eth_supply": ethereum.update_eth_supply,
+            "supply_inflation": metrics.update_supply_inflation,
         },
     },
     {
         "description": """
             Accounting of validator costs and online validator rewards
         """,
+        "post_processing": False,
         "policies": {
             "metric_validator_costs": metrics.policy_validator_costs,
         },
@@ -131,17 +152,13 @@ state_update_blocks = [
     },
     {
         "description": """
-            Accounting of Ethereum issuance, inflation, and validator yields
+            Accounting of validator yield metrics
         """,
+        "post_processing": False,
         "policies": {
-            "issuance": ethereum.policy_network_issuance,
             "yields": metrics.policy_calculate_yields,
         },
         "variables": {
-            # State Updates
-            "eth_supply": ethereum.update_eth_supply,
-            # Metrics
-            "supply_inflation": metrics.update_supply_inflation,
             "validator_eth_staked": update_from_signal("validator_eth_staked"),
             "validator_revenue": update_from_signal("validator_revenue"),
             "validator_profit": update_from_signal("validator_profit"),
@@ -154,3 +171,8 @@ state_update_blocks = [
         },
     },
 ]
+
+# Split the state update blocks into those used during the simulation (state_update_blocks)
+# and those used in post-processing to calculate the system metrics (post_processing_blocks)
+state_update_blocks = [block for block in _state_update_blocks if not block.get("post_processing", False)]
+post_processing_blocks = [block for block in _state_update_blocks if block.get("post_processing", False)]
