@@ -2,6 +2,7 @@ import numpy as np
 from pytest import approx
 
 import model.constants as constants
+import model.parts.spec as spec
 
 
 """
@@ -70,24 +71,12 @@ def policy_validators(params, substep, state_history, previous_state):
 
 
 def policy_average_effective_balance(params, substep, state_history, previous_state):
-    # Parameters
-    effective_balance_increment = params["EFFECTIVE_BALANCE_INCREMENT"]
-    max_effective_balance = params["MAX_EFFECTIVE_BALANCE"]
-
     # State Variables
-    eth_staked = previous_state["eth_staked"]
     number_of_validators = previous_state["number_of_validators"]
-
-    # Calculate average effective balance
-    total_effective_balance = (
-        eth_staked * constants.gwei
-        - eth_staked * constants.gwei % effective_balance_increment
-    )
-    max_total_effective_balance = max_effective_balance * number_of_validators
-
-    average_effective_balance = min(
-        total_effective_balance, max_total_effective_balance
-    )
-    average_effective_balance /= number_of_validators
+    
+    # Get total active balance
+    total_active_balance = spec.get_total_active_balance(params, previous_state)
+    # Aggregate by averaging over all validators
+    average_effective_balance = total_active_balance / number_of_validators
 
     return {"average_effective_balance": average_effective_balance}

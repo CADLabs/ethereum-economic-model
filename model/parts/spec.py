@@ -15,8 +15,40 @@ See:
 # Beacon state accessors
 
 
-def get_total_active_balance(state: StateVariables) -> Gwei:
-    return Gwei(state["eth_staked"] * constants.gwei)
+def get_total_active_balance(params: Parameters, state: StateVariables) -> Gwei:
+    '''
+    ```
+    See https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/beacon-chain.md#get_total_active_balance
+
+    def get_total_active_balance(state: BeaconState) -> Gwei:
+        """
+        Return the combined effective balance of the active validators.
+        Note: ``get_total_balance`` returns ``EFFECTIVE_BALANCE_INCREMENT`` Gwei minimum to avoid divisions by zero.
+        """
+        return get_total_balance(state, set(get_active_validator_indices(state, get_current_epoch(state))))
+    ```
+    '''
+
+    # Parameters
+    EFFECTIVE_BALANCE_INCREMENT = params["EFFECTIVE_BALANCE_INCREMENT"]
+    MAX_EFFECTIVE_BALANCE = params["MAX_EFFECTIVE_BALANCE"]
+
+    # State Variables
+    eth_staked = state["eth_staked"]
+    number_of_validators = state["number_of_validators"]
+
+    # Calculate total active balance
+    total_active_balance = (
+        eth_staked * constants.gwei
+        - eth_staked * constants.gwei % EFFECTIVE_BALANCE_INCREMENT
+    )
+    max_total_active_balance = MAX_EFFECTIVE_BALANCE * number_of_validators
+
+    total_active_balance = min(
+        total_active_balance, max_total_active_balance
+    )
+
+    return Gwei(max(EFFECTIVE_BALANCE_INCREMENT, total_active_balance))
 
 
 def get_base_reward_per_increment(params: Parameters, state: StateVariables) -> Gwei:
@@ -26,7 +58,7 @@ def get_base_reward_per_increment(params: Parameters, state: StateVariables) -> 
     return Gwei(
         EFFECTIVE_BALANCE_INCREMENT
         * BASE_REWARD_FACTOR
-        // math.sqrt(get_total_active_balance(state))
+        // math.sqrt(get_total_active_balance(params, state))
     )
 
 
