@@ -66,7 +66,7 @@ _state_update_blocks = [
             "target_reward": update_from_signal("target_reward"),
             "head_reward": update_from_signal("head_reward"),
             "sync_reward": update_from_signal("sync_reward"),
-        }
+        },
     },
     {
         "description": """
@@ -174,5 +174,9 @@ _state_update_blocks = [
 
 # Split the state update blocks into those used during the simulation (state_update_blocks)
 # and those used in post-processing to calculate the system metrics (post_processing_blocks)
-state_update_blocks = [block for block in _state_update_blocks if not block.get("post_processing", False)]
-post_processing_blocks = [block for block in _state_update_blocks if block.get("post_processing", False)]
+state_update_blocks = [
+    block for block in _state_update_blocks if not block.get("post_processing", False)
+]
+post_processing_blocks = [
+    block for block in _state_update_blocks if block.get("post_processing", False)
+]

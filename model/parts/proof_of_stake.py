@@ -74,7 +74,12 @@ def policy_sync_committee(params, substep, state_history, previous_state):
     number_of_validators_online = previous_state["number_of_validators_online"]
 
     # Calculate aggregate sync reward
-    sync_reward = (SYNC_REWARD_WEIGHT / WEIGHT_DENOMINATOR) * (1 / SLOTS_PER_EPOCH) * (1 / SYNC_COMMITTEE_SIZE) * base_reward
+    sync_reward = (
+        (SYNC_REWARD_WEIGHT / WEIGHT_DENOMINATOR)
+        * (1 / SLOTS_PER_EPOCH)
+        * (1 / SYNC_COMMITTEE_SIZE)
+        * base_reward
+    )
     # Aggregation over all committee members over all slots in one epoch
     sync_reward *= SYNC_COMMITTEE_SIZE * SLOTS_PER_EPOCH
     # Aggregation over all active validators
@@ -99,10 +104,17 @@ def policy_block_proposal(params, substep, state_history, previous_state):
     sync_reward = previous_state["sync_reward"]
 
     # Calculate block proposer reward
-    block_proposer_reward = (1 / PROPOSER_REWARD_QUOTIENT) * (source_reward + target_reward + head_reward + sync_reward)
+    block_proposer_reward = (1 / PROPOSER_REWARD_QUOTIENT) * (
+        source_reward + target_reward + head_reward + sync_reward
+    )
     # Normalize by the sum of weights so that proposer rewards are 1/8th of base reward
-    block_proposer_reward *= (WEIGHT_DENOMINATOR / (TIMELY_SOURCE_WEIGHT + TIMELY_TARGET_WEIGHT + TIMELY_HEAD_WEIGHT + SYNC_REWARD_WEIGHT))
-    
+    block_proposer_reward *= WEIGHT_DENOMINATOR / (
+        TIMELY_SOURCE_WEIGHT
+        + TIMELY_TARGET_WEIGHT
+        + TIMELY_HEAD_WEIGHT
+        + SYNC_REWARD_WEIGHT
+    )
+
     return {"block_proposer_reward": block_proposer_reward}
 
 
@@ -114,7 +126,9 @@ def policy_slashing(params, substep, state_history, previous_state):
     number_of_slashing_events = slashing_events_per_1000_epochs / 1000
 
     # Calculate amount slashed, whistleblower reward, and proposer reward for a single slashing event
-    amount_slashed, whistleblower_reward, proposer_reward = spec.slash_validator(params, previous_state)
+    amount_slashed, whistleblower_reward, proposer_reward = spec.slash_validator(
+        params, previous_state
+    )
 
     # Scale slashed and rewards by the number of slashing events per epoch
     amount_slashed *= number_of_slashing_events
@@ -127,7 +141,9 @@ def policy_slashing(params, substep, state_history, previous_state):
     }
 
 
-def update_base_reward(params, substep, state_history, previous_state, policy_input) -> (str, Gwei):
+def update_base_reward(
+    params, substep, state_history, previous_state, policy_input
+) -> (str, Gwei):
     """Update Base Reward
     Calculate and update base reward state variable
     """

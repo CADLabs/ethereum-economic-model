@@ -6,22 +6,29 @@ from model.parameters import Parameters
 from model.state_variables import StateVariables
 
 
-'''
+"""
 See:
 * https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md
-'''
+"""
 
 
 # Beacon state accessors
 
+
 def get_total_active_balance(state: StateVariables) -> Gwei:
     return Gwei(state["eth_staked"] * constants.gwei)
+
 
 def get_base_reward_per_increment(params: Parameters, state: StateVariables) -> Gwei:
     EFFECTIVE_BALANCE_INCREMENT = params["EFFECTIVE_BALANCE_INCREMENT"]
     BASE_REWARD_FACTOR = params["BASE_REWARD_FACTOR"]
 
-    return Gwei(EFFECTIVE_BALANCE_INCREMENT * BASE_REWARD_FACTOR // math.sqrt(get_total_active_balance(state)))
+    return Gwei(
+        EFFECTIVE_BALANCE_INCREMENT
+        * BASE_REWARD_FACTOR
+        // math.sqrt(get_total_active_balance(state))
+    )
+
 
 def get_base_reward(params: Parameters, state: StateVariables) -> Gwei:
     MAX_EFFECTIVE_BALANCE = params["MAX_EFFECTIVE_BALANCE"]
@@ -29,15 +36,21 @@ def get_base_reward(params: Parameters, state: StateVariables) -> Gwei:
 
     average_effective_balance = state["average_effective_balance"]
 
-    increments = min(average_effective_balance, MAX_EFFECTIVE_BALANCE) // EFFECTIVE_BALANCE_INCREMENT
+    increments = (
+        min(average_effective_balance, MAX_EFFECTIVE_BALANCE)
+        // EFFECTIVE_BALANCE_INCREMENT
+    )
 
     return Gwei(increments * get_base_reward_per_increment(params, state))
+
 
 def get_proposer_reward(params: Parameters, state: StateVariables) -> Gwei:
     PROPOSER_REWARD_QUOTIENT = params["PROPOSER_REWARD_QUOTIENT"]
     return Gwei(get_base_reward(params, state) // PROPOSER_REWARD_QUOTIENT)
 
+
 # Beacon state mutators
+
 
 def slash_validator(params: Parameters, state: StateVariables) -> (Gwei, Gwei, Gwei):
     MIN_SLASHING_PENALTY_QUOTIENT = params["MIN_SLASHING_PENALTY_QUOTIENT"]
@@ -48,7 +61,9 @@ def slash_validator(params: Parameters, state: StateVariables) -> (Gwei, Gwei, G
     average_effective_balance = state["average_effective_balance"]
 
     slashed = Gwei(average_effective_balance // MIN_SLASHING_PENALTY_QUOTIENT)
-    whistleblower_reward = Gwei(average_effective_balance // WHISTLEBLOWER_REWARD_QUOTIENT)
+    whistleblower_reward = Gwei(
+        average_effective_balance // WHISTLEBLOWER_REWARD_QUOTIENT
+    )
     proposer_reward = Gwei(whistleblower_reward * PROPOSER_WEIGHT // WEIGHT_DENOMINATOR)
 
     return slashed, Gwei(whistleblower_reward - proposer_reward), proposer_reward
