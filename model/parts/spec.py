@@ -44,9 +44,7 @@ def get_total_active_balance(params: Parameters, state: StateVariables) -> Gwei:
     )
     max_total_active_balance = MAX_EFFECTIVE_BALANCE * number_of_validators
 
-    total_active_balance = min(
-        total_active_balance, max_total_active_balance
-    )
+    total_active_balance = min(total_active_balance, max_total_active_balance)
 
     return Gwei(max(EFFECTIVE_BALANCE_INCREMENT, total_active_balance))
 

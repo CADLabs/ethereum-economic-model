@@ -124,7 +124,9 @@ _state_update_blocks = [
             "issuance": ethereum.policy_network_issuance,
         },
         "variables": {
-            "total_online_validator_rewards": update_from_signal("total_online_validator_rewards"),
+            "total_online_validator_rewards": update_from_signal(
+                "total_online_validator_rewards"
+            ),
             "eth_supply": ethereum.update_eth_supply,
             "supply_inflation": metrics.update_supply_inflation,
         },

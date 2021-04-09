@@ -26,9 +26,7 @@ def policy_staking(params, substep, state_history, previous_state):
     # Get the ETH staked sample for the current run and timestep
     eth_staked = eth_staked_process(run, timestep)
 
-    assert (
-        eth_staked <= eth_supply
-    ), "ETH staked can't be more than ETH supply"
+    assert eth_staked <= eth_supply, "ETH staked can't be more than ETH supply"
 
     return {"eth_staked": eth_staked}
 
@@ -73,7 +71,7 @@ def policy_validators(params, substep, state_history, previous_state):
 def policy_average_effective_balance(params, substep, state_history, previous_state):
     # State Variables
     number_of_validators = previous_state["number_of_validators"]
-    
+
     # Get total active balance
     total_active_balance = spec.get_total_active_balance(params, previous_state)
     # Aggregate by averaging over all validators
