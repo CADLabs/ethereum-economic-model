@@ -17,7 +17,7 @@ _state_update_blocks = [
         },
         "variables": {
             "eth_price": ethereum.update_eth_price,
-            "eth_staked": validators.update_eth_staked,
+            "eth_staked": update_from_signal("eth_staked"),
         },
     },
     {

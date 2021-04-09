@@ -20,12 +20,16 @@ def policy_staking(params, substep, state_history, previous_state):
     # State Variables
     run = previous_state["run"]
     timestep = previous_state["timestep"]
-    eth_staked = previous_state["eth_staked"]
+    eth_supply = previous_state["eth_supply"]
 
-    # Get the staked ETH sample for the current run and timestep
-    staked_eth = eth_staked_process(run, timestep) - eth_staked
+    # Get the ETH staked sample for the current run and timestep
+    eth_staked = eth_staked_process(run, timestep)
 
-    return {"staked_eth": staked_eth}
+    assert (
+        eth_staked <= eth_supply
+    ), "ETH staked can't be more than ETH supply"
+
+    return {"eth_staked": eth_staked}
 
 
 def policy_validators(params, substep, state_history, previous_state):
@@ -87,15 +91,3 @@ def policy_average_effective_balance(params, substep, state_history, previous_st
     average_effective_balance /= number_of_validators
 
     return {"average_effective_balance": average_effective_balance}
-
-
-def update_eth_staked(params, substep, state_history, previous_state, policy_input):
-    eth_supply = previous_state["eth_supply"]
-    eth_staked = previous_state["eth_staked"]
-    staked_eth = policy_input["staked_eth"]
-
-    assert (
-        eth_staked + staked_eth <= eth_supply
-    ), "ETH staked can't be more than ETH supply"
-
-    return "eth_staked", eth_staked + staked_eth
