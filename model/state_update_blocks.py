@@ -124,7 +124,7 @@ _state_update_blocks = [
             "issuance": ethereum.policy_network_issuance,
         },
         "variables": {
-            "total_online_validator_rewards": metrics.update_total_online_validator_rewards,
+            "total_online_validator_rewards": update_from_signal("total_online_validator_rewards"),
             "eth_supply": ethereum.update_eth_supply,
             "supply_inflation": metrics.update_supply_inflation,
         },
@@ -156,7 +156,7 @@ _state_update_blocks = [
         """,
         "post_processing": False,
         "policies": {
-            "yields": metrics.policy_calculate_yields,
+            "yields": metrics.policy_validator_yields,
         },
         "variables": {
             "validator_eth_staked": update_from_signal("validator_eth_staked"),

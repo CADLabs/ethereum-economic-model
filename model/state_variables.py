@@ -33,7 +33,6 @@ class StateVariables(TypedDict, total=True):
     source_reward: Gwei
     target_reward: Gwei
     head_reward: Gwei
-    block_attester_reward: Gwei
     block_proposer_reward: Gwei
     sync_reward: Gwei
 
@@ -87,7 +86,6 @@ initial_state = StateVariables(
     source_reward=0,
     target_reward=0,
     head_reward=0,
-    block_attester_reward=0,
     block_proposer_reward=0,
     sync_reward=0,
     amount_slashed=0,

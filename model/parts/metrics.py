@@ -57,7 +57,7 @@ def policy_validator_costs(params, substep, state_history, previous_state):
     }
 
 
-def policy_calculate_yields(params, substep, state_history, previous_state):
+def policy_validator_yields(params, substep, state_history, previous_state):
     # Parameters
     validator_percentage_distribution = params["validator_percentage_distribution"]
 
@@ -137,14 +137,6 @@ def policy_total_online_validator_rewards(
     )
 
     return {"total_online_validator_rewards": total_online_validator_rewards}
-
-
-def update_total_online_validator_rewards(
-    params, substep, state_history, previous_state, policy_input
-):
-    total_online_validator_rewards = policy_input["total_online_validator_rewards"]
-
-    return "total_online_validator_rewards", total_online_validator_rewards
 
 
 def update_supply_inflation(
