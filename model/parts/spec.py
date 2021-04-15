@@ -1,7 +1,7 @@
 import math
 
 import model.constants as constants
-from model.types import Gwei
+from model.types import Gwei, ValidatorIndex, BeaconState
 from model.parameters import Parameters
 from model.state_variables import StateVariables
 
@@ -13,6 +13,16 @@ See:
 
 
 # Beacon state accessors
+
+def get_total_balance(params: Parameters, state: StateVariables) -> Gwei:
+    """
+    Return the combined effective balance of the ``indices``.
+    ``EFFECTIVE_BALANCE_INCREMENT`` Gwei minimum to avoid divisions by zero.
+    Math safe up to ~10B ETH, afterwhich this overflows uint64.
+    """
+    EFFECTIVE_BALANCE_INCREMENT = params["EFFECTIVE_BALANCE_INCREMENT"]
+
+    return Gwei(max(EFFECTIVE_BALANCE_INCREMENT, sum([state.validators[index].effective_balance for index in indices])))
 
 
 def get_total_active_balance(params: Parameters, state: StateVariables) -> Gwei:
@@ -81,8 +91,18 @@ def get_proposer_reward(params: Parameters, state: StateVariables) -> Gwei:
 
 # Beacon state mutators
 
+def increase_balance(params: Parameters, state: StateVariables, index: ValidatorIndex, delta: Gwei) -> Gwei:
+    """
+    Increase the validator balance at index ``index`` by ``delta``.
+    """
+    state.balances[index] += delta
+
 
 def slash_validator(params: Parameters, state: StateVariables) -> (Gwei, Gwei, Gwei):
+    '''
+    See https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#modified-slash_validator
+    
+    '''
     MIN_SLASHING_PENALTY_QUOTIENT = params["MIN_SLASHING_PENALTY_QUOTIENT"]
     WHISTLEBLOWER_REWARD_QUOTIENT = params["WHISTLEBLOWER_REWARD_QUOTIENT"]
     PROPOSER_WEIGHT = params["PROPOSER_WEIGHT"]
@@ -98,6 +118,30 @@ def slash_validator(params: Parameters, state: StateVariables) -> (Gwei, Gwei, G
 
     return slashed, Gwei(whistleblower_reward - proposer_reward), proposer_reward
 
+# Effective balance updates
+
+def process_effective_balance_updates(params: Parameters, state: StateVariables) -> BeaconState:
+    EFFECTIVE_BALANCE_INCREMENT = params["EFFECTIVE_BALANCE_INCREMENT"]
+    HYSTERESIS_QUOTIENT = params["HYSTERESIS_QUOTIENT"]
+    HYSTERESIS_DOWNWARD_MULTIPLIER = params["HYSTERESIS_DOWNWARD_MULTIPLIER"]
+    HYSTERESIS_UPWARD_MULTIPLIER = params["HYSTERESIS_UPWARD_MULTIPLIER"]
+    MAX_EFFECTIVE_BALANCE = params["MAX_EFFECTIVE_BALANCE"]
+
+    beacon_state = state["beacon_state"]
+
+    # Update effective balances with hysteresis
+    for index, validator in enumerate(beacon_state.validators):
+        balance = beacon_state.balances[index]
+        HYSTERESIS_INCREMENT = uint64(EFFECTIVE_BALANCE_INCREMENT // HYSTERESIS_QUOTIENT)
+        DOWNWARD_THRESHOLD = HYSTERESIS_INCREMENT * HYSTERESIS_DOWNWARD_MULTIPLIER
+        UPWARD_THRESHOLD = HYSTERESIS_INCREMENT * HYSTERESIS_UPWARD_MULTIPLIER
+        if (
+            balance + DOWNWARD_THRESHOLD < validator.effective_balance
+            or validator.effective_balance + UPWARD_THRESHOLD < balance
+        ):
+            validator.effective_balance = min(balance - balance % EFFECTIVE_BALANCE_INCREMENT, MAX_EFFECTIVE_BALANCE)
+    
+    return beacon_state
 
 # Block processing
 

@@ -115,6 +115,13 @@ validator_types = [
     ),
 ]
 
+# Normalise percentage distribution to a total of 100%
+total_percentage_distribution = sum([
+    validator.percentage_distribution for validator in validator_types
+])
+for validator in validator_types:
+    validator.percentage_distribution /= total_percentage_distribution
+
 # Configure parameters and parameter sweeps
 parameters = Parameters(
     eth_price_process=[
