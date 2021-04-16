@@ -36,6 +36,7 @@ Timestep = int
 
 # BeaconState types
 
+
 @dataclass
 class Validator:
     effective_balance: Gwei = 0
@@ -45,6 +46,7 @@ class Validator:
 class BeaconState:
     balances: [Gwei] = field(default_factory=lambda: [0])
     validators: [Validator] = field(default_factory=lambda: [Validator()])
+
 
 # Validator types
 ValidatorIndex = int
