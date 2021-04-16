@@ -1,0 +1,19 @@
+- file: landing-page
+
+- part: Model Specification
+  chapters:
+  - file: hackmd_mathematical_specification.md
+
+- part: Code Documentation
+  chapters:
+  - file: model/index.html
+
+- part: Analysis Notebooks
+  chapters:
+  - file: notebooks/validator_rewards
+  - file: notebooks/validator_environment_yields
+  - file: notebooks/revenue_yields_vs_network_inflation
+
+- part: Scratchpad
+  chapters:
+  - file: notebooks/scratchpad

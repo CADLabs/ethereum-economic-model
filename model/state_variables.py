@@ -30,15 +30,11 @@ class StateVariables(TypedDict, total=True):
     base_reward: Gwei
     validating_rewards: Gwei
     validating_penalties: Gwei
-
-    # Casper FFG state variables
     source_reward: Gwei
     target_reward: Gwei
-
-    # LMD Ghost state variables
     head_reward: Gwei
-    block_attester_reward: Gwei
     block_proposer_reward: Gwei
+    sync_reward: Gwei
 
     # Slashing state variables
     amount_slashed: Gwei
@@ -48,7 +44,7 @@ class StateVariables(TypedDict, total=True):
     total_basefee: Gwei
     total_tips_to_validators: Gwei
 
-    # Accounting state variables
+    # System metric state variables
     validator_eth_staked: np.ndarray
     validator_revenue: np.ndarray
     validator_profit: np.ndarray
@@ -90,8 +86,8 @@ initial_state = StateVariables(
     source_reward=0,
     target_reward=0,
     head_reward=0,
-    block_attester_reward=0,
     block_proposer_reward=0,
+    sync_reward=0,
     amount_slashed=0,
     whistleblower_rewards=0,
     total_basefee=0,

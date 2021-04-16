@@ -2,7 +2,7 @@ import numpy as np
 import sys
 
 # See https://docs.python.org/3/library/dataclasses.html
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 # If Python version is greater than equal to 3.8, import from typing module
@@ -33,6 +33,23 @@ USD_per_epoch = float
 # Simulation types
 Run = int
 Timestep = int
+
+# BeaconState types
+
+
+@dataclass
+class Validator:
+    effective_balance: Gwei = 0
+
+
+@dataclass
+class BeaconState:
+    balances: [Gwei] = field(default_factory=lambda: [0])
+    validators: [Validator] = field(default_factory=lambda: [Validator()])
+
+
+# Validator types
+ValidatorIndex = int
 
 # Validator type for configuring distribution of validators as parameters
 @dataclass

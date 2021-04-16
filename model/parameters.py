@@ -21,6 +21,8 @@ from model.types import (
 
 
 class Parameters(TypedDict, total=True):
+    dt: List[int]
+
     # Stochastic processes
     eth_price_process: List[Callable[[Run, Timestep], ETH]]
     eth_staked_process: List[Callable[[Run, Timestep], ETH]]
@@ -32,11 +34,19 @@ class Parameters(TypedDict, total=True):
 
     MAX_EFFECTIVE_BALANCE: List[Gwei]
     EFFECTIVE_BALANCE_INCREMENT: List[int]
+    SLOTS_PER_EPOCH: List[int]
+    SYNC_COMMITTEE_SIZE: List[int]
 
     # Rewards and penalties
     PROPOSER_REWARD_QUOTIENT: List[int]
     WHISTLEBLOWER_REWARD_QUOTIENT: List[int]
     MIN_SLASHING_PENALTY_QUOTIENT: List[int]
+    TIMELY_HEAD_WEIGHT: List[int]
+    TIMELY_SOURCE_WEIGHT: List[int]
+    TIMELY_TARGET_WEIGHT: List[int]
+    SYNC_REWARD_WEIGHT: List[int]
+    PROPOSER_WEIGHT: List[int]
+    WEIGHT_DENOMINATOR: List[int]
 
     # Validator parameters
     validator_internet_uptime: List[Percentage]
@@ -63,10 +73,14 @@ class Parameters(TypedDict, total=True):
 # Create Random Number Generator (RNG) with a seed of 1
 rng = np.random.default_rng(1)
 eth_price_process = processes.continuous.BrownianExcursion(
-    t=simulation.TIMESTEPS, rng=rng
+    t=(simulation.TIMESTEPS * simulation.DELTA_TIME), rng=rng
 )
-eth_price_samples = eth_price_process.sample(simulation.TIMESTEPS)
-eth_staked_samples = np.linspace(524_288, 33_600_000, simulation.TIMESTEPS)
+eth_price_samples = eth_price_process.sample(
+    simulation.TIMESTEPS * simulation.DELTA_TIME
+)
+eth_staked_samples = np.linspace(
+    524_288, 33_600_000, simulation.TIMESTEPS * simulation.DELTA_TIME
+)
 
 # Configure validator type distribution
 validator_types = [
@@ -107,8 +121,16 @@ validator_types = [
     ),
 ]
 
+# Normalise percentage distribution to a total of 100%
+total_percentage_distribution = sum(
+    [validator.percentage_distribution for validator in validator_types]
+)
+for validator in validator_types:
+    validator.percentage_distribution /= total_percentage_distribution
+
 # Configure parameters and parameter sweeps
 parameters = Parameters(
+    dt=[simulation.DELTA_TIME],
     eth_price_process=[
         lambda _run, timestep: 1000
         + eth_price_samples[timestep] / max(eth_price_samples) * 1000
@@ -120,7 +142,15 @@ parameters = Parameters(
     EFFECTIVE_BALANCE_INCREMENT=[1 * constants.gwei],
     PROPOSER_REWARD_QUOTIENT=[8],
     WHISTLEBLOWER_REWARD_QUOTIENT=[512],
-    MIN_SLASHING_PENALTY_QUOTIENT=[32],
+    MIN_SLASHING_PENALTY_QUOTIENT=[2 ** 6],
+    TIMELY_HEAD_WEIGHT=[12],
+    TIMELY_SOURCE_WEIGHT=[12],
+    TIMELY_TARGET_WEIGHT=[24],
+    SYNC_REWARD_WEIGHT=[8],
+    PROPOSER_WEIGHT=[8],
+    WEIGHT_DENOMINATOR=[64],
+    SLOTS_PER_EPOCH=[32],
+    SYNC_COMMITTEE_SIZE=[2 ** 10],
     validator_internet_uptime=[0.999],
     validator_power_uptime=[0.999],
     validator_technical_uptime=[0.982],

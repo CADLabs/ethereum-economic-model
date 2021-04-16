@@ -2,6 +2,7 @@ import numpy as np
 from pytest import approx
 
 import model.constants as constants
+import model.parts.spec as spec
 
 
 """
@@ -15,17 +16,20 @@ import model.constants as constants
 
 def policy_staking(params, substep, state_history, previous_state):
     # Parameters
+    dt = params["dt"]
     eth_staked_process = params["eth_staked_process"]
 
     # State Variables
     run = previous_state["run"]
     timestep = previous_state["timestep"]
-    eth_staked = previous_state["eth_staked"]
+    eth_supply = previous_state["eth_supply"]
 
-    # Get the staked ETH sample for the current run and timestep
-    staked_eth = eth_staked_process(run, timestep) - eth_staked
+    # Get the ETH staked sample for the current run and timestep
+    eth_staked = eth_staked_process(run, timestep * dt)
 
-    return {"staked_eth": staked_eth}
+    assert eth_staked <= eth_supply, "ETH staked can't be more than ETH supply"
+
+    return {"eth_staked": eth_staked}
 
 
 def policy_validators(params, substep, state_history, previous_state):
@@ -66,37 +70,12 @@ def policy_validators(params, substep, state_history, previous_state):
 
 
 def policy_average_effective_balance(params, substep, state_history, previous_state):
-    # Parameters
-    effective_balance_increment = params["EFFECTIVE_BALANCE_INCREMENT"]
-    max_effective_balance = params["MAX_EFFECTIVE_BALANCE"]
-
     # State Variables
-    eth_staked = previous_state["eth_staked"]
     number_of_validators = previous_state["number_of_validators"]
 
-    # TODO check balance == eth_staked at aggregate
-    # TODO confirm effective balance multiplied by both online and offline validators
-    total_effective_balance = (
-        eth_staked * constants.gwei
-        - eth_staked * constants.gwei % effective_balance_increment
-    )
-    max_total_effective_balance = max_effective_balance * number_of_validators
-
-    average_effective_balance = min(
-        total_effective_balance, max_total_effective_balance
-    )
-    average_effective_balance /= number_of_validators
+    # Get total active balance
+    total_active_balance = spec.get_total_active_balance(params, previous_state)
+    # Aggregate by averaging over all validators
+    average_effective_balance = total_active_balance / number_of_validators
 
     return {"average_effective_balance": average_effective_balance}
-
-
-def update_eth_staked(params, substep, state_history, previous_state, policy_input):
-    eth_supply = previous_state["eth_supply"]
-    eth_staked = previous_state["eth_staked"]
-    staked_eth = policy_input["staked_eth"]
-
-    assert (
-        eth_staked + staked_eth <= eth_supply
-    ), "ETH staked can't be more than ETH supply"
-
-    return "eth_staked", eth_staked + staked_eth
