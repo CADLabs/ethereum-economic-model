@@ -1,4 +1,7 @@
+import typing
+
 import model.constants as constants
+from model.types import ETH, USD_per_ETH, Gwei
 
 
 """
@@ -8,7 +11,9 @@ import model.constants as constants
 """
 
 
-def policy_network_issuance(params, substep, state_history, previous_state):
+def policy_network_issuance(
+    params, substep, state_history, previous_state
+) -> typing.Dict[str, ETH]:
     # State Variables
     amount_slashed = previous_state["amount_slashed"]
     total_basefee = previous_state["total_basefee"]
@@ -28,7 +33,9 @@ def policy_network_issuance(params, substep, state_history, previous_state):
     }
 
 
-def policy_eip1559_transaction_pricing(params, substep, state_history, previous_state):
+def policy_eip1559_transaction_pricing(
+    params, substep, state_history, previous_state
+) -> typing.Dict[str, Gwei]:
     """EIP1559 Transaction Pricing Mechanism
     A transaction pricing mechanism that includes fixed-per-block network fee
     that is burned and dynamically expands/contracts block sizes to deal with transient congestion.
@@ -37,6 +44,7 @@ def policy_eip1559_transaction_pricing(params, substep, state_history, previous_
     """
 
     # Parameters
+    dt = params["dt"]
     eip1559_avg_transactions_per_day = params["eip1559_avg_transactions_per_day"]
     eip1559_avg_gas_per_transaction = params["eip1559_avg_gas_per_transaction"]
     eip1559_basefee = params["eip1559_basefee"]
@@ -49,13 +57,16 @@ def policy_eip1559_transaction_pricing(params, substep, state_history, previous_
     total_tips_to_validators = total_gas_used * eip1559_avg_tip_amount
 
     return {
-        "total_basefee": total_basefee,
-        "total_tips_to_validators": total_tips_to_validators,
+        "total_basefee": total_basefee * dt,
+        "total_tips_to_validators": total_tips_to_validators * dt,
     }
 
 
-def update_eth_price(params, substep, state_history, previous_state, policy_input):
+def update_eth_price(
+    params, substep, state_history, previous_state, policy_input
+) -> (str, USD_per_ETH):
     # Parameters
+    dt = params["dt"]
     eth_price_process = params["eth_price_process"]
 
     # State Variables
@@ -63,13 +74,18 @@ def update_eth_price(params, substep, state_history, previous_state, policy_inpu
     timestep = previous_state["timestep"]
 
     # Get the ETH price sample for the current run and timestep
-    eth_price_sample = eth_price_process(run, timestep)
+    eth_price_sample = eth_price_process(run, timestep * dt)
 
     return "eth_price", eth_price_sample
 
 
-def update_eth_supply(params, substep, state_history, previous_state, policy_input):
-    eth_supply = previous_state["eth_supply"]
+def update_eth_supply(
+    params, substep, state_history, previous_state, policy_input
+) -> (str, ETH):
+    # Policy Inputs
     network_issuance = policy_input["network_issuance"]
+
+    # State variables
+    eth_supply = previous_state["eth_supply"]
 
     return "eth_supply", eth_supply + network_issuance

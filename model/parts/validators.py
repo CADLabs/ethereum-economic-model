@@ -16,6 +16,7 @@ import model.parts.spec as spec
 
 def policy_staking(params, substep, state_history, previous_state):
     # Parameters
+    dt = params["dt"]
     eth_staked_process = params["eth_staked_process"]
 
     # State Variables
@@ -24,7 +25,7 @@ def policy_staking(params, substep, state_history, previous_state):
     eth_supply = previous_state["eth_supply"]
 
     # Get the ETH staked sample for the current run and timestep
-    eth_staked = eth_staked_process(run, timestep)
+    eth_staked = eth_staked_process(run, timestep * dt)
 
     assert eth_staked <= eth_supply, "ETH staked can't be more than ETH supply"
 

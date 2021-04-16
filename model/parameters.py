@@ -21,6 +21,8 @@ from model.types import (
 
 
 class Parameters(TypedDict, total=True):
+    dt: List[int]
+
     # Stochastic processes
     eth_price_process: List[Callable[[Run, Timestep], ETH]]
     eth_staked_process: List[Callable[[Run, Timestep], ETH]]
@@ -71,10 +73,14 @@ class Parameters(TypedDict, total=True):
 # Create Random Number Generator (RNG) with a seed of 1
 rng = np.random.default_rng(1)
 eth_price_process = processes.continuous.BrownianExcursion(
-    t=simulation.TIMESTEPS, rng=rng
+    t=(simulation.TIMESTEPS * simulation.DELTA_TIME), rng=rng
 )
-eth_price_samples = eth_price_process.sample(simulation.TIMESTEPS)
-eth_staked_samples = np.linspace(524_288, 33_600_000, simulation.TIMESTEPS)
+eth_price_samples = eth_price_process.sample(
+    simulation.TIMESTEPS * simulation.DELTA_TIME
+)
+eth_staked_samples = np.linspace(
+    524_288, 33_600_000, simulation.TIMESTEPS * simulation.DELTA_TIME
+)
 
 # Configure validator type distribution
 validator_types = [
@@ -116,14 +122,15 @@ validator_types = [
 ]
 
 # Normalise percentage distribution to a total of 100%
-total_percentage_distribution = sum([
-    validator.percentage_distribution for validator in validator_types
-])
+total_percentage_distribution = sum(
+    [validator.percentage_distribution for validator in validator_types]
+)
 for validator in validator_types:
     validator.percentage_distribution /= total_percentage_distribution
 
 # Configure parameters and parameter sweeps
 parameters = Parameters(
+    dt=[simulation.DELTA_TIME],
     eth_price_process=[
         lambda _run, timestep: 1000
         + eth_price_samples[timestep] / max(eth_price_samples) * 1000

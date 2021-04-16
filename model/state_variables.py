@@ -9,15 +9,11 @@ from model.types import (
     Percentage,
     Uninitialized,
     TypedDict,
-    BeaconState
 )
 from model.parameters import validator_types
 
 
 class StateVariables(TypedDict, total=True):
-    # BeaconState
-    beacon_state: BeaconState
-
     # Ethereum state variables
     eth_price: USD_per_ETH
     eth_supply: ETH

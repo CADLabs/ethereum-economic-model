@@ -1,8 +1,8 @@
 import numpy as np
-from experiments.default import experiment, TIMESTEPS
+from experiments.default import experiment, TIMESTEPS, DELTA_TIME
 
 
-eth_price_samples = np.linspace(start=25, stop=1500, num=TIMESTEPS)
+eth_price_samples = np.linspace(start=100, stop=3000, num=(TIMESTEPS * DELTA_TIME))
 
 parameter_overrides = {
     "eth_price_process": [
