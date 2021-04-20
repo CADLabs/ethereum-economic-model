@@ -29,6 +29,18 @@ python3 -m experiments.run
 
 ## Development
 
+A [Makefile](Makefile) is included for convenience, for example to setup your environment and start Jupyter Lab:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+
+make setup # Setup environment
+make start # Start Jupyter Lab
+```
+
+Otherwise, follow the steps below.
+
 ### Requirements
 
 * Python versions: tested with 3.7, 3.8
