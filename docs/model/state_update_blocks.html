@@ -58,6 +58,7 @@ _state_update_blocks = [
             &#34;policy_validators&#34;: validators.policy_validators,
         },
         &#34;variables&#34;: {
+            &#34;number_of_validators_in_activation_queue&#34;: update_from_signal(&#34;number_of_validators_in_activation_queue&#34;),
             &#34;number_of_validators&#34;: update_from_signal(&#34;number_of_validators&#34;),
             &#34;number_of_validators_online&#34;: update_from_signal(
                 &#34;number_of_validators_online&#34;

@@ -49,6 +49,7 @@ class StateVariables(TypedDict, total=True):
     supply_inflation: Percentage
 
     # Validator state variables
+    number_of_validators_in_activation_queue: int
     average_effective_balance: Gwei
     number_of_validators: int
     number_of_validators_online: int
@@ -105,6 +106,7 @@ initial_state = StateVariables(
     eth_staked=0,
     supply_inflation=0,
     average_effective_balance=32 * constants.gwei,
+    number_of_validators_in_activation_queue=0,
     number_of_validators=0,
     number_of_validators_online=0,
     number_of_validators_offline=0,
@@ -176,6 +178,7 @@ dict(one=1, two=2)</p></div>
     supply_inflation: Percentage
 
     # Validator state variables
+    number_of_validators_in_activation_queue: int
     average_effective_balance: Gwei
     number_of_validators: int
     number_of_validators_online: int
@@ -258,6 +261,10 @@ dict(one=1, two=2)</p></div>
 <div class="desc"></div>
 </dd>
 <dt id="model.state_variables.StateVariables.number_of_validators"><code class="name">var <span class="ident">number_of_validators</span> : int</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="model.state_variables.StateVariables.number_of_validators_in_activation_queue"><code class="name">var <span class="ident">number_of_validators_in_activation_queue</span> : int</code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -399,6 +406,7 @@ dict(one=1, two=2)</p></div>
 <li><code><a title="model.state_variables.StateVariables.eth_supply" href="#model.state_variables.StateVariables.eth_supply">eth_supply</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.head_reward" href="#model.state_variables.StateVariables.head_reward">head_reward</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.number_of_validators" href="#model.state_variables.StateVariables.number_of_validators">number_of_validators</a></code></li>
+<li><code><a title="model.state_variables.StateVariables.number_of_validators_in_activation_queue" href="#model.state_variables.StateVariables.number_of_validators_in_activation_queue">number_of_validators_in_activation_queue</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.number_of_validators_offline" href="#model.state_variables.StateVariables.number_of_validators_offline">number_of_validators_offline</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.number_of_validators_online" href="#model.state_variables.StateVariables.number_of_validators_online">number_of_validators_online</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.source_reward" href="#model.state_variables.StateVariables.source_reward">source_reward</a></code></li>

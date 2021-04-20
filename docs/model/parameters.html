@@ -59,6 +59,7 @@ class Parameters(TypedDict, total=True):
     # Uppercase used for all parameters from Eth2 specification
     BASE_REWARD_FACTOR: List[int]
     BASE_REWARDS_PER_EPOCH: List[int]
+    &#34;&#34;&#34;Example class variable description for the base rewards per epoch&#34;&#34;&#34;
 
     MAX_EFFECTIVE_BALANCE: List[Gwei]
     EFFECTIVE_BALANCE_INCREMENT: List[int]
@@ -77,6 +78,7 @@ class Parameters(TypedDict, total=True):
     WEIGHT_DENOMINATOR: List[int]
 
     # Validator parameters
+    new_validators_per_epoch: List[int]
     validator_internet_uptime: List[Percentage]
     validator_power_uptime: List[Percentage]
     validator_technical_uptime: List[Percentage]
@@ -171,6 +173,9 @@ parameters = Parameters(
     PROPOSER_REWARD_QUOTIENT=[8],
     WHISTLEBLOWER_REWARD_QUOTIENT=[512],
     MIN_SLASHING_PENALTY_QUOTIENT=[2 ** 6],
+    MIN_PER_EPOCH_CHURN_LIMIT=[2 ** 2],
+    MAX_SEED_LOOKAHEAD=[2 ** 2],
+    CHURN_LIMIT_QUOTIENT=[2 ** 16],
     TIMELY_HEAD_WEIGHT=[12],
     TIMELY_SOURCE_WEIGHT=[12],
     TIMELY_TARGET_WEIGHT=[24],
@@ -179,6 +184,7 @@ parameters = Parameters(
     WEIGHT_DENOMINATOR=[64],
     SLOTS_PER_EPOCH=[32],
     SYNC_COMMITTEE_SIZE=[2 ** 10],
+    new_validators_per_epoch=[4],
     validator_internet_uptime=[0.999],
     validator_power_uptime=[0.999],
     validator_technical_uptime=[0.982],
@@ -258,6 +264,7 @@ dict(one=1, two=2)</p></div>
     # Uppercase used for all parameters from Eth2 specification
     BASE_REWARD_FACTOR: List[int]
     BASE_REWARDS_PER_EPOCH: List[int]
+    &#34;&#34;&#34;Example class variable description for the base rewards per epoch&#34;&#34;&#34;
 
     MAX_EFFECTIVE_BALANCE: List[Gwei]
     EFFECTIVE_BALANCE_INCREMENT: List[int]
@@ -276,6 +283,7 @@ dict(one=1, two=2)</p></div>
     WEIGHT_DENOMINATOR: List[int]
 
     # Validator parameters
+    new_validators_per_epoch: List[int]
     validator_internet_uptime: List[Percentage]
     validator_power_uptime: List[Percentage]
     validator_technical_uptime: List[Percentage]
@@ -302,7 +310,7 @@ dict(one=1, two=2)</p></div>
 <dl>
 <dt id="model.parameters.Parameters.BASE_REWARDS_PER_EPOCH"><code class="name">var <span class="ident">BASE_REWARDS_PER_EPOCH</span> : List[int]</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Example class variable description for the base rewards per epoch</p></div>
 </dd>
 <dt id="model.parameters.Parameters.BASE_REWARD_FACTOR"><code class="name">var <span class="ident">BASE_REWARD_FACTOR</span> : List[int]</code></dt>
 <dd>
@@ -388,6 +396,10 @@ dict(one=1, two=2)</p></div>
 <dd>
 <div class="desc"></div>
 </dd>
+<dt id="model.parameters.Parameters.new_validators_per_epoch"><code class="name">var <span class="ident">new_validators_per_epoch</span> : List[int]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="model.parameters.Parameters.number_of_validating_penalties"><code class="name">var <span class="ident">number_of_validating_penalties</span> : List[int]</code></dt>
 <dd>
 <div class="desc"></div>
@@ -467,6 +479,7 @@ dict(one=1, two=2)</p></div>
 <li><code><a title="model.parameters.Parameters.eip1559_basefee" href="#model.parameters.Parameters.eip1559_basefee">eip1559_basefee</a></code></li>
 <li><code><a title="model.parameters.Parameters.eth_price_process" href="#model.parameters.Parameters.eth_price_process">eth_price_process</a></code></li>
 <li><code><a title="model.parameters.Parameters.eth_staked_process" href="#model.parameters.Parameters.eth_staked_process">eth_staked_process</a></code></li>
+<li><code><a title="model.parameters.Parameters.new_validators_per_epoch" href="#model.parameters.Parameters.new_validators_per_epoch">new_validators_per_epoch</a></code></li>
 <li><code><a title="model.parameters.Parameters.number_of_validating_penalties" href="#model.parameters.Parameters.number_of_validating_penalties">number_of_validating_penalties</a></code></li>
 <li><code><a title="model.parameters.Parameters.slashing_events_per_1000_epochs" href="#model.parameters.Parameters.slashing_events_per_1000_epochs">slashing_events_per_1000_epochs</a></code></li>
 <li><code><a title="model.parameters.Parameters.validator_cloud_costs_per_epoch" href="#model.parameters.Parameters.validator_cloud_costs_per_epoch">validator_cloud_costs_per_epoch</a></code></li>
