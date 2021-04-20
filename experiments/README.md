@@ -1,5 +1,13 @@
 # Experiments
 
-## EIP1559
+TODO descriptions
 
-TODO
+## Default
+
+## Validation
+
+## Validator Environment Yields
+
+## Revenue Yields vs Network Inflation
+
+## EIP1559

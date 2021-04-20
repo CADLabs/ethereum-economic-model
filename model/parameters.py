@@ -49,6 +49,9 @@ class Parameters(TypedDict, total=True):
     SYNC_REWARD_WEIGHT: List[int]
     PROPOSER_WEIGHT: List[int]
     WEIGHT_DENOMINATOR: List[int]
+    MIN_PER_EPOCH_CHURN_LIMIT: List[int]
+    CHURN_LIMIT_QUOTIENT: List[int]
+    MAX_SEED_LOOKAHEAD: List[int]
 
     # Validator parameters
     validator_internet_uptime: List[Percentage]
