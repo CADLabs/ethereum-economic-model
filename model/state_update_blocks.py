@@ -191,7 +191,7 @@ _post_processing_blocks = [
 
 state_update_blocks = (
     _state_update_blocks
-    if (not parameters["eth_staked_process"][0](0, 0) == None)
+    if parameters["eth_staked_process"][0](0, 0) is not None
     else (
         # If driving with validator process, switch first two blocks
         _state_update_blocks[:2][::-1]

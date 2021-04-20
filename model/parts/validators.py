@@ -27,7 +27,7 @@ def policy_staking(params, substep, state_history, previous_state):
     average_effective_balance = previous_state["average_effective_balance"]
 
     # If the eth_staked_process is defined
-    if not eth_staked_process(0, 0) == None:
+    if eth_staked_process(0, 0) is not None:
         # Get the ETH staked sample for the current run and timestep
         eth_staked = eth_staked_process(run, timestep * dt)
     # Else, calculate from the number of validators
@@ -65,7 +65,7 @@ def policy_validators(params, substep, state_history, previous_state):
     )
 
     # Calculate the number of validators using ETH staked
-    if number_of_validators == 0 or not eth_staked_process(0, 0) == None:
+    if number_of_validators == 0 or eth_staked_process(0, 0) is not None:
         number_of_validators = int(
             round(eth_staked / (average_effective_balance / constants.gwei))
         )
