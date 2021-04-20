@@ -51,23 +51,40 @@ def policy_staking(params, substep, state_history, previous_state):
     run = previous_state[&#34;run&#34;]
     timestep = previous_state[&#34;timestep&#34;]
     eth_supply = previous_state[&#34;eth_supply&#34;]
+    number_of_validators = previous_state[&#34;number_of_validators&#34;]
+    average_effective_balance = previous_state[&#34;average_effective_balance&#34;]
 
-    # Get the ETH staked sample for the current run and timestep
-    eth_staked = eth_staked_process(run, timestep * dt)
+    # If the eth_staked_process is defined
+    if not eth_staked_process(0, 0) == None:
+        # Get the ETH staked sample for the current run and timestep
+        eth_staked = eth_staked_process(run, timestep * dt)
+    # Else, calculate from the number of validators
+    else:
+        eth_staked = number_of_validators * average_effective_balance / constants.gwei
 
-    assert eth_staked &lt;= eth_supply, &#34;ETH staked can&#39;t be more than ETH supply&#34;
+    # Assert expected conditions
+    assert eth_staked &lt;= eth_supply, f&#34;{eth_staked=} can&#39;t be more than {eth_supply=}&#34;
 
     return {&#34;eth_staked&#34;: eth_staked}
 
 
 def policy_validators(params, substep, state_history, previous_state):
     # Parameters
+    dt = params[&#34;dt&#34;]
+    eth_staked_process = params[&#34;eth_staked_process&#34;]
+    validator_process = params[&#34;validator_process&#34;]
     validator_internet_uptime = params[&#34;validator_internet_uptime&#34;]
     validator_power_uptime = params[&#34;validator_power_uptime&#34;]
     validator_technical_uptime = params[&#34;validator_technical_uptime&#34;]
 
     # State Variables
+    run = previous_state[&#34;run&#34;]
+    timestep = previous_state[&#34;timestep&#34;]
     eth_staked = previous_state[&#34;eth_staked&#34;]
+    number_of_validators = previous_state[&#34;number_of_validators&#34;]
+    number_of_validators_in_activation_queue = previous_state[
+        &#34;number_of_validators_in_activation_queue&#34;
+    ]
     average_effective_balance = previous_state[&#34;average_effective_balance&#34;]
 
     # Calculate the net validators uptime
@@ -76,21 +93,36 @@ def policy_validators(params, substep, state_history, previous_state):
     )
 
     # Calculate the number of validators using ETH staked
-    number_of_validators = int(
-        round(eth_staked / (average_effective_balance / constants.gwei))
-    )
+    if number_of_validators == 0 or not eth_staked_process(0, 0) == None:
+        number_of_validators = int(
+            round(eth_staked / (average_effective_balance / constants.gwei))
+        )
+    else:
+        new_validators_per_epoch = validator_process(run, timestep * dt)
+        number_of_validators_in_activation_queue += new_validators_per_epoch * dt
+
+        validator_churn_limit = (
+            spec.get_validator_churn_limit(params, previous_state) * dt
+        )
+        activated_validators = len(
+            range(number_of_validators_in_activation_queue)[:validator_churn_limit]
+        )
+
+        number_of_validators += activated_validators
+        number_of_validators_in_activation_queue -= activated_validators
 
     # Calculate the number of validators online and offline using validators uptime
     number_of_validators_online = int(round(number_of_validators * validators_uptime))
     number_of_validators_offline = number_of_validators - number_of_validators_online
 
-    # Assert expected conditions are valid
+    # Assert expected conditions
     assert (
         number_of_validators
         == number_of_validators_online + number_of_validators_offline
     )
 
     return {
+        &#34;number_of_validators_in_activation_queue&#34;: number_of_validators_in_activation_queue,
         &#34;number_of_validators&#34;: number_of_validators,
         &#34;number_of_validators_online&#34;: number_of_validators_online,
         &#34;number_of_validators_offline&#34;: number_of_validators_offline,
@@ -155,11 +187,19 @@ def policy_average_effective_balance(params, substep, state_history, previous_st
     run = previous_state[&#34;run&#34;]
     timestep = previous_state[&#34;timestep&#34;]
     eth_supply = previous_state[&#34;eth_supply&#34;]
+    number_of_validators = previous_state[&#34;number_of_validators&#34;]
+    average_effective_balance = previous_state[&#34;average_effective_balance&#34;]
 
-    # Get the ETH staked sample for the current run and timestep
-    eth_staked = eth_staked_process(run, timestep * dt)
+    # If the eth_staked_process is defined
+    if not eth_staked_process(0, 0) == None:
+        # Get the ETH staked sample for the current run and timestep
+        eth_staked = eth_staked_process(run, timestep * dt)
+    # Else, calculate from the number of validators
+    else:
+        eth_staked = number_of_validators * average_effective_balance / constants.gwei
 
-    assert eth_staked &lt;= eth_supply, &#34;ETH staked can&#39;t be more than ETH supply&#34;
+    # Assert expected conditions
+    assert eth_staked &lt;= eth_supply, f&#34;{eth_staked=} can&#39;t be more than {eth_supply=}&#34;
 
     return {&#34;eth_staked&#34;: eth_staked}</code></pre>
 </details>
@@ -175,12 +215,21 @@ def policy_average_effective_balance(params, substep, state_history, previous_st
 </summary>
 <pre><code class="python">def policy_validators(params, substep, state_history, previous_state):
     # Parameters
+    dt = params[&#34;dt&#34;]
+    eth_staked_process = params[&#34;eth_staked_process&#34;]
+    validator_process = params[&#34;validator_process&#34;]
     validator_internet_uptime = params[&#34;validator_internet_uptime&#34;]
     validator_power_uptime = params[&#34;validator_power_uptime&#34;]
     validator_technical_uptime = params[&#34;validator_technical_uptime&#34;]
 
     # State Variables
+    run = previous_state[&#34;run&#34;]
+    timestep = previous_state[&#34;timestep&#34;]
     eth_staked = previous_state[&#34;eth_staked&#34;]
+    number_of_validators = previous_state[&#34;number_of_validators&#34;]
+    number_of_validators_in_activation_queue = previous_state[
+        &#34;number_of_validators_in_activation_queue&#34;
+    ]
     average_effective_balance = previous_state[&#34;average_effective_balance&#34;]
 
     # Calculate the net validators uptime
@@ -189,21 +238,36 @@ def policy_average_effective_balance(params, substep, state_history, previous_st
     )
 
     # Calculate the number of validators using ETH staked
-    number_of_validators = int(
-        round(eth_staked / (average_effective_balance / constants.gwei))
-    )
+    if number_of_validators == 0 or not eth_staked_process(0, 0) == None:
+        number_of_validators = int(
+            round(eth_staked / (average_effective_balance / constants.gwei))
+        )
+    else:
+        new_validators_per_epoch = validator_process(run, timestep * dt)
+        number_of_validators_in_activation_queue += new_validators_per_epoch * dt
+
+        validator_churn_limit = (
+            spec.get_validator_churn_limit(params, previous_state) * dt
+        )
+        activated_validators = len(
+            range(number_of_validators_in_activation_queue)[:validator_churn_limit]
+        )
+
+        number_of_validators += activated_validators
+        number_of_validators_in_activation_queue -= activated_validators
 
     # Calculate the number of validators online and offline using validators uptime
     number_of_validators_online = int(round(number_of_validators * validators_uptime))
     number_of_validators_offline = number_of_validators - number_of_validators_online
 
-    # Assert expected conditions are valid
+    # Assert expected conditions
     assert (
         number_of_validators
         == number_of_validators_online + number_of_validators_offline
     )
 
     return {
+        &#34;number_of_validators_in_activation_queue&#34;: number_of_validators_in_activation_queue,
         &#34;number_of_validators&#34;: number_of_validators,
         &#34;number_of_validators_online&#34;: number_of_validators_online,
         &#34;number_of_validators_offline&#34;: number_of_validators_offline,

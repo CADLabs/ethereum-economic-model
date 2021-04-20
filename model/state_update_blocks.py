@@ -1,7 +1,8 @@
 import model.parts.ethereum as ethereum
 import model.parts.validators as validators
-import model.parts.proof_of_stake as proof_of_stake
+import model.parts.incentives as incentives
 import model.parts.metrics as metrics
+from model.parameters import parameters
 from model.utils import update_from_signal
 
 
@@ -30,6 +31,9 @@ _state_update_blocks = [
             "policy_validators": validators.policy_validators,
         },
         "variables": {
+            "number_of_validators_in_activation_queue": update_from_signal(
+                "number_of_validators_in_activation_queue"
+            ),
             "number_of_validators": update_from_signal("number_of_validators"),
             "number_of_validators_online": update_from_signal(
                 "number_of_validators_online"
@@ -50,7 +54,7 @@ _state_update_blocks = [
             "average_effective_balance": update_from_signal(
                 "average_effective_balance"
             ),
-            "base_reward": proof_of_stake.update_base_reward,
+            "base_reward": incentives.update_base_reward,
         },
     },
     {
@@ -58,8 +62,8 @@ _state_update_blocks = [
             Sync committee and attestation rewards
         """,
         "policies": {
-            "casper_ffg_vote": proof_of_stake.policy_attestation_rewards,
-            "sync_committee": proof_of_stake.policy_sync_committee,
+            "casper_ffg_vote": incentives.policy_attestation_rewards,
+            "sync_committee": incentives.policy_sync_committee,
         },
         "variables": {
             "source_reward": update_from_signal("source_reward"),
@@ -73,7 +77,7 @@ _state_update_blocks = [
             Block proposal rewards
         """,
         "policies": {
-            "block_proposal": proof_of_stake.policy_block_proposal,
+            "block_proposal": incentives.policy_block_proposal,
         },
         "variables": {
             "block_proposer_reward": update_from_signal("block_proposer_reward"),
@@ -84,10 +88,10 @@ _state_update_blocks = [
             Total validating rewards and penalties
         """,
         "policies": {
-            "penalties": proof_of_stake.policy_attestation_penalties,
+            "penalties": incentives.policy_attestation_penalties,
         },
         "variables": {
-            "validating_rewards": proof_of_stake.update_validating_rewards,
+            "validating_rewards": incentives.update_validating_rewards,
             "validating_penalties": update_from_signal("validating_penalties"),
         },
     },
@@ -96,7 +100,7 @@ _state_update_blocks = [
             Validator slashing process, rewards, and penalties
         """,
         "policies": {
-            "slashing": proof_of_stake.policy_slashing,
+            "slashing": incentives.policy_slashing,
         },
         "variables": {
             "amount_slashed": update_from_signal("amount_slashed"),
@@ -174,11 +178,23 @@ _state_update_blocks = [
     },
 ]
 
+
 # Split the state update blocks into those used during the simulation (state_update_blocks)
 # and those used in post-processing to calculate the system metrics (post_processing_blocks)
-state_update_blocks = [
+_state_update_blocks = [
     block for block in _state_update_blocks if not block.get("post_processing", False)
 ]
-post_processing_blocks = [
+_post_processing_blocks = [
     block for block in _state_update_blocks if block.get("post_processing", False)
 ]
+
+
+state_update_blocks = (
+    _state_update_blocks
+    if parameters["eth_staked_process"][0](0, 0) is not None
+    else (
+        # If driving with validator process, switch first two blocks
+        _state_update_blocks[:2][::-1]
+        + _state_update_blocks[2:]
+    )
+)

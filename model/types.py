@@ -23,6 +23,7 @@ Percentage_per_epoch = float
 Gas = int
 Wei = int
 Gwei = float
+Gwei_per_Gas = float
 ETH = float
 
 # US Dollar types
@@ -35,6 +36,7 @@ Run = int
 Timestep = int
 
 # BeaconState types
+Epoch = int
 
 
 @dataclass

@@ -1,14 +1,17 @@
 import math
 
 import model.constants as constants
-from model.types import Gwei, ValidatorIndex
+from model.types import Gwei, ValidatorIndex, Epoch
 from model.parameters import Parameters
 from model.state_variables import StateVariables
 
 
 """
+# Relevant Eth2 Specs
+
 See:
-* https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md
+* Phase 0: https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/beacon-chain.md
+* Altair updates: https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md
 """
 
 
@@ -56,7 +59,7 @@ def get_total_active_balance(params: Parameters, state: StateVariables) -> Gwei:
     # Calculate total active balance
     total_active_balance = (
         eth_staked * constants.gwei
-        - eth_staked * constants.gwei % EFFECTIVE_BALANCE_INCREMENT
+        - (eth_staked * constants.gwei) % EFFECTIVE_BALANCE_INCREMENT
     )
     max_total_active_balance = MAX_EFFECTIVE_BALANCE * number_of_validators
 
@@ -95,6 +98,39 @@ def get_proposer_reward(params: Parameters, state: StateVariables) -> Gwei:
     return Gwei(get_base_reward(params, state) // PROPOSER_REWARD_QUOTIENT)
 
 
+def get_validator_churn_limit(params: Parameters, state: StateVariables) -> int:
+    """
+    Return the validator churn limit for the current epoch.
+
+    See https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/beacon-chain.md#get_validator_churn_limit
+
+    ```
+    active_validator_indices = get_active_validator_indices(state, get_current_epoch(state))
+    return max(MIN_PER_EPOCH_CHURN_LIMIT, uint64(len(active_validator_indices)) // CHURN_LIMIT_QUOTIENT)
+    ```
+    """
+    # Parameters
+    MIN_PER_EPOCH_CHURN_LIMIT = params["MIN_PER_EPOCH_CHURN_LIMIT"]
+    CHURN_LIMIT_QUOTIENT = params["CHURN_LIMIT_QUOTIENT"]
+
+    # State Variables
+    number_of_validators = state["number_of_validators"]
+
+    return max(MIN_PER_EPOCH_CHURN_LIMIT, number_of_validators // CHURN_LIMIT_QUOTIENT)
+
+
+def compute_activation_exit_epoch(params: Parameters, epoch: Epoch) -> Epoch:
+    """
+    Return the epoch during which validator activations and exits initiated in ``epoch`` take effect.
+
+    See https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/beacon-chain.md#compute_activation_exit_epoch
+    """
+    # Parameters
+    MAX_SEED_LOOKAHEAD = params["MAX_SEED_LOOKAHEAD"]
+
+    return Epoch(epoch + 1 + MAX_SEED_LOOKAHEAD)
+
+
 # Beacon state mutators
 
 
@@ -110,7 +146,6 @@ def increase_balance(
 def slash_validator(params: Parameters, state: StateVariables) -> (Gwei, Gwei, Gwei):
     """
     See https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#modified-slash_validator
-
     """
     MIN_SLASHING_PENALTY_QUOTIENT = params["MIN_SLASHING_PENALTY_QUOTIENT"]
     WHISTLEBLOWER_REWARD_QUOTIENT = params["WHISTLEBLOWER_REWARD_QUOTIENT"]

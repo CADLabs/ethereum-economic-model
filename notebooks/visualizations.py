@@ -4,21 +4,34 @@ from plotly.subplots import make_subplots
 import pandas as pd
 pd.options.plotting.backend = "plotly"
 
+import model.constants as constants
 from model.parameters import validator_types
 
 
 def plot_validator_rewards(df):
-    df.plot.area(x='timestep', y=['source_reward', 'target_reward', 'head_reward', 'block_proposer_reward', 'sync_reward'])
+    validator_rewards = ['source_reward_eth', 'target_reward_eth', 'head_reward_eth', 'block_proposer_reward_eth', 'sync_reward_eth']
+    
+    return df.plot.area(
+        x='timestamp', 
+        y=validator_rewards,
+        labels={
+            "timestamp": "Date",
+            "value": "Reward (ETH)",
+        },
+        height=800
+    )
 
 
 def plot_validator_environment_yields(df):
-    # validator_profit_yields = [validator.type + '_profit_yields' for validator in validator_types]
-    # df[validator_profit_yields] = df[validator_profit_yields] * 100
+    validator_profit_yields = [validator.type + '_profit_yields' for validator in validator_types]
+    df[validator_profit_yields] = df[validator_profit_yields] * 100
 
-    # df.plot(x='timestep', y=(validator_profit_yields + ['total_profit_yields_pct']), title='Net Yields of Validator Environments')
-
-    df.plot.area(x='timestep', y=['source_reward', 'target_reward', 'head_reward', 'block_proposer_reward', 'sync_reward'])
-
+    return df.plot(
+        x='eth_price',
+        y=(validator_profit_yields + ['total_profit_yields_pct']),
+        title=f'Net Yields of Validator Environments @ {df.eth_staked.iloc[0]} ETH Staked',
+        height=800
+    )
 
 
 def plot_revenue_yields_vs_network_inflation(df):
@@ -30,32 +43,33 @@ def plot_revenue_yields_vs_network_inflation(df):
 
     # Add traces
     fig.add_trace(
-        go.Scatter(x=df_subset_0.timestep, y=df_subset_0.total_revenue_yields_pct, name="Revenue yields (%)"),
+        go.Scatter(x=df_subset_0.timestamp, y=df_subset_0.total_revenue_yields_pct, name="Revenue yields (%)"),
         secondary_y=False,
     )
 
     fig.add_trace(
-        go.Scatter(x=df_subset_0.timestep, y=df_subset_0.total_profit_yields_pct, name="Net yields @ 25 (%)"),
+        go.Scatter(x=df_subset_0.timestamp, y=df_subset_0.total_profit_yields_pct, name=f"Net yields @ {df_subset_0.eth_price.iloc[0]} $/ETH (%)"),
         secondary_y=False,
     )
 
     fig.add_trace(
-        go.Scatter(x=df_subset_1.timestep, y=df_subset_1.total_profit_yields_pct, name="Net yields @ 1500 (%)"),
+        go.Scatter(x=df_subset_1.timestamp, y=df_subset_1.total_profit_yields_pct, name=f"Net yields @ {df_subset_1.eth_price.iloc[0]} $/ETH (%)"),
         secondary_y=False,
     )
 
     fig.add_trace(
-        go.Scatter(x=df_subset_0.timestep, y=df_subset_0.supply_inflation_pct, name="ETH Supply inflation (%)"),
+        go.Scatter(x=df_subset_0.timestamp, y=df_subset_0.supply_inflation_pct, name="ETH Supply inflation (%)"),
         secondary_y=True,
     )
 
     # Add figure title
     fig.update_layout(
-        title_text="Revenue Yields vs. Network Inflation"
+        title_text="Revenue Yields vs. Network Inflation",
+        height=800
     )
 
     # Set x-axis title
-    fig.update_xaxes(title_text="Epochs")
+    fig.update_xaxes(title_text="Timestamp")
 
     # Set y-axes titles
     fig.update_yaxes(title_text="Revenue Yields", secondary_y=False)

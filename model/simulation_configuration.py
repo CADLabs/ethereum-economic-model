@@ -1,5 +1,6 @@
 from model.constants import epochs_per_month
 
+
 DELTA_TIME = 100  # epochs per timestep
 SIMULATION_TIME_MONTHS = 12  # number of months
 TIMESTEPS = (
