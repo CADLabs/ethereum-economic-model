@@ -35,7 +35,7 @@ def policy_staking(params, substep, state_history, previous_state):
         eth_staked = number_of_validators * average_effective_balance / constants.gwei
 
     # Assert expected conditions
-    assert eth_staked <= eth_supply, f"{eth_staked=} can't be more than {eth_supply=}"
+    assert eth_staked <= eth_supply, f"ETH staked can't be more than ETH supply"
 
     return {"eth_staked": eth_staked}
 
