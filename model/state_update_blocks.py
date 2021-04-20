@@ -31,7 +31,9 @@ _state_update_blocks = [
             "policy_validators": validators.policy_validators,
         },
         "variables": {
-            "number_of_validators_in_activation_queue": update_from_signal("number_of_validators_in_activation_queue"),
+            "number_of_validators_in_activation_queue": update_from_signal(
+                "number_of_validators_in_activation_queue"
+            ),
             "number_of_validators": update_from_signal("number_of_validators"),
             "number_of_validators_online": update_from_signal(
                 "number_of_validators_online"
@@ -187,9 +189,12 @@ _post_processing_blocks = [
 ]
 
 
-state_update_blocks = _state_update_blocks if (
-    not parameters["eth_staked_process"][0](0, 0) == None
-) else (
-    # If driving with validator process, switch first two blocks
-    _state_update_blocks[:2][::-1] + _state_update_blocks[2:]
+state_update_blocks = (
+    _state_update_blocks
+    if (not parameters["eth_staked_process"][0](0, 0) == None)
+    else (
+        # If driving with validator process, switch first two blocks
+        _state_update_blocks[:2][::-1]
+        + _state_update_blocks[2:]
+    )
 )

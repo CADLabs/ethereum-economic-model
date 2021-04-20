@@ -163,7 +163,9 @@ parameters = Parameters(
         + eth_price_samples[timestep] / max(eth_price_samples) * 1000
     ],
     eth_staked_process=[lambda _run, _timestep: None],
-    validator_process=[lambda _run, timestep: 4],  # From https://beaconscan.com/ as of 20/04/21
+    validator_process=[
+        lambda _run, timestep: 4
+    ],  # From https://beaconscan.com/ as of 20/04/21
     validator_internet_uptime=[0.999],
     validator_power_uptime=[0.999],
     validator_technical_uptime=[0.982],
@@ -197,6 +199,8 @@ parameters = Parameters(
     # TODO confirm average basefee and tip amount
     eip1559_basefee=[100],  # Gwei per gas
     eip1559_avg_tip_amount=[1],  # Gwei per gas
-    eip1559_avg_transactions_per_day=[1_400_00],  # From https://etherscan.io/chart/tx as of 20/04/21
+    eip1559_avg_transactions_per_day=[
+        1_400_00
+    ],  # From https://etherscan.io/chart/tx as of 20/04/21
     eip1559_avg_gas_per_transaction=[73123],  # Gas
 )

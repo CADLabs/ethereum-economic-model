@@ -99,16 +99,16 @@ def get_proposer_reward(params: Parameters, state: StateVariables) -> Gwei:
 
 
 def get_validator_churn_limit(params: Parameters, state: StateVariables) -> int:
-    '''
+    """
     Return the validator churn limit for the current epoch.
-    
+
     See https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/beacon-chain.md#get_validator_churn_limit
 
     ```
     active_validator_indices = get_active_validator_indices(state, get_current_epoch(state))
     return max(MIN_PER_EPOCH_CHURN_LIMIT, uint64(len(active_validator_indices)) // CHURN_LIMIT_QUOTIENT)
     ```
-    '''
+    """
     # Parameters
     MIN_PER_EPOCH_CHURN_LIMIT = params["MIN_PER_EPOCH_CHURN_LIMIT"]
     CHURN_LIMIT_QUOTIENT = params["CHURN_LIMIT_QUOTIENT"]

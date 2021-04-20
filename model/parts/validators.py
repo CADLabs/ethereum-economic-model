@@ -54,7 +54,9 @@ def policy_validators(params, substep, state_history, previous_state):
     timestep = previous_state["timestep"]
     eth_staked = previous_state["eth_staked"]
     number_of_validators = previous_state["number_of_validators"]
-    number_of_validators_in_activation_queue = previous_state["number_of_validators_in_activation_queue"]
+    number_of_validators_in_activation_queue = previous_state[
+        "number_of_validators_in_activation_queue"
+    ]
     average_effective_balance = previous_state["average_effective_balance"]
 
     # Calculate the net validators uptime
@@ -71,11 +73,11 @@ def policy_validators(params, substep, state_history, previous_state):
         new_validators_per_epoch = validator_process(run, timestep * dt)
         number_of_validators_in_activation_queue += new_validators_per_epoch * dt
 
-        validator_churn_limit = spec.get_validator_churn_limit(params, previous_state) * dt
+        validator_churn_limit = (
+            spec.get_validator_churn_limit(params, previous_state) * dt
+        )
         activated_validators = len(
-            range(number_of_validators_in_activation_queue)[
-                :validator_churn_limit
-            ]
+            range(number_of_validators_in_activation_queue)[:validator_churn_limit]
         )
 
         number_of_validators += activated_validators
