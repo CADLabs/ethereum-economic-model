@@ -7,7 +7,7 @@ import model.parts.spec as spec
 
 
 """
-# Proof of Stake
+# Proof of Stake Incentives
 
 * Calculation of PoS attestation and block proposal rewards and penalties
 * Calculation of PoS slashing penalties
@@ -146,8 +146,8 @@ def policy_sync_committee(
     sync_reward *= number_of_validators_online / number_of_validators
 
     # Equivalent to:
-    sync_reward = total_base_rewards * SYNC_REWARD_WEIGHT // WEIGHT_DENOMINATOR
-    sync_reward *= number_of_validators_online / number_of_validators
+    # sync_reward = total_base_rewards * SYNC_REWARD_WEIGHT // WEIGHT_DENOMINATOR
+    # sync_reward *= number_of_validators_online / number_of_validators
 
     return {"sync_reward": sync_reward}
 

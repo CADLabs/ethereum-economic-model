@@ -7,7 +7,7 @@ from model.types import ETH, USD_per_ETH, Gwei
 """
 # Ethereum
 
-* Basic policies and mechanisms shared between the Eth1 and Eth2 systems
+* Policy Functions and State Update Functions shared between the Eth1 and Eth2 systems
 """
 
 

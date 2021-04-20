@@ -35,7 +35,7 @@ Run = int
 Timestep = int
 
 # BeaconState types
-
+Epoch = int
 
 @dataclass
 class Validator:

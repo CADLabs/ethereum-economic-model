@@ -21,6 +21,7 @@ class StateVariables(TypedDict, total=True):
     supply_inflation: Percentage
 
     # Validator state variables
+    number_of_validators_in_activation_queue: int
     average_effective_balance: Gwei
     number_of_validators: int
     number_of_validators_online: int
@@ -68,17 +69,16 @@ class StateVariables(TypedDict, total=True):
 # Get number of validator types for initializing Numpy array size
 number_of_validator_types = len(validator_types)
 
-# TODO use np.nan for unintialized/unknown initial values
-# NOTE https://numpy.org/doc/stable/reference/generated/numpy.nan_to_num.html
 
 initial_state = StateVariables(
     eth_price=0,
     eth_supply=112_000_000,
-    eth_staked=0,
+    eth_staked=3_868_555,  # From https://beaconscan.com/ as of 20/04/21
     supply_inflation=0,
     average_effective_balance=32 * constants.gwei,
-    number_of_validators=0,
-    number_of_validators_online=0,
+    number_of_validators_in_activation_queue=230,  # From https://beaconscan.com/ as of 20/04/21
+    number_of_validators=120_894,  # From https://beaconscan.com/ as of 20/04/21
+    number_of_validators_online=120_894,  # From https://beaconscan.com/ as of 20/04/21
     number_of_validators_offline=0,
     base_reward=0,
     validating_rewards=0,
