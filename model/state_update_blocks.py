@@ -2,11 +2,12 @@ import model.parts.ethereum as ethereum
 import model.parts.validators as validators
 import model.parts.incentives as incentives
 import model.parts.metrics as metrics
+from model.parameters import parameters
 from model.utils import update_from_signal
 
 
 _state_update_blocks = [
-    *[{
+    {
         "description": """
             Exogenous Ethereum processes:
             * ETH price update
@@ -39,7 +40,7 @@ _state_update_blocks = [
                 "number_of_validators_offline"
             ),
         },
-    }][::-1],
+    },
     {
         "description": """
             Calculation and update of validator average effective balance & base reward
@@ -175,11 +176,20 @@ _state_update_blocks = [
     },
 ]
 
+
 # Split the state update blocks into those used during the simulation (state_update_blocks)
 # and those used in post-processing to calculate the system metrics (post_processing_blocks)
-state_update_blocks = [
+_state_update_blocks = [
     block for block in _state_update_blocks if not block.get("post_processing", False)
 ]
-post_processing_blocks = [
+_post_processing_blocks = [
     block for block in _state_update_blocks if block.get("post_processing", False)
 ]
+
+
+state_update_blocks = _state_update_blocks if (
+    not parameters["eth_staked_process"][0](0, 0) == None
+) else (
+    # If driving with validator process, switch first two blocks
+    _state_update_blocks[:2][::-1] + _state_update_blocks[2:]
+)

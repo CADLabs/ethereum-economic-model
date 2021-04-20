@@ -10,6 +10,7 @@ from model.types import (
     Percentage,
     Gwei,
     Gas,
+    Gwei_per_Gas,
     ETH,
     USD_per_epoch,
     Percentage_per_epoch,
@@ -64,8 +65,8 @@ class Parameters(TypedDict, total=True):
     number_of_validating_penalties: List[int]
 
     # EIP1559
-    eip1559_basefee: List[Gwei]
-    eip1559_avg_tip_amount: List[Percentage]
+    eip1559_basefee: List[Gwei_per_Gas]
+    eip1559_avg_tip_amount: List[Gwei_per_Gas]
     eip1559_avg_transactions_per_day: List[int]
     eip1559_avg_gas_per_transaction: List[Gas]
 
@@ -161,7 +162,7 @@ parameters = Parameters(
         lambda _run, timestep: 1000
         + eth_price_samples[timestep] / max(eth_price_samples) * 1000
     ],
-    eth_staked_process=[None],
+    eth_staked_process=[lambda _run, _timestep: None],
     validator_process=[lambda _run, timestep: 4],  # From https://beaconscan.com/ as of 20/04/21
     validator_internet_uptime=[0.999],
     validator_power_uptime=[0.999],
@@ -193,9 +194,9 @@ parameters = Parameters(
     ],
     slashing_events_per_1000_epochs=[1],  # Units: 1 / 1000 epochs
     number_of_validating_penalties=[3],
-    # TODO determine basefee and tip amount process or average
-    eip1559_basefee=[0],  # Default: 1 * constants.gwei
-    eip1559_avg_tip_amount=[0],  # Default: 0.01
-    eip1559_avg_transactions_per_day=[688078],
-    eip1559_avg_gas_per_transaction=[73123],
+    # TODO confirm average basefee and tip amount
+    eip1559_basefee=[100],  # Gwei per gas
+    eip1559_avg_tip_amount=[1],  # Gwei per gas
+    eip1559_avg_transactions_per_day=[1_400_00],  # From https://etherscan.io/chart/tx as of 20/04/21
+    eip1559_avg_gas_per_transaction=[73123],  # Gas
 )

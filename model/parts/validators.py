@@ -27,13 +27,14 @@ def policy_staking(params, substep, state_history, previous_state):
     average_effective_balance = previous_state["average_effective_balance"]
 
     # If the eth_staked_process is defined
-    if eth_staked_process:
+    if not eth_staked_process(0, 0) == None:
         # Get the ETH staked sample for the current run and timestep
         eth_staked = eth_staked_process(run, timestep * dt)
     # Else, calculate from the number of validators
     else:
         eth_staked = number_of_validators * average_effective_balance / constants.gwei
 
+    # Assert expected conditions
     assert eth_staked <= eth_supply, f"{eth_staked=} can't be more than {eth_supply=}"
 
     return {"eth_staked": eth_staked}
@@ -62,7 +63,7 @@ def policy_validators(params, substep, state_history, previous_state):
     )
 
     # Calculate the number of validators using ETH staked
-    if number_of_validators == 0 or eth_staked_process:
+    if number_of_validators == 0 or not eth_staked_process(0, 0) == None:
         number_of_validators = int(
             round(eth_staked / (average_effective_balance / constants.gwei))
         )
@@ -84,7 +85,7 @@ def policy_validators(params, substep, state_history, previous_state):
     number_of_validators_online = int(round(number_of_validators * validators_uptime))
     number_of_validators_offline = number_of_validators - number_of_validators_online
 
-    # Assert expected conditions are valid
+    # Assert expected conditions
     assert (
         number_of_validators
         == number_of_validators_online + number_of_validators_offline

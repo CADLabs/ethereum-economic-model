@@ -70,15 +70,24 @@ class StateVariables(TypedDict, total=True):
 number_of_validator_types = len(validator_types)
 
 
+# Intial state from external live data source
+# Updated from https://beaconscan.com/ as of 20/04/21
+number_of_validators = 120_894
+number_of_validators_in_activation_queue = 230
+eth_staked = 3_868_555
+# Updated from https://etherscan.io/chart/ethersupplygrowth as of 20/04/21
+eth_supply = 115_538_828
+
+
 initial_state = StateVariables(
     eth_price=0,
-    eth_supply=112_000_000,
-    eth_staked=3_868_555,  # From https://beaconscan.com/ as of 20/04/21
+    eth_supply=eth_supply,
+    eth_staked=eth_staked,
     supply_inflation=0,
     average_effective_balance=32 * constants.gwei,
-    number_of_validators_in_activation_queue=230,  # From https://beaconscan.com/ as of 20/04/21
-    number_of_validators=120_894,  # From https://beaconscan.com/ as of 20/04/21
-    number_of_validators_online=120_894,  # From https://beaconscan.com/ as of 20/04/21
+    number_of_validators_in_activation_queue=number_of_validators_in_activation_queue,
+    number_of_validators=number_of_validators,
+    number_of_validators_online=0,
     number_of_validators_offline=0,
     base_reward=0,
     validating_rewards=0,

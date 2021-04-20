@@ -292,6 +292,7 @@ def update_validating_rewards(
     # assert math.isclose(source_reward + target_reward + head_reward, (3 / 4) * validating_rewards, abs_tol=10**-1)
     # assert source_reward + target_reward + head_reward == (3 / 4) * validating_rewards, f"{(source_reward + target_reward + head_reward) / validating_rewards}"
 
+    # Assert expected conditions
     # The validating rewards should be less than equal to the maximum validating rewards
     max_validating_rewards = number_of_validators_online * base_reward
     assert validating_rewards <= max_validating_rewards

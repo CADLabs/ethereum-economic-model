@@ -11,17 +11,27 @@ from model.parameters import validator_types
 def plot_validator_rewards(df):
     validator_rewards = ['source_reward_eth', 'target_reward_eth', 'head_reward_eth', 'block_proposer_reward_eth', 'sync_reward_eth']
     
-    return df.plot.area(x='timestamp', y=validator_rewards, labels={
-        "timestamp": "Date",
-        "value": "Reward (ETH)",
-    })
+    return df.plot.area(
+        x='timestamp', 
+        y=validator_rewards,
+        labels={
+            "timestamp": "Date",
+            "value": "Reward (ETH)",
+        },
+        height=800
+    )
 
 
 def plot_validator_environment_yields(df):
     validator_profit_yields = [validator.type + '_profit_yields' for validator in validator_types]
     df[validator_profit_yields] = df[validator_profit_yields] * 100
 
-    return df.plot(x='timestamp', y=(validator_profit_yields + ['total_profit_yields_pct']), title=f'Net Yields of Validator Environments @ {df.eth_staked.iloc[0]} ETH Staked')
+    return df.plot(
+        x='eth_price',
+        y=(validator_profit_yields + ['total_profit_yields_pct']),
+        title=f'Net Yields of Validator Environments @ {df.eth_staked.iloc[0]} ETH Staked',
+        height=800
+    )
 
 
 def plot_revenue_yields_vs_network_inflation(df):
@@ -54,7 +64,8 @@ def plot_revenue_yields_vs_network_inflation(df):
 
     # Add figure title
     fig.update_layout(
-        title_text="Revenue Yields vs. Network Inflation"
+        title_text="Revenue Yields vs. Network Inflation",
+        height=800
     )
 
     # Set x-axis title
