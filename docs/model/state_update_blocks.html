@@ -28,8 +28,9 @@
 </summary>
 <pre><code class="python">import model.parts.ethereum as ethereum
 import model.parts.validators as validators
-import model.parts.proof_of_stake as proof_of_stake
+import model.parts.incentives as incentives
 import model.parts.metrics as metrics
+from model.parameters import parameters
 from model.utils import update_from_signal
 
 
@@ -58,7 +59,9 @@ _state_update_blocks = [
             &#34;policy_validators&#34;: validators.policy_validators,
         },
         &#34;variables&#34;: {
-            &#34;number_of_validators_in_activation_queue&#34;: update_from_signal(&#34;number_of_validators_in_activation_queue&#34;),
+            &#34;number_of_validators_in_activation_queue&#34;: update_from_signal(
+                &#34;number_of_validators_in_activation_queue&#34;
+            ),
             &#34;number_of_validators&#34;: update_from_signal(&#34;number_of_validators&#34;),
             &#34;number_of_validators_online&#34;: update_from_signal(
                 &#34;number_of_validators_online&#34;
@@ -79,7 +82,7 @@ _state_update_blocks = [
             &#34;average_effective_balance&#34;: update_from_signal(
                 &#34;average_effective_balance&#34;
             ),
-            &#34;base_reward&#34;: proof_of_stake.update_base_reward,
+            &#34;base_reward&#34;: incentives.update_base_reward,
         },
     },
     {
@@ -87,8 +90,8 @@ _state_update_blocks = [
             Sync committee and attestation rewards
         &#34;&#34;&#34;,
         &#34;policies&#34;: {
-            &#34;casper_ffg_vote&#34;: proof_of_stake.policy_attestation_rewards,
-            &#34;sync_committee&#34;: proof_of_stake.policy_sync_committee,
+            &#34;casper_ffg_vote&#34;: incentives.policy_attestation_rewards,
+            &#34;sync_committee&#34;: incentives.policy_sync_committee,
         },
         &#34;variables&#34;: {
             &#34;source_reward&#34;: update_from_signal(&#34;source_reward&#34;),
@@ -102,7 +105,7 @@ _state_update_blocks = [
             Block proposal rewards
         &#34;&#34;&#34;,
         &#34;policies&#34;: {
-            &#34;block_proposal&#34;: proof_of_stake.policy_block_proposal,
+            &#34;block_proposal&#34;: incentives.policy_block_proposal,
         },
         &#34;variables&#34;: {
             &#34;block_proposer_reward&#34;: update_from_signal(&#34;block_proposer_reward&#34;),
@@ -113,10 +116,10 @@ _state_update_blocks = [
             Total validating rewards and penalties
         &#34;&#34;&#34;,
         &#34;policies&#34;: {
-            &#34;penalties&#34;: proof_of_stake.policy_attestation_penalties,
+            &#34;penalties&#34;: incentives.policy_attestation_penalties,
         },
         &#34;variables&#34;: {
-            &#34;validating_rewards&#34;: proof_of_stake.update_validating_rewards,
+            &#34;validating_rewards&#34;: incentives.update_validating_rewards,
             &#34;validating_penalties&#34;: update_from_signal(&#34;validating_penalties&#34;),
         },
     },
@@ -125,7 +128,7 @@ _state_update_blocks = [
             Validator slashing process, rewards, and penalties
         &#34;&#34;&#34;,
         &#34;policies&#34;: {
-            &#34;slashing&#34;: proof_of_stake.policy_slashing,
+            &#34;slashing&#34;: incentives.policy_slashing,
         },
         &#34;variables&#34;: {
             &#34;amount_slashed&#34;: update_from_signal(&#34;amount_slashed&#34;),
@@ -203,14 +206,26 @@ _state_update_blocks = [
     },
 ]
 
+
 # Split the state update blocks into those used during the simulation (state_update_blocks)
 # and those used in post-processing to calculate the system metrics (post_processing_blocks)
-state_update_blocks = [
+_state_update_blocks = [
     block for block in _state_update_blocks if not block.get(&#34;post_processing&#34;, False)
 ]
-post_processing_blocks = [
+_post_processing_blocks = [
     block for block in _state_update_blocks if block.get(&#34;post_processing&#34;, False)
-]</code></pre>
+]
+
+
+state_update_blocks = (
+    _state_update_blocks
+    if (not parameters[&#34;eth_staked_process&#34;][0](0, 0) == None)
+    else (
+        # If driving with validator process, switch first two blocks
+        _state_update_blocks[:2][::-1]
+        + _state_update_blocks[2:]
+    )
+)</code></pre>
 </details>
 </section>
 <section>

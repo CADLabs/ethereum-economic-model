@@ -10,3 +10,5 @@ ipython-autotime==0.3.1
 jupyterlab==3.0.14
 ipywidgets==7.6.3
 notebook==6.3.0
+pdoc3==0.9.2
+jupyter-book==0.10.2
