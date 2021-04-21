@@ -119,28 +119,7 @@ def get_validator_churn_limit(params: Parameters, state: StateVariables) -> int:
     return max(MIN_PER_EPOCH_CHURN_LIMIT, number_of_validators // CHURN_LIMIT_QUOTIENT)
 
 
-def compute_activation_exit_epoch(params: Parameters, epoch: Epoch) -> Epoch:
-    """
-    Return the epoch during which validator activations and exits initiated in ``epoch`` take effect.
-
-    See https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/beacon-chain.md#compute_activation_exit_epoch
-    """
-    # Parameters
-    MAX_SEED_LOOKAHEAD = params["MAX_SEED_LOOKAHEAD"]
-
-    return Epoch(epoch + 1 + MAX_SEED_LOOKAHEAD)
-
-
 # Beacon state mutators
-
-
-def increase_balance(
-    params: Parameters, state: StateVariables, index: ValidatorIndex, delta: Gwei
-) -> Gwei:
-    """
-    Increase the validator balance at index ``index`` by ``delta``.
-    """
-    state.balances[index] += delta
 
 
 def slash_validator(params: Parameters, state: StateVariables) -> (Gwei, Gwei, Gwei):

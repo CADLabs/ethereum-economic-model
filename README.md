@@ -23,6 +23,7 @@ TODO: description
 
 ## Experiments
 
+To run the default experiment from the terminal, execute the `experiments.run` module:
 ```bash
 python3 -m experiments.run
 ```

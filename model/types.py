@@ -38,18 +38,6 @@ Timestep = int
 # BeaconState types
 Epoch = int
 
-
-@dataclass
-class Validator:
-    effective_balance: Gwei = 0
-
-
-@dataclass
-class BeaconState:
-    balances: [Gwei] = field(default_factory=lambda: [0])
-    validators: [Validator] = field(default_factory=lambda: [Validator()])
-
-
 # Validator types
 ValidatorIndex = int
 

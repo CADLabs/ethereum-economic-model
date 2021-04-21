@@ -1,11 +1,11 @@
 import pandas as pd
 from functools import partial
+import datetime
 from radcad.core import generate_parameter_sweep
 
 import model.simulation_configuration as simulation
 import model.constants as constants
 from model.parameters import parameters, Parameters, validator_types
-import datetime
 
 
 def assign_parameters(df: pd.DataFrame, parameters: Parameters, set_params=[]):

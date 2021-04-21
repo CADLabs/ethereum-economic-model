@@ -59,11 +59,6 @@ def policy_validators(params, substep, state_history, previous_state):
     ]
     average_effective_balance = previous_state["average_effective_balance"]
 
-    # Calculate the net validators uptime
-    validators_uptime = (
-        validator_internet_uptime * validator_power_uptime * validator_technical_uptime
-    )
-
     # Calculate the number of validators using ETH staked
     if number_of_validators == 0 or eth_staked_process(0, 0) is not None:
         number_of_validators = int(
@@ -82,6 +77,11 @@ def policy_validators(params, substep, state_history, previous_state):
 
         number_of_validators += activated_validators
         number_of_validators_in_activation_queue -= activated_validators
+
+    # Calculate the net validators uptime
+    validators_uptime = (
+        validator_internet_uptime * validator_power_uptime * validator_technical_uptime
+    )
 
     # Calculate the number of validators online and offline using validators uptime
     number_of_validators_online = int(round(number_of_validators * validators_uptime))

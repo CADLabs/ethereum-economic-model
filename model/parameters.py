@@ -65,7 +65,6 @@ class Parameters(TypedDict, total=True):
 
     # Rewards, penalties, and slashing
     slashing_events_per_1000_epochs: List[int]
-    number_of_validating_penalties: List[int]
 
     # EIP1559
     eip1559_basefee: List[Gwei_per_Gas]
@@ -83,9 +82,6 @@ eth_price_process = processes.continuous.BrownianExcursion(
 )
 eth_price_samples = eth_price_process.sample(
     simulation.TIMESTEPS * simulation.DELTA_TIME + 1
-)
-eth_staked_samples = np.linspace(
-    524_288, 33_600_000, simulation.TIMESTEPS * simulation.DELTA_TIME + 1
 )
 
 # Configure validator type distribution
@@ -198,12 +194,12 @@ parameters = Parameters(
         )
     ],
     slashing_events_per_1000_epochs=[1],  # Units: 1 / 1000 epochs
-    number_of_validating_penalties=[3],
     # TODO confirm average basefee and tip amount
+    # See https://notes.ethereum.org/@vbuterin/BkSQmQTS8
     eip1559_basefee=[100],  # Gwei per gas
     eip1559_avg_tip_amount=[1],  # Gwei per gas
     eip1559_avg_transactions_per_day=[
-        1_400_00
+        1_400_000
     ],  # From https://etherscan.io/chart/tx as of 20/04/21
     eip1559_avg_gas_per_transaction=[73123],  # Gas
 )
