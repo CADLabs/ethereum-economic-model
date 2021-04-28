@@ -1,18 +1,16 @@
+"""
+# Relevant Eth2 Spec Methods
+
+* Phase 0: https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/beacon-chain.md
+* Altair updates: https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md
+"""
+
 import math
 
 import model.constants as constants
 from model.types import Gwei, ValidatorIndex, Epoch
 from model.parameters import Parameters
 from model.state_variables import StateVariables
-
-
-"""
-# Relevant Eth2 Specs
-
-See:
-* Phase 0: https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/beacon-chain.md
-* Altair updates: https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md
-"""
 
 
 # Beacon state accessors

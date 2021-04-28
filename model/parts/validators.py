@@ -1,17 +1,16 @@
-import numpy as np
-from pytest import approx
-
-import model.constants as constants
-import model.parts.spec as spec
-
-
 """
-# Validators
+# Validator Mechanisms
 
 * Implementation of the validator staking process
 * Implementation of the new, online, and offline validator processes
 * Calculation of the validator average effective balance
 """
+
+import numpy as np
+from pytest import approx
+
+import model.constants as constants
+import model.parts.spec as spec
 
 
 def policy_staking(params, substep, state_history, previous_state):

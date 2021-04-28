@@ -1,4 +1,6 @@
 from functools import partial
+import copy
+from dataclasses import field
 
 
 def _update_from_signal(
@@ -27,3 +29,7 @@ def local_variables(_locals):
         key: _locals[key]
         for key in [_key for _key in _locals.keys() if "__" not in _key]
     }
+
+
+def default(obj):
+    return field(default_factory=lambda: copy.copy(obj))

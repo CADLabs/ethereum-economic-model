@@ -1,14 +1,13 @@
+"""
+# Ethereum System
+
+Policy Functions and State Update Functions shared between the Eth1 and Eth2 systems.
+"""
+
 import typing
 
 import model.constants as constants
 from model.types import ETH, USD_per_ETH, Gwei
-
-
-"""
-# Ethereum
-
-* Policy Functions and State Update Functions shared between the Eth1 and Eth2 systems
-"""
 
 
 def policy_network_issuance(
@@ -40,21 +39,26 @@ def policy_eip1559_transaction_pricing(
     A transaction pricing mechanism that includes fixed-per-block network fee
     that is burned and dynamically expands/contracts block sizes to deal with transient congestion.
 
-    See https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md
+    See:
+    * https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md
+    * https://eips.ethereum.org/EIPS/eip-1559
     """
 
     # Parameters
     dt = params["dt"]
-    eip1559_avg_transactions_per_day = params["eip1559_avg_transactions_per_day"]
-    eip1559_avg_gas_per_transaction = params["eip1559_avg_gas_per_transaction"]
-    eip1559_basefee = params["eip1559_basefee"]
-    eip1559_avg_tip_amount = params["eip1559_avg_tip_amount"]
-
+    gas_target = params["gas_target"] # Gas
+    ELASTICITY_MULTIPLIER = params["ELASTICITY_MULTIPLIER"]
+    eip1559_avg_basefee = params["eip1559_avg_basefee"] # Gwei per Gas
+    eip1559_avg_tip_amount = params["eip1559_avg_tip_amount"] # Gwei per Gas
+    
     # Calculate total basefee and tips to validators
-    total_transactions = eip1559_avg_transactions_per_day // constants.epochs_per_day
-    total_gas_used = total_transactions * eip1559_avg_gas_per_transaction
-    total_basefee = total_gas_used * eip1559_basefee
-    total_tips_to_validators = total_gas_used * eip1559_avg_tip_amount
+    # Assume on average the gas used per block is equal to the gas target
+    gas_used = gas_target
+    total_basefee = gas_used * eip1559_avg_basefee # Gwei
+    total_tips_to_validators = gas_used * eip1559_avg_tip_amount # Gwei
+
+    # Check if the block used too much gas
+    assert gas_used <= gas_target * ELASTICITY_MULTIPLIER, 'invalid block: too much gas used'
 
     return {
         "total_basefee": total_basefee * dt,

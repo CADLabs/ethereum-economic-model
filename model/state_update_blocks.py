@@ -6,43 +6,45 @@ from model.parameters import parameters
 from model.utils import update_from_signal
 
 
+state_update_block_staking = {
+    "description": """
+        Environmental Ethereum processes:
+        * ETH price update
+        * Staking of ETH for new validators
+    """,
+    "policies": {
+        "staking": validators.policy_staking,
+    },
+    "variables": {
+        "eth_price": ethereum.update_eth_price,
+        "eth_staked": update_from_signal("eth_staked"),
+    },
+}
+
+state_update_block_validators = {
+    "description": """
+        Environmental validator processes:
+        * New validators
+        * Online and offline validators
+    """,
+    "policies": {
+        "policy_validators": validators.policy_validators,
+    },
+    "variables": {
+        "number_of_validators_in_activation_queue": update_from_signal(
+            "number_of_validators_in_activation_queue"
+        ),
+        "number_of_validators": update_from_signal("number_of_validators"),
+        "number_of_validators_online": update_from_signal(
+            "number_of_validators_online"
+        ),
+        "number_of_validators_offline": update_from_signal(
+            "number_of_validators_offline"
+        ),
+    },
+}
+
 _state_update_blocks = [
-    {
-        "description": """
-            Exogenous Ethereum processes:
-            * ETH price update
-            * Staking of ETH for new validators
-        """,
-        "policies": {
-            "staking": validators.policy_staking,
-        },
-        "variables": {
-            "eth_price": ethereum.update_eth_price,
-            "eth_staked": update_from_signal("eth_staked"),
-        },
-    },
-    {
-        "description": """
-            Validator processes:
-            * New validators
-            * Online and offline validators
-        """,
-        "policies": {
-            "policy_validators": validators.policy_validators,
-        },
-        "variables": {
-            "number_of_validators_in_activation_queue": update_from_signal(
-                "number_of_validators_in_activation_queue"
-            ),
-            "number_of_validators": update_from_signal("number_of_validators"),
-            "number_of_validators_online": update_from_signal(
-                "number_of_validators_online"
-            ),
-            "number_of_validators_offline": update_from_signal(
-                "number_of_validators_offline"
-            ),
-        },
-    },
     {
         "description": """
             Calculation and update of validator average effective balance & base reward
@@ -178,23 +180,20 @@ _state_update_blocks = [
     },
 ]
 
+# Conditionally update the order of the State Update Blocks
+_state_update_blocks = (
+    [state_update_block_staking, state_update_block_validators] + _state_update_blocks
+    if parameters["eth_staked_process"][0](0, 0) is not None
+    # If driving with validator process, switch first two blocks
+    else [state_update_block_validators, state_update_block_staking]
+    + _state_update_blocks
+)
 
 # Split the state update blocks into those used during the simulation (state_update_blocks)
 # and those used in post-processing to calculate the system metrics (post_processing_blocks)
-_state_update_blocks = [
+state_update_blocks = [
     block for block in _state_update_blocks if not block.get("post_processing", False)
 ]
-_post_processing_blocks = [
+post_processing_blocks = [
     block for block in _state_update_blocks if block.get("post_processing", False)
 ]
-
-
-state_update_blocks = (
-    _state_update_blocks
-    if parameters["eth_staked_process"][0](0, 0) is not None
-    else (
-        # If driving with validator process, switch first two blocks
-        _state_update_blocks[:2][::-1]
-        + _state_update_blocks[2:]
-    )
-)

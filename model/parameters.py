@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 from stochastic import processes
+from dataclasses import dataclass, field
+import logging
 
 import model.simulation_configuration as simulation
 import model.constants as constants
@@ -20,57 +22,7 @@ from model.types import (
     Callable,
     Epoch,
 )
-
-
-class Parameters(TypedDict, total=True):
-    # Timescale delta time
-    dt: List[Epoch]
-
-    # Environmental processes
-    eth_price_process: List[Callable[[Run, Timestep], ETH]]
-    eth_staked_process: List[Callable[[Run, Timestep], ETH]]
-    validator_process: List[Callable[[Run, Timestep], int]]  # New validators per epoch
-
-    # Parameters from the Eth2 specification
-    # Uppercase used for all parameters from Eth2 specification
-    BASE_REWARD_FACTOR: List[int]
-    BASE_REWARDS_PER_EPOCH: List[int]
-    """Example class variable description for the base rewards per epoch"""
-    MAX_EFFECTIVE_BALANCE: List[Gwei]
-    EFFECTIVE_BALANCE_INCREMENT: List[int]
-    SLOTS_PER_EPOCH: List[int]
-    SYNC_COMMITTEE_SIZE: List[int]
-    PROPOSER_REWARD_QUOTIENT: List[int]
-    WHISTLEBLOWER_REWARD_QUOTIENT: List[int]
-    MIN_SLASHING_PENALTY_QUOTIENT: List[int]
-    TIMELY_HEAD_WEIGHT: List[int]
-    TIMELY_SOURCE_WEIGHT: List[int]
-    TIMELY_TARGET_WEIGHT: List[int]
-    SYNC_REWARD_WEIGHT: List[int]
-    PROPOSER_WEIGHT: List[int]
-    WEIGHT_DENOMINATOR: List[int]
-    MIN_PER_EPOCH_CHURN_LIMIT: List[int]
-    CHURN_LIMIT_QUOTIENT: List[int]
-    MAX_SEED_LOOKAHEAD: List[int]
-
-    # Validator parameters
-    validator_internet_uptime: List[Percentage]
-    validator_power_uptime: List[Percentage]
-    validator_technical_uptime: List[Percentage]
-    validator_percentage_distribution: List[np.ndarray]
-    validator_hardware_costs_per_epoch: List[np.ndarray]
-    validator_cloud_costs_per_epoch: List[np.ndarray]
-    validator_third_party_costs_per_epoch: List[np.ndarray]
-    """Percentage of total online validator rewards"""
-
-    # Rewards, penalties, and slashing
-    slashing_events_per_1000_epochs: List[int]
-
-    # EIP1559
-    eip1559_basefee: List[Gwei_per_Gas]
-    eip1559_avg_tip_amount: List[Gwei_per_Gas]
-    eip1559_avg_transactions_per_day: List[int]
-    eip1559_avg_gas_per_transaction: List[Gas]
+from model.utils import default
 
 
 # Configure environmental ETH price and ETH staking processes
@@ -127,79 +79,119 @@ validator_types = [
 total_percentage_distribution = sum(
     [validator.percentage_distribution for validator in validator_types]
 )
-for validator in validator_types:
-    validator.percentage_distribution /= total_percentage_distribution
 
-# Parameters from the Eth2 specification
-eth2_spec_parameters = {
-    "BASE_REWARD_FACTOR": [64],
-    "BASE_REWARDS_PER_EPOCH": [4],
-    "MAX_EFFECTIVE_BALANCE": [32 * constants.gwei],
-    "EFFECTIVE_BALANCE_INCREMENT": [1 * constants.gwei],
-    "PROPOSER_REWARD_QUOTIENT": [8],
-    "WHISTLEBLOWER_REWARD_QUOTIENT": [512],
-    "MIN_SLASHING_PENALTY_QUOTIENT": [2 ** 6],
-    "MIN_PER_EPOCH_CHURN_LIMIT": [2 ** 2],
-    "MAX_SEED_LOOKAHEAD": [2 ** 2],
-    "CHURN_LIMIT_QUOTIENT": [2 ** 16],
-    "TIMELY_HEAD_WEIGHT": [12],
-    "TIMELY_SOURCE_WEIGHT": [12],
-    "TIMELY_TARGET_WEIGHT": [24],
-    "SYNC_REWARD_WEIGHT": [8],
-    "PROPOSER_WEIGHT": [8],
-    "WEIGHT_DENOMINATOR": [64],
-    "SLOTS_PER_EPOCH": [32],
-    "SYNC_COMMITTEE_SIZE": [2 ** 10],
-}
+if total_percentage_distribution < 1:
+    logging.warn("""
+    Parameter validator.percentage_distribution normalized due to sum not being equal to 100%
+    """)
+    for validator in validator_types:
+        validator.percentage_distribution /= total_percentage_distribution
 
-# Configure parameters and parameter sweeps
-parameters = Parameters(
-    # Unpack the Eth2 spec parameters into the Parameters class initialization
-    **eth2_spec_parameters,
-    dt=[simulation.DELTA_TIME],
-    eth_price_process=[
+
+@dataclass
+class Parameters:
+    dt: List[Epoch] = default([simulation.DELTA_TIME])
+    """Simulation timescale / timestep unit of time"""
+
+    # Environmental processes
+    eth_price_process: List[Callable[[Run, Timestep], ETH]] = default([
         lambda _run, timestep: 1000
         + eth_price_samples[timestep] / max(eth_price_samples) * 1000
-    ],
-    eth_staked_process=[lambda _run, _timestep: None],
-    validator_process=[
+    ])
+    """ETH spot price at each epoch"""
+
+    eth_staked_process: List[Callable[[Run, Timestep], ETH]] = default([
+        lambda _run, _timestep: None
+    ])
+    """ETH staked at each epoch"""
+
+    validator_process: List[Callable[[Run, Timestep], int]] = default([
+        
+        # From https://beaconscan.com/ as of 20/04/21
         lambda _run, timestep: 4
-    ],  # From https://beaconscan.com/ as of 20/04/21
-    validator_internet_uptime=[0.999],
-    validator_power_uptime=[0.999],
-    validator_technical_uptime=[0.982],
+    ])
+    """New validators per epoch (enabled if model not driven using eth_staked_process)"""
+
+    # Parameters from the Eth2 specification
+    # Uppercase used for all parameters from Eth2 specification
+    BASE_REWARD_FACTOR: List[int] = default([64])
+    MAX_EFFECTIVE_BALANCE: List[Gwei] = default([32 * constants.gwei])
+    EFFECTIVE_BALANCE_INCREMENT: List[int] = default([1 * constants.gwei])
+    SLOTS_PER_EPOCH: List[int] = default([32])
+    SYNC_COMMITTEE_SIZE: List[int] = default([2 ** 10])
+    PROPOSER_REWARD_QUOTIENT: List[int] = default([8])
+    WHISTLEBLOWER_REWARD_QUOTIENT: List[int] = default([512])
+    MIN_SLASHING_PENALTY_QUOTIENT: List[int] = default([2 ** 6])
+    TIMELY_HEAD_WEIGHT: List[int] = default([12])
+    TIMELY_SOURCE_WEIGHT: List[int] = default([12])
+    TIMELY_TARGET_WEIGHT: List[int] = default([24])
+    SYNC_REWARD_WEIGHT: List[int] = default([8])
+    PROPOSER_WEIGHT: List[int] = default([8])
+    WEIGHT_DENOMINATOR: List[int] = default([64])
+    MIN_PER_EPOCH_CHURN_LIMIT: List[int] = default([4])
+    CHURN_LIMIT_QUOTIENT: List[int] = default([2 ** 16])
+
+    # Validator parameters
+    validator_internet_uptime: List[Percentage] = default([0.999])
+    validator_power_uptime: List[Percentage] = default([0.999])
+    validator_technical_uptime: List[Percentage] = default([0.982])
+
     # Using list comprehension, map the validator types to each parameter
-    validator_percentage_distribution=[
+    validator_percentage_distribution: List[np.ndarray] = default([
         np.array(
             [validator.percentage_distribution for validator in validator_types],
             dtype=Percentage,
         )
-    ],
-    validator_hardware_costs_per_epoch=[
+    ])
+    validator_hardware_costs_per_epoch: List[np.ndarray] = default([
         np.array(
             [validator.hardware_costs_per_epoch for validator in validator_types],
             dtype=USD_per_epoch,
         )
-    ],
-    validator_cloud_costs_per_epoch=[
+    ])
+    validator_cloud_costs_per_epoch: List[np.ndarray] = default([
         np.array(
             [validator.cloud_costs_per_epoch for validator in validator_types],
             dtype=USD_per_epoch,
         )
-    ],
-    validator_third_party_costs_per_epoch=[
+    ])
+    validator_third_party_costs_per_epoch: List[np.ndarray] = default([
         np.array(
             [validator.third_party_costs_per_epoch for validator in validator_types],
             dtype=Percentage_per_epoch,
         )
-    ],
-    slashing_events_per_1000_epochs=[1],  # Units: 1 / 1000 epochs
-    # TODO confirm average basefee and tip amount
-    # See https://notes.ethereum.org/@vbuterin/BkSQmQTS8
-    eip1559_basefee=[100],  # Gwei per gas
-    eip1559_avg_tip_amount=[1],  # Gwei per gas
-    eip1559_avg_transactions_per_day=[
-        1_400_000
-    ],  # From https://etherscan.io/chart/tx as of 20/04/21
-    eip1559_avg_gas_per_transaction=[73123],  # Gas
-)
+    ])
+    """Validator cost as a percentage of total online validator rewards"""
+
+    # Rewards, penalties, and slashing
+    slashing_events_per_1000_epochs: List[int] = default([1])  # 1 / 1000 epochs
+    """
+    Number of slashing events per 1000 epochs. Asssumption from Hoban/Borgers report.
+    """
+
+    # EIP1559 transaction pricing parameters
+    ELASTICITY_MULTIPLIER: List[int] = default([2])
+    """
+    Used to calculate gas limit from EIP1559 gas target
+    """
+
+    eip1559_avg_basefee: List[Gwei_per_Gas] = default([50])  # Gwei per gas
+    """
+    Approximated using average gas price from https://etherscan.io/gastracker as of 20/04/21
+    """
+
+    eip1559_avg_tip_amount: List[Gwei_per_Gas] = default([1])  # Gwei per gas
+    """
+    The tip level that compensates for uncle risk.
+    See https://notes.ethereum.org/@vbuterin/BkSQmQTS8#Why-would-miners-include-transactions-at-all
+    """
+
+    gas_target: List[Gas] = default([15e6])
+    """
+    EIP1559 gas limit = gas_target * ELASTICITY_MULTIPLIER
+    See https://eips.ethereum.org/EIPS/eip-1559
+    """
+
+
+# Initialize Parameters instance with default values
+parameters = Parameters().__dict__
