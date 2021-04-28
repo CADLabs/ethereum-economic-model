@@ -4,8 +4,6 @@ from experiments.run import run
 from experiments.default import experiment
 import model.parts.spec as spec
 
-import runtime_tests as runtime_tests
-
 
 def check_base_reward(params, substep, state_history, previous_state):
     EFFECTIVE_BALANCE_INCREMENT = params["EFFECTIVE_BALANCE_INCREMENT"]
