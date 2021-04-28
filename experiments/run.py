@@ -1,5 +1,6 @@
 import pandas as pd
 import logging
+import sys
 from datetime import datetime
 
 from experiments.default import experiment
@@ -9,10 +10,11 @@ from experiments.default import experiment
 # e.g. Use logging.debug(...) to log to log file
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
-file_handler = logging.FileHandler(filename=f'logs/experiment-{datetime.now()}.log')
+# handler = logging.FileHandler(filename=f'logs/experiment-{datetime.now()}.log')
+handler = logging.StreamHandler(sys.stdout)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-file_handler.setFormatter(formatter)
-logger.addHandler(file_handler)
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 
 def run(experiment=experiment):
