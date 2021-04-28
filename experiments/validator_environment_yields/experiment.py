@@ -14,7 +14,9 @@ parameter_overrides = {
         # A sweep of two fixed ETH staked points
         lambda _run, _timestep: eth_staked,  # From https://beaconscan.com/ as of 20/04/21
         lambda _run, _timestep: 33_600_000,  # From Hoban/Borgers Economic Report
-    ]
+    ],
+    # Combination of validator internet, power, and technical uptime from Hoban/Borgers Report
+    "validator_uptime": [0.999 * 0.999 * 0.982]
 }
 
 # Override default experiment parameters

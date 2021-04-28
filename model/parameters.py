@@ -138,8 +138,6 @@ class Parameters:
     BASE_REWARD_FACTOR: List[int] = default([64])
     MAX_EFFECTIVE_BALANCE: List[Gwei] = default([32 * constants.gwei])
     EFFECTIVE_BALANCE_INCREMENT: List[int] = default([1 * constants.gwei])
-    SLOTS_PER_EPOCH: List[int] = default([32])
-    SYNC_COMMITTEE_SIZE: List[int] = default([2 ** 10])
     PROPOSER_REWARD_QUOTIENT: List[int] = default([8])
     WHISTLEBLOWER_REWARD_QUOTIENT: List[int] = default([512])
     MIN_SLASHING_PENALTY_QUOTIENT: List[int] = default([2 ** 6])
@@ -153,9 +151,8 @@ class Parameters:
     CHURN_LIMIT_QUOTIENT: List[int] = default([2 ** 16])
 
     # Validator parameters
-    validator_internet_uptime: List[Percentage] = default([0.999])
-    validator_power_uptime: List[Percentage] = default([0.999])
-    validator_technical_uptime: List[Percentage] = default([0.982])
+    validator_uptime: List[Percentage] = default([0.98])
+    """Combination of validator internet, power, and technical uptime"""
 
     # Using list comprehension, map the validator types to each parameter
     validator_percentage_distribution: List[np.ndarray] = default(

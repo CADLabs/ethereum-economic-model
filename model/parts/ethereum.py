@@ -20,8 +20,8 @@ def policy_network_issuance(
     total_online_validator_rewards = previous_state["total_online_validator_rewards"]
 
     # Calculate network issuance in ETH
-    # total_online_validator_rewards includes tips to validators, which is not issuance, and is removed
     network_issuance = (
+        # Remove tips to validators which is not issuance (ETH transferred rather than minted)
         (total_online_validator_rewards - total_tips_to_validators)
         - amount_slashed
         - total_basefee

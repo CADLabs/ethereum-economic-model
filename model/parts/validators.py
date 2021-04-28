@@ -14,6 +14,13 @@ import model.parts.spec as spec
 
 
 def policy_staking(params, substep, state_history, previous_state):
+    """Staking Policy
+    A policy used when driving the model with the `eth_staked_process`,
+    for generating phase space analyses, e.g. simulating a set of discrete `eth_staked` values.
+
+    When the `eth_staked_process` is disabled, the model is driven using the `validator_process`,
+    for generating state space (change in state over time) analyses.
+    """
     # Parameters
     dt = params["dt"]
     eth_staked_process = params["eth_staked_process"]
@@ -70,8 +77,8 @@ def policy_validators(params, substep, state_history, previous_state):
         validator_churn_limit = (
             spec.get_validator_churn_limit(params, previous_state) * dt
         )
-        activated_validators = len(
-            range(number_of_validators_in_activation_queue)[:validator_churn_limit]
+        activated_validators = min(
+            number_of_validators_in_activation_queue, validator_churn_limit
         )
 
         number_of_validators += activated_validators

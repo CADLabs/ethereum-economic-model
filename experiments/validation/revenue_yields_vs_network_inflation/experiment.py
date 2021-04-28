@@ -19,6 +19,8 @@ parameter_overrides = {
         lambda _run, _timestep: 25,  # From Hoban/Borgers Economic Report
         lambda _run, _timestep: 1500,  # From Hoban/Borgers Economic Report
     ],
+    # Combination of validator internet, power, and technical uptime from Hoban/Borgers Report
+    "validator_uptime": [0.999 * 0.999 * 0.982],
     # Disable EIP1559
     "eip1559_basefee": [0],  # Gwei per gas
     "eip1559_avg_tip_amount": [0],  # Gwei per gas

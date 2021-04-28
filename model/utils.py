@@ -16,8 +16,14 @@ def _update_from_signal(
 
 
 def update_from_signal(state_variable, signal_key=None):
-    """
-    A generic State Update Function to update a state variable directly from a policy signal
+    """A generic State Update Function to update a State Variable directly from a Policy Signal
+
+    Args:
+        state_variable (str): State Variable key
+        signal_key (str, optional): Policy Signal key. Defaults to None.
+
+    Returns:
+        Callable: A generic State Update Function
     """
     if not signal_key:
         signal_key = state_variable
