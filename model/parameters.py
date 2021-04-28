@@ -1,5 +1,10 @@
 """
 Definition of System Parameters, their types, and default values.
+
+By using a dataclass to represent the System Parameters:
+* We can use types for Python type hints
+* Set default values
+* Ensure that all System Parameters are initialized
 """
 
 
@@ -96,11 +101,11 @@ if total_percentage_distribution < 1:
 
 @dataclass
 class Parameters:
-    """State Variables
-    By using a dataclass to represent the System Parameters:
-    * We can use types for Python type hints
-    * Set default values
-    * Ensure that all System Parameters are initialized
+    """System Parameters
+    Each System Parameter is defined as:
+    system parameter key: system parameter type = default system parameter value
+
+    Because lists are mutable, we need to wrap each parameter list in the `default(...)` method.
     """
 
     dt: List[Epoch] = default([simulation.DELTA_TIME])

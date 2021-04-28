@@ -1,5 +1,10 @@
 """
 Definition of State Variables, their types, and default values.
+
+By using a dataclass to represent the State Variables:
+* We can use types for Python type hints
+* Set default values
+* Ensure that all State Variables are initialized
 """
 
 
@@ -33,10 +38,8 @@ eth_supply = 115_538_828
 @dataclass
 class StateVariables:
     """State Variables
-    By using a dataclass to represent the State Variables:
-    * We can use types for Python type hints
-    * Set default values
-    * Ensure that all State Variables are initialized
+    Each State Variable is defined as:
+    state variable key: state variable type = default state variable value
     """
 
     # Ethereum state variables
