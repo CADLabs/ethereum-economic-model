@@ -81,9 +81,11 @@ total_percentage_distribution = sum(
 )
 
 if total_percentage_distribution < 1:
-    logging.warn("""
+    logging.warn(
+        """
     Parameter validator.percentage_distribution normalized due to sum not being equal to 100%
-    """)
+    """
+    )
     for validator in validator_types:
         validator.percentage_distribution /= total_percentage_distribution
 
@@ -94,22 +96,25 @@ class Parameters:
     """Simulation timescale / timestep unit of time"""
 
     # Environmental processes
-    eth_price_process: List[Callable[[Run, Timestep], ETH]] = default([
-        lambda _run, timestep: 1000
-        + eth_price_samples[timestep] / max(eth_price_samples) * 1000
-    ])
+    eth_price_process: List[Callable[[Run, Timestep], ETH]] = default(
+        [
+            lambda _run, timestep: 1000
+            + eth_price_samples[timestep] / max(eth_price_samples) * 1000
+        ]
+    )
     """ETH spot price at each epoch"""
 
-    eth_staked_process: List[Callable[[Run, Timestep], ETH]] = default([
-        lambda _run, _timestep: None
-    ])
+    eth_staked_process: List[Callable[[Run, Timestep], ETH]] = default(
+        [lambda _run, _timestep: None]
+    )
     """ETH staked at each epoch"""
 
-    validator_process: List[Callable[[Run, Timestep], int]] = default([
-        
-        # From https://beaconscan.com/ as of 20/04/21
-        lambda _run, timestep: 4
-    ])
+    validator_process: List[Callable[[Run, Timestep], int]] = default(
+        [
+            # From https://beaconscan.com/ as of 20/04/21
+            lambda _run, timestep: 4
+        ]
+    )
     """New validators per epoch (enabled if model not driven using eth_staked_process)"""
 
     # Parameters from the Eth2 specification
@@ -137,30 +142,41 @@ class Parameters:
     validator_technical_uptime: List[Percentage] = default([0.982])
 
     # Using list comprehension, map the validator types to each parameter
-    validator_percentage_distribution: List[np.ndarray] = default([
-        np.array(
-            [validator.percentage_distribution for validator in validator_types],
-            dtype=Percentage,
-        )
-    ])
-    validator_hardware_costs_per_epoch: List[np.ndarray] = default([
-        np.array(
-            [validator.hardware_costs_per_epoch for validator in validator_types],
-            dtype=USD_per_epoch,
-        )
-    ])
-    validator_cloud_costs_per_epoch: List[np.ndarray] = default([
-        np.array(
-            [validator.cloud_costs_per_epoch for validator in validator_types],
-            dtype=USD_per_epoch,
-        )
-    ])
-    validator_third_party_costs_per_epoch: List[np.ndarray] = default([
-        np.array(
-            [validator.third_party_costs_per_epoch for validator in validator_types],
-            dtype=Percentage_per_epoch,
-        )
-    ])
+    validator_percentage_distribution: List[np.ndarray] = default(
+        [
+            np.array(
+                [validator.percentage_distribution for validator in validator_types],
+                dtype=Percentage,
+            )
+        ]
+    )
+    validator_hardware_costs_per_epoch: List[np.ndarray] = default(
+        [
+            np.array(
+                [validator.hardware_costs_per_epoch for validator in validator_types],
+                dtype=USD_per_epoch,
+            )
+        ]
+    )
+    validator_cloud_costs_per_epoch: List[np.ndarray] = default(
+        [
+            np.array(
+                [validator.cloud_costs_per_epoch for validator in validator_types],
+                dtype=USD_per_epoch,
+            )
+        ]
+    )
+    validator_third_party_costs_per_epoch: List[np.ndarray] = default(
+        [
+            np.array(
+                [
+                    validator.third_party_costs_per_epoch
+                    for validator in validator_types
+                ],
+                dtype=Percentage_per_epoch,
+            )
+        ]
+    )
     """Validator cost as a percentage of total online validator rewards"""
 
     # Rewards, penalties, and slashing

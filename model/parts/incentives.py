@@ -13,7 +13,9 @@ from model.types import Gwei
 import model.parts.spec as spec
 
 
-def policy_attestation_penalties(params, substep, state_history, previous_state) -> typing.Dict[str, Gwei]:
+def policy_attestation_penalties(
+    params, substep, state_history, previous_state
+) -> typing.Dict[str, Gwei]:
     """
     Derived from: https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#get_flag_index_deltas
 
@@ -125,7 +127,7 @@ def policy_sync_committee(
     number_of_validators_online = previous_state["number_of_validators_online"]
 
     # Calculate total sync reward
-    total_base_rewards = base_reward *  number_of_validators_online
+    total_base_rewards = base_reward * number_of_validators_online
     sync_reward = total_base_rewards * SYNC_REWARD_WEIGHT // WEIGHT_DENOMINATOR
     # Scale reward by the percentage of online validators
     sync_reward *= number_of_validators_online / number_of_validators

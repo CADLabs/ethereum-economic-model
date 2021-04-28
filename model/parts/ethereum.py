@@ -46,19 +46,21 @@ def policy_eip1559_transaction_pricing(
 
     # Parameters
     dt = params["dt"]
-    gas_target = params["gas_target"] # Gas
+    gas_target = params["gas_target"]  # Gas
     ELASTICITY_MULTIPLIER = params["ELASTICITY_MULTIPLIER"]
-    eip1559_avg_basefee = params["eip1559_avg_basefee"] # Gwei per Gas
-    eip1559_avg_tip_amount = params["eip1559_avg_tip_amount"] # Gwei per Gas
-    
+    eip1559_avg_basefee = params["eip1559_avg_basefee"]  # Gwei per Gas
+    eip1559_avg_tip_amount = params["eip1559_avg_tip_amount"]  # Gwei per Gas
+
     # Calculate total basefee and tips to validators
     # Assume on average the gas used per block is equal to the gas target
     gas_used = gas_target
-    total_basefee = gas_used * eip1559_avg_basefee # Gwei
-    total_tips_to_validators = gas_used * eip1559_avg_tip_amount # Gwei
+    total_basefee = gas_used * eip1559_avg_basefee  # Gwei
+    total_tips_to_validators = gas_used * eip1559_avg_tip_amount  # Gwei
 
     # Check if the block used too much gas
-    assert gas_used <= gas_target * ELASTICITY_MULTIPLIER, 'invalid block: too much gas used'
+    assert (
+        gas_used <= gas_target * ELASTICITY_MULTIPLIER
+    ), "invalid block: too much gas used"
 
     return {
         "total_basefee": total_basefee * dt,
