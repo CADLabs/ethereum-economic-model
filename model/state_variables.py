@@ -1,4 +1,10 @@
+"""
+Definition of State Variables, their types, and default values.
+"""
+
+
 import numpy as np
+from dataclasses import dataclass
 
 import model.constants as constants
 from model.types import (
@@ -8,67 +14,12 @@ from model.types import (
     USD_per_ETH,
     Percentage,
     Uninitialized,
-    TypedDict,
 )
 from model.parameters import validator_types
 
 
-class StateVariables(TypedDict, total=True):
-    # Ethereum state variables
-    eth_price: USD_per_ETH
-    eth_supply: ETH
-    eth_staked: ETH
-    supply_inflation: Percentage
-
-    # Validator state variables
-    number_of_validators_in_activation_queue: int
-    average_effective_balance: Gwei
-    number_of_validators: int
-    number_of_validators_online: int
-    number_of_validators_offline: int
-
-    # Reward and penalty state variables
-    base_reward: Gwei
-    validating_rewards: Gwei
-    validating_penalties: Gwei
-    source_reward: Gwei
-    target_reward: Gwei
-    head_reward: Gwei
-    block_proposer_reward: Gwei
-    sync_reward: Gwei
-
-    # Slashing state variables
-    amount_slashed: Gwei
-    whistleblower_rewards: Gwei
-
-    # EIP1559 state variables
-    total_basefee: Gwei
-    total_tips_to_validators: Gwei
-
-    # System metric state variables
-    validator_eth_staked: np.ndarray
-    validator_revenue: np.ndarray
-    validator_profit: np.ndarray
-    validator_revenue_yields: np.ndarray
-    validator_profit_yields: np.ndarray
-
-    total_online_validator_rewards: Gwei
-    total_revenue: USD
-    total_profit: USD
-    total_revenue_yields: Percentage
-    total_profit_yields: Percentage
-
-    validator_count_distribution: np.ndarray
-    validator_hardware_costs: np.ndarray
-    validator_cloud_costs: np.ndarray
-    validator_third_party_costs: np.ndarray
-    validator_costs: np.ndarray
-    total_network_costs: USD
-
-
 # Get number of validator types for initializing Numpy array size
 number_of_validator_types = len(validator_types)
-
 
 # Intial state from external live data source
 # Updated from https://beaconscan.com/ as of 20/04/21
@@ -79,42 +30,82 @@ eth_staked = 3_868_555
 eth_supply = 115_538_828
 
 
-initial_state = StateVariables(
-    eth_price=0,
-    eth_supply=eth_supply,
-    eth_staked=eth_staked,
-    supply_inflation=0,
-    average_effective_balance=32 * constants.gwei,
-    number_of_validators_in_activation_queue=number_of_validators_in_activation_queue,
-    number_of_validators=number_of_validators,
-    number_of_validators_online=0,
-    number_of_validators_offline=0,
-    base_reward=0,
-    validating_rewards=0,
-    validating_penalties=0,
-    source_reward=0,
-    target_reward=0,
-    head_reward=0,
-    block_proposer_reward=0,
-    sync_reward=0,
-    amount_slashed=0,
-    whistleblower_rewards=0,
-    total_basefee=0,
-    total_tips_to_validators=0,
-    validator_eth_staked=np.zeros((number_of_validator_types, 1), dtype=int),
-    validator_revenue=np.zeros((number_of_validator_types, 1), dtype=int),
-    validator_profit=np.zeros((number_of_validator_types, 1), dtype=int),
-    validator_revenue_yields=np.zeros((number_of_validator_types, 1), dtype=int),
-    validator_profit_yields=np.zeros((number_of_validator_types, 1), dtype=int),
-    total_online_validator_rewards=0,
-    total_revenue=0,
-    total_profit=0,
-    total_revenue_yields=0,
-    total_profit_yields=0,
-    validator_count_distribution=np.zeros((number_of_validator_types, 1), dtype=int),
-    validator_hardware_costs=np.zeros((number_of_validator_types, 1), dtype=int),
-    validator_cloud_costs=np.zeros((number_of_validator_types, 1), dtype=int),
-    validator_third_party_costs=np.zeros((number_of_validator_types, 1), dtype=int),
-    validator_costs=np.zeros((number_of_validator_types, 1), dtype=int),
-    total_network_costs=0,
-)
+@dataclass
+class StateVariables:
+    """State Variables
+    By using a dataclass to represent the State Variables:
+    * We can use types for Python type hints
+    * Set default values
+    * Ensure that all State Variables are initialized
+    """
+
+    # Ethereum state variables
+    eth_price: USD_per_ETH = 0
+    eth_supply: ETH = eth_supply
+    eth_staked: ETH = eth_staked
+    supply_inflation: Percentage = 0
+
+    # Validator state variables
+    number_of_validators_in_activation_queue: int = (
+        number_of_validators_in_activation_queue
+    )
+    average_effective_balance: Gwei = 32 * constants.gwei
+    number_of_validators: int = number_of_validators
+    number_of_validators_online: int = 0
+    number_of_validators_offline: int = 0
+
+    # Reward and penalty state variables
+    base_reward: Gwei = 0
+    validating_rewards: Gwei = 0
+    validating_penalties: Gwei = 0
+    source_reward: Gwei = 0
+    target_reward: Gwei = 0
+    head_reward: Gwei = 0
+    block_proposer_reward: Gwei = 0
+    sync_reward: Gwei = 0
+
+    # Slashing state variables
+    amount_slashed: Gwei = 0
+    whistleblower_rewards: Gwei = 0
+
+    # EIP1559 state variables
+    total_basefee: Gwei = 0
+    total_tips_to_validators: Gwei = 0
+
+    # System metric state variables
+    validator_eth_staked: np.ndarray = np.zeros(
+        (number_of_validator_types, 1), dtype=int
+    )
+    validator_revenue: np.ndarray = np.zeros((number_of_validator_types, 1), dtype=int)
+    validator_profit: np.ndarray = np.zeros((number_of_validator_types, 1), dtype=int)
+    validator_revenue_yields: np.ndarray = np.zeros(
+        (number_of_validator_types, 1), dtype=int
+    )
+    validator_profit_yields: np.ndarray = np.zeros(
+        (number_of_validator_types, 1), dtype=int
+    )
+
+    total_online_validator_rewards: Gwei = 0
+    total_revenue: USD = 0
+    total_profit: USD = 0
+    total_revenue_yields: Percentage = 0
+    total_profit_yields: Percentage = 0
+
+    validator_count_distribution: np.ndarray = np.zeros(
+        (number_of_validator_types, 1), dtype=int
+    )
+    validator_hardware_costs: np.ndarray = np.zeros(
+        (number_of_validator_types, 1), dtype=int
+    )
+    validator_cloud_costs: np.ndarray = np.zeros(
+        (number_of_validator_types, 1), dtype=int
+    )
+    validator_third_party_costs: np.ndarray = np.zeros(
+        (number_of_validator_types, 1), dtype=int
+    )
+    validator_costs: np.ndarray = np.zeros((number_of_validator_types, 1), dtype=int)
+    total_network_costs: USD = 0
+
+
+# Initialize State Variables instance with default values
+initial_state = StateVariables().__dict__

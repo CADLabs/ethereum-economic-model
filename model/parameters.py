@@ -1,7 +1,12 @@
+"""
+Definition of System Parameters, their types, and default values.
+"""
+
+
 import numpy as np
 import pandas as pd
 from stochastic import processes
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import logging
 
 import model.simulation_configuration as simulation
@@ -17,7 +22,6 @@ from model.types import (
     USD_per_epoch,
     Percentage_per_epoch,
     ValidatorType,
-    TypedDict,
     List,
     Callable,
     Epoch,
@@ -92,6 +96,13 @@ if total_percentage_distribution < 1:
 
 @dataclass
 class Parameters:
+    """State Variables
+    By using a dataclass to represent the System Parameters:
+    * We can use types for Python type hints
+    * Set default values
+    * Ensure that all System Parameters are initialized
+    """
+
     dt: List[Epoch] = default([simulation.DELTA_TIME])
     """Simulation timescale / timestep unit of time"""
 
