@@ -44,6 +44,12 @@ eth_price_process = processes.continuous.BrownianExcursion(
 eth_price_samples = eth_price_process.sample(
     simulation.TIMESTEPS * simulation.DELTA_TIME + 1
 )
+minimum_eth_price = 1000
+maximum_eth_price = max(eth_price_samples)
+eth_price_samples = [
+    minimum_eth_price + eth_price_sample / maximum_eth_price * minimum_eth_price
+    for eth_price_sample in eth_price_samples
+]
 
 # Configure validator type distribution
 validator_types = [
@@ -113,10 +119,7 @@ class Parameters:
 
     # Environmental processes
     eth_price_process: List[Callable[[Run, Timestep], ETH]] = default(
-        [
-            lambda _run, timestep: 1000
-            + eth_price_samples[timestep] / max(eth_price_samples) * 1000
-        ]
+        [lambda _run, timestep: eth_price_samples[timestep]]
     )
     """ETH spot price at each epoch"""
 

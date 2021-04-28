@@ -235,7 +235,7 @@ def policy_slashing(
     WEIGHT_DENOMINATOR = params["WEIGHT_DENOMINATOR"]
 
     # State Variables
-    average_effective_balance = state["average_effective_balance"]
+    average_effective_balance = previous_state["average_effective_balance"]
 
     # Calculate amount slashed, whistleblower reward, and proposer reward for a single slashing event
     amount_slashed = Gwei(average_effective_balance // MIN_SLASHING_PENALTY_QUOTIENT)
