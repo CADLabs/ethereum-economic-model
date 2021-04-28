@@ -34,43 +34,45 @@ from model.parameters import parameters
 from model.utils import update_from_signal
 
 
+state_update_block_staking = {
+    &#34;description&#34;: &#34;&#34;&#34;
+        Environmental Ethereum processes:
+        * ETH price update
+        * Staking of ETH for new validators
+    &#34;&#34;&#34;,
+    &#34;policies&#34;: {
+        &#34;staking&#34;: validators.policy_staking,
+    },
+    &#34;variables&#34;: {
+        &#34;eth_price&#34;: ethereum.update_eth_price,
+        &#34;eth_staked&#34;: update_from_signal(&#34;eth_staked&#34;),
+    },
+}
+
+state_update_block_validators = {
+    &#34;description&#34;: &#34;&#34;&#34;
+        Environmental validator processes:
+        * New validators
+        * Online and offline validators
+    &#34;&#34;&#34;,
+    &#34;policies&#34;: {
+        &#34;policy_validators&#34;: validators.policy_validators,
+    },
+    &#34;variables&#34;: {
+        &#34;number_of_validators_in_activation_queue&#34;: update_from_signal(
+            &#34;number_of_validators_in_activation_queue&#34;
+        ),
+        &#34;number_of_validators&#34;: update_from_signal(&#34;number_of_validators&#34;),
+        &#34;number_of_validators_online&#34;: update_from_signal(
+            &#34;number_of_validators_online&#34;
+        ),
+        &#34;number_of_validators_offline&#34;: update_from_signal(
+            &#34;number_of_validators_offline&#34;
+        ),
+    },
+}
+
 _state_update_blocks = [
-    {
-        &#34;description&#34;: &#34;&#34;&#34;
-            Exogenous Ethereum processes:
-            * ETH price update
-            * Staking of ETH for new validators
-        &#34;&#34;&#34;,
-        &#34;policies&#34;: {
-            &#34;staking&#34;: validators.policy_staking,
-        },
-        &#34;variables&#34;: {
-            &#34;eth_price&#34;: ethereum.update_eth_price,
-            &#34;eth_staked&#34;: update_from_signal(&#34;eth_staked&#34;),
-        },
-    },
-    {
-        &#34;description&#34;: &#34;&#34;&#34;
-            Validator processes:
-            * New validators
-            * Online and offline validators
-        &#34;&#34;&#34;,
-        &#34;policies&#34;: {
-            &#34;policy_validators&#34;: validators.policy_validators,
-        },
-        &#34;variables&#34;: {
-            &#34;number_of_validators_in_activation_queue&#34;: update_from_signal(
-                &#34;number_of_validators_in_activation_queue&#34;
-            ),
-            &#34;number_of_validators&#34;: update_from_signal(&#34;number_of_validators&#34;),
-            &#34;number_of_validators_online&#34;: update_from_signal(
-                &#34;number_of_validators_online&#34;
-            ),
-            &#34;number_of_validators_offline&#34;: update_from_signal(
-                &#34;number_of_validators_offline&#34;
-            ),
-        },
-    },
     {
         &#34;description&#34;: &#34;&#34;&#34;
             Calculation and update of validator average effective balance &amp; base reward
@@ -206,26 +208,23 @@ _state_update_blocks = [
     },
 ]
 
+# Conditionally update the order of the State Update Blocks
+_state_update_blocks = (
+    [state_update_block_staking, state_update_block_validators] + _state_update_blocks
+    if parameters[&#34;eth_staked_process&#34;][0](0, 0) is not None
+    # If driving with validator process, switch first two blocks
+    else [state_update_block_validators, state_update_block_staking]
+    + _state_update_blocks
+)
 
 # Split the state update blocks into those used during the simulation (state_update_blocks)
 # and those used in post-processing to calculate the system metrics (post_processing_blocks)
-_state_update_blocks = [
+state_update_blocks = [
     block for block in _state_update_blocks if not block.get(&#34;post_processing&#34;, False)
 ]
-_post_processing_blocks = [
+post_processing_blocks = [
     block for block in _state_update_blocks if block.get(&#34;post_processing&#34;, False)
-]
-
-
-state_update_blocks = (
-    _state_update_blocks
-    if (not parameters[&#34;eth_staked_process&#34;][0](0, 0) == None)
-    else (
-        # If driving with validator process, switch first two blocks
-        _state_update_blocks[:2][::-1]
-        + _state_update_blocks[2:]
-    )
-)</code></pre>
+]</code></pre>
 </details>
 </section>
 <section>

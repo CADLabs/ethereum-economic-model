@@ -66,18 +66,6 @@ Timestep = int
 # BeaconState types
 Epoch = int
 
-
-@dataclass
-class Validator:
-    effective_balance: Gwei = 0
-
-
-@dataclass
-class BeaconState:
-    balances: [Gwei] = field(default_factory=lambda: [0])
-    validators: [Validator] = field(default_factory=lambda: [Validator()])
-
-
 # Validator types
 ValidatorIndex = int
 
@@ -101,53 +89,6 @@ class ValidatorType:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="model.types.BeaconState"><code class="flex name class">
-<span>class <span class="ident">BeaconState</span></span>
-<span>(</span><span>balances: [<class 'float'>] = &lt;factory&gt;, validators: [<class '<a title="model.types.Validator" href="#model.types.Validator">Validator</a>'>] = &lt;factory&gt;)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>BeaconState(balances: [<class 'float'>] = <factory>, validators: [<class 'model.types.Validator'>] = <factory>)</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class BeaconState:
-    balances: [Gwei] = field(default_factory=lambda: [0])
-    validators: [Validator] = field(default_factory=lambda: [Validator()])</code></pre>
-</details>
-<h3>Class variables</h3>
-<dl>
-<dt id="model.types.BeaconState.balances"><code class="name">var <span class="ident">balances</span> : [<class 'float'>]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="model.types.BeaconState.validators"><code class="name">var <span class="ident">validators</span> : [<class '<a title="model.types.Validator" href="#model.types.Validator">Validator</a>'>]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-</dd>
-<dt id="model.types.Validator"><code class="flex name class">
-<span>class <span class="ident">Validator</span></span>
-<span>(</span><span>effective_balance: float = 0)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Validator(effective_balance: float = 0)</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class Validator:
-    effective_balance: Gwei = 0</code></pre>
-</details>
-<h3>Class variables</h3>
-<dl>
-<dt id="model.types.Validator.effective_balance"><code class="name">var <span class="ident">effective_balance</span> : float</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-</dd>
 <dt id="model.types.ValidatorType"><code class="flex name class">
 <span>class <span class="ident">ValidatorType</span></span>
 <span>(</span><span>type: str = '', percentage_distribution: float = 0.0, hardware_costs_per_epoch: float = 0.0, cloud_costs_per_epoch: float = 0.0, third_party_costs_per_epoch: float = 0.0)</span>
@@ -206,19 +147,6 @@ class ValidatorType:
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
-<li>
-<h4><code><a title="model.types.BeaconState" href="#model.types.BeaconState">BeaconState</a></code></h4>
-<ul class="">
-<li><code><a title="model.types.BeaconState.balances" href="#model.types.BeaconState.balances">balances</a></code></li>
-<li><code><a title="model.types.BeaconState.validators" href="#model.types.BeaconState.validators">validators</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="model.types.Validator" href="#model.types.Validator">Validator</a></code></h4>
-<ul class="">
-<li><code><a title="model.types.Validator.effective_balance" href="#model.types.Validator.effective_balance">effective_balance</a></code></li>
-</ul>
-</li>
 <li>
 <h4><code><a title="model.types.ValidatorType" href="#model.types.ValidatorType">ValidatorType</a></code></h4>
 <ul class="">
