@@ -68,9 +68,7 @@ df.plot(x='timestamp', y='eth_staked')
 
 df.plot(x='timestamp', y=['number_of_validators_in_activation_queue','number_of_validators'])
 
-fig = visualizations.plot_validator_rewards(df)
-fig.show()
-fig.write_image("../outputs/validator_rewards.png")
+visualizations.plot_validator_rewards(df)
 
 df.plot(x='timestamp', y=['total_revenue', 'total_network_costs'])
 
