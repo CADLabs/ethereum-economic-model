@@ -117,6 +117,7 @@ _state_update_blocks = [
             "eip1559": ethereum.policy_eip1559_transaction_pricing,
         },
         "variables": {
+            "basefee": update_from_signal("basefee"),
             "total_basefee": update_from_signal("total_basefee"),
             "total_tips_to_validators": update_from_signal("total_tips_to_validators"),
         },

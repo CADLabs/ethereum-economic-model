@@ -44,7 +44,7 @@ eth_price_process = processes.continuous.BrownianExcursion(
 eth_price_samples = eth_price_process.sample(
     simulation.TIMESTEPS * simulation.DELTA_TIME + 1
 )
-minimum_eth_price = 1000
+minimum_eth_price = 1500
 maximum_eth_price = max(eth_price_samples)
 eth_price_samples = [
     minimum_eth_price + eth_price_sample / maximum_eth_price * minimum_eth_price
@@ -104,6 +104,32 @@ if total_percentage_distribution < 1:
     for validator in validator_types:
         validator.percentage_distribution /= total_percentage_distribution
 
+# Using list comprehension, map the validator types to each parameter
+validator_percentage_distribution = [
+    np.array(
+        [validator.percentage_distribution for validator in validator_types],
+        dtype=Percentage,
+    )
+]
+validator_hardware_costs_per_epoch = [
+    np.array(
+        [validator.hardware_costs_per_epoch for validator in validator_types],
+        dtype=USD_per_epoch,
+    )
+]
+validator_cloud_costs_per_epoch = [
+    np.array(
+        [validator.cloud_costs_per_epoch for validator in validator_types],
+        dtype=USD_per_epoch,
+    )
+]
+validator_third_party_costs_per_epoch = [
+    np.array(
+        [validator.third_party_costs_per_epoch for validator in validator_types],
+        dtype=Percentage_per_epoch,
+    )
+]
+
 
 @dataclass
 class Parameters:
@@ -134,13 +160,13 @@ class Parameters:
             lambda _run, timestep: 4
         ]
     )
-    """New validators per epoch (enabled if model not driven using eth_staked_process)"""
+    """New validators per epoch (used if model not driven using eth_staked_process)"""
 
     # Parameters from the Eth2 specification
     # Uppercase used for all parameters from Eth2 specification
     BASE_REWARD_FACTOR: List[int] = default([64])
     MAX_EFFECTIVE_BALANCE: List[Gwei] = default([32 * constants.gwei])
-    EFFECTIVE_BALANCE_INCREMENT: List[int] = default([1 * constants.gwei])
+    EFFECTIVE_BALANCE_INCREMENT: List[Gwei] = default([1 * constants.gwei])
     PROPOSER_REWARD_QUOTIENT: List[int] = default([8])
     WHISTLEBLOWER_REWARD_QUOTIENT: List[int] = default([512])
     MIN_SLASHING_PENALTY_QUOTIENT: List[int] = default([2 ** 6])
@@ -152,46 +178,22 @@ class Parameters:
     WEIGHT_DENOMINATOR: List[int] = default([64])
     MIN_PER_EPOCH_CHURN_LIMIT: List[int] = default([4])
     CHURN_LIMIT_QUOTIENT: List[int] = default([2 ** 16])
+    BASE_FEE_MAX_CHANGE_DENOMINATOR: List[int] = default([8])
 
     # Validator parameters
     validator_uptime: List[Percentage] = default([0.98])
     """Combination of validator internet, power, and technical uptime"""
-
-    # Using list comprehension, map the validator types to each parameter
     validator_percentage_distribution: List[np.ndarray] = default(
-        [
-            np.array(
-                [validator.percentage_distribution for validator in validator_types],
-                dtype=Percentage,
-            )
-        ]
+        validator_percentage_distribution
     )
     validator_hardware_costs_per_epoch: List[np.ndarray] = default(
-        [
-            np.array(
-                [validator.hardware_costs_per_epoch for validator in validator_types],
-                dtype=USD_per_epoch,
-            )
-        ]
+        validator_hardware_costs_per_epoch
     )
     validator_cloud_costs_per_epoch: List[np.ndarray] = default(
-        [
-            np.array(
-                [validator.cloud_costs_per_epoch for validator in validator_types],
-                dtype=USD_per_epoch,
-            )
-        ]
+        validator_cloud_costs_per_epoch
     )
     validator_third_party_costs_per_epoch: List[np.ndarray] = default(
-        [
-            np.array(
-                [
-                    validator.third_party_costs_per_epoch
-                    for validator in validator_types
-                ],
-                dtype=Percentage_per_epoch,
-            )
-        ]
+        validator_third_party_costs_per_epoch
     )
     """Validator cost as a percentage of total online validator rewards"""
 
@@ -207,12 +209,16 @@ class Parameters:
     Used to calculate gas limit from EIP1559 gas target
     """
 
-    eip1559_avg_basefee: List[Gwei_per_Gas] = default([50])  # Gwei per gas
+    eip1559_basefee_process: List[Callable[[Run, Timestep], Gwei_per_Gas]] = default(
+        [lambda _run, _timestep: 100]  # Gwei per gas
+    )
     """
     Approximated using average gas price from https://etherscan.io/gastracker as of 20/04/21
     """
 
-    eip1559_avg_tip_amount: List[Gwei_per_Gas] = default([1])  # Gwei per gas
+    eip1559_tip_process: List[Callable[[Run, Timestep], Gwei_per_Gas]] = default(
+        [lambda _run, _timestep: 1]  # Gwei per gas
+    )
     """
     The tip level that compensates for uncle risk.
     See https://notes.ethereum.org/@vbuterin/BkSQmQTS8#Why-would-miners-include-transactions-at-all
@@ -223,6 +229,24 @@ class Parameters:
     EIP1559 gas limit = gas_target * ELASTICITY_MULTIPLIER
     See https://eips.ethereum.org/EIPS/eip-1559
     """
+
+    daily_transactions_process: List[int] = default([lambda _run, _timestep: 1_400_000])
+    """
+    Number of transactions per day.
+
+    fees per day = daily_transactions * transaction_average_gas * (basefee + tip) / 1e9 ~= 10k ETH
+    (see https://etherscan.io/chart/transactionfee)
+    
+    Where:
+    * daily_transactions ~= 1_400_000
+    * transaction_average_gas ~= 73_123
+    * (basefee + tip) ~= 100
+
+    Static default from https://etherscan.io/chart/tx as of 20/04/21
+    """
+
+    transaction_average_gas: List[Gas] = default([73_123])
+    """Average gas per transaction"""
 
 
 # Initialize Parameters instance with default values

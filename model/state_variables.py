@@ -14,6 +14,7 @@ from dataclasses import dataclass
 import model.constants as constants
 from model.types import (
     Gwei,
+    Gwei_per_Gas,
     ETH,
     USD,
     USD_per_ETH,
@@ -72,6 +73,7 @@ class StateVariables:
     whistleblower_rewards: Gwei = 0
 
     # EIP1559 state variables
+    basefee: Gwei_per_Gas = 1
     total_basefee: Gwei = 0
     total_tips_to_validators: Gwei = 0
 
@@ -98,15 +100,15 @@ class StateVariables:
         (number_of_validator_types, 1), dtype=int
     )
     validator_hardware_costs: np.ndarray = np.zeros(
-        (number_of_validator_types, 1), dtype=int
+        (number_of_validator_types, 1), dtype=USD
     )
     validator_cloud_costs: np.ndarray = np.zeros(
-        (number_of_validator_types, 1), dtype=int
+        (number_of_validator_types, 1), dtype=USD
     )
     validator_third_party_costs: np.ndarray = np.zeros(
-        (number_of_validator_types, 1), dtype=int
+        (number_of_validator_types, 1), dtype=USD
     )
-    validator_costs: np.ndarray = np.zeros((number_of_validator_types, 1), dtype=int)
+    validator_costs: np.ndarray = np.zeros((number_of_validator_types, 1), dtype=USD)
     total_network_costs: USD = 0
 
 

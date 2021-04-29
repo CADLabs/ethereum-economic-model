@@ -5,6 +5,8 @@ Policy Functions and State Update Functions shared between the Eth1 and Eth2 sys
 """
 
 import typing
+import math
+import logging
 
 import model.constants as constants
 from model.types import ETH, USD_per_ETH, Gwei
@@ -48,21 +50,48 @@ def policy_eip1559_transaction_pricing(
     dt = params["dt"]
     gas_target = params["gas_target"]  # Gas
     ELASTICITY_MULTIPLIER = params["ELASTICITY_MULTIPLIER"]
-    eip1559_avg_basefee = params["eip1559_avg_basefee"]  # Gwei per Gas
-    eip1559_avg_tip_amount = params["eip1559_avg_tip_amount"]  # Gwei per Gas
+    BASE_FEE_MAX_CHANGE_DENOMINATOR = params["BASE_FEE_MAX_CHANGE_DENOMINATOR"]
+    eip1559_basefee_process = params["eip1559_basefee_process"]
+    eip1559_tip_process = params["eip1559_tip_process"]
+    daily_transactions_process = params["daily_transactions_process"]
+    transaction_average_gas = params["transaction_average_gas"]
+
+    # State Variables
+    run = previous_state["run"]
+    timestep = previous_state["timestep"]
+    previous_basefee = previous_state["basefee"]
+
+    # Get samples for current run and timestep from basefee, tip, and transaction processes
+    basefee = eip1559_basefee_process(run, timestep * dt)  # Gwei per Gas
+
+    # Ensure basefee changes by no more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %
+    assert (
+        abs(basefee - previous_basefee) / (previous_basefee + 1)
+        <= constants.slots_per_epoch / BASE_FEE_MAX_CHANGE_DENOMINATOR
+        if timestep > 1
+        else True
+    ), "basefee changed by more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %"
+
+    avg_tip_amount = eip1559_tip_process(run, timestep * dt)  # Gwei per Gas
+    transactions_per_day = daily_transactions_process(
+        run, timestep * dt
+    )  # Transactions per day
+    transactions_per_epoch = (
+        transactions_per_day / constants.epochs_per_day
+    )  # Transactions per epoch
 
     # Calculate total basefee and tips to validators
-    # Assume on average the gas used per block is equal to the gas target
-    gas_used = gas_target
-    total_basefee = gas_used * eip1559_avg_basefee  # Gwei
-    total_tips_to_validators = gas_used * eip1559_avg_tip_amount  # Gwei
+    gas_used = transactions_per_epoch * transaction_average_gas  # Gas
+    total_basefee = gas_used * basefee  # Gwei
+    total_tips_to_validators = gas_used * avg_tip_amount  # Gwei
 
     # Check if the block used too much gas
     assert (
-        gas_used <= gas_target * ELASTICITY_MULTIPLIER
+        gas_used <= gas_target * ELASTICITY_MULTIPLIER * constants.slots_per_epoch
     ), "invalid block: too much gas used"
 
     return {
+        "basefee": basefee,
         "total_basefee": total_basefee * dt,
         "total_tips_to_validators": total_tips_to_validators * dt,
     }
