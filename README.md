@@ -122,10 +122,18 @@ pip install jupyterlab "ipywidgets>=7.5"
 jupyter labextension install jupyterlab-plotly@4.14.3
 ```
 
-# Change Log
+## Roadmap
+
+The following is a non-exhaustive list of possible model extensions and future features:
+* Implement a dynamic EIP1559 basefee with a feedback loop based on blockspace demand / network congestion
+* Backtest the model against historical data such as the ETH price, ETH staked to determine expected historical yields
+* Extend the model to cover future Eth2 phases after merge, such as sharding
+* ...
+
+## Change Log
 
 See [CHANGELOG.md](CHANGELOG.md) for notable changes and versions.
 
-# Contributors
+## Contributors
 
 See [CONTRIBUTORS.md](CONTRIBUTORS.md) for contributions to this project repo.
