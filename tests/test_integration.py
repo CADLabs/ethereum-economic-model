@@ -1,8 +1,10 @@
 import pytest
 import math
+from copy import deepcopy
+import pandas as pd
 
-from experiments.run import run
-from experiments.default import experiment
+import experiments.default as default
+import experiments.eip1559.experiment as eip1559
 
 
 def check_validating_rewards(params, substep, state_history, previous_state):
@@ -25,13 +27,11 @@ def check_validating_rewards(params, substep, state_history, previous_state):
 
 
 def test_validating_rewards():
-    simulation: Simulation = experiment.simulations[0]
+    simulation: Simulation = deepcopy(default.experiment.simulations[0])
     simulation.timesteps = 10
 
     simulation.model.params.update({
-        'validator_internet_uptime': [1.0],
-        'validator_power_uptime': [1.0],
-        'validator_technical_uptime': [1.0],
+        'validator_uptime': [1.0],
     })
 
     simulation.model.state_update_blocks.append(
@@ -41,4 +41,38 @@ def test_validating_rewards():
         }
     )
 
-    run(experiment)
+    simulation.run()
+
+
+def test_slashing():
+    simulation: Simulation = deepcopy(default.experiment.simulations[0])
+    simulation.timesteps = 10
+
+    simulation.model.params.update({
+        'dt': [1],
+        'slashing_events_per_1000_epochs': [0],
+    })
+
+    results = simulation.run()
+    df = pd.DataFrame(results)
+    assert df['amount_slashed'].max() == 0
+
+    simulation.model.params.update({
+        'dt': [1],
+        'slashing_events_per_1000_epochs': [1],
+    })
+
+    results = simulation.run()
+    df = pd.DataFrame(results)
+    assert df['amount_slashed'].max() == 500000.0
+
+
+def test_eip1559_experiment():
+    simulation: Simulation = deepcopy(eip1559.experiment.simulations[0])
+    simulation.timesteps = 10
+
+    results = simulation.run()
+    df = pd.DataFrame(results)
+
+    assert df.query("subset == 0")["total_tips_to_validators"].max() == 0
+    assert df.query("subset == 1")["total_tips_to_validators"].max() != 0

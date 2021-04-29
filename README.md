@@ -24,6 +24,7 @@ Features:
 * [logs/](logs/): experiment log files
 * [model/](model/): model structure, parts, and configuration
 * [notebooks/](notebooks/): experiment analysis notebooks
+* [outputs/](outputs/): experiment outputs (images, datasets, etc.)
 * [tests/](tests/): unit and integration tests for model and notebooks
 
 ---
@@ -32,20 +33,37 @@ Features:
 
 The [experiments/](experiments/) directory contains different experiment configurations, where each experiment has a corresponding analysis Jupyter notebook in the [notebooks/](notebooks/) directory.
 
-1. State Space ~ An experiment that uses the default cadCAD System Parameters, Initial State, and State Update Blocks defined in the [models/](models/) directory to simulate the State Space of the model
-  * Experiment: [experiments/default.py](experiments/eip1559/default.py)
-  * Notebook: [notebooks/state_space.ipynb](notebooks/state_space.ipynb)
-1. EIP1559 ~ Analysing the effect of enabling EIP1559 under different conditions
-  * Experiment: [experiments/eip1559/experiment.py](experiments/eip1559/experiment.py)
-  * Notebook: [notebooks/eip1559.ipynb](notebooks/eip1559.ipynb)
-2. Revenue Yields vs Network Inflation ~ Analysing the revenue yields of validators and network inflation for a static ETH price over discrete ETH staked values
-  * Experiment: [experiments/revenue_yields_vs_network_inflation/experiment.py](experiments/revenue_yields_vs_network_inflation/experiment.py)
-  * Notebook: [notebooks/revenue_yields_vs_network_inflation.ipynb](notebooks/revenue_yields_vs_network_inflation.ipynb)
-3. Validator Environment Yields ~ Analysing different validator environment yields for static ETH staked over discrete ETH price values
-  * Experiment: [experiments/validator_environment_yields/experiment.py](experiments/validator_environment_yields/experiment.py)
-  * Notebook: [notebooks/validator_environment_yields.ipynb](notebooks/validator_environment_yields.ipynb)
-4. Validation ~ Various experiments used to validate the results of our model against the Hoban/Borgers Report model
-  * Experiments: [experiments/validation/*/experiment.py](experiments/validation/)
+### State Space
+An experiment that uses the default cadCAD System Parameters, Initial State, and State Update Blocks defined in the [models/](models/) directory to simulate the State Space of the model.
+
+* Experiment: [experiments/default.py](experiments/eip1559/default.py)
+* Notebook: [notebooks/state_space.ipynb](notebooks/state_space.ipynb)
+
+![Validator rewards](outputs/validator_rewards.png)
+
+### Revenue Yields vs Network Inflation
+Analysing the revenue yields of validators and network inflation for a static ETH price over discrete ETH staked values.
+
+* Experiment: [experiments/revenue_yields_vs_network_inflation/experiment.py](experiments/revenue_yields_vs_network_inflation/experiment.py)
+* Notebook: [notebooks/revenue_yields_vs_network_inflation.ipynb](notebooks/revenue_yields_vs_network_inflation.ipynb)
+
+### Validator Environment Yields
+Analysing different validator environment yields for static ETH staked over discrete ETH price values.
+
+* Experiment: [experiments/validator_environment_yields/experiment.py](experiments/validator_environment_yields/experiment.py)
+* Notebook: [notebooks/validator_environment_yields.ipynb](notebooks/validator_environment_yields.ipynb)
+
+### EIP1559
+
+Analysing the effect of enabling EIP1559 under different conditions.
+
+* Experiment: [experiments/eip1559/experiment.py](experiments/eip1559/experiment.py)
+* Notebook: [notebooks/eip1559.ipynb](notebooks/eip1559.ipynb)
+
+### Validation
+Various experiments used to validate the results of our model against the Hoban/Borgers Report model.
+
+* Experiments: [experiments/validation/*/experiment.py](experiments/validation/)
 
 ### Experiment Execution
 
