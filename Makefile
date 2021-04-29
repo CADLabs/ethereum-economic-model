@@ -15,7 +15,14 @@ start-lab:
 test:
 	python3 -m pytest tests
 
-build-docs:
-	cp -r notebooks/* docs/notebooks/
+build-docs: docs-pdoc docs-jupyter-book
+
+docs-pdoc:
 	pdoc --html model -o docs --force
+
+docs-jupyter-book:
+	cp -r notebooks/* docs/notebooks/
 	jupyter-book build docs
+
+execute-notebooks:
+	jupyter nbconvert --execute --to notebook --inplace notebooks/*.ipynb

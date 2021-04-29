@@ -1,3 +1,10 @@
+"""
+# Proof of Stake Incentives
+
+* Calculation of PoS attestation and block proposal rewards and penalties
+* Calculation of PoS slashing penalties
+"""
+
 import math
 import typing
 
@@ -6,18 +13,13 @@ from model.types import Gwei
 import model.parts.spec as spec
 
 
-"""
-# Proof of Stake Incentives
+def policy_attestation_penalties(
+    params, substep, state_history, previous_state
+) -> typing.Dict[str, Gwei]:
+    """Attestation Penalties Policy Function
+    Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#get_flag_index_deltas
 
-* Calculation of PoS attestation and block proposal rewards and penalties
-* Calculation of PoS slashing penalties
-"""
-
-
-def policy_attestation_penalties(params, substep, state_history, previous_state):
-    """
-    See https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#get_flag_index_deltas
-
+    Extract from spec:
     ```python
     penalties[index] += Gwei(base_reward * weight // WEIGHT_DENOMINATOR)
     ```
@@ -48,9 +50,10 @@ def policy_attestation_penalties(params, substep, state_history, previous_state)
 def policy_attestation_rewards(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
-    """
-    See https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#get_flag_index_deltas
+    """Attestation Rewards Policy Function
+    Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#get_flag_index_deltas
 
+    Extract from spec:
     ```python
     reward_numerator = base_reward * weight * unslashed_participating_increments
     rewards[index] += Gwei(reward_numerator // (active_increments * WEIGHT_DENOMINATOR))
@@ -68,7 +71,7 @@ def policy_attestation_rewards(
     number_of_validators = previous_state["number_of_validators"]
     number_of_validators_online = previous_state["number_of_validators_online"]
 
-    # Calculate source reward
+    # Calculate total source reward
     # All submitted attestations have to match source vote
     source_reward = (TIMELY_SOURCE_WEIGHT / WEIGHT_DENOMINATOR) * base_reward
     # Scale reward by the proportion of validators who also got the attestation in time and correctly
@@ -76,14 +79,14 @@ def policy_attestation_rewards(
     # Aggregation over all online validators; assumes one correct vote per online validator per epoch
     source_reward *= number_of_validators_online
 
-    # Calculate target reward
+    # Calculate total target reward
     target_reward = (TIMELY_TARGET_WEIGHT / WEIGHT_DENOMINATOR) * base_reward
     # Scale reward by the proportion of validators who also got the attestation in time and correctly
     target_reward *= number_of_validators_online / number_of_validators
     # Aggregation over all online validators; assumes one correct vote per online validator per epoch
     target_reward *= number_of_validators_online
 
-    # Calculate head reward
+    # Calculate total head reward
     head_reward = (TIMELY_HEAD_WEIGHT / WEIGHT_DENOMINATOR) * base_reward
     # Scale reward by the proportion of validators who also got the attestation in time and correctly
     head_reward *= number_of_validators_online / number_of_validators
@@ -100,9 +103,10 @@ def policy_attestation_rewards(
 def policy_sync_committee(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
-    """
-    See https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#sync-committee-processing
+    """Sync Committee Policy Function
+    Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#sync-committee-processing
 
+    Extract from spec:
     ```python
     # Compute participant and proposer rewards
     total_active_increments = get_total_active_balance(state) // EFFECTIVE_BALANCE_INCREMENT
@@ -114,40 +118,20 @@ def policy_sync_committee(
     """
 
     # Parameters
-    SYNC_COMMITTEE_SIZE = params["SYNC_COMMITTEE_SIZE"]
-    SLOTS_PER_EPOCH = params["SLOTS_PER_EPOCH"]
     SYNC_REWARD_WEIGHT = params["SYNC_REWARD_WEIGHT"]
     WEIGHT_DENOMINATOR = params["WEIGHT_DENOMINATOR"]
-    EFFECTIVE_BALANCE_INCREMENT = params["EFFECTIVE_BALANCE_INCREMENT"]
 
     # State Variables
     base_reward = previous_state["base_reward"]
     number_of_validators = previous_state["number_of_validators"]
     number_of_validators_online = previous_state["number_of_validators_online"]
 
-    # Calculate sync reward per committee member per slot
-    total_active_increments = (
-        spec.get_total_active_balance(params, previous_state)
-        // EFFECTIVE_BALANCE_INCREMENT
-    )
-    total_base_rewards = (
-        base_reward * number_of_validators
-    )  # Gwei(spec.get_base_reward_per_increment(params, previous_state) * total_active_increments)
-    max_participant_rewards = Gwei(
-        total_base_rewards * SYNC_REWARD_WEIGHT // WEIGHT_DENOMINATOR // SLOTS_PER_EPOCH
-    )
-    participant_reward = Gwei(max_participant_rewards // SYNC_COMMITTEE_SIZE)
-
-    # Aggregation over all committee members
-    sync_reward = participant_reward * SYNC_COMMITTEE_SIZE
-    # Aggregation over number of slots in one epoch
-    sync_reward *= SLOTS_PER_EPOCH
+    # Calculate total base rewards
+    total_base_rewards = base_reward * number_of_validators_online
+    # Set sync reward to proportion of total base rewards
+    sync_reward = total_base_rewards * SYNC_REWARD_WEIGHT // WEIGHT_DENOMINATOR
     # Scale reward by the percentage of online validators
     sync_reward *= number_of_validators_online / number_of_validators
-
-    # Equivalent to:
-    # sync_reward = total_base_rewards * SYNC_REWARD_WEIGHT // WEIGHT_DENOMINATOR
-    # sync_reward *= number_of_validators_online / number_of_validators
 
     return {"sync_reward": sync_reward}
 
@@ -155,9 +139,10 @@ def policy_sync_committee(
 def policy_block_proposal(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
-    """
-    See https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#modified-process_attestation
+    """Block Proposal Policy Function
+    Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#modified-process_attestation
 
+    Extract from spec:
     ```python
     # Participation flag indices
     participation_flag_indices = []
@@ -197,7 +182,6 @@ def policy_block_proposal(
     number_of_validators = previous_state["number_of_validators"]
 
     # Calculate block proposer reward
-    # See https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#modified-process_attestation
     proposer_reward_numerator = base_reward * (
         TIMELY_SOURCE_WEIGHT + TIMELY_TARGET_WEIGHT + TIMELY_HEAD_WEIGHT
     )
@@ -224,19 +208,45 @@ def policy_block_proposal(
 def policy_slashing(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
+    """Slashing Policy Function
+    Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#modified-slash_validator
+
+    Extract from spec:
+    ```python
+    state.slashings[epoch % EPOCHS_PER_SLASHINGS_VECTOR] += validator.effective_balance
+    decrease_balance(state, slashed_index, validator.effective_balance // MIN_SLASHING_PENALTY_QUOTIENT_ALTAIR)
+
+    # Apply proposer and whistleblower rewards
+    proposer_index = get_beacon_proposer_index(state)
+    if whistleblower_index is None:
+        whistleblower_index = proposer_index
+    whistleblower_reward = Gwei(validator.effective_balance // WHISTLEBLOWER_REWARD_QUOTIENT)
+    proposer_reward = Gwei(whistleblower_reward * PROPOSER_WEIGHT // WEIGHT_DENOMINATOR)
+    increase_balance(state, proposer_index, proposer_reward)
+    increase_balance(state, whistleblower_index, Gwei(whistleblower_reward - proposer_reward))
+    ```
+    """
     # Parameters
     dt = params["dt"]
     slashing_events_per_1000_epochs = params["slashing_events_per_1000_epochs"]
+    MIN_SLASHING_PENALTY_QUOTIENT = params["MIN_SLASHING_PENALTY_QUOTIENT"]
+    WHISTLEBLOWER_REWARD_QUOTIENT = params["WHISTLEBLOWER_REWARD_QUOTIENT"]
+    PROPOSER_WEIGHT = params["PROPOSER_WEIGHT"]
+    WEIGHT_DENOMINATOR = params["WEIGHT_DENOMINATOR"]
 
-    # Calculate total number of slashing events in current epoch
-    number_of_slashing_events = slashing_events_per_1000_epochs / 1000
+    # State Variables
+    average_effective_balance = previous_state["average_effective_balance"]
 
     # Calculate amount slashed, whistleblower reward, and proposer reward for a single slashing event
-    amount_slashed, whistleblower_reward, proposer_reward = spec.slash_validator(
-        params, previous_state
+    amount_slashed = Gwei(average_effective_balance // MIN_SLASHING_PENALTY_QUOTIENT)
+    whistleblower_reward = Gwei(
+        average_effective_balance // WHISTLEBLOWER_REWARD_QUOTIENT
     )
+    proposer_reward = Gwei(whistleblower_reward * PROPOSER_WEIGHT // WEIGHT_DENOMINATOR)
+    whistleblower_reward = Gwei(whistleblower_reward - proposer_reward)
 
     # Scale amount slashed and rewards by the number of slashing events per epoch
+    number_of_slashing_events = slashing_events_per_1000_epochs / 1000
     amount_slashed *= number_of_slashing_events
     whistleblower_reward *= number_of_slashing_events
     proposer_reward *= number_of_slashing_events
@@ -253,18 +263,27 @@ def policy_slashing(
 def update_base_reward(
     params, substep, state_history, previous_state, policy_input
 ) -> (str, Gwei):
+    """Base Reward State Update Function
+    Calculate and update base reward per validator
+    """
     # Parameters
     dt = params["dt"]
 
     # Get base reward per validator
     base_reward_per_validator: Gwei = spec.get_base_reward(params, previous_state)
 
+    # By scaling the base reward by our unit of time dt (in epochs),
+    # we can scale all rewards and penalties by the same unit of time
     return "base_reward", Gwei(base_reward_per_validator) * dt
 
 
 def update_validating_rewards(
     params, substep, state_history, previous_state, policy_input
 ) -> (str, Gwei):
+    """Validating Rewards State Update Function
+    Calculate and update total validating rewards
+    i.e. rewards received for block proposal, attesting, and being a member of sync committee
+    """
     # State Variables
     block_proposer_reward = previous_state["block_proposer_reward"]
     sync_reward = previous_state["sync_reward"]
@@ -285,15 +304,7 @@ def update_validating_rewards(
         + sync_reward
     )
 
-    # Check validating reward conditions
-    # TODO review conditions not passing, but close
-    # assert sync_reward == (1 / 8) * validating_rewards, f"{sync_reward / validating_rewards} {sync_reward=} {validating_rewards=}"
-    # assert block_proposer_reward == (1 / 8) * validating_rewards, f"{block_proposer_reward / validating_rewards} {block_proposer_reward=} {validating_rewards=}"
-    # assert math.isclose(source_reward + target_reward + head_reward, (3 / 4) * validating_rewards, abs_tol=10**-1)
-    # assert source_reward + target_reward + head_reward == (3 / 4) * validating_rewards, f"{(source_reward + target_reward + head_reward) / validating_rewards}"
-
-    # Assert expected conditions
-    # The validating rewards should be less than equal to the maximum validating rewards
+    # Assert validating rewards should be less than equal to the maximum validating rewards
     max_validating_rewards = number_of_validators_online * base_reward
     assert validating_rewards <= max_validating_rewards
 

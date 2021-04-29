@@ -1,3 +1,11 @@
+"""
+# Validator Mechanisms
+
+* Implementation of the validator staking process
+* Implementation of the new, online, and offline validator processes
+* Calculation of the validator average effective balance
+"""
+
 import numpy as np
 from pytest import approx
 
@@ -5,16 +13,14 @@ import model.constants as constants
 import model.parts.spec as spec
 
 
-"""
-# Validators
-
-* Implementation of the validator staking process
-* Implementation of the new, online, and offline validator processes
-* Calculation of the validator average effective balance
-"""
-
-
 def policy_staking(params, substep, state_history, previous_state):
+    """Staking Policy
+    A policy used when driving the model with the `eth_staked_process`,
+    for generating phase space analyses, e.g. simulating a set of discrete `eth_staked` values.
+
+    When the `eth_staked_process` is disabled, the model is driven using the `validator_process`,
+    for generating state space (change in state over time) analyses.
+    """
     # Parameters
     dt = params["dt"]
     eth_staked_process = params["eth_staked_process"]
@@ -45,9 +51,7 @@ def policy_validators(params, substep, state_history, previous_state):
     dt = params["dt"]
     eth_staked_process = params["eth_staked_process"]
     validator_process = params["validator_process"]
-    validator_internet_uptime = params["validator_internet_uptime"]
-    validator_power_uptime = params["validator_power_uptime"]
-    validator_technical_uptime = params["validator_technical_uptime"]
+    validator_uptime = params["validator_uptime"]
 
     # State Variables
     run = previous_state["run"]
@@ -71,20 +75,15 @@ def policy_validators(params, substep, state_history, previous_state):
         validator_churn_limit = (
             spec.get_validator_churn_limit(params, previous_state) * dt
         )
-        activated_validators = len(
-            range(number_of_validators_in_activation_queue)[:validator_churn_limit]
+        activated_validators = min(
+            number_of_validators_in_activation_queue, validator_churn_limit
         )
 
         number_of_validators += activated_validators
         number_of_validators_in_activation_queue -= activated_validators
 
-    # Calculate the net validators uptime
-    validators_uptime = (
-        validator_internet_uptime * validator_power_uptime * validator_technical_uptime
-    )
-
-    # Calculate the number of validators online and offline using validators uptime
-    number_of_validators_online = int(round(number_of_validators * validators_uptime))
+    # Calculate the number of validators online and offline using validator uptime
+    number_of_validators_online = int(round(number_of_validators * validator_uptime))
     number_of_validators_offline = number_of_validators - number_of_validators_online
 
     # Assert expected conditions

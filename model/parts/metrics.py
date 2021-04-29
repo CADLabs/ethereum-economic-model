@@ -1,15 +1,14 @@
-import typing
-
-import model.constants as constants
-from model.types import Percentage, Gwei
-
-
 """
-# Metrics
+# System Metrics
 
 * Calculation of validator operational costs
 * Calculation of validator revenue, profit, and yield metrics
 """
+
+import typing
+
+import model.constants as constants
+from model.types import Percentage, Gwei
 
 
 def policy_validator_costs(

@@ -134,3 +134,4 @@ dmypy.json
 
 .vscode/
 scratchpad.py
+.DS_Store

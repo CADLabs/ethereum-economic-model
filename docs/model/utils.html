@@ -27,6 +27,8 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">from functools import partial
+import copy
+from dataclasses import field
 
 
 def _update_from_signal(
@@ -54,7 +56,11 @@ def local_variables(_locals):
     return {
         key: _locals[key]
         for key in [_key for _key in _locals.keys() if &#34;__&#34; not in _key]
-    }</code></pre>
+    }
+
+
+def default(obj):
+    return field(default_factory=lambda: copy.copy(obj))</code></pre>
 </details>
 </section>
 <section>
@@ -64,6 +70,19 @@ def local_variables(_locals):
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="model.utils.default"><code class="name flex">
+<span>def <span class="ident">default</span></span>(<span>obj)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def default(obj):
+    return field(default_factory=lambda: copy.copy(obj))</code></pre>
+</details>
+</dd>
 <dt id="model.utils.local_variables"><code class="name flex">
 <span>def <span class="ident">local_variables</span></span>(<span>_locals)</span>
 </code></dt>
@@ -116,6 +135,7 @@ def local_variables(_locals):
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="model.utils.default" href="#model.utils.default">default</a></code></li>
 <li><code><a title="model.utils.local_variables" href="#model.utils.local_variables">local_variables</a></code></li>
 <li><code><a title="model.utils.update_from_signal" href="#model.utils.update_from_signal">update_from_signal</a></code></li>
 </ul>

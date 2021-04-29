@@ -1,14 +1,15 @@
+"""
+# Ethereum System
+
+Policy Functions and State Update Functions shared between the Eth1 and Eth2 systems.
+"""
+
 import typing
+import math
+import logging
 
 import model.constants as constants
 from model.types import ETH, USD_per_ETH, Gwei
-
-
-"""
-# Ethereum
-
-* Policy Functions and State Update Functions shared between the Eth1 and Eth2 systems
-"""
 
 
 def policy_network_issuance(
@@ -21,8 +22,8 @@ def policy_network_issuance(
     total_online_validator_rewards = previous_state["total_online_validator_rewards"]
 
     # Calculate network issuance in ETH
-    # total_online_validator_rewards includes tips to validators, which is not issuance, and is removed
     network_issuance = (
+        # Remove tips to validators which is not issuance (ETH transferred rather than minted)
         (total_online_validator_rewards - total_tips_to_validators)
         - amount_slashed
         - total_basefee
@@ -40,23 +41,57 @@ def policy_eip1559_transaction_pricing(
     A transaction pricing mechanism that includes fixed-per-block network fee
     that is burned and dynamically expands/contracts block sizes to deal with transient congestion.
 
-    See https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md
+    See:
+    * https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md
+    * https://eips.ethereum.org/EIPS/eip-1559
     """
 
     # Parameters
     dt = params["dt"]
-    eip1559_avg_transactions_per_day = params["eip1559_avg_transactions_per_day"]
-    eip1559_avg_gas_per_transaction = params["eip1559_avg_gas_per_transaction"]
-    eip1559_basefee = params["eip1559_basefee"]
-    eip1559_avg_tip_amount = params["eip1559_avg_tip_amount"]
+    gas_target = params["gas_target"]  # Gas
+    ELASTICITY_MULTIPLIER = params["ELASTICITY_MULTIPLIER"]
+    BASE_FEE_MAX_CHANGE_DENOMINATOR = params["BASE_FEE_MAX_CHANGE_DENOMINATOR"]
+    eip1559_basefee_process = params["eip1559_basefee_process"]
+    eip1559_tip_process = params["eip1559_tip_process"]
+    daily_transactions_process = params["daily_transactions_process"]
+    transaction_average_gas = params["transaction_average_gas"]
+
+    # State Variables
+    run = previous_state["run"]
+    timestep = previous_state["timestep"]
+    previous_basefee = previous_state["basefee"]
+
+    # Get samples for current run and timestep from basefee, tip, and transaction processes
+    basefee = eip1559_basefee_process(run, timestep * dt)  # Gwei per Gas
+
+    # Ensure basefee changes by no more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %
+    assert (
+        abs(basefee - previous_basefee) / (previous_basefee + 1)
+        <= constants.slots_per_epoch / BASE_FEE_MAX_CHANGE_DENOMINATOR
+        if timestep > 1
+        else True
+    ), "basefee changed by more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %"
+
+    avg_tip_amount = eip1559_tip_process(run, timestep * dt)  # Gwei per Gas
+    transactions_per_day = daily_transactions_process(
+        run, timestep * dt
+    )  # Transactions per day
+    transactions_per_epoch = (
+        transactions_per_day / constants.epochs_per_day
+    )  # Transactions per epoch
 
     # Calculate total basefee and tips to validators
-    total_transactions = eip1559_avg_transactions_per_day // constants.epochs_per_day
-    total_gas_used = total_transactions * eip1559_avg_gas_per_transaction
-    total_basefee = total_gas_used * eip1559_basefee
-    total_tips_to_validators = total_gas_used * eip1559_avg_tip_amount
+    gas_used = transactions_per_epoch * transaction_average_gas  # Gas
+    total_basefee = gas_used * basefee  # Gwei
+    total_tips_to_validators = gas_used * avg_tip_amount  # Gwei
+
+    # Check if the block used too much gas
+    assert (
+        gas_used <= gas_target * ELASTICITY_MULTIPLIER * constants.slots_per_epoch
+    ), "invalid block: too much gas used"
 
     return {
+        "basefee": basefee,
         "total_basefee": total_basefee * dt,
         "total_tips_to_validators": total_tips_to_validators * dt,
     }
