@@ -43,22 +43,22 @@ def plot_revenue_yields_vs_network_inflation(df):
 
     # Add traces
     fig.add_trace(
-        go.Scatter(x=df_subset_0.timestamp, y=df_subset_0.total_revenue_yields_pct, name="Revenue yields (%)"),
+        go.Scatter(x=df_subset_0.eth_staked, y=df_subset_0.total_revenue_yields_pct, name="Revenue yields (%)"),
         secondary_y=False,
     )
 
     fig.add_trace(
-        go.Scatter(x=df_subset_0.timestamp, y=df_subset_0.total_profit_yields_pct, name=f"Net yields @ {df_subset_0.eth_price.iloc[0]} $/ETH (%)"),
+        go.Scatter(x=df_subset_0.eth_staked, y=df_subset_0.total_profit_yields_pct, name=f"Net yields @ {df_subset_0.eth_price.iloc[0]} $/ETH (%)"),
         secondary_y=False,
     )
 
     fig.add_trace(
-        go.Scatter(x=df_subset_1.timestamp, y=df_subset_1.total_profit_yields_pct, name=f"Net yields @ {df_subset_1.eth_price.iloc[0]} $/ETH (%)"),
+        go.Scatter(x=df_subset_1.eth_staked, y=df_subset_1.total_profit_yields_pct, name=f"Net yields @ {df_subset_1.eth_price.iloc[0]} $/ETH (%)"),
         secondary_y=False,
     )
 
     fig.add_trace(
-        go.Scatter(x=df_subset_0.timestamp, y=df_subset_0.supply_inflation_pct, name="ETH Supply inflation (%)"),
+        go.Scatter(x=df_subset_0.eth_staked, y=df_subset_0.supply_inflation_pct, name="ETH Supply inflation (%)"),
         secondary_y=True,
     )
 
