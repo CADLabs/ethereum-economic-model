@@ -3,6 +3,8 @@
 
 A post-merge Eth2 Validator Economics model.
 
+**Eth2 specs version**: implements the [Altair](https://github.com/ethereum/eth2.0-specs#altair) updates in the [Beige Gorgon / v1.1.0-alpha.3](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.3) release.
+
 Features:
 * Enables both State Space (simulation over time) and Phase Space (analysis of system state) simulations and analyses
 * Customizable processes for ETH price, ETH staked, validator adoption, EIP1559, and transaction rates
