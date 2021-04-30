@@ -30,6 +30,7 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import plotly.express as px
 
 pd.options.plotting.backend = "plotly"
 # -
@@ -42,7 +43,7 @@ import visualizations as visualizations
 
 # Import the experiment to be run and analysed in this notebook:
 
-from experiments.default import experiment
+from experiments.state_space.experiment import experiment
 
 # Run the experiment, and get the raw results:
 
@@ -60,15 +61,26 @@ df
 
 df.plot(x='timestamp', y='eth_price')
 
-df.plot(x='timestamp', y='eth_supply')
+df.plot(x='timestamp', y='eth_supply', width=1000, height=600)
 
 df.plot(x='timestamp', y='supply_inflation_pct')
 
+df.plot(x='timestamp', y='total_online_validator_rewards_eth')
+
 df.plot(x='timestamp', y='eth_staked')
 
-df.plot(x='timestamp', y=['number_of_validators_in_activation_queue','number_of_validators'])
-
 visualizations.plot_validator_rewards(df)
+
+# +
+validator_rewards = df.iloc[-1][['source_reward_eth', 'target_reward_eth', 'head_reward_eth', 'block_proposer_reward_eth', 'sync_reward_eth']].to_dict()
+
+px.pie(df, values=validator_rewards.values(), names=validator_rewards.keys(), title="Validator Rewards")
+
+# +
+validator_rewards = df.iloc[-1][['total_tips_to_validators_eth', 'source_reward_eth', 'target_reward_eth', 'head_reward_eth', 'block_proposer_reward_eth', 'sync_reward_eth']].to_dict()
+
+px.pie(df, values=validator_rewards.values(), names=validator_rewards.keys(), title="Validator Rewards with tips")
+# -
 
 df.plot(x='timestamp', y=['total_revenue', 'total_network_costs'])
 

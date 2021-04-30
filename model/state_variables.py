@@ -10,6 +10,7 @@ By using a dataclass to represent the State Variables:
 
 import numpy as np
 from dataclasses import dataclass
+from datetime import datetime
 
 import model.constants as constants
 from model.types import (
@@ -20,6 +21,7 @@ from model.types import (
     USD_per_ETH,
     Percentage,
     Uninitialized,
+    Phase,
 )
 from model.parameters import validator_types
 
@@ -43,11 +45,17 @@ class StateVariables:
     state variable key: state variable type = default state variable value
     """
 
+    # Time state variables
+    phase: Phase = None
+    timestamp: datetime = None
+
     # Ethereum state variables
     eth_price: USD_per_ETH = 0
     eth_supply: ETH = eth_supply
     eth_staked: ETH = eth_staked
     supply_inflation: Percentage = 0
+    pow_issuance: ETH = 0
+    """Proof of Work issuance in ETH"""
 
     # Validator state variables
     number_of_validators_in_activation_queue: int = (
