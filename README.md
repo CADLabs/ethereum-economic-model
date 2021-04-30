@@ -12,6 +12,7 @@ Features:
 * Referrences to [Eth2 specs](https://github.com/ethereum/eth2.0-specs) in Policy and State Update Function logic
 
 ## Table of Contents
+* [Model](#model)
 * [Experiments](#experiments)
 * [Development](#development)
 * [Tests](#tests)
