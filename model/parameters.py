@@ -13,6 +13,7 @@ import pandas as pd
 from stochastic import processes
 from dataclasses import dataclass
 import logging
+from datetime import datetime
 
 import model.simulation_configuration as simulation
 import model.constants as constants
@@ -30,26 +31,32 @@ from model.types import (
     List,
     Callable,
     Epoch,
+    Phase,
 )
 from model.utils import default
 
 
-# Configure environmental ETH price and ETH staking processes
-# See https://stochastic.readthedocs.io/en/latest/continuous.html
-# Create Random Number Generator (RNG) with a seed of 1
-rng = np.random.default_rng(1)
-eth_price_process = processes.continuous.BrownianExcursion(
-    t=(simulation.TIMESTEPS * simulation.DELTA_TIME), rng=rng
-)
-eth_price_samples = eth_price_process.sample(
-    simulation.TIMESTEPS * simulation.DELTA_TIME + 1
-)
-minimum_eth_price = 1500
-maximum_eth_price = max(eth_price_samples)
-eth_price_samples = [
-    minimum_eth_price + eth_price_sample / maximum_eth_price * minimum_eth_price
-    for eth_price_sample in eth_price_samples
-]
+def create_eth_price_process(
+    timesteps=simulation.TIMESTEPS, dt=simulation.DELTA_TIME, minimum_eth_price=1500
+):
+    """Configure environmental ETH price process
+    See See https://stochastic.readthedocs.io/en/latest/continuous.html
+    """
+    # Create Random Number Generator (RNG) with a seed of 1
+    rng = np.random.default_rng(1)
+    eth_price_process = processes.continuous.BrownianExcursion(
+        t=(timesteps * dt), rng=rng
+    )
+    eth_price_samples = eth_price_process.sample(timesteps * dt + 1)
+    maximum_eth_price = max(eth_price_samples)
+    eth_price_samples = [
+        minimum_eth_price + eth_price_sample / maximum_eth_price * minimum_eth_price
+        for eth_price_sample in eth_price_samples
+    ]
+    return eth_price_samples
+
+
+eth_price_samples = create_eth_price_process()
 
 # Configure validator type distribution
 validator_types = [
@@ -140,8 +147,29 @@ class Parameters:
     Because lists are mutable, we need to wrap each parameter list in the `default(...)` method.
     """
 
+    # Time parameters
     dt: List[Epoch] = default([simulation.DELTA_TIME])
     """Simulation timescale / timestep unit of time"""
+
+    phase: List[Phase] = default([Phase.POST_MERGE])
+    """Which phase or phases of the network upgrade process to simulate"""
+
+    date_start: List[datetime] = default([datetime.now()])
+    """Start date for simulation as Python datetime"""
+
+    date_eip1559: List[datetime] = default(
+        [datetime.strptime("2021/07/14", "%Y/%m/%d")]
+    )
+    """
+    EIP1559 activation date as Python datetime
+    Source: https://github.com/ethereum/pm/issues/245#issuecomment-825751460
+    """
+
+    date_merge: List[datetime] = default([datetime.strptime("2021/12/1", "%Y/%m/%d")])
+    """
+    Eth1/Eth2 merge date as Python datetime
+    Source: https://twitter.com/drakefjustin/status/1379052831982956547
+    """
 
     # Environmental processes
     eth_price_process: List[Callable[[Run, Timestep], ETH]] = default(
@@ -156,11 +184,18 @@ class Parameters:
 
     validator_process: List[Callable[[Run, Timestep], int]] = default(
         [
-            # From https://beaconscan.com/ as of 20/04/21
-            lambda _run, timestep: 4
+            # From https://beaconscan.com/statistics as of 20/04/21
+            lambda _run, timestep: 3
         ]
     )
     """New validators per epoch (used if model not driven using eth_staked_process)"""
+
+    # Ethereum system parameters
+    daily_pow_issuance: List[ETH] = default([13_550])
+    """
+    Average daily Proof of Work issuance in ETH
+    Source: https://etherscan.io/chart/blockreward
+    """
 
     # Parameters from the Eth2 specification
     # Uppercase used for all parameters from Eth2 specification
@@ -210,14 +245,14 @@ class Parameters:
     """
 
     eip1559_basefee_process: List[Callable[[Run, Timestep], Gwei_per_Gas]] = default(
-        [lambda _run, _timestep: 100]  # Gwei per gas
+        [lambda _run, _timestep: 70]  # Gwei per gas
     )
     """
     Approximated using average gas price from https://etherscan.io/gastracker as of 20/04/21
     """
 
     eip1559_tip_process: List[Callable[[Run, Timestep], Gwei_per_Gas]] = default(
-        [lambda _run, _timestep: 1]  # Gwei per gas
+        [lambda _run, _timestep: 30]  # Gwei per gas
     )
     """
     The tip level that compensates for uncle risk.

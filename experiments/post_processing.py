@@ -1,6 +1,5 @@
 import pandas as pd
 from functools import partial
-import datetime
 from radcad.core import generate_parameter_sweep
 
 import model.simulation_configuration as simulation
@@ -25,12 +24,6 @@ def post_process(df: pd.DataFrame):
         # Parameters to assign to DataFrame
     ])
 
-    # Set timestamps
-    now = datetime.datetime.now()
-    df['timestamp'] = df.apply(lambda row: now + datetime.timedelta(days=(
-        row["timestep"] * (simulation.DELTA_TIME / constants.epochs_per_day)
-    )), axis=1)
-
     # Dissagregate validator costs
     df[[validator.type + '_hardware_costs' for validator in validator_types]] = df.apply(lambda row: list(row.validator_hardware_costs), axis=1, result_type='expand').astype('float64')
     df[[validator.type + '_cloud_costs' for validator in validator_types]] = df.apply(lambda row: list(row.validator_cloud_costs), axis=1, result_type='expand').astype('float64')
@@ -46,7 +39,7 @@ def post_process(df: pd.DataFrame):
     df['total_profit_yields_pct'] = df['total_profit_yields'] * 100
 
     # Convert validator rewards from Gwei to ETH
-    validator_rewards = ['source_reward', 'target_reward', 'head_reward', 'block_proposer_reward', 'sync_reward']
+    validator_rewards = ['total_online_validator_rewards', 'total_tips_to_validators', 'source_reward', 'target_reward', 'head_reward', 'block_proposer_reward', 'sync_reward']
     df[[reward + '_eth' for reward in validator_rewards]] = df[validator_rewards] / constants.gwei
 
     # Drop the initial state for plotting
