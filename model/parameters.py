@@ -55,6 +55,7 @@ def create_eth_price_process(
     ]
     return eth_price_samples
 
+
 eth_price_samples = create_eth_price_process()
 
 # Configure validator type distribution
