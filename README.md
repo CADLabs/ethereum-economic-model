@@ -100,7 +100,7 @@ Otherwise, follow the steps below.
 
 ### Requirements
 
-* Python versions: tested with 3.7, 3.8, 3.9
+* Python versions: tested with 3.7, 3.8
 * Python dependencies: tested against versions in `requirements.txt`
 
 ### Setup
