@@ -1,5 +1,5 @@
 pytest==6.2.2
-radcad==0.6.2
+radcad==0.6.3
 ipykernel==5.5.3
 matplotlib==3.3.4
 plotly==4.14.3
