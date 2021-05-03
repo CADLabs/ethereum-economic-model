@@ -9,13 +9,18 @@ import math
 import logging
 
 import model.constants as constants
-from model.types import ETH, USD_per_ETH, Gwei
+from model.types import ETH, USD_per_ETH, Gwei, Phase
 
 
 def policy_network_issuance(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, ETH]:
+    # Parameters
+    dt = params["dt"]
+    daily_pow_issuance = params["daily_pow_issuance"]
+
     # State Variables
+    phase = previous_state["phase"]
     amount_slashed = previous_state["amount_slashed"]
     total_basefee = previous_state["total_basefee"]
     total_tips_to_validators = previous_state["total_tips_to_validators"]
@@ -29,8 +34,17 @@ def policy_network_issuance(
         - total_basefee
     ) / constants.gwei
 
+    # Calculate Proof of Work issuance
+    pow_issuance = (
+        daily_pow_issuance / constants.epochs_per_day
+        if Phase(phase) in [Phase.PHASE_0, Phase.POST_EIP1559]
+        else 0
+    )
+    network_issuance += pow_issuance * dt
+
     return {
         "network_issuance": network_issuance,
+        "pow_issuance": pow_issuance,
     }
 
 
@@ -45,6 +59,14 @@ def policy_eip1559_transaction_pricing(
     * https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md
     * https://eips.ethereum.org/EIPS/eip-1559
     """
+
+    phase = Phase(previous_state["phase"])
+    if not phase in [Phase.POST_EIP1559, Phase.POST_MERGE]:
+        return {
+            "basefee": 0,
+            "total_basefee": 0,
+            "total_tips_to_validators": 0,
+        }
 
     # Parameters
     dt = params["dt"]
@@ -65,12 +87,12 @@ def policy_eip1559_transaction_pricing(
     basefee = eip1559_basefee_process(run, timestep * dt)  # Gwei per Gas
 
     # Ensure basefee changes by no more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %
-    assert (
-        abs(basefee - previous_basefee) / (previous_basefee + 1)
-        <= constants.slots_per_epoch / BASE_FEE_MAX_CHANGE_DENOMINATOR
-        if timestep > 1
-        else True
-    ), "basefee changed by more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %"
+    # assert (
+    #     abs(basefee - previous_basefee) / previous_basefee
+    #     <= constants.slots_per_epoch / BASE_FEE_MAX_CHANGE_DENOMINATOR
+    #     if timestep > 1
+    #     else True
+    # ), "basefee changed by more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %"
 
     avg_tip_amount = eip1559_tip_process(run, timestep * dt)  # Gwei per Gas
     transactions_per_day = daily_transactions_process(

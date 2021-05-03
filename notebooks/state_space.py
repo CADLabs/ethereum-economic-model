@@ -36,6 +36,7 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import plotly.express as px
 
 pd.options.plotting.backend = "plotly"
 
@@ -49,9 +50,8 @@ import visualizations as visualizations
 
 # %% [markdown]
 # Import the experiment to be run and analysed in this notebook:
-
-# %%
-from experiments.default import experiment
+#
+# from experiments.state_space.experiment import experiment
 
 # %% [markdown]
 # Run the experiment, and get the raw results:
@@ -72,96 +72,101 @@ df
 
 # %% [markdown]
 # Analyze and visualize the results:
-
-# %%
-df.plot(x='timestamp', y='eth_price', title='ETH Price')
-
-# %%
-from model.parameters import parameters
-
-df = df.set_index('timestamp')
-
-date_start = parameters["date_start"][0]
-date_eip1559 = parameters["date_eip1559"][0]
-date_merge = parameters["date_merge"][0]
-date_end = df.index[0]
-
-fig = df.plot(y='eth_supply', title='ETH Supply', width=1000, height=600)
-
-fig.add_shape(
-    type="rect",
-    xref="x",
-    yref="paper",
-    x0=date_start,
-    y0=0,
-    x1=date_eip1559,
-    y1=1,
-    line=dict(color="rgba(0,0,0,0)",width=3,),
-    fillcolor="rgba(0,0,0,0.3)",
-    layer='below'
-)
-
-fig.add_shape(
-    type="rect",
-    xref="x",
-    yref="paper",
-    x0=date_eip1559,
-    y0=0,
-    x1=date_merge,
-    y1=1,
-    line=dict(color="rgba(0,0,0,0)",width=3,),
-    fillcolor="rgba(0,0,0,0.2)",
-    layer='below'
-)
-
-fig.add_shape(
-    type="rect",
-    xref="x",
-    yref="paper",
-    x0=date_merge,
-    y0=0,
-    x1=date_end,
-    y1=1,
-    line=dict(color="rgba(0,0,0,0)",width=3,),
-    fillcolor="rgba(0,0,0,0.1)",
-    layer='below'
-)
-
-fig.add_annotation(
-    x=date_eip1559, y=df.loc[date_eip1559.strftime("%Y-%m-%d")]['eth_supply'][0],
-    text="EIP1559 Enabled",
-    showarrow=True,
-    arrowhead=1
-)
-
-fig.add_annotation(
-    x=date_merge, y=df.loc[date_merge.strftime("%Y-%m-%d")]['eth_supply'][0],
-    text="The Merge",
-    showarrow=True,
-    arrowhead=1,
-)
-
-df.reset_index(inplace=True)
-
-fig.show()
-
-# %%
-df.plot(x='timestamp', y='supply_inflation_pct', title='ETH Supply Inflation')
-
-# %%
-df.plot(x='timestamp', y='total_online_validator_rewards_eth', title='Total Online Validator Rewards')
-
-# %%
-df.plot(x='timestamp', y='eth_staked', title='ETH Staked')
-
-# %%
-df.plot(x='timestamp', y=['number_of_validators_in_activation_queue','number_of_validators'])
+#
+# df.plot(x='timestamp', y='eth_price')
+#
+# +
+# from model.parameters import parameters
+#
+# df.reset_index(inplace=True)
+# df = df.set_index('timestamp')
+#
+# date_start = parameters["date_start"][0]
+# date_eip1559 = parameters["date_eip1559"][0]
+# date_merge = parameters["date_merge"][0]
+# date_end = df.index[0]
+#
+# fig = df.plot(y='eth_supply', title='ETH Supply', width=1000, height=600)
+#
+# fig.add_shape(
+#     type="rect",
+#     xref="x",
+#     yref="paper",
+#     x0=date_start,
+#     y0=0,
+#     x1=date_eip1559,
+#     y1=1,
+#     line=dict(color="rgba(0,0,0,0)",width=3,),
+#     fillcolor="rgba(0,0,0,0.3)",
+#     layer='below'
+# )
+#
+# fig.add_shape(
+#     type="rect",
+#     xref="x",
+#     yref="paper",
+#     x0=date_eip1559,
+#     y0=0,
+#     x1=date_merge,
+#     y1=1,
+#     line=dict(color="rgba(0,0,0,0)",width=3,),
+#     fillcolor="rgba(0,0,0,0.2)",
+#     layer='below'
+# )
+#
+# fig.add_shape(
+#     type="rect",
+#     xref="x",
+#     yref="paper",
+#     x0=date_merge,
+#     y0=0,
+#     x1=date_end,
+#     y1=1,
+#     line=dict(color="rgba(0,0,0,0)",width=3,),
+#     fillcolor="rgba(0,0,0,0.1)",
+#     layer='below'
+# )
+#
+# fig.add_annotation(
+#     x=date_eip1559, y=df.loc[date_eip1559.strftime("%Y-%m-%d")]['eth_supply'][0],
+#     text="EIP1559 Enabled",
+#     showarrow=True,
+#     arrowhead=1
+# )
+#
+# fig.add_annotation(
+#     x=date_merge, y=df.loc[date_merge.strftime("%Y-%m-%d")]['eth_supply'][0],
+#     text="The Merge",
+#     showarrow=True,
+#     arrowhead=1,
+# )
+#
+# df.reset_index(inplace=True)
+#
+# fig.show()
+# -
+#
+# df.plot(x='timestamp', y='supply_inflation_pct')
+#
+# df.plot(x='timestamp', y='total_online_validator_rewards_eth')
+#
+# df.plot(x='timestamp', y='eth_staked')
 
 # %%
 visualizations.plot_validator_rewards(df)
 
-# %%
-df.plot(x='timestamp', y=['total_revenue', 'total_network_costs'], title='Total Revenue and Network Costs')
+# +
+validator_rewards = df.iloc[-1][['source_reward_eth', 'target_reward_eth', 'head_reward_eth', 'block_proposer_reward_eth', 'sync_reward_eth']].to_dict()
+
+px.pie(df, values=validator_rewards.values(), names=validator_rewards.keys(), title="Validator Rewards")
+
+# +
+validator_rewards = df.iloc[-1][['total_tips_to_validators_eth', 'source_reward_eth', 'target_reward_eth', 'head_reward_eth', 'block_proposer_reward_eth', 'sync_reward_eth']].to_dict()
+
+px.pie(df, values=validator_rewards.values(), names=validator_rewards.keys(), title="Validator Rewards with tips")
+# -
+
+df.plot(x='timestamp', y=['total_revenue', 'total_network_costs'])
 
 # %%
 df.plot(x='timestamp', y=['total_revenue', 'total_profit'])

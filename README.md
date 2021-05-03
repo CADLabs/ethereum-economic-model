@@ -1,17 +1,19 @@
-# cadCAD Edu Eth2 MasterClass
+# cadCAD Edu Eth2 MasterClass: Validator Economics Model
 [![Python package](https://github.com/cadCAD-edu/eth2.0-masterclass/actions/workflows/python.yml/badge.svg)](https://github.com/cadCAD-edu/eth2.0-masterclass/actions/workflows/python.yml)
 
-A post-merge Eth2 Validator Economics model.
+An Eth2 Validator Economics model.
 
 **Eth2 specs version**: implements the [Altair](https://github.com/ethereum/eth2.0-specs#altair) updates in the [Beige Gorgon / v1.1.0-alpha.3](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.3) release.
 
 Features:
+* Simulate the different phases of the Ethereum system upgrade process (Phase 0, EIP1559 enabled, The Merge)
 * Enables both State Space (simulation over time) and Phase Space (analysis of system state) simulations and analyses
 * Customizable processes for ETH price, ETH staked, validator adoption, EIP1559, and transaction rates
 * Modular model structure
 * Referrences to [Eth2 specs](https://github.com/ethereum/eth2.0-specs) in Policy and State Update Function logic
 
 ## Table of Contents
+* [Model](#model)
 * [Experiments](#experiments)
 * [Development](#development)
 * [Tests](#tests)
@@ -31,14 +33,43 @@ Features:
 
 ---
 
+## Model
+
+### Parts
+
+The model is composed of different modules in the [model/parts/](model/parts/) directory:
+
+| Module | Description |
+| --- | --- |
+| [ethereum.py](model/parts/ethereum.py) | Genereal Ethereum mechanisms, such as the EIP1559 transaction pricing mechanism, and updating the ETH price and ETH supply |
+| [incentives.py](model/parts/incentives.py) | Proof of Stake incentives |
+| [metrics.py](model/parts/metrics.py) | Calculation of validator costs, revenue, profit, and yield metrics |
+| [phases.py](model/parts/phases.py) | Management of phases of the Ethereum system upgrade process |
+| [spec.py](model/parts/spec.py) | Relevant extracts from the Eth2 spec |
+| [validators.py](model/parts/validators.py) | Validator processes such as validator activation, staking, uptime |
+
+### Configuration
+
+The model is configured using modules in the [model/](model/) directory:
+
+| Module | Description |
+| --- | --- |
+| [constants.py](model/constants.py) ||
+| [parameters.py](model/parameters.py) ||
+| [simulation_configuration.py](model/simulation_configuration.py) ||
+| [state_update_blocks.py](model/state_update_blocks.py) ||
+| [state_variables.py](model/state_variables.py) ||
+| [types.py](model/types.py) ||
+| [utils.py](model/utils.py) ||
+
 ## Experiments
 
 The [experiments/](experiments/) directory contains different experiment configurations, where each experiment has a corresponding analysis Jupyter notebook in the [notebooks/](notebooks/) directory.
 
 ### State Space
-An experiment that uses the default cadCAD System Parameters, Initial State, and State Update Blocks defined in the [models/](models/) directory to simulate the State Space of the model.
+An experiment that simulates the State Space of the model, with phases (Phase 0, EIP1559 enabled, The Merge) representing the upgrade process of the Eth2 system.
 
-* Experiment: [experiments/default.py](experiments/eip1559/default.py)
+* Experiment: [experiments/state_space/experiment.py](experiments/state_space/experiment.py)
 * Notebook: [notebooks/state_space.ipynb](notebooks/state_space.ipynb)
 
 ![Validator rewards](outputs/validator_rewards.png)
@@ -100,7 +131,7 @@ Otherwise, follow the steps below.
 
 ### Requirements
 
-* Python versions: tested with 3.7, 3.8, 3.9
+* Python versions: tested with 3.7, 3.8
 * Python dependencies: tested against versions in `requirements.txt`
 
 ### Setup
