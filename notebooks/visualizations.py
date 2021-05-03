@@ -14,7 +14,7 @@ def plot_validator_rewards(df):
     return df.plot.area(
         x='timestamp', 
         y=validator_rewards,
-        title="Validator Rewards over time",
+        title="Validator Rewards",
         labels={
             "timestamp": "Date",
             "value": "Reward (ETH)",
