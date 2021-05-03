@@ -1,5 +1,5 @@
+radcad==0.6.3  # A cadCAD reference implementation
 pytest==6.2.2
-radcad==0.6.3
 ipykernel==5.5.3
 matplotlib==3.3.4
 plotly==4.14.3
@@ -14,3 +14,4 @@ pdoc3==0.9.2
 jupyter-book==0.10.2
 psutil==5.8.0
 kaleido==0.2.1
+nbconvert==5.6
