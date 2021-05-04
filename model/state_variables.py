@@ -47,6 +47,10 @@ class StateVariables:
 
     # Time state variables
     phase: Phase = None
+    """
+    Keeps track of the current Phase in the
+    system phase finite-state machine.
+    """
     timestamp: datetime = None
 
     # Ethereum state variables

@@ -1,3 +1,8 @@
+"""Ethereum Upgrade Phases
+The Phases module contains the logic for transitioning the model
+from one phase in the Ethereum network upgrade process to the next at different milestones.
+"""
+
 import datetime
 
 import model.simulation_configuration as simulation
@@ -6,6 +11,12 @@ from model.types import Phase
 
 
 def policy_phases(params, substep, state_history, previous_state):
+    """Phases Policy
+    Transitions the model from one phase in the Ethereum network
+    upgrade process to the next at different milestones.
+
+    This is essentially a finite-state machine: https://en.wikipedia.org/wiki/Finite-state_machine
+    """
     # Parameters
     dt = params["dt"]
     phase: Phase = params["phase"]
@@ -22,14 +33,17 @@ def policy_phases(params, substep, state_history, previous_state):
         days=(timestep * dt / constants.epochs_per_day)
     )
 
-    # Initialize phase
+    # Initialize phase State Variable at start of simulation
     if current_phase == None:
         current_phase = phase
     else:
+        # Convert Phase enum value (int) to Phase enum
         current_phase = Phase(current_phase)
 
-    # Transition through phases
+    # Phase finite-state machine
     if phase == Phase.ALL:
+        # If Phase ALL selected, transition through all phases
+        # at different timestamps
         if current_phase in [Phase.ALL, Phase.PHASE_0] and timestamp < date_eip1559:
             current_phase = Phase.PHASE_0
         elif (
@@ -40,12 +54,16 @@ def policy_phases(params, substep, state_history, previous_state):
         else:
             current_phase = Phase.POST_MERGE
     elif phase == Phase.PHASE_0:
+        # If Phase PHASE_0 selected, only execute single phase
         current_phase = Phase.PHASE_0
     elif phase == Phase.POST_EIP1559:
+        # If Phase POST_EIP1559 selected, only execute single phase
         current_phase = Phase.POST_EIP1559
     elif phase == Phase.POST_MERGE:
+        # If Phase POST_MERGE selected, only execute single phase
         current_phase = Phase.POST_MERGE
     else:
+        # Else, raise exception if invalid Phase
         raise Exception("Invalid Phase selected")
 
     return {
