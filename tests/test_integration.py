@@ -7,6 +7,25 @@ import experiments.default as default
 import experiments.eip1559.experiment as eip1559
 
 
+def test_dt():
+    simulation: Simulation = deepcopy(default.experiment.simulations[0])
+
+    simulation.timesteps = 1
+    simulation.model.params.update({"dt": [1000]})
+
+    results = simulation.run()
+    df_timestep_1 = pd.DataFrame(results)
+
+    simulation.timesteps = 1000
+    simulation.model.params.update({"dt": [1]})
+
+    results = simulation.run()
+    df_timestep_1000 = pd.DataFrame(results)
+
+    assert math.isclose(df_timestep_1.iloc[-1]["total_profit_yields"], df_timestep_1000.iloc[-1]["total_profit_yields"])
+    assert math.isclose(df_timestep_1.iloc[-1]["total_online_validator_rewards"], df_timestep_1000.iloc[-1]["total_online_validator_rewards"] * 1000)
+
+
 def check_validating_rewards(params, substep, state_history, previous_state):
     # State Variables
     validating_rewards = previous_state["validating_rewards"]

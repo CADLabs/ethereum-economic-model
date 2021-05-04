@@ -29,6 +29,8 @@ ETH = float
 
 
 class Phase(Enum):
+    """Phases of the Ethereum network upgrade process finite-state machine"""
+
     ALL = 1
     """Transition through all phases"""
     PHASE_0 = 2
