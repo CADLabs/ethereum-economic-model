@@ -71,6 +71,8 @@ The model is configured using modules in the [model/](model/) directory:
 
 The [experiments/](experiments/) directory contains different experiment configurations, where each experiment has a corresponding analysis Jupyter notebook in the [notebooks/](notebooks/) directory.
 
+See the [experiments/README.ipynb](experiments/README.ipynb) notebook for a walk-through of how to configure and execute an experiment.
+
 ### State Space
 An experiment that simulates the State Space of the model (e.g. Validating Rewards over time), with phases (Phase 0, EIP1559 enabled, The Merge) representing the upgrade process of the Eth2 system.
 
