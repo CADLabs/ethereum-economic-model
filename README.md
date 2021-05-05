@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="https://github.com/cadCAD-edu/eth2-masterclass/blob/main/media/eth-masterclass-horizontal.png" />
+  <img src="https://github.com/cadCAD-edu/eth2-masterclass/blob/main/media/eth-masterclass-horizontal.png" style="max-width:50%;" />
 </p>
 
-# cadCAD Edu Eth2 Masterclass: Validator Economics Model
+# Ethereum Validator Economics Model
 [![Python package](https://github.com/cadCAD-edu/eth2.0-masterclass/actions/workflows/python.yml/badge.svg)](https://github.com/cadCAD-edu/eth2.0-masterclass/actions/workflows/python.yml)
 
-An Eth2 Validator Economics model.
+An Ethereum Validator Economics model.
 
 **Eth2 specs version**: implements the [Altair](https://github.com/ethereum/eth2.0-specs#altair) updates in the [Beige Gorgon / v1.1.0-alpha.3](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.3) release.
 
