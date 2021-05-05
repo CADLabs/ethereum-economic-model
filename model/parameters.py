@@ -34,29 +34,12 @@ from model.types import (
     Phase,
 )
 from model.utils import default
+from model.processes import create_stochastic_process_realizations
 
 
-def create_eth_price_process(
-    timesteps=simulation.TIMESTEPS, dt=simulation.DELTA_TIME, minimum_eth_price=1500
-):
-    """Configure environmental ETH price process
-    See See https://stochastic.readthedocs.io/en/latest/continuous.html
-    """
-    # Create Random Number Generator (RNG) with a seed of 1
-    rng = np.random.default_rng(1)
-    eth_price_process = processes.continuous.BrownianExcursion(
-        t=(timesteps * dt), rng=rng
-    )
-    eth_price_samples = eth_price_process.sample(timesteps * dt + 1)
-    maximum_eth_price = max(eth_price_samples)
-    eth_price_samples = [
-        minimum_eth_price + eth_price_sample / maximum_eth_price * minimum_eth_price
-        for eth_price_sample in eth_price_samples
-    ]
-    return eth_price_samples
-
-
-eth_price_samples = create_eth_price_process()
+# Create stochastic (random) process realizations
+stochastic_process_realizations = create_stochastic_process_realizations()
+eth_price_samples = stochastic_process_realizations["eth_price_samples"]
 
 # Configure validator type distribution
 validator_types = [
@@ -173,7 +156,7 @@ class Parameters:
 
     # Environmental processes
     eth_price_process: List[Callable[[Run, Timestep], ETH]] = default(
-        [lambda _run, timestep: eth_price_samples[timestep]]
+        [lambda run, timestep: eth_price_samples[run - 1][timestep]]
     )
     """ETH spot price at each epoch"""
 
@@ -185,7 +168,7 @@ class Parameters:
     validator_process: List[Callable[[Run, Timestep], int]] = default(
         [
             # From https://beaconscan.com/statistics as of 20/04/21
-            lambda _run, timestep: 3
+            lambda _run, _timestep: 3,
         ]
     )
     """New validators per epoch (used if model not driven using eth_staked_process)"""
@@ -216,7 +199,7 @@ class Parameters:
     BASE_FEE_MAX_CHANGE_DENOMINATOR: List[int] = default([8])
 
     # Validator parameters
-    validator_uptime: List[Percentage] = default([0.98])
+    validator_uptime_process: List[Percentage] = default([lambda _run, _timestep: 0.98])
     """Combination of validator internet, power, and technical uptime"""
     validator_percentage_distribution: List[np.ndarray] = default(
         validator_percentage_distribution
@@ -265,7 +248,9 @@ class Parameters:
     See https://eips.ethereum.org/EIPS/eip-1559
     """
 
-    daily_transactions_process: List[int] = default([lambda _run, _timestep: 1_400_000])
+    daily_transactions_process: List[int] = default(
+        [lambda _run=None, _timestep=None: 1_400_000]
+    )
     """
     Number of transactions per day.
 

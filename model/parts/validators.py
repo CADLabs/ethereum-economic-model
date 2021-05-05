@@ -51,7 +51,7 @@ def policy_validators(params, substep, state_history, previous_state):
     dt = params["dt"]
     eth_staked_process = params["eth_staked_process"]
     validator_process = params["validator_process"]
-    validator_uptime = params["validator_uptime"]
+    validator_uptime_process = params["validator_uptime_process"]
 
     # State Variables
     run = previous_state["run"]
@@ -83,6 +83,7 @@ def policy_validators(params, substep, state_history, previous_state):
         number_of_validators_in_activation_queue -= activated_validators
 
     # Calculate the number of validators online and offline using validator uptime
+    validator_uptime = validator_uptime_process(run, timestep * dt)
     number_of_validators_online = int(round(number_of_validators * validator_uptime))
     number_of_validators_offline = number_of_validators - number_of_validators_online
 

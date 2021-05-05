@@ -58,6 +58,7 @@ class StateVariables:
     eth_supply: ETH = eth_supply
     eth_staked: ETH = eth_staked
     supply_inflation: Percentage = 0
+    network_issuance: ETH = 0
     pow_issuance: ETH = 0
     """Proof of Work issuance in ETH"""
 
@@ -102,12 +103,6 @@ class StateVariables:
         (number_of_validator_types, 1), dtype=int
     )
 
-    total_online_validator_rewards: Gwei = 0
-    total_revenue: USD = 0
-    total_profit: USD = 0
-    total_revenue_yields: Percentage = 0
-    total_profit_yields: Percentage = 0
-
     validator_count_distribution: np.ndarray = np.zeros(
         (number_of_validator_types, 1), dtype=int
     )
@@ -121,7 +116,15 @@ class StateVariables:
         (number_of_validator_types, 1), dtype=USD
     )
     validator_costs: np.ndarray = np.zeros((number_of_validator_types, 1), dtype=USD)
+
+    total_online_validator_rewards: Gwei = 0
     total_network_costs: USD = 0
+    total_revenue: USD = 0
+    total_profit: USD = 0
+    total_revenue_yields: Percentage = 0
+    """Annualized revenue for all validators"""
+    total_profit_yields: Percentage = 0
+    """Annualized profit (revenue - costs) for all validators"""
 
 
 # Initialize State Variables instance with default values

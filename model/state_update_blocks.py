@@ -148,6 +148,7 @@ _state_update_blocks = [
             ),
             "eth_supply": ethereum.update_eth_supply,
             "supply_inflation": metrics.update_supply_inflation,
+            "network_issuance": update_from_signal("network_issuance"),
             "pow_issuance": update_from_signal("pow_issuance"),
         },
     },
