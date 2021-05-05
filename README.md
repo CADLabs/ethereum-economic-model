@@ -1,4 +1,4 @@
-# cadCAD Edu Eth2 MasterClass: Validator Economics Model
+# cadCAD Edu Eth2 Masterclass: Validator Economics Model
 [![Python package](https://github.com/cadCAD-edu/eth2.0-masterclass/actions/workflows/python.yml/badge.svg)](https://github.com/cadCAD-edu/eth2.0-masterclass/actions/workflows/python.yml)
 
 <p align="center">
