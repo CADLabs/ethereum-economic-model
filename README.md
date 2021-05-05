@@ -1,6 +1,10 @@
 # cadCAD Edu Eth2 MasterClass: Validator Economics Model
 [![Python package](https://github.com/cadCAD-edu/eth2.0-masterclass/actions/workflows/python.yml/badge.svg)](https://github.com/cadCAD-edu/eth2.0-masterclass/actions/workflows/python.yml)
 
+<p align="center">
+  <img src="https://github.com/cadCAD-edu/eth2-masterclass/blob/main/outputs/eth-masterclass-horizontal.png" />
+</p>
+
 An Eth2 Validator Economics model.
 
 **Eth2 specs version**: implements the [Altair](https://github.com/ethereum/eth2.0-specs#altair) updates in the [Beige Gorgon / v1.1.0-alpha.3](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.3) release.
@@ -73,6 +77,8 @@ An experiment that simulates the State Space of the model (e.g. Validating Rewar
 * Notebook: [notebooks/state_space.ipynb](notebooks/state_space.ipynb)
 
 ![Validating rewards](outputs/validating_rewards.png)
+
+![ETH Supply](outputs/eth_supply_phases.png)
 
 ### Revenue Yields vs Network Inflation
 Analysing the revenue yields of validators and network inflation for a static ETH price over discrete ETH staked values.
