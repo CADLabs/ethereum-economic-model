@@ -1,12 +1,14 @@
 import numpy as np
 
 from experiments.default import experiment, TIMESTEPS, DELTA_TIME
+from model.types import Phase
 
 
 # From Hoban/Borgers Economic Report
 eth_price_samples = np.linspace(start=25, stop=1500, num=(TIMESTEPS * DELTA_TIME + 1))
 
 parameter_overrides = {
+    "phase": [Phase.PHASE_0],
     "eth_price_process": [
         lambda _run, timestep: eth_price_samples[timestep]
     ],
@@ -15,7 +17,7 @@ parameter_overrides = {
         lambda _run, _timestep: 33_600_000,  # From Hoban/Borgers Economic Report
     ],
     # Combination of validator internet, power, and technical uptime from Hoban/Borgers Report
-    "validator_uptime": [0.999 * 0.999 * 0.982],
+    "validator_uptime": [lambda _run, _timestep: 0.999 * 0.999 * 0.982],
     # Disable EIP1559
     "eip1559_basefee_process": [lambda _run, _timestep: 0],  # Gwei per gas
     "eip1559_tip_process": [lambda _run, _timestep: 0],  # Gwei per gas

@@ -4,6 +4,7 @@ import sys
 from datetime import datetime
 
 from experiments.default import experiment
+from experiments.post_processing import post_process
 
 
 # Configure logging framework
@@ -22,11 +23,12 @@ def run(experiment=experiment):
   experiment.run()
   logging.info("Experiment complete")
 
-  return experiment.results, experiment.exceptions
+  df = pd.DataFrame(experiment.results)
+  df = post_process(df)
+
+  return df, experiment.exceptions
 
 
 if __name__ == '__main__':
-  results, _exceptions = run()
-
-  results_dataframe = pd.DataFrame(results)
-  print(results_dataframe)
+  df, _exceptions = run()
+  print(df)
