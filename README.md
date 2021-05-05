@@ -58,13 +58,14 @@ The model is configured using modules in the [model/](model/) directory:
 
 | Module | Description |
 | --- | --- |
-| [constants.py](model/constants.py) ||
-| [parameters.py](model/parameters.py) ||
-| [simulation_configuration.py](model/simulation_configuration.py) ||
-| [state_update_blocks.py](model/state_update_blocks.py) ||
-| [state_variables.py](model/state_variables.py) ||
-| [types.py](model/types.py) ||
-| [utils.py](model/utils.py) ||
+| [constants.py](model/constants.py) | Constants used in the model e.g. number of epochs in a year, Gwei in 1 Ether |
+| [parameters.py](model/parameters.py) | Model System Parameter definition, configuration, and defaults |
+| [processes.py](model/processes.py) | Helper functions to generate stochastic environmental processes |
+| [simulation_configuration.py](model/simulation_configuration.py) | Simulation configuration such as the number of timesteps and Monte Carlo runs |
+| [state_update_blocks.py](model/state_update_blocks.py) | cadCAD model state update block structure, composed of Policy and State Update Functions |
+| [state_variables.py](model/state_variables.py) | Model State Variable definition, configuration, and defaults |
+| [types.py](model/types.py) | Various types used in the model, such as the `Phase` Enum and calculation units |
+| [utils.py](model/utils.py) | Misc. utility and helper functions |
 
 ## Experiments
 
@@ -86,11 +87,23 @@ Analysing the revenue yields of validators and network inflation for a static ET
 * Experiment: [experiments/revenue_yields_vs_network_inflation/experiment.py](experiments/revenue_yields_vs_network_inflation/experiment.py)
 * Notebook: [notebooks/revenue_yields_vs_network_inflation.ipynb](notebooks/revenue_yields_vs_network_inflation.ipynb)
 
+![Revenue Yields vs Network Inflation](outputs/revenue_yields_vs_network_inflation.png)
+
 ### Validator Environment Yields
 Analysing different validator environment yields for static ETH staked over discrete ETH price values.
 
 * Experiment: [experiments/validator_environment_yields/experiment.py](experiments/validator_environment_yields/experiment.py)
 * Notebook: [notebooks/validator_environment_yields.ipynb](notebooks/validator_environment_yields.ipynb)
+
+![Validator Environments Net Yield](outputs/validator_environments_net_yield.png)
+
+### Validator Yield Surface
+Generate and analyse 2D contours and 3D surfaces for validator yields vs. different system states.
+
+* Experiment: [experiments/validator_yield_surface/experiment.py](experiments/validator_yield_surface/experiment.py)
+* Notebook: [notebooks/validator_yield_surface.ipynb](notebooks/validator_yield_surface.ipynb)
+
+![Validator Yield Contour](outputs/validator_yield_contour.png)
 
 ### EIP1559
 Analysing the effect of enabling EIP1559 under different conditions.
@@ -98,16 +111,25 @@ Analysing the effect of enabling EIP1559 under different conditions.
 * Experiment: [experiments/eip1559/experiment.py](experiments/eip1559/experiment.py)
 * Notebook: [notebooks/eip1559.ipynb](notebooks/eip1559.ipynb)
 
-### Monte Carlo
+### Validation
+Various experiments used to validate the results of our model against the Hoban/Borgers Report model as a sanity check; due to Altair update, they will not exactly match.
+
+* Experiments: [experiments/validation/*/experiment.py](experiments/validation/)
+
+### Monte Carlo (Work in Progress)
 Applying stochastic processes to the ETH price, validator staking, and validator uptime processes, and executing 5 Monte Carlo runs.
 
 * Experiment: [experiments/monte_carlo/experiment.py](experiments/monte_carlo/experiment.py)
 * Notebook: [notebooks/monte_carlo.ipynb](notebooks/monte_carlo.ipynb)
 
-### Validation
-Various experiments used to validate the results of our model against the Hoban/Borgers Report model as a sanity check; due to Altair update, they will not exactly match.
+![Annualized Revenue Yields MC](outputs/annualized_revenue_yields_mc.png)
 
-* Experiments: [experiments/validation/*/experiment.py](experiments/validation/)
+### Justin Drake APR (Work in Progress)
+Demonstrate the model's ability to compute numerical results by comparing the results of our analysis to Justin Drake's scenario analysis (optimistic, lean optimistic, best guess, lean conservative, conservative).
+
+See https://docs.google.com/spreadsheets/d/1FslqTnECKvi7_l4x6lbyRhNtzW9f6CVEzwDf04zprfA
+
+* Notebook: [notebooks/justin_drake_apr.ipynb](notebooks/justin_drake_apr.ipynb)
 
 ### Experiment Execution
 
