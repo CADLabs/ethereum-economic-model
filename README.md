@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/cadCAD-edu/eth2-masterclass/blob/main/media/eth-masterclass-horizontal.png" style="max-width:50%;" />
+  <img src="https://github.com/cadCAD-edu/eth2-masterclass/blob/main/media/eth-masterclass-horizontal.png" width="50%" />
 </p>
 
 # Ethereum Validator Economics Model
