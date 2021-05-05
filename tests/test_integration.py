@@ -50,7 +50,7 @@ def test_validating_rewards():
     simulation.timesteps = 10
 
     simulation.model.params.update({
-        'validator_uptime': [1.0],
+        'validator_uptime_process': [lambda _run, _timestep: 1.0],
     })
 
     simulation.model.state_update_blocks.append(

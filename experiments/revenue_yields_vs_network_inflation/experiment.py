@@ -1,17 +1,19 @@
 import numpy as np
 
-import model.simulation_configuration as simulation
+from model.simulation_configuration import TIMESTEPS, DELTA_TIME
 from model.state_variables import eth_staked
 from experiments.default import experiment
+from model.types import Phase
 
 
 eth_staked_samples = np.linspace(
     eth_staked,  # From https://beaconscan.com/ as of 20/04/21
     33_600_000,  # From Hoban/Borgers Economic Report
-    simulation.TIMESTEPS * simulation.DELTA_TIME + 1
+    TIMESTEPS * DELTA_TIME + 1
 )
 
 parameter_overrides = {
+    "phase": [Phase.PHASE_0],
     "eth_staked_process": [
         lambda _run, timestep: eth_staked_samples[timestep],
     ],

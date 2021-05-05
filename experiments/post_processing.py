@@ -8,23 +8,25 @@ from model.parameters import parameters, Parameters, validator_types
 
 
 def assign_parameters(df: pd.DataFrame, parameters: Parameters, set_params=[]):
-    parameter_sweep = generate_parameter_sweep(parameters)
-    parameter_sweep = [{param: subset[param] for param in set_params} for subset in parameter_sweep]
+    if set_params:
+        parameter_sweep = generate_parameter_sweep(parameters)
+        parameter_sweep = [{param: subset[param] for param in set_params} for subset in parameter_sweep]
 
-    for subset_index in df['subset'].unique():
-        for (key, value) in parameter_sweep[subset_index].items():
-            df.loc[df.eval(f'subset == {subset_index}'), key] = value
+        for subset_index in df['subset'].unique():
+            for (key, value) in parameter_sweep[subset_index].items():
+                df.loc[df.eval(f'subset == {subset_index}'), key] = value
 
     return df
 
 
-def post_process(df: pd.DataFrame):
+def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameters):
     # Assign parameters to DataFrame
     assign_parameters(df, parameters, [
         # Parameters to assign to DataFrame
     ])
 
     # Dissagregate validator costs
+    df[[validator.type + '_costs' for validator in validator_types]] = df.apply(lambda row: list(row.validator_costs), axis=1, result_type='expand').astype('float64')
     df[[validator.type + '_hardware_costs' for validator in validator_types]] = df.apply(lambda row: list(row.validator_hardware_costs), axis=1, result_type='expand').astype('float64')
     df[[validator.type + '_cloud_costs' for validator in validator_types]] = df.apply(lambda row: list(row.validator_cloud_costs), axis=1, result_type='expand').astype('float64')
     df[[validator.type + '_third_party_costs' for validator in validator_types]] = df.apply(lambda row: list(row.validator_third_party_costs), axis=1, result_type='expand').astype('float64')
@@ -43,6 +45,7 @@ def post_process(df: pd.DataFrame):
     df[[reward + '_eth' for reward in validator_rewards]] = df[validator_rewards] / constants.gwei
 
     # Drop the initial state for plotting
-    df = df.drop(df.query('timestep == 0').index)
+    if drop_timestep_zero:
+        df = df.drop(df.query('timestep == 0').index)
 
     return df

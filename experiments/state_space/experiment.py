@@ -1,8 +1,8 @@
 from model.types import Phase
 import model.constants as constants
 import model.simulation_configuration as simulation_configuration
-from model.parameters import create_eth_price_process
-
+from model.processes import create_stochastic_process_realizations
+from model.types import Phase
 from experiments.default import experiment
 
 
@@ -10,11 +10,13 @@ DELTA_TIME = constants.epochs_per_day  # epochs per timestep
 SIMULATION_TIME_MONTHS = 12 * 5  # number of months
 TIMESTEPS = constants.epochs_per_month * SIMULATION_TIME_MONTHS // DELTA_TIME
 
-eth_price_samples = create_eth_price_process(TIMESTEPS, DELTA_TIME)
+# Generate stochastic process realizations
+stochastic_process_realizations = create_stochastic_process_realizations(TIMESTEPS, DELTA_TIME)
+eth_price_samples = stochastic_process_realizations['eth_price_samples']
 
 parameter_overrides = {
     "phase": [Phase.ALL],
-    "eth_price_process": [lambda _run, timestep: eth_price_samples[timestep]],
+    "eth_price_process": [lambda run, timestep: eth_price_samples[run - 1][timestep]],
 }
 
 experiment.simulations[0].timesteps = TIMESTEPS
