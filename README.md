@@ -2,7 +2,7 @@
 [![Python package](https://github.com/cadCAD-edu/eth2.0-masterclass/actions/workflows/python.yml/badge.svg)](https://github.com/cadCAD-edu/eth2.0-masterclass/actions/workflows/python.yml)
 
 <p align="center">
-  <img src="https://github.com/cadCAD-edu/eth2-masterclass/blob/main/outputs/eth-masterclass-horizontal.png" />
+  <img src="https://github.com/cadCAD-edu/eth2-masterclass/blob/main/media/eth-masterclass-horizontal.png" />
 </p>
 
 An Eth2 Validator Economics model.
