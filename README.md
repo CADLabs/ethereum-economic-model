@@ -67,12 +67,12 @@ The model is configured using modules in the [model/](model/) directory:
 The [experiments/](experiments/) directory contains different experiment configurations, where each experiment has a corresponding analysis Jupyter notebook in the [notebooks/](notebooks/) directory.
 
 ### State Space
-An experiment that simulates the State Space of the model, with phases (Phase 0, EIP1559 enabled, The Merge) representing the upgrade process of the Eth2 system.
+An experiment that simulates the State Space of the model (e.g. Validating Rewards over time), with phases (Phase 0, EIP1559 enabled, The Merge) representing the upgrade process of the Eth2 system.
 
 * Experiment: [experiments/state_space/experiment.py](experiments/state_space/experiment.py)
 * Notebook: [notebooks/state_space.ipynb](notebooks/state_space.ipynb)
 
-![Validator rewards](outputs/validator_rewards.png)
+![Validating rewards](outputs/validating_rewards.png)
 
 ### Revenue Yields vs Network Inflation
 Analysing the revenue yields of validators and network inflation for a static ETH price over discrete ETH staked values.
@@ -87,14 +87,19 @@ Analysing different validator environment yields for static ETH staked over disc
 * Notebook: [notebooks/validator_environment_yields.ipynb](notebooks/validator_environment_yields.ipynb)
 
 ### EIP1559
-
 Analysing the effect of enabling EIP1559 under different conditions.
 
 * Experiment: [experiments/eip1559/experiment.py](experiments/eip1559/experiment.py)
 * Notebook: [notebooks/eip1559.ipynb](notebooks/eip1559.ipynb)
 
+### Monte Carlo
+Applying stochastic processes to the ETH price, validator staking, and validator uptime processes, and executing 5 Monte Carlo runs.
+
+* Experiment: [experiments/monte_carlo/experiment.py](experiments/monte_carlo/experiment.py)
+* Notebook: [notebooks/monte_carlo.ipynb](notebooks/monte_carlo.ipynb)
+
 ### Validation
-Various experiments used to validate the results of our model against the Hoban/Borgers Report model.
+Various experiments used to validate the results of our model against the Hoban/Borgers Report model as a sanity check; due to Altair update, they will not exactly match.
 
 * Experiments: [experiments/validation/*/experiment.py](experiments/validation/)
 
@@ -154,7 +159,7 @@ source venv/bin/activate
 python3 -m pytest tests
 ```
 
-## Jupyter Lab Environment
+## Jupyter Environment
 
 ### Jupyter kernel
 
@@ -164,7 +169,18 @@ source venv/bin/activate
 python3 -m ipykernel install --user --name python-eth2 --display-name "Python (Eth2)"
 ```
 
+### Start environment
+
+```bash
+source venv/bin/activate
+jupyter notebook
+# Or Jupyter Lab, following additional steps below
+jupyter lab
+```
+
 ### Plotly Jupyter Lab support
+
+To install and use Plotly with Jupyter Lab, you'll need NodeJS installed to build Node dependencies. Alternatively, use Jupyter Notebook which works out the box with Plotly.
 
 See https://plotly.com/python/getting-started/
 
