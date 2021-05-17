@@ -11,7 +11,7 @@ def create_eth_price_process(
     minimum_eth_price=1500,
 ):
     """Configure environmental ETH price process
-    See See https://stochastic.readthedocs.io/en/latest/continuous.html
+    See https://stochastic.readthedocs.io/en/latest/continuous.html
     """
     process = processes.continuous.BrownianExcursion(t=(timesteps * dt), rng=rng)
     samples = process.sample(timesteps * dt + 1)
