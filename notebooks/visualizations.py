@@ -96,7 +96,7 @@ def plot_validator_environment_yield_contour(x, y, z):
     fig = go.Figure(data=[
         go.Contour(
             x=x, y=y, z=z,
-            line_smoothing=0.85
+            line_smoothing=0.85,
         )
     ])
 
@@ -126,8 +126,8 @@ def plot_validator_environment_yield_surface(x, y, z):
         width=1000, height=800,
         margin=dict(l=65, r=50, b=65, t=90),
         scene={
-            "xaxis": {"title" : { "text": "ETH Price ($/Ether)" }},
-            "yaxis": {"type": "log", "title" : { "text": "ETH Staked (Ether; Logarithmic axis)" }},
+            "xaxis": {"title" : { "text": "ETH Price ($/Ether)" }, "type": "log",},
+            "yaxis": {"title" : { "text": "ETH Staked (Ether; Logarithmic axis)" }},
             "zaxis": {"title" : { "text": "Yield (%)" }},
         }
     )
