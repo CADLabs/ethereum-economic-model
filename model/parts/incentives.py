@@ -13,40 +13,6 @@ from model.types import Gwei
 import model.parts.spec as spec
 
 
-def policy_attestation_penalties(
-    params, substep, state_history, previous_state
-) -> typing.Dict[str, Gwei]:
-    """Attestation Penalties Policy Function
-    Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#get_flag_index_deltas
-
-    Extract from spec:
-    ```python
-    penalties[index] += Gwei(base_reward * weight // WEIGHT_DENOMINATOR)
-    ```
-    """
-
-    # Parameters
-    TIMELY_SOURCE_WEIGHT = params["TIMELY_SOURCE_WEIGHT"]
-    TIMELY_TARGET_WEIGHT = params["TIMELY_TARGET_WEIGHT"]
-    TIMELY_HEAD_WEIGHT = params["TIMELY_HEAD_WEIGHT"]
-    WEIGHT_DENOMINATOR = params["WEIGHT_DENOMINATOR"]
-
-    # State Variables
-    base_reward = previous_state["base_reward"]
-    number_of_validators_offline = previous_state["number_of_validators_offline"]
-
-    # Calculate validating penalties
-    validating_penalties = (
-        (TIMELY_SOURCE_WEIGHT + TIMELY_TARGET_WEIGHT + TIMELY_HEAD_WEIGHT)
-        / WEIGHT_DENOMINATOR
-        * base_reward
-    )
-    # Aggregation over all offline validators
-    validating_penalties *= number_of_validators_offline
-
-    return {"validating_penalties": validating_penalties}
-
-
 def policy_attestation_rewards(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
@@ -100,10 +66,44 @@ def policy_attestation_rewards(
     }
 
 
-def policy_sync_committee(
+def policy_attestation_penalties(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
-    """Sync Committee Policy Function
+    """Attestation Penalties Policy Function
+    Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#get_flag_index_deltas
+
+    Extract from spec:
+    ```python
+    penalties[index] += Gwei(base_reward * weight // WEIGHT_DENOMINATOR)
+    ```
+    """
+
+    # Parameters
+    TIMELY_SOURCE_WEIGHT = params["TIMELY_SOURCE_WEIGHT"]
+    TIMELY_TARGET_WEIGHT = params["TIMELY_TARGET_WEIGHT"]
+    TIMELY_HEAD_WEIGHT = params["TIMELY_HEAD_WEIGHT"]
+    WEIGHT_DENOMINATOR = params["WEIGHT_DENOMINATOR"]
+
+    # State Variables
+    base_reward = previous_state["base_reward"]
+    number_of_validators_offline = previous_state["number_of_validators_offline"]
+
+    # Calculate validating penalties
+    validating_penalties = (
+        (TIMELY_SOURCE_WEIGHT + TIMELY_TARGET_WEIGHT + TIMELY_HEAD_WEIGHT)
+        / WEIGHT_DENOMINATOR
+        * base_reward
+    )
+    # Aggregation over all offline validators
+    validating_penalties *= number_of_validators_offline
+
+    return {"validating_penalties": validating_penalties}
+
+
+def policy_sync_committee_reward(
+    params, substep, state_history, previous_state
+) -> typing.Dict[str, Gwei]:
+    """Sync Committee Reward Policy Function
     Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#sync-committee-processing
 
     Extract from spec:
@@ -136,10 +136,10 @@ def policy_sync_committee(
     return {"sync_reward": sync_reward}
 
 
-def policy_block_proposal(
+def policy_block_proposal_reward(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
-    """Block Proposal Policy Function
+    """Block Proposal Reward Policy Function
     Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#modified-process_attestation
 
     Extract from spec:
@@ -179,7 +179,6 @@ def policy_block_proposal(
     base_reward = previous_state["base_reward"]
     sync_reward = previous_state["sync_reward"]
     number_of_validators_online = previous_state["number_of_validators_online"]
-    number_of_validators = previous_state["number_of_validators"]
 
     # Calculate block proposer reward
     proposer_reward_numerator = base_reward * (

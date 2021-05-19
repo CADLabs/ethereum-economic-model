@@ -77,9 +77,11 @@ def get_base_reward_per_increment(params: Parameters, state: StateVariables) -> 
 
 
 def get_base_reward(params: Parameters, state: StateVariables) -> Gwei:
+    # Parameters
     MAX_EFFECTIVE_BALANCE = params["MAX_EFFECTIVE_BALANCE"]
     EFFECTIVE_BALANCE_INCREMENT = params["EFFECTIVE_BALANCE_INCREMENT"]
 
+    # State Variables
     average_effective_balance = state["average_effective_balance"]
 
     increments = (

@@ -76,8 +76,8 @@ _state_update_blocks = [
             Sync committee and attestation rewards
         """,
         "policies": {
-            "casper_ffg_vote": incentives.policy_attestation_rewards,
-            "sync_committee": incentives.policy_sync_committee,
+            "attestation": incentives.policy_attestation_rewards,
+            "sync_committee": incentives.policy_sync_committee_reward,
         },
         "variables": {
             "source_reward": update_from_signal("source_reward"),
@@ -91,7 +91,7 @@ _state_update_blocks = [
             Block proposal rewards
         """,
         "policies": {
-            "block_proposal": incentives.policy_block_proposal,
+            "block_proposal": incentives.policy_block_proposal_reward,
         },
         "variables": {
             "block_proposer_reward": update_from_signal("block_proposer_reward"),
@@ -136,21 +136,30 @@ _state_update_blocks = [
     },
     {
         "description": """
-            Online validator reward aggregation, and accounting of Ethereum issuance & inflation 
+            Online validator reward aggregation
         """,
         "policies": {
             "calculate_total_online_validator_rewards": metrics.policy_total_online_validator_rewards,
-            "issuance": ethereum.policy_network_issuance,
         },
         "variables": {
             "total_online_validator_rewards": update_from_signal(
                 "total_online_validator_rewards"
             ),
+        },
+    },
+    {
+        "description": """
+            Accounting of Ethereum issuance & inflation
+        """,
+        "policies": {
+            "issuance": ethereum.policy_network_issuance,
+        },
+        "variables": {
             "eth_supply": ethereum.update_eth_supply,
             "supply_inflation": metrics.update_supply_inflation,
             "network_issuance": update_from_signal("network_issuance"),
             "pow_issuance": update_from_signal("pow_issuance"),
-        },
+        }
     },
     {
         "description": """
