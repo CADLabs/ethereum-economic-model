@@ -4,7 +4,7 @@ from radcad.core import generate_parameter_sweep
 
 import model.simulation_configuration as simulation
 import model.constants as constants
-from model.parameters import parameters, Parameters, validator_types
+from model.parameters import parameters, Parameters, validator_environments
 
 
 def assign_parameters(df: pd.DataFrame, parameters: Parameters, set_params=[]):
@@ -26,14 +26,14 @@ def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameter
     ])
 
     # Dissagregate validator costs
-    df[[validator.type + '_costs' for validator in validator_types]] = df.apply(lambda row: list(row.validator_costs), axis=1, result_type='expand').astype('float64')
-    df[[validator.type + '_hardware_costs' for validator in validator_types]] = df.apply(lambda row: list(row.validator_hardware_costs), axis=1, result_type='expand').astype('float64')
-    df[[validator.type + '_cloud_costs' for validator in validator_types]] = df.apply(lambda row: list(row.validator_cloud_costs), axis=1, result_type='expand').astype('float64')
-    df[[validator.type + '_third_party_costs' for validator in validator_types]] = df.apply(lambda row: list(row.validator_third_party_costs), axis=1, result_type='expand').astype('float64')
+    df[[validator.type + '_costs' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_costs), axis=1, result_type='expand').astype('float64')
+    df[[validator.type + '_hardware_costs' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_hardware_costs), axis=1, result_type='expand').astype('float64')
+    df[[validator.type + '_cloud_costs' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_cloud_costs), axis=1, result_type='expand').astype('float64')
+    df[[validator.type + '_third_party_costs' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_third_party_costs), axis=1, result_type='expand').astype('float64')
 
     # Dissagregate yields
-    df[[validator.type + '_revenue_yields' for validator in validator_types]] = df.apply(lambda row: list(row.validator_revenue_yields), axis=1, result_type='expand').astype('float64')
-    df[[validator.type + '_profit_yields' for validator in validator_types]] = df.apply(lambda row: list(row.validator_profit_yields), axis=1, result_type='expand').astype('float64')
+    df[[validator.type + '_revenue_yields' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_revenue_yields), axis=1, result_type='expand').astype('float64')
+    df[[validator.type + '_profit_yields' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_profit_yields), axis=1, result_type='expand').astype('float64')
 
     # Convert decimals to percentages
     df['supply_inflation_pct'] = df['supply_inflation'] * 100

@@ -56,9 +56,9 @@ Epoch = int
 # Validator types
 ValidatorIndex = int
 
-# Validator type for configuring distribution of validators as parameters
+# Validator environment class used for configuring distribution of validators as parameters
 @dataclass
-class ValidatorType:
+class ValidatorEnvironment:
     # Set the type (e.g. Percentage) and default value (e.g. 0.0) for each field
     type: str = ""
     percentage_distribution: Percentage = 0.0

@@ -27,7 +27,7 @@ from model.types import (
     ETH,
     USD_per_epoch,
     Percentage_per_epoch,
-    ValidatorType,
+    ValidatorEnvironment,
     List,
     Callable,
     Epoch,
@@ -41,40 +41,40 @@ from model.processes import create_stochastic_process_realizations
 stochastic_process_realizations = create_stochastic_process_realizations()
 eth_price_samples = stochastic_process_realizations["eth_price_samples"]
 
-# Configure validator type distribution
+# Configure validator environment distribution
 # From Hoban/Borgers report
-validator_types = [
-    ValidatorType(
+validator_environments = [
+    ValidatorEnvironment(
         type="diy_hardware",
         percentage_distribution=0.37,
         hardware_costs_per_epoch=0.0014,
     ),
-    ValidatorType(
+    ValidatorEnvironment(
         type="diy_cloud",
         percentage_distribution=0.13,
         cloud_costs_per_epoch=0.00027,
     ),
-    ValidatorType(
+    ValidatorEnvironment(
         type="pool_staas",
         percentage_distribution=0.27,
         third_party_costs_per_epoch=0.12,
     ),
-    ValidatorType(
+    ValidatorEnvironment(
         type="pool_hardware",
         percentage_distribution=0.05,
         hardware_costs_per_epoch=0.0007,
     ),
-    ValidatorType(
+    ValidatorEnvironment(
         type="pool_cloud",
         percentage_distribution=0.02,
         cloud_costs_per_epoch=0.00136,
     ),
-    ValidatorType(
+    ValidatorEnvironment(
         type="staas_full",
         percentage_distribution=0.08,
         third_party_costs_per_epoch=0.15,
     ),
-    ValidatorType(
+    ValidatorEnvironment(
         type="staas_self_custodied",
         percentage_distribution=0.08,
         third_party_costs_per_epoch=0.12,
@@ -83,7 +83,7 @@ validator_types = [
 
 # Normalise percentage distribution to a total of 100%
 total_percentage_distribution = sum(
-    [validator.percentage_distribution for validator in validator_types]
+    [validator.percentage_distribution for validator in validator_environments]
 )
 
 if total_percentage_distribution < 1:
@@ -92,31 +92,31 @@ if total_percentage_distribution < 1:
     Parameter validator.percentage_distribution normalized due to sum not being equal to 100%
     """
     )
-    for validator in validator_types:
+    for validator in validator_environments:
         validator.percentage_distribution /= total_percentage_distribution
 
 # Using list comprehension, map the validator types to each parameter
 validator_percentage_distribution = [
     np.array(
-        [validator.percentage_distribution for validator in validator_types],
+        [validator.percentage_distribution for validator in validator_environments],
         dtype=Percentage,
     )
 ]
 validator_hardware_costs_per_epoch = [
     np.array(
-        [validator.hardware_costs_per_epoch for validator in validator_types],
+        [validator.hardware_costs_per_epoch for validator in validator_environments],
         dtype=USD_per_epoch,
     )
 ]
 validator_cloud_costs_per_epoch = [
     np.array(
-        [validator.cloud_costs_per_epoch for validator in validator_types],
+        [validator.cloud_costs_per_epoch for validator in validator_environments],
         dtype=USD_per_epoch,
     )
 ]
 validator_third_party_costs_per_epoch = [
     np.array(
-        [validator.third_party_costs_per_epoch for validator in validator_types],
+        [validator.third_party_costs_per_epoch for validator in validator_environments],
         dtype=Percentage_per_epoch,
     )
 ]
