@@ -10,11 +10,15 @@
 
 - part: Analysis Notebooks
   chapters:
+  - file: notebooks/README
   - file: notebooks/validation
   - file: notebooks/validator_rewards
   - file: notebooks/validator_environment_yields
+  - file: notebooks/validator_yield_surface
   - file: notebooks/revenue_yields_vs_network_inflation
   - file: notebooks/eip1559
+  - file: notebooks/state_space
+  - file: notebooks/monte_carlo
 
 - part: Scratchpad
   chapters:

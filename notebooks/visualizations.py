@@ -11,7 +11,7 @@ from pygments.formatters import HtmlFormatter
 from IPython.core.display import HTML
 
 import model.constants as constants
-from model.parameters import parameters, validator_types
+from model.parameters import parameters, validator_environments
 
 
 def inspect_module(module):
@@ -37,7 +37,7 @@ def plot_validating_rewards(df):
 
 
 def plot_validator_environment_yields(df):
-    validator_profit_yields = [validator.type + '_profit_yields' for validator in validator_types]
+    validator_profit_yields = [validator.type + '_profit_yields' for validator in validator_environments]
     df[validator_profit_yields] = df[validator_profit_yields] * 100
 
     return df.plot(

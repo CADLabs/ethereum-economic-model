@@ -35,30 +35,46 @@ Policy Functions and State Update Functions shared between the Eth1 and Eth2 sys
 &#34;&#34;&#34;
 
 import typing
+import math
+import logging
 
 import model.constants as constants
-from model.types import ETH, USD_per_ETH, Gwei
+from model.types import ETH, USD_per_ETH, Gwei, Phase
 
 
 def policy_network_issuance(
     params, substep, state_history, previous_state
 ) -&gt; typing.Dict[str, ETH]:
+    # Parameters
+    dt = params[&#34;dt&#34;]
+    daily_pow_issuance = params[&#34;daily_pow_issuance&#34;]
+
     # State Variables
+    phase = previous_state[&#34;phase&#34;]
     amount_slashed = previous_state[&#34;amount_slashed&#34;]
     total_basefee = previous_state[&#34;total_basefee&#34;]
     total_tips_to_validators = previous_state[&#34;total_tips_to_validators&#34;]
     total_online_validator_rewards = previous_state[&#34;total_online_validator_rewards&#34;]
 
     # Calculate network issuance in ETH
-    # total_online_validator_rewards includes tips to validators, which is not issuance, and is removed
     network_issuance = (
+        # Remove tips to validators which is not issuance (ETH transferred rather than minted)
         (total_online_validator_rewards - total_tips_to_validators)
         - amount_slashed
         - total_basefee
     ) / constants.gwei
 
+    # Calculate Proof of Work issuance
+    pow_issuance = (
+        daily_pow_issuance / constants.epochs_per_day
+        if Phase(phase) in [Phase.PHASE_0, Phase.POST_EIP1559]
+        else 0
+    )
+    network_issuance += pow_issuance * dt
+
     return {
         &#34;network_issuance&#34;: network_issuance,
+        &#34;pow_issuance&#34;: pow_issuance,
     }
 
 
@@ -74,23 +90,60 @@ def policy_eip1559_transaction_pricing(
     * https://eips.ethereum.org/EIPS/eip-1559
     &#34;&#34;&#34;
 
+    phase = Phase(previous_state[&#34;phase&#34;])
+    if not phase in [Phase.POST_EIP1559, Phase.POST_MERGE]:
+        return {
+            &#34;basefee&#34;: 0,
+            &#34;total_basefee&#34;: 0,
+            &#34;total_tips_to_validators&#34;: 0,
+        }
+
     # Parameters
     dt = params[&#34;dt&#34;]
-    gas_target = params[&#34;gas_target&#34;] # Gas
+    gas_target = params[&#34;gas_target&#34;]  # Gas
     ELASTICITY_MULTIPLIER = params[&#34;ELASTICITY_MULTIPLIER&#34;]
-    eip1559_basefee = params[&#34;eip1559_basefee&#34;] # Gwei per Gas
-    eip1559_avg_tip_amount = params[&#34;eip1559_avg_tip_amount&#34;] # Gwei per Gas
-    
+    BASE_FEE_MAX_CHANGE_DENOMINATOR = params[&#34;BASE_FEE_MAX_CHANGE_DENOMINATOR&#34;]
+    eip1559_basefee_process = params[&#34;eip1559_basefee_process&#34;]
+    eip1559_tip_process = params[&#34;eip1559_tip_process&#34;]
+    daily_transactions_process = params[&#34;daily_transactions_process&#34;]
+    transaction_average_gas = params[&#34;transaction_average_gas&#34;]
+
+    # State Variables
+    run = previous_state[&#34;run&#34;]
+    timestep = previous_state[&#34;timestep&#34;]
+    previous_basefee = previous_state[&#34;basefee&#34;]
+
+    # Get samples for current run and timestep from basefee, tip, and transaction processes
+    basefee = eip1559_basefee_process(run, timestep * dt)  # Gwei per Gas
+
+    # Ensure basefee changes by no more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %
+    # assert (
+    #     abs(basefee - previous_basefee) / previous_basefee
+    #     &lt;= constants.slots_per_epoch / BASE_FEE_MAX_CHANGE_DENOMINATOR
+    #     if timestep &gt; 1
+    #     else True
+    # ), &#34;basefee changed by more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %&#34;
+
+    avg_tip_amount = eip1559_tip_process(run, timestep * dt)  # Gwei per Gas
+    transactions_per_day = daily_transactions_process(
+        run, timestep * dt
+    )  # Transactions per day
+    transactions_per_epoch = (
+        transactions_per_day / constants.epochs_per_day
+    )  # Transactions per epoch
+
     # Calculate total basefee and tips to validators
-    # Assume on average the gas used per block is equal to the gas target
-    gas_used = gas_target
-    total_basefee = gas_used * eip1559_basefee # Gwei
-    total_tips_to_validators = gas_used * eip1559_avg_tip_amount # Gwei
+    gas_used = transactions_per_epoch * transaction_average_gas  # Gas
+    total_basefee = gas_used * basefee  # Gwei
+    total_tips_to_validators = gas_used * avg_tip_amount  # Gwei
 
     # Check if the block used too much gas
-    assert gas_used &lt;= gas_target * ELASTICITY_MULTIPLIER, &#39;invalid block: too much gas used&#39;
+    assert (
+        gas_used &lt;= gas_target * ELASTICITY_MULTIPLIER * constants.slots_per_epoch
+    ), &#34;invalid block: too much gas used&#34;
 
     return {
+        &#34;basefee&#34;: basefee,
         &#34;total_basefee&#34;: total_basefee * dt,
         &#34;total_tips_to_validators&#34;: total_tips_to_validators * dt,
     }
@@ -158,23 +211,60 @@ that is burned and dynamically expands/contracts block sizes to deal with transi
     * https://eips.ethereum.org/EIPS/eip-1559
     &#34;&#34;&#34;
 
+    phase = Phase(previous_state[&#34;phase&#34;])
+    if not phase in [Phase.POST_EIP1559, Phase.POST_MERGE]:
+        return {
+            &#34;basefee&#34;: 0,
+            &#34;total_basefee&#34;: 0,
+            &#34;total_tips_to_validators&#34;: 0,
+        }
+
     # Parameters
     dt = params[&#34;dt&#34;]
-    gas_target = params[&#34;gas_target&#34;] # Gas
+    gas_target = params[&#34;gas_target&#34;]  # Gas
     ELASTICITY_MULTIPLIER = params[&#34;ELASTICITY_MULTIPLIER&#34;]
-    eip1559_basefee = params[&#34;eip1559_basefee&#34;] # Gwei per Gas
-    eip1559_avg_tip_amount = params[&#34;eip1559_avg_tip_amount&#34;] # Gwei per Gas
-    
+    BASE_FEE_MAX_CHANGE_DENOMINATOR = params[&#34;BASE_FEE_MAX_CHANGE_DENOMINATOR&#34;]
+    eip1559_basefee_process = params[&#34;eip1559_basefee_process&#34;]
+    eip1559_tip_process = params[&#34;eip1559_tip_process&#34;]
+    daily_transactions_process = params[&#34;daily_transactions_process&#34;]
+    transaction_average_gas = params[&#34;transaction_average_gas&#34;]
+
+    # State Variables
+    run = previous_state[&#34;run&#34;]
+    timestep = previous_state[&#34;timestep&#34;]
+    previous_basefee = previous_state[&#34;basefee&#34;]
+
+    # Get samples for current run and timestep from basefee, tip, and transaction processes
+    basefee = eip1559_basefee_process(run, timestep * dt)  # Gwei per Gas
+
+    # Ensure basefee changes by no more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %
+    # assert (
+    #     abs(basefee - previous_basefee) / previous_basefee
+    #     &lt;= constants.slots_per_epoch / BASE_FEE_MAX_CHANGE_DENOMINATOR
+    #     if timestep &gt; 1
+    #     else True
+    # ), &#34;basefee changed by more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %&#34;
+
+    avg_tip_amount = eip1559_tip_process(run, timestep * dt)  # Gwei per Gas
+    transactions_per_day = daily_transactions_process(
+        run, timestep * dt
+    )  # Transactions per day
+    transactions_per_epoch = (
+        transactions_per_day / constants.epochs_per_day
+    )  # Transactions per epoch
+
     # Calculate total basefee and tips to validators
-    # Assume on average the gas used per block is equal to the gas target
-    gas_used = gas_target
-    total_basefee = gas_used * eip1559_basefee # Gwei
-    total_tips_to_validators = gas_used * eip1559_avg_tip_amount # Gwei
+    gas_used = transactions_per_epoch * transaction_average_gas  # Gas
+    total_basefee = gas_used * basefee  # Gwei
+    total_tips_to_validators = gas_used * avg_tip_amount  # Gwei
 
     # Check if the block used too much gas
-    assert gas_used &lt;= gas_target * ELASTICITY_MULTIPLIER, &#39;invalid block: too much gas used&#39;
+    assert (
+        gas_used &lt;= gas_target * ELASTICITY_MULTIPLIER * constants.slots_per_epoch
+    ), &#34;invalid block: too much gas used&#34;
 
     return {
+        &#34;basefee&#34;: basefee,
         &#34;total_basefee&#34;: total_basefee * dt,
         &#34;total_tips_to_validators&#34;: total_tips_to_validators * dt,
     }</code></pre>
@@ -192,22 +282,36 @@ that is burned and dynamically expands/contracts block sizes to deal with transi
 <pre><code class="python">def policy_network_issuance(
     params, substep, state_history, previous_state
 ) -&gt; typing.Dict[str, ETH]:
+    # Parameters
+    dt = params[&#34;dt&#34;]
+    daily_pow_issuance = params[&#34;daily_pow_issuance&#34;]
+
     # State Variables
+    phase = previous_state[&#34;phase&#34;]
     amount_slashed = previous_state[&#34;amount_slashed&#34;]
     total_basefee = previous_state[&#34;total_basefee&#34;]
     total_tips_to_validators = previous_state[&#34;total_tips_to_validators&#34;]
     total_online_validator_rewards = previous_state[&#34;total_online_validator_rewards&#34;]
 
     # Calculate network issuance in ETH
-    # total_online_validator_rewards includes tips to validators, which is not issuance, and is removed
     network_issuance = (
+        # Remove tips to validators which is not issuance (ETH transferred rather than minted)
         (total_online_validator_rewards - total_tips_to_validators)
         - amount_slashed
         - total_basefee
     ) / constants.gwei
 
+    # Calculate Proof of Work issuance
+    pow_issuance = (
+        daily_pow_issuance / constants.epochs_per_day
+        if Phase(phase) in [Phase.PHASE_0, Phase.POST_EIP1559]
+        else 0
+    )
+    network_issuance += pow_issuance * dt
+
     return {
         &#34;network_issuance&#34;: network_issuance,
+        &#34;pow_issuance&#34;: pow_issuance,
     }</code></pre>
 </details>
 </dd>

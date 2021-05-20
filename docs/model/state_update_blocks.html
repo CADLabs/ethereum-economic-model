@@ -26,13 +26,25 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">import model.parts.ethereum as ethereum
+<pre><code class="python">import model.parts.phases as phases
+import model.parts.ethereum as ethereum
 import model.parts.validators as validators
 import model.parts.incentives as incentives
 import model.parts.metrics as metrics
 from model.parameters import parameters
 from model.utils import update_from_signal
 
+
+state_update_block_phases = {
+    &#34;description&#34;: &#34;&#34;&#34;
+    Transition between phases of network upgrade process
+    &#34;&#34;&#34;,
+    &#34;policies&#34;: {&#34;update_phases&#34;: phases.policy_phases},
+    &#34;variables&#34;: {
+        &#34;phase&#34;: update_from_signal(&#34;phase&#34;),
+        &#34;timestamp&#34;: update_from_signal(&#34;timestamp&#34;),
+    },
+}
 
 state_update_block_staking = {
     &#34;description&#34;: &#34;&#34;&#34;
@@ -92,8 +104,8 @@ _state_update_blocks = [
             Sync committee and attestation rewards
         &#34;&#34;&#34;,
         &#34;policies&#34;: {
-            &#34;casper_ffg_vote&#34;: incentives.policy_attestation_rewards,
-            &#34;sync_committee&#34;: incentives.policy_sync_committee,
+            &#34;attestation&#34;: incentives.policy_attestation_rewards,
+            &#34;sync_committee&#34;: incentives.policy_sync_committee_reward,
         },
         &#34;variables&#34;: {
             &#34;source_reward&#34;: update_from_signal(&#34;source_reward&#34;),
@@ -107,7 +119,7 @@ _state_update_blocks = [
             Block proposal rewards
         &#34;&#34;&#34;,
         &#34;policies&#34;: {
-            &#34;block_proposal&#34;: incentives.policy_block_proposal,
+            &#34;block_proposal&#34;: incentives.policy_block_proposal_reward,
         },
         &#34;variables&#34;: {
             &#34;block_proposer_reward&#34;: update_from_signal(&#34;block_proposer_reward&#34;),
@@ -145,25 +157,37 @@ _state_update_blocks = [
             &#34;eip1559&#34;: ethereum.policy_eip1559_transaction_pricing,
         },
         &#34;variables&#34;: {
+            &#34;basefee&#34;: update_from_signal(&#34;basefee&#34;),
             &#34;total_basefee&#34;: update_from_signal(&#34;total_basefee&#34;),
             &#34;total_tips_to_validators&#34;: update_from_signal(&#34;total_tips_to_validators&#34;),
         },
     },
     {
         &#34;description&#34;: &#34;&#34;&#34;
-            Online validator reward aggregation, and accounting of Ethereum issuance &amp; inflation 
+            Online validator reward aggregation
         &#34;&#34;&#34;,
         &#34;policies&#34;: {
             &#34;calculate_total_online_validator_rewards&#34;: metrics.policy_total_online_validator_rewards,
-            &#34;issuance&#34;: ethereum.policy_network_issuance,
         },
         &#34;variables&#34;: {
             &#34;total_online_validator_rewards&#34;: update_from_signal(
                 &#34;total_online_validator_rewards&#34;
             ),
+        },
+    },
+    {
+        &#34;description&#34;: &#34;&#34;&#34;
+            Accounting of Ethereum issuance &amp; inflation
+        &#34;&#34;&#34;,
+        &#34;policies&#34;: {
+            &#34;issuance&#34;: ethereum.policy_network_issuance,
+        },
+        &#34;variables&#34;: {
             &#34;eth_supply&#34;: ethereum.update_eth_supply,
             &#34;supply_inflation&#34;: metrics.update_supply_inflation,
-        },
+            &#34;network_issuance&#34;: update_from_signal(&#34;network_issuance&#34;),
+            &#34;pow_issuance&#34;: update_from_signal(&#34;pow_issuance&#34;),
+        }
     },
     {
         &#34;description&#34;: &#34;&#34;&#34;
@@ -210,10 +234,19 @@ _state_update_blocks = [
 
 # Conditionally update the order of the State Update Blocks
 _state_update_blocks = (
-    [state_update_block_staking, state_update_block_validators] + _state_update_blocks
+    [
+        state_update_block_phases,
+        state_update_block_staking,
+        state_update_block_validators,
+    ]
+    + _state_update_blocks
     if parameters[&#34;eth_staked_process&#34;][0](0, 0) is not None
     # If driving with validator process, switch first two blocks
-    else [state_update_block_validators, state_update_block_staking]
+    else [
+        state_update_block_phases,
+        state_update_block_validators,
+        state_update_block_staking,
+    ]
     + _state_update_blocks
 )
 
@@ -244,7 +277,7 @@ post_processing_blocks = [
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="model" href="index.html">model</a></code></li>
+<li><code><a title="model" href="model/index.html">model</a></code></li>
 </ul>
 </li>
 </ul>

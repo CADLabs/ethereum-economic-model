@@ -1,7 +1,7 @@
 title: "Eth2 MasterClass Model Documentation"
 logo: media/cadcad-edu-logo.png
 execute:
-  execute_notebooks: "force"
+  execute_notebooks: "off"
 sphinx:
   config:
     html_js_files:
