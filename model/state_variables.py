@@ -126,9 +126,13 @@ class StateVariables:
         (number_of_validator_environments, 1), dtype=int
     )
     """The ETH staked per validator environment"""
-    validator_revenue: np.ndarray = np.zeros((number_of_validator_environments, 1), dtype=int)
+    validator_revenue: np.ndarray = np.zeros(
+        (number_of_validator_environments, 1), dtype=int
+    )
     """The total revenue (income received) for performing PoS duties per validator environment"""
-    validator_profit: np.ndarray = np.zeros((number_of_validator_environments, 1), dtype=int)
+    validator_profit: np.ndarray = np.zeros(
+        (number_of_validator_environments, 1), dtype=int
+    )
     """The total profit (income received - costs) per validator environment"""
     validator_revenue_yields: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=int
@@ -157,7 +161,9 @@ class StateVariables:
         (number_of_validator_environments, 1), dtype=USD
     )
     """The total validator third-party fee costs validator environment"""
-    validator_costs: np.ndarray = np.zeros((number_of_validator_environments, 1), dtype=USD)
+    validator_costs: np.ndarray = np.zeros(
+        (number_of_validator_environments, 1), dtype=USD
+    )
     """The total validator costs validator environment"""
 
     total_online_validator_rewards: Gwei = 0

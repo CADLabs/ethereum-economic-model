@@ -159,7 +159,7 @@ _state_update_blocks = [
             "supply_inflation": metrics.update_supply_inflation,
             "network_issuance": update_from_signal("network_issuance"),
             "pow_issuance": update_from_signal("pow_issuance"),
-        }
+        },
     },
     {
         "description": """
