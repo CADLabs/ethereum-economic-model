@@ -73,6 +73,11 @@ The [experiments/](experiments/) directory contains different experiment configu
 
 See the [experiments/README.ipynb](experiments/README.ipynb) notebook for a walk-through of how to configure and execute an experiment.
 
+### Validation
+Various experiments used to validate the results of our model against the Hoban/Borgers Report model as a sanity check; due to Altair update, they will not exactly match.
+
+* Experiments: [experiments/validation/*/experiment.py](experiments/validation/)
+
 ### State Space
 An experiment that simulates the State Space of the model (e.g. Validating Rewards over time), with phases (Phase 0, EIP1559 enabled, The Merge) representing the upgrade process of the Eth2 system.
 
@@ -82,14 +87,6 @@ An experiment that simulates the State Space of the model (e.g. Validating Rewar
 ![Validating rewards](outputs/validating_rewards.png)
 
 ![ETH Supply](outputs/eth_supply_phases.png)
-
-### Revenue Yields vs Network Inflation
-Analysing the revenue yields of validators and network inflation for a static ETH price over discrete ETH staked values.
-
-* Experiment: [experiments/revenue_yields_vs_network_inflation/experiment.py](experiments/revenue_yields_vs_network_inflation/experiment.py)
-* Notebook: [notebooks/revenue_yields_vs_network_inflation.ipynb](notebooks/revenue_yields_vs_network_inflation.ipynb)
-
-![Revenue Yields vs Network Inflation](outputs/revenue_yields_vs_network_inflation.png)
 
 ### Validator Environment Yields
 Analysing different validator environment yields for static ETH staked over discrete ETH price values.
@@ -107,16 +104,19 @@ Generate and analyse 2D contours and 3D surfaces for validator yields vs. differ
 
 ![Validator Yield Contour](outputs/validator_yield_contour.png)
 
+### Revenue Yields vs Network Inflation
+Analysing the revenue yields of validators and network inflation for a static ETH price over discrete ETH staked values.
+
+* Experiment: [experiments/revenue_yields_vs_network_inflation/experiment.py](experiments/revenue_yields_vs_network_inflation/experiment.py)
+* Notebook: [notebooks/revenue_yields_vs_network_inflation.ipynb](notebooks/revenue_yields_vs_network_inflation.ipynb)
+
+![Revenue Yields vs Network Inflation](outputs/revenue_yields_vs_network_inflation.png)
+
 ### EIP1559
 Analysing the effect of enabling EIP1559 under different conditions.
 
 * Experiment: [experiments/eip1559/experiment.py](experiments/eip1559/experiment.py)
 * Notebook: [notebooks/eip1559.ipynb](notebooks/eip1559.ipynb)
-
-### Validation
-Various experiments used to validate the results of our model against the Hoban/Borgers Report model as a sanity check; due to Altair update, they will not exactly match.
-
-* Experiments: [experiments/validation/*/experiment.py](experiments/validation/)
 
 ### Monte Carlo (Work in Progress)
 Applying stochastic processes to the ETH price, validator staking, and validator uptime processes, and executing 5 Monte Carlo runs.
