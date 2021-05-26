@@ -1,14 +1,14 @@
 import numpy as np
 
 from model.simulation_configuration import TIMESTEPS, DELTA_TIME
-from model.state_variables import eth_staked
+from model.state_variables import eth_staked, eth_supply
 from experiments.default import experiment
 from model.types import Phase
 
 
 eth_staked_samples = np.linspace(
     eth_staked,  # From https://beaconscan.com/ as of 20/04/21
-    33_600_000,  # From Hoban/Borgers Economic Report
+    eth_supply * 0.3,  # 30% of current total ETH supply
     TIMESTEPS * DELTA_TIME + 1
 )
 

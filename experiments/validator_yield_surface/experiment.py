@@ -1,14 +1,16 @@
 import numpy as np
 
-from model.state_variables import eth_staked
+from model.state_variables import eth_staked, eth_supply
 from experiments.default import experiment, TIMESTEPS, DELTA_TIME
 from experiments.utils import generate_cartesion_product
 from model.types import Phase
 
 
 sweep = generate_cartesion_product({
+    # ETH price range from 100 $/ETH to 3000 $/ETH
     "eth_price_samples": np.linspace(start=100, stop=3000, num=20),
-    "eth_staked_samples": np.linspace(start=eth_staked, stop=min(eth_staked * 2, 33_600_000), num=20),
+    # ETH staked range from current ETH staked to minimum of 2 x ETH staked and 30% of total ETH supply
+    "eth_staked_samples": np.linspace(start=eth_staked, stop=min(eth_staked * 2, eth_supply * 0.3), num=20),
 })
 
 parameter_overrides = {
