@@ -45,6 +45,15 @@ eth_price_samples = stochastic_process_realizations["eth_price_samples"]
 # From Hoban/Borgers report
 validator_environments = [
     ValidatorEnvironment(
+        # Configure a custom environment
+        # Used for dissagregation of single validator performance
+        type="custom",
+        percentage_distribution=0.01,  # Set to 1% by default
+        hardware_costs_per_epoch=0.0014,
+        cloud_costs_per_epoch=0,
+        third_party_costs_per_epoch=0,
+    ),
+    ValidatorEnvironment(
         type="diy_hardware",
         percentage_distribution=0.37,
         hardware_costs_per_epoch=0.0014,
@@ -289,6 +298,10 @@ class Parameters:
     """
     Used to set the maximum rate at which the EIP1559 basefee can change per block, approx. 12.5%.
     """
+    ELASTICITY_MULTIPLIER: List[int] = default([2])
+    """
+    Used to calculate gas limit from EIP1559 gas target
+    """
 
     # Validator parameters
     validator_uptime_process: List[Percentage] = default([lambda _run, _timestep: 0.98])
@@ -341,11 +354,6 @@ class Parameters:
     """
 
     # EIP1559 transaction pricing parameters
-    ELASTICITY_MULTIPLIER: List[int] = default([2])
-    """
-    Used to calculate gas limit from EIP1559 gas target
-    """
-
     eip1559_basefee_process: List[Callable[[Run, Timestep], Gwei_per_Gas]] = default(
         [lambda _run, _timestep: 70]  # Gwei per gas
     )
