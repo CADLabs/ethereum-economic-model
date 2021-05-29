@@ -3,12 +3,11 @@ import math
 from copy import deepcopy
 import pandas as pd
 
-import experiments.default as default
-import experiments.eip1559.experiment as eip1559
+import experiments.base as base
 
 
 def test_dt():
-    simulation: Simulation = deepcopy(default.experiment.simulations[0])
+    simulation: Simulation = deepcopy(base.experiment.simulations[0])
 
     simulation.timesteps = 1
     simulation.model.params.update({"dt": [1000]})
@@ -46,7 +45,7 @@ def check_validating_rewards(params, substep, state_history, previous_state):
 
 
 def test_validating_rewards():
-    simulation: Simulation = deepcopy(default.experiment.simulations[0])
+    simulation: Simulation = deepcopy(base.experiment.simulations[0])
     simulation.timesteps = 10
 
     simulation.model.params.update({
@@ -64,7 +63,7 @@ def test_validating_rewards():
 
 
 def test_slashing():
-    simulation: Simulation = deepcopy(default.experiment.simulations[0])
+    simulation: Simulation = deepcopy(base.experiment.simulations[0])
     simulation.timesteps = 10
 
     simulation.model.params.update({
@@ -87,8 +86,25 @@ def test_slashing():
 
 
 def test_eip1559_experiment():
-    simulation: Simulation = deepcopy(eip1559.experiment.simulations[0])
+    simulation: Simulation = deepcopy(base.experiment.simulations[0])
     simulation.timesteps = 10
+
+    parameter_overrides = {
+        # Sweep of EIP1559 disabled and enabled
+        "eip1559_basefee_process": [
+            lambda _run, _timestep: 0,
+            lambda _run, _timestep: 100,
+            lambda _run, _timestep: 70
+        ],  # Gwei per gas
+        "eip1559_tip_process": [
+            lambda _run, _timestep: 0,
+            lambda _run, _timestep: 1,
+            lambda _run, _timestep: 30
+        ],  # Gwei per gas
+    }
+
+    # Override default parameters
+    simulation.model.params.update(parameter_overrides)
 
     results = simulation.run()
     df = pd.DataFrame(results)

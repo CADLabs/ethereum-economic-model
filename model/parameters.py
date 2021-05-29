@@ -42,7 +42,6 @@ stochastic_process_realizations = create_stochastic_process_realizations()
 eth_price_samples = stochastic_process_realizations["eth_price_samples"]
 
 # Configure validator environment distribution
-# From Hoban/Borgers report
 validator_environments = [
     ValidatorEnvironment(
         # Configure a custom environment
@@ -89,6 +88,16 @@ validator_environments = [
         third_party_costs_per_epoch=0.12,
     ),
 ]
+"""Validator environment configuration
+
+From the Hoban/Borgers report (Ethereum 2.0 Economic Review):
+> assume validators will consider different validator models according to their preferences, requirements, and the scale of their stake
+> The breakdown of validator environments reflects the results of user surveys and stakeholder interviews
+
+Cost analysis:
+> See "Ethereum 2.0 Ecosystem Staking Report" by ConsenSys Insights: https://cdn2.hubspot.net/hubfs/4795067/Codefi/Ethereum%202.0%20Staking%20Ecosystem%20Report.pdf?__hstc=148571112.51d5567256d6f4167c1422d5c083e93e.1574348924308.1588770700176.1588788083651.18&__hssc=148571112.1.1588788083651
+> See "Ethereum Lighthouse: Chasing Serenity" survey report by Empire Ventures: https://medium.com/empireventures/eth2uxreport-858c73ca1f53
+"""
 
 # Normalise percentage distribution to a total of 100%
 total_percentage_distribution = sum(
@@ -304,11 +313,13 @@ class Parameters:
     """
 
     # Validator parameters
-    validator_uptime_process: List[Percentage] = default([lambda _run, _timestep: 0.98])
+    validator_uptime_process: List[Percentage] = default(
+        [lambda _run, _timestep: max(0.98, 0.666)]
+    )
     """
     The combination of validator internet, power, and technical uptime, as a percentage.
 
-    A vector with a value for each validator environment.
+    Minimum uptime is inactivity leak threshold = 0.666, as this model doesn't model the inactivity leak process.
     """
     validator_percentage_distribution: List[np.ndarray] = default(
         validator_percentage_distribution

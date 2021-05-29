@@ -135,7 +135,7 @@ See https://docs.google.com/spreadsheets/d/1FslqTnECKvi7_l4x6lbyRhNtzW9f6CVEzwDf
 
 ### Experiment Execution
 
-The default experiment is an experiment that uses the default cadCAD System Parameters, Initial State, and State Update Blocks defined in the [models/](models/) directory. To run the default experiment from the terminal, execute the `experiments.run` module:
+The base experiment is an experiment that uses the default cadCAD System Parameters, Initial State, and State Update Blocks defined in the [models/](models/) directory. To run the base experiment from the terminal, execute the `experiments.run` module:
 ```bash
 python3 -m experiments.run
 ```
@@ -146,7 +146,7 @@ Alternatively, open and run one of the analysis Jupyter notebooks in Jupyter Lab
 
 1. Create a new directory with the name of the experiment in the [experiments/](experiments/) directory
 2. Copy the template experiment from [experiments/template.py](experiments/template.py) into the directory
-3. Customize the default experiment using the template
+3. Customize the base experiment using the template
 4. Create a new Jupyter notebook using the [notebooks/template.ipynb](notebooks/template.ipynb) experiment notebook template
 5. Execute your experiment, post-process and analyze the results, and create Plotly charts!
 
@@ -225,6 +225,7 @@ The following is a non-exhaustive list of possible model extensions and future f
 * Implement a dynamic EIP1559 basefee with a feedback loop based on blockspace demand / network congestion
 * Backtest the model against historical data such as the ETH price, ETH staked to determine expected historical yields
 * Extend the model to cover future Eth2 phases after merge, such as sharding
+* Apply Hoban/Borgers security (cost of attack) and required rate of return (RSAVY) analysis to simulation results
 * ...
 
 ## Change Log
@@ -234,3 +235,5 @@ See [CHANGELOG.md](CHANGELOG.md) for notable changes and versions.
 ## Contributors
 
 See [CONTRIBUTORS.md](CONTRIBUTORS.md) for contributions to this project repo.
+
+## Acknowledgements

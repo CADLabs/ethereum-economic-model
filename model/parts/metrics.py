@@ -139,6 +139,9 @@ def policy_total_online_validator_rewards(
     validating_rewards = previous_state["validating_rewards"]
     whistleblower_rewards = previous_state["whistleblower_rewards"]
     validating_penalties = previous_state["validating_penalties"]
+
+    # TODO check Phase past merge
+    # TODO add tips to miners vs. tips to validators
     total_tips_to_validators = previous_state["total_tips_to_validators"]
 
     # Calculate total rewards for online validators

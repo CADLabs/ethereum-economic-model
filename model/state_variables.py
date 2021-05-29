@@ -118,8 +118,10 @@ class StateVariables:
     """The basefee burned, in Gwei per gas, for each transaction, dynamically updated for each block"""
     total_basefee: Gwei = 0
     """The total basefee burned"""
+    total_tips_to_miners: Gwei = 0
+    """"The total tips to miners pre-merge for transactions included in blockspace"""
     total_tips_to_validators: Gwei = 0
-    """"The total tips to validators for transactions included in blockspace"""
+    """"The total tips to validators post-merge for transactions included in blockspace"""
 
     # System metric state variables
     validator_eth_staked: np.ndarray = np.zeros(

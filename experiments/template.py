@@ -1,8 +1,8 @@
-"""Experiment template
-A template to override and customize the default experiment. 
+"""Experiment template example
+An example of overriding and customizing the base experiment to create a new template.
 """
 
-from experiments.default import experiment
+from experiments.base import experiment
 
 
 parameter_overrides = {
@@ -13,7 +13,7 @@ state_variable_overrides = {
     "eth_price": [0],
 }
 
-# Override default experiment System Parameters
+# Override base experiment System Parameters
 experiment.simulations[0].model.params.update(parameter_overrides)
-# Override default experiment Initial State
+# Override base experiment Initial State
 experiment.simulations[0].model.initial_state.update(state_variable_overrides)
