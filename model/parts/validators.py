@@ -6,14 +6,18 @@
 * Calculation of the validator average effective balance
 """
 
+import typing
 import numpy as np
 from pytest import approx
 
 import model.constants as constants
 import model.parts.spec as spec
+from model.types import ETH, Gwei
 
 
-def policy_staking(params, substep, state_history, previous_state):
+def policy_staking(
+    params, substep, state_history, previous_state
+) -> typing.Tuple[str, ETH]:
     """Staking Policy
     A policy used when driving the model with the `eth_staked_process`,
     for generating phase space analyses, e.g. simulating a set of discrete `eth_staked` values.
@@ -106,7 +110,9 @@ def policy_validators(params, substep, state_history, previous_state):
     }
 
 
-def policy_average_effective_balance(params, substep, state_history, previous_state):
+def policy_average_effective_balance(
+    params, substep, state_history, previous_state
+) -> typing.Tuple[str, Gwei]:
     # State Variables
     number_of_validators = previous_state["number_of_validators"]
 

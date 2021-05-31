@@ -157,7 +157,7 @@ def policy_total_online_validator_rewards(
 
 def update_supply_inflation(
     params, substep, state_history, previous_state, policy_input
-) -> (str, Percentage):
+) -> typing.Tuple[str, Percentage]:
     # Policy Inputs
     network_issuance = policy_input["network_issuance"]
 
