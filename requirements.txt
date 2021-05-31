@@ -1,4 +1,4 @@
-radcad==0.6.3  # A cadCAD reference implementation
+radcad==0.6.4  # A cadCAD reference implementation
 pytest==6.2.2
 ipykernel==5.5.3
 matplotlib==3.3.4
