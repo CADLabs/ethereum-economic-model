@@ -39,6 +39,8 @@ def create_eth_price_process(
     minimum_eth_price=1500,
 ):
     &#34;&#34;&#34;Configure environmental ETH price process
+    &gt; A Brownian excursion is a Brownian bridge from (0, 0) to (t, 0) which is conditioned to be nonnegative on the interval [0, t].
+
     See https://stochastic.readthedocs.io/en/latest/continuous.html
     &#34;&#34;&#34;
     process = processes.continuous.BrownianExcursion(t=(timesteps * dt), rng=rng)
@@ -57,6 +59,11 @@ def create_validator_process(
     rng=np.random.default_rng(1),
     validator_adoption_rate=4,
 ):
+    &#34;&#34;&#34;Configure environmental validator staking process
+    &gt; A Poisson process with rate :math:\lambda is a count of occurrences of i.i.d. exponential random variables with mean :math:1/\lambda. This class generates samples of times for which cumulative exponential random variables occur.
+
+    See https://stochastic.readthedocs.io/en/latest/continuous.html
+    &#34;&#34;&#34;
     process = processes.continuous.PoissonProcess(rate=1 / 3, rng=rng)
     samples = process.sample(timesteps * dt + 1)
     samples = np.diff(samples)
@@ -69,6 +76,10 @@ def create_stochastic_process_realizations(
     dt=simulation.DELTA_TIME,
     runs=simulation.MONTE_CARLO_RUNS,
 ):
+    &#34;&#34;&#34;Create stochastic process realizations
+    Using the stochastic processes defined in `processes` module, create random number generator (RNG) seeds,
+    and use RNG to pre-generate samples for number of simulation timesteps.
+    &#34;&#34;&#34;
     # Create Random Number Generator (RNG) with a seed for range of runs
     rngs = [np.random.default_rng(seed) for seed in range(runs)]
 
@@ -100,8 +111,11 @@ def create_stochastic_process_realizations(
 <span>def <span class="ident">create_eth_price_process</span></span>(<span>timesteps=360, dt=225, rng=Generator(PCG64), minimum_eth_price=1500)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Configure environmental ETH price process
-See <a href="https://stochastic.readthedocs.io/en/latest/continuous.html">https://stochastic.readthedocs.io/en/latest/continuous.html</a></p></div>
+<div class="desc"><p>Configure environmental ETH price process</p>
+<blockquote>
+<p>A Brownian excursion is a Brownian bridge from (0, 0) to (t, 0) which is conditioned to be nonnegative on the interval [0, t].</p>
+</blockquote>
+<p>See <a href="https://stochastic.readthedocs.io/en/latest/continuous.html">https://stochastic.readthedocs.io/en/latest/continuous.html</a></p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -113,6 +127,8 @@ See <a href="https://stochastic.readthedocs.io/en/latest/continuous.html">https:
     minimum_eth_price=1500,
 ):
     &#34;&#34;&#34;Configure environmental ETH price process
+    &gt; A Brownian excursion is a Brownian bridge from (0, 0) to (t, 0) which is conditioned to be nonnegative on the interval [0, t].
+
     See https://stochastic.readthedocs.io/en/latest/continuous.html
     &#34;&#34;&#34;
     process = processes.continuous.BrownianExcursion(t=(timesteps * dt), rng=rng)
@@ -129,7 +145,9 @@ See <a href="https://stochastic.readthedocs.io/en/latest/continuous.html">https:
 <span>def <span class="ident">create_stochastic_process_realizations</span></span>(<span>timesteps=360, dt=225, runs=1)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Create stochastic process realizations
+Using the stochastic processes defined in <code>processes</code> module, create random number generator (RNG) seeds,
+and use RNG to pre-generate samples for number of simulation timesteps.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -139,6 +157,10 @@ See <a href="https://stochastic.readthedocs.io/en/latest/continuous.html">https:
     dt=simulation.DELTA_TIME,
     runs=simulation.MONTE_CARLO_RUNS,
 ):
+    &#34;&#34;&#34;Create stochastic process realizations
+    Using the stochastic processes defined in `processes` module, create random number generator (RNG) seeds,
+    and use RNG to pre-generate samples for number of simulation timesteps.
+    &#34;&#34;&#34;
     # Create Random Number Generator (RNG) with a seed for range of runs
     rngs = [np.random.default_rng(seed) for seed in range(runs)]
 
@@ -163,7 +185,11 @@ See <a href="https://stochastic.readthedocs.io/en/latest/continuous.html">https:
 <span>def <span class="ident">create_validator_process</span></span>(<span>timesteps=360, dt=225, rng=Generator(PCG64), validator_adoption_rate=4)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Configure environmental validator staking process</p>
+<blockquote>
+<p>A Poisson process with rate :math:\lambda is a count of occurrences of i.i.d. exponential random variables with mean :math:1/\lambda. This class generates samples of times for which cumulative exponential random variables occur.</p>
+</blockquote>
+<p>See <a href="https://stochastic.readthedocs.io/en/latest/continuous.html">https://stochastic.readthedocs.io/en/latest/continuous.html</a></p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -174,6 +200,11 @@ See <a href="https://stochastic.readthedocs.io/en/latest/continuous.html">https:
     rng=np.random.default_rng(1),
     validator_adoption_rate=4,
 ):
+    &#34;&#34;&#34;Configure environmental validator staking process
+    &gt; A Poisson process with rate :math:\lambda is a count of occurrences of i.i.d. exponential random variables with mean :math:1/\lambda. This class generates samples of times for which cumulative exponential random variables occur.
+
+    See https://stochastic.readthedocs.io/en/latest/continuous.html
+    &#34;&#34;&#34;
     process = processes.continuous.PoissonProcess(rate=1 / 3, rng=rng)
     samples = process.sample(timesteps * dt + 1)
     samples = np.diff(samples)

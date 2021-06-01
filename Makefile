@@ -24,6 +24,8 @@ docs-pdoc:
 docs-jupyter-book:
 	rm -rf docs/notebooks/*
 	cp -r notebooks/* docs/notebooks/
+	sed -i 's/media/_static/g' ./docs/notebooks/*.ipynb
+	jupyter-book clean docs
 	jupyter-book build docs
 
 serve-docs:
