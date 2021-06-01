@@ -9,8 +9,6 @@ By using a dataclass to represent the System Parameters:
 
 
 import numpy as np
-import pandas as pd
-from stochastic import processes
 from dataclasses import dataclass
 import logging
 from datetime import datetime
@@ -319,7 +317,7 @@ class Parameters:
     """
     The combination of validator internet, power, and technical uptime, as a percentage.
 
-    Minimum uptime is inactivity leak threshold = 0.666, as this model doesn't model the inactivity leak process.
+    Minimum uptime is inactivity leak threshold = 2/3, as this model doesn't model the inactivity leak process.
     """
     validator_percentage_distribution: List[np.ndarray] = default(
         validator_percentage_distribution

@@ -130,7 +130,7 @@ def policy_eip1559_transaction_pricing(
 
 def update_eth_price(
     params, substep, state_history, previous_state, policy_input
-) -> (str, USD_per_ETH):
+) -> typing.Tuple[str, USD_per_ETH]:
     # Parameters
     dt = params["dt"]
     eth_price_process = params["eth_price_process"]
@@ -147,7 +147,7 @@ def update_eth_price(
 
 def update_eth_supply(
     params, substep, state_history, previous_state, policy_input
-) -> (str, ETH):
+) -> typing.Tuple[str, ETH]:
     # Policy Inputs
     network_issuance = policy_input["network_issuance"]
 
