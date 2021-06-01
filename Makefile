@@ -19,7 +19,7 @@ build-docs: docs-pdoc docs-jupyter-book
 
 docs-pdoc:
 	pdoc --html model -o docs --force
-	sed -i 's/\"index.html/\"model\/index.html/g' ./docs/model/*.html
+	# sed -i 's/\"index.html/\"model\/index.html/g' ./docs/model/*.html
 
 docs-jupyter-book:
 	rm -rf docs/notebooks/*
