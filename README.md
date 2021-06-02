@@ -11,7 +11,7 @@ An Ethereum Validator Economics model.
 
 Features:
 * Simulate the different phases of the Ethereum system upgrade process (Phase 0, EIP1559 enabled, The Merge)
-* Enables both State Space (simulation over time) and Phase Space (analysis of system state) simulations and analyses
+* Enables both state space (simulation over time) and phase space (analysis of system state) simulations and analyses
 * Customizable processes for ETH price, ETH staked, validator adoption, EIP1559, and transaction rates
 * Modular model structure
 * Referrences to [Eth2 specs](https://github.com/ethereum/eth2.0-specs) in Policy and State Update Function logic
