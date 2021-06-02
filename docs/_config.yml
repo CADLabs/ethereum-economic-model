@@ -1,5 +1,5 @@
-title: "Eth2 MasterClass Model Documentation"
-logo: media/cadcad-edu-logo.png
+title: "CADLabs Ethereum Model Documentation"
+logo: _static/eth-masterclass-horizontal.png
 execute:
   execute_notebooks: "off"
 sphinx:

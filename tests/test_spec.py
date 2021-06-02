@@ -1,7 +1,7 @@
 import pytest
 
 from experiments.run import run
-from experiments.default import experiment
+from experiments.base import experiment
 import model.parts.spec as spec
 
 

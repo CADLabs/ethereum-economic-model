@@ -133,6 +133,6 @@ dmypy.json
 .pyre/
 
 .vscode/
-scratchpad.py
+scratchpad.*
 scratchpad/
 .DS_Store

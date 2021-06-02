@@ -131,6 +131,7 @@ _state_update_blocks = [
         "variables": {
             "basefee": update_from_signal("basefee"),
             "total_basefee": update_from_signal("total_basefee"),
+            "total_tips_to_miners": update_from_signal("total_tips_to_miners"),
             "total_tips_to_validators": update_from_signal("total_tips_to_validators"),
         },
     },
@@ -212,7 +213,7 @@ _state_update_blocks = (
         state_update_block_validators,
     ]
     + _state_update_blocks
-    if parameters["eth_staked_process"][0](0, 0) is not None
+    if parameters["eth_staked_process"][0](0, 0) != None
     # If driving with validator process, switch first two blocks
     else [
         state_update_block_phases,

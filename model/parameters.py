@@ -9,8 +9,6 @@ By using a dataclass to represent the System Parameters:
 
 
 import numpy as np
-import pandas as pd
-from stochastic import processes
 from dataclasses import dataclass
 import logging
 from datetime import datetime
@@ -42,8 +40,16 @@ stochastic_process_realizations = create_stochastic_process_realizations()
 eth_price_samples = stochastic_process_realizations["eth_price_samples"]
 
 # Configure validator environment distribution
-# From Hoban/Borgers report
 validator_environments = [
+    ValidatorEnvironment(
+        # Configure a custom environment
+        # Used for dissagregation of single validator performance
+        type="custom",
+        percentage_distribution=0.01,  # Set to 1% by default
+        hardware_costs_per_epoch=0.0014,
+        cloud_costs_per_epoch=0,
+        third_party_costs_per_epoch=0,
+    ),
     ValidatorEnvironment(
         type="diy_hardware",
         percentage_distribution=0.37,
@@ -80,6 +86,16 @@ validator_environments = [
         third_party_costs_per_epoch=0.12,
     ),
 ]
+"""Validator environment configuration
+
+From the Hoban/Borgers report (Ethereum 2.0 Economic Review):
+> assume validators will consider different validator models according to their preferences, requirements, and the scale of their stake
+> The breakdown of validator environments reflects the results of user surveys and stakeholder interviews
+
+Cost analysis:
+> See "Ethereum 2.0 Ecosystem Staking Report" by ConsenSys Insights: https://cdn2.hubspot.net/hubfs/4795067/Codefi/Ethereum%202.0%20Staking%20Ecosystem%20Report.pdf?__hstc=148571112.51d5567256d6f4167c1422d5c083e93e.1574348924308.1588770700176.1588788083651.18&__hssc=148571112.1.1588788083651
+> See "Ethereum Lighthouse: Chasing Serenity" survey report by Empire Ventures: https://medium.com/empireventures/eth2uxreport-858c73ca1f53
+"""
 
 # Normalise percentage distribution to a total of 100%
 total_percentage_distribution = sum(
@@ -289,13 +305,19 @@ class Parameters:
     """
     Used to set the maximum rate at which the EIP1559 basefee can change per block, approx. 12.5%.
     """
+    ELASTICITY_MULTIPLIER: List[int] = default([2])
+    """
+    Used to calculate gas limit from EIP1559 gas target
+    """
 
     # Validator parameters
-    validator_uptime_process: List[Percentage] = default([lambda _run, _timestep: 0.98])
+    validator_uptime_process: List[Percentage] = default(
+        [lambda _run, _timestep: max(0.98, 0.666)]
+    )
     """
     The combination of validator internet, power, and technical uptime, as a percentage.
 
-    A vector with a value for each validator environment.
+    Minimum uptime is inactivity leak threshold = 2/3, as this model doesn't model the inactivity leak process.
     """
     validator_percentage_distribution: List[np.ndarray] = default(
         validator_percentage_distribution
@@ -341,11 +363,6 @@ class Parameters:
     """
 
     # EIP1559 transaction pricing parameters
-    ELASTICITY_MULTIPLIER: List[int] = default([2])
-    """
-    Used to calculate gas limit from EIP1559 gas target
-    """
-
     eip1559_basefee_process: List[Callable[[Run, Timestep], Gwei_per_Gas]] = default(
         [lambda _run, _timestep: 70]  # Gwei per gas
     )

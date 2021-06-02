@@ -261,7 +261,7 @@ def policy_slashing(
 
 def update_base_reward(
     params, substep, state_history, previous_state, policy_input
-) -> (str, Gwei):
+) -> typing.Tuple[str, Gwei]:
     """Base Reward State Update Function
     Calculate and update base reward per validator
     """
@@ -278,7 +278,7 @@ def update_base_reward(
 
 def update_validating_rewards(
     params, substep, state_history, previous_state, policy_input
-) -> (str, Gwei):
+) -> typing.Tuple[str, Gwei]:
     """Validating Rewards State Update Function
     Calculate and update total validating rewards
     i.e. rewards received for block proposal, attesting, and being a member of sync committee

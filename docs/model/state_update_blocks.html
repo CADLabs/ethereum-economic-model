@@ -159,6 +159,7 @@ _state_update_blocks = [
         &#34;variables&#34;: {
             &#34;basefee&#34;: update_from_signal(&#34;basefee&#34;),
             &#34;total_basefee&#34;: update_from_signal(&#34;total_basefee&#34;),
+            &#34;total_tips_to_miners&#34;: update_from_signal(&#34;total_tips_to_miners&#34;),
             &#34;total_tips_to_validators&#34;: update_from_signal(&#34;total_tips_to_validators&#34;),
         },
     },
@@ -187,7 +188,7 @@ _state_update_blocks = [
             &#34;supply_inflation&#34;: metrics.update_supply_inflation,
             &#34;network_issuance&#34;: update_from_signal(&#34;network_issuance&#34;),
             &#34;pow_issuance&#34;: update_from_signal(&#34;pow_issuance&#34;),
-        }
+        },
     },
     {
         &#34;description&#34;: &#34;&#34;&#34;
@@ -240,7 +241,7 @@ _state_update_blocks = (
         state_update_block_validators,
     ]
     + _state_update_blocks
-    if parameters[&#34;eth_staked_process&#34;][0](0, 0) is not None
+    if parameters[&#34;eth_staked_process&#34;][0](0, 0) != None
     # If driving with validator process, switch first two blocks
     else [
         state_update_block_phases,
@@ -277,7 +278,7 @@ post_processing_blocks = [
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="model" href="model/index.html">model</a></code></li>
+<li><code><a title="model" href="index.html">model</a></code></li>
 </ul>
 </li>
 </ul>

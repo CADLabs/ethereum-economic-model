@@ -65,6 +65,7 @@ def policy_eip1559_transaction_pricing(
         return {
             "basefee": 0,
             "total_basefee": 0,
+            "total_tips_to_miners": 0,
             "total_tips_to_validators": 0,
         }
 
@@ -105,7 +106,14 @@ def policy_eip1559_transaction_pricing(
     # Calculate total basefee and tips to validators
     gas_used = transactions_per_epoch * transaction_average_gas  # Gas
     total_basefee = gas_used * basefee  # Gwei
-    total_tips_to_validators = gas_used * avg_tip_amount  # Gwei
+    total_tips = gas_used * avg_tip_amount  # Gwei
+
+    if phase in [Phase.POST_MERGE]:
+        total_tips_to_miners = 0
+        total_tips_to_validators = total_tips
+    else:
+        total_tips_to_miners = total_tips
+        total_tips_to_validators = 0
 
     # Check if the block used too much gas
     assert (
@@ -115,13 +123,14 @@ def policy_eip1559_transaction_pricing(
     return {
         "basefee": basefee,
         "total_basefee": total_basefee * dt,
+        "total_tips_to_miners": total_tips_to_miners * dt,
         "total_tips_to_validators": total_tips_to_validators * dt,
     }
 
 
 def update_eth_price(
     params, substep, state_history, previous_state, policy_input
-) -> (str, USD_per_ETH):
+) -> typing.Tuple[str, USD_per_ETH]:
     # Parameters
     dt = params["dt"]
     eth_price_process = params["eth_price_process"]
@@ -138,7 +147,7 @@ def update_eth_price(
 
 def update_eth_supply(
     params, substep, state_history, previous_state, policy_input
-) -> (str, ETH):
+) -> typing.Tuple[str, ETH]:
     # Policy Inputs
     network_issuance = policy_input["network_issuance"]
 

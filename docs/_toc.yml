@@ -4,22 +4,27 @@
   chapters:
   - file: hackmd_mathematical_specification.md
 
-- part: Code Documentation
-  chapters:
-  - file: model/index.html
+# - part: Code Documentation
+#   chapters:
+#   - file: docs/index.html
 
-- part: Analysis Notebooks
+- part: Experiment Notebooks
   chapters:
-  - file: notebooks/README
-  - file: notebooks/validation
-  - file: notebooks/validator_rewards
-  - file: notebooks/validator_environment_yields
-  - file: notebooks/validator_yield_surface
-  - file: notebooks/revenue_yields_vs_network_inflation
-  - file: notebooks/eip1559
-  - file: notebooks/state_space
-  - file: notebooks/monte_carlo
+  - file: notebooks/0_README
+  - file: notebooks/1_model_validation
+  - file: notebooks/2_validator_environment_yields
+  - file: notebooks/3_network_yields
+  - file: notebooks/4_ultra_sound_barrier
+  - file: notebooks/5_eip1559_transaction_pricing
+  - file: notebooks/6_individual_validator_performance
+  - file: notebooks/7_validator_incentives
+  - file: notebooks/8_validator_costs
 
-- part: Scratchpad
+- part: Example Model Outputs
   chapters:
-  - file: notebooks/scratchpad
+  - file: notebooks/examples/monte_carlo
+  - file: notebooks/examples/revenue_net_yield_spread
+  - file: notebooks/examples/revenue_yields_vs_network_inflation
+  - file: notebooks/examples/state_space
+  - file: notebooks/examples/validator_environment_yields
+  - file: notebooks/examples/validator_yield_surface

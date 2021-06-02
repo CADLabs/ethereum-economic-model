@@ -187,7 +187,7 @@ def policy_total_online_validator_rewards(
 
 def update_supply_inflation(
     params, substep, state_history, previous_state, policy_input
-) -&gt; (str, Percentage):
+) -&gt; typing.Tuple[str, Percentage]:
     # Policy Inputs
     network_issuance = policy_input[&#34;network_issuance&#34;]
 
@@ -380,7 +380,7 @@ def update_supply_inflation(
 </details>
 </dd>
 <dt id="model.parts.metrics.update_supply_inflation"><code class="name flex">
-<span>def <span class="ident">update_supply_inflation</span></span>(<span>params, substep, state_history, previous_state, policy_input) ‑> (<class 'str'>, <class 'float'>)</span>
+<span>def <span class="ident">update_supply_inflation</span></span>(<span>params, substep, state_history, previous_state, policy_input) ‑> Tuple[str, float]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -390,7 +390,7 @@ def update_supply_inflation(
 </summary>
 <pre><code class="python">def update_supply_inflation(
     params, substep, state_history, previous_state, policy_input
-) -&gt; (str, Percentage):
+) -&gt; typing.Tuple[str, Percentage]:
     # Policy Inputs
     network_issuance = policy_input[&#34;network_issuance&#34;]
 

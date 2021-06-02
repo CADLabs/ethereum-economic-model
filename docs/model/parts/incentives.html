@@ -294,7 +294,7 @@ def policy_slashing(
 
 def update_base_reward(
     params, substep, state_history, previous_state, policy_input
-) -&gt; (str, Gwei):
+) -&gt; typing.Tuple[str, Gwei]:
     &#34;&#34;&#34;Base Reward State Update Function
     Calculate and update base reward per validator
     &#34;&#34;&#34;
@@ -311,7 +311,7 @@ def update_base_reward(
 
 def update_validating_rewards(
     params, substep, state_history, previous_state, policy_input
-) -&gt; (str, Gwei):
+) -&gt; typing.Tuple[str, Gwei]:
     &#34;&#34;&#34;Validating Rewards State Update Function
     Calculate and update total validating rewards
     i.e. rewards received for block proposal, attesting, and being a member of sync committee
@@ -698,7 +698,7 @@ proposer_reward = Gwei(participant_reward * PROPOSER_WEIGHT // (WEIGHT_DENOMINAT
 </details>
 </dd>
 <dt id="model.parts.incentives.update_base_reward"><code class="name flex">
-<span>def <span class="ident">update_base_reward</span></span>(<span>params, substep, state_history, previous_state, policy_input) ‑> (<class 'str'>, <class 'float'>)</span>
+<span>def <span class="ident">update_base_reward</span></span>(<span>params, substep, state_history, previous_state, policy_input) ‑> Tuple[str, float]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Base Reward State Update Function
@@ -709,7 +709,7 @@ Calculate and update base reward per validator</p></div>
 </summary>
 <pre><code class="python">def update_base_reward(
     params, substep, state_history, previous_state, policy_input
-) -&gt; (str, Gwei):
+) -&gt; typing.Tuple[str, Gwei]:
     &#34;&#34;&#34;Base Reward State Update Function
     Calculate and update base reward per validator
     &#34;&#34;&#34;
@@ -725,7 +725,7 @@ Calculate and update base reward per validator</p></div>
 </details>
 </dd>
 <dt id="model.parts.incentives.update_validating_rewards"><code class="name flex">
-<span>def <span class="ident">update_validating_rewards</span></span>(<span>params, substep, state_history, previous_state, policy_input) ‑> (<class 'str'>, <class 'float'>)</span>
+<span>def <span class="ident">update_validating_rewards</span></span>(<span>params, substep, state_history, previous_state, policy_input) ‑> Tuple[str, float]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Validating Rewards State Update Function
@@ -737,7 +737,7 @@ i.e. rewards received for block proposal, attesting, and being a member of sync 
 </summary>
 <pre><code class="python">def update_validating_rewards(
     params, substep, state_history, previous_state, policy_input
-) -&gt; (str, Gwei):
+) -&gt; typing.Tuple[str, Gwei]:
     &#34;&#34;&#34;Validating Rewards State Update Function
     Calculate and update total validating rewards
     i.e. rewards received for block proposal, attesting, and being a member of sync committee

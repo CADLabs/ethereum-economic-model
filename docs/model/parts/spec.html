@@ -49,21 +49,6 @@ from model.state_variables import StateVariables
 # Beacon state accessors
 
 
-def get_total_balance(params: Parameters, state: StateVariables) -&gt; Gwei:
-    &#34;&#34;&#34;Return the combined effective balance of the `indices`
-    `EFFECTIVE_BALANCE_INCREMENT` Gwei minimum to avoid divisions by zero.
-    Math safe up to ~10B ETH, afterwhich this overflows uint64.
-    &#34;&#34;&#34;
-    EFFECTIVE_BALANCE_INCREMENT = params[&#34;EFFECTIVE_BALANCE_INCREMENT&#34;]
-
-    return Gwei(
-        max(
-            EFFECTIVE_BALANCE_INCREMENT,
-            sum([state.validators[index].effective_balance for index in indices]),
-        )
-    )
-
-
 def get_total_active_balance(params: Parameters, state: StateVariables) -&gt; Gwei:
     &#39;&#39;&#39;
     See https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/beacon-chain.md#get_total_active_balance
@@ -265,32 +250,6 @@ def get_validator_churn_limit(params: Parameters, state: StateVariables) -&gt; i
     return Gwei(max(EFFECTIVE_BALANCE_INCREMENT, total_active_balance))</code></pre>
 </details>
 </dd>
-<dt id="model.parts.spec.get_total_balance"><code class="name flex">
-<span>def <span class="ident">get_total_balance</span></span>(<span>params: <a title="model.parameters.Parameters" href="../parameters.html#model.parameters.Parameters">Parameters</a>, state: <a title="model.state_variables.StateVariables" href="../state_variables.html#model.state_variables.StateVariables">StateVariables</a>) ‑> float</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Return the combined effective balance of the <code>indices</code>
-<code>EFFECTIVE_BALANCE_INCREMENT</code> Gwei minimum to avoid divisions by zero.
-Math safe up to ~10B ETH, afterwhich this overflows uint64.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def get_total_balance(params: Parameters, state: StateVariables) -&gt; Gwei:
-    &#34;&#34;&#34;Return the combined effective balance of the `indices`
-    `EFFECTIVE_BALANCE_INCREMENT` Gwei minimum to avoid divisions by zero.
-    Math safe up to ~10B ETH, afterwhich this overflows uint64.
-    &#34;&#34;&#34;
-    EFFECTIVE_BALANCE_INCREMENT = params[&#34;EFFECTIVE_BALANCE_INCREMENT&#34;]
-
-    return Gwei(
-        max(
-            EFFECTIVE_BALANCE_INCREMENT,
-            sum([state.validators[index].effective_balance for index in indices]),
-        )
-    )</code></pre>
-</details>
-</dd>
 <dt id="model.parts.spec.get_validator_churn_limit"><code class="name flex">
 <span>def <span class="ident">get_validator_churn_limit</span></span>(<span>params: <a title="model.parameters.Parameters" href="../parameters.html#model.parameters.Parameters">Parameters</a>, state: <a title="model.state_variables.StateVariables" href="../state_variables.html#model.state_variables.StateVariables">StateVariables</a>) ‑> int</span>
 </code></dt>
@@ -347,7 +306,6 @@ return max(MIN_PER_EPOCH_CHURN_LIMIT, uint64(len(active_validator_indices)) // C
 <li><code><a title="model.parts.spec.get_base_reward_per_increment" href="#model.parts.spec.get_base_reward_per_increment">get_base_reward_per_increment</a></code></li>
 <li><code><a title="model.parts.spec.get_proposer_reward" href="#model.parts.spec.get_proposer_reward">get_proposer_reward</a></code></li>
 <li><code><a title="model.parts.spec.get_total_active_balance" href="#model.parts.spec.get_total_active_balance">get_total_active_balance</a></code></li>
-<li><code><a title="model.parts.spec.get_total_balance" href="#model.parts.spec.get_total_balance">get_total_balance</a></code></li>
 <li><code><a title="model.parts.spec.get_validator_churn_limit" href="#model.parts.spec.get_validator_churn_limit">get_validator_churn_limit</a></code></li>
 </ul>
 </li>

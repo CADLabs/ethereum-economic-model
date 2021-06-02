@@ -25,20 +25,32 @@ def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameter
         # Parameters to assign to DataFrame
     ])
 
+    # Dissagregate validator count
+    df[[validator.type + '_validator_count' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_count_distribution), axis=1, result_type='expand').astype('float64')
+
     # Dissagregate validator costs
     df[[validator.type + '_costs' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_costs), axis=1, result_type='expand').astype('float64')
     df[[validator.type + '_hardware_costs' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_hardware_costs), axis=1, result_type='expand').astype('float64')
     df[[validator.type + '_cloud_costs' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_cloud_costs), axis=1, result_type='expand').astype('float64')
     df[[validator.type + '_third_party_costs' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_third_party_costs), axis=1, result_type='expand').astype('float64')
 
+    # Dissagregate revenue and profit
+    df[[validator.type + '_revenue' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_revenue), axis=1, result_type='expand').astype('float64')
+    df[[validator.type + '_profit' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_profit), axis=1, result_type='expand').astype('float64')
+
     # Dissagregate yields
     df[[validator.type + '_revenue_yields' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_revenue_yields), axis=1, result_type='expand').astype('float64')
     df[[validator.type + '_profit_yields' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_profit_yields), axis=1, result_type='expand').astype('float64')
 
     # Convert decimals to percentages
+    df[[validator.type + '_revenue_yields_pct' for validator in validator_environments]] = df[[validator.type + '_revenue_yields' for validator in validator_environments]] * 100
+    df[[validator.type + '_profit_yields_pct' for validator in validator_environments]] = df[[validator.type + '_profit_yields' for validator in validator_environments]] * 100
     df['supply_inflation_pct'] = df['supply_inflation'] * 100
     df['total_revenue_yields_pct'] = df['total_revenue_yields'] * 100
     df['total_profit_yields_pct'] = df['total_profit_yields'] * 100
+
+    # Calculate revenue-net yield spread
+    df['revenue_net_yield_spread_pct'] = df['total_revenue_yields_pct'] - df['total_profit_yields_pct']
 
     # Convert validator rewards from Gwei to ETH
     validator_rewards = ['total_online_validator_rewards', 'total_tips_to_validators', 'source_reward', 'target_reward', 'head_reward', 'block_proposer_reward', 'sync_reward']
