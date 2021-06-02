@@ -69,85 +69,25 @@ The model is configured using modules in the [model/](model/) directory:
 
 ## Experiments
 
-The [experiments/](experiments/) directory contains different experiment configurations, where each experiment has a corresponding analysis Jupyter notebook in the [notebooks/](notebooks/) directory.
+The [experiments/](experiments/) directory contains different experiment templates which are used in the Jupyter experiment notebooks in the [notebooks/](notebooks/) directory to answer research questions and perform scenario analyses.
 
 See the [experiments/README.ipynb](experiments/README.ipynb) notebook for a walk-through of how to configure and execute an experiment.
 
-### Validation
-Various experiments used to validate the results of our model against the Hoban/Borgers Report model as a sanity check; due to Altair update, they will not exactly match.
-
-* Experiments: [experiments/validation/*/experiment.py](experiments/validation/)
-
-### State Space
-An experiment that simulates the State Space of the model (e.g. Validating Rewards over time), with phases (Phase 0, EIP1559 enabled, The Merge) representing the upgrade process of the Eth2 system.
-
-* Experiment: [experiments/state_space/experiment.py](experiments/state_space/experiment.py)
-* Notebook: [notebooks/state_space.ipynb](notebooks/state_space.ipynb)
-
-![Validating rewards](outputs/validating_rewards.png)
-
-![ETH Supply](outputs/eth_supply_phases.png)
-
-### Validator Environment Yields
-Analysing different validator environment yields for static ETH staked over discrete ETH price values.
-
-* Experiment: [experiments/validator_environment_yields/experiment.py](experiments/validator_environment_yields/experiment.py)
-* Notebook: [notebooks/validator_environment_yields.ipynb](notebooks/validator_environment_yields.ipynb)
-
-![Validator Environments Net Yield](outputs/validator_environments_net_yield.png)
-
-### Validator Yield Surface
-Generate and analyse 2D contours and 3D surfaces for validator yields vs. different system states.
-
-* Experiment: [experiments/validator_yield_surface/experiment.py](experiments/validator_yield_surface/experiment.py)
-* Notebook: [notebooks/validator_yield_surface.ipynb](notebooks/validator_yield_surface.ipynb)
-
-![Validator Yield Contour](outputs/validator_yield_contour.png)
-
-### Revenue Yields vs Network Inflation
-Analysing the revenue yields of validators and network inflation for a static ETH price over discrete ETH staked values.
-
-* Experiment: [experiments/revenue_yields_vs_network_inflation/experiment.py](experiments/revenue_yields_vs_network_inflation/experiment.py)
-* Notebook: [notebooks/revenue_yields_vs_network_inflation.ipynb](notebooks/revenue_yields_vs_network_inflation.ipynb)
-
-![Revenue Yields vs Network Inflation](outputs/revenue_yields_vs_network_inflation.png)
-
-### EIP1559
-Analysing the effect of enabling EIP1559 under different conditions.
-
-* Experiment: [experiments/eip1559/experiment.py](experiments/eip1559/experiment.py)
-* Notebook: [notebooks/eip1559.ipynb](notebooks/eip1559.ipynb)
-
-### Monte Carlo (Work in Progress)
-Applying stochastic processes to the ETH price, validator staking, and validator uptime processes, and executing 5 Monte Carlo runs.
-
-* Experiment: [experiments/monte_carlo/experiment.py](experiments/monte_carlo/experiment.py)
-* Notebook: [notebooks/monte_carlo.ipynb](notebooks/monte_carlo.ipynb)
-
-![Annualized Revenue Yields MC](outputs/annualized_revenue_yields_mc.png)
-
-### Justin Drake APR (Work in Progress)
-Demonstrate the model's ability to compute numerical results by comparing the results of our analysis to Justin Drake's scenario analysis (optimistic, lean optimistic, best guess, lean conservative, conservative).
-
-See https://docs.google.com/spreadsheets/d/1FslqTnECKvi7_l4x6lbyRhNtzW9f6CVEzwDf04zprfA
-
-* Notebook: [notebooks/justin_drake_apr.ipynb](notebooks/justin_drake_apr.ipynb)
-
 ### Experiment Execution
 
-The base experiment is an experiment that uses the default cadCAD System Parameters, Initial State, and State Update Blocks defined in the [models/](models/) directory. To run the base experiment from the terminal, execute the `experiments.run` module:
+The base experiment template is an experiment that uses the default cadCAD System Parameters, Initial State, and State Update Blocks defined in the [models/](models/) directory. To run the base experiment from the terminal, execute the `experiments.run` module:
 ```bash
 python3 -m experiments.run
 ```
 
-Alternatively, open and run one of the analysis Jupyter notebooks in Jupyter Lab.
+Alternatively, open and run one of the Jupyter experiment notebooks in Jupyter Lab.
 
 ### Experiment Workflow
 
-1. Create a new directory with the name of the experiment in the [experiments/](experiments/) directory
+1. Choose or create a new experiment template in the [experiments/templates/](experiments/templates/) directory
 2. Copy the template experiment from [experiments/template.py](experiments/template.py) into the directory
 3. Customize the base experiment using the template
-4. Create a new Jupyter notebook using the [notebooks/template.ipynb](notebooks/template.ipynb) experiment notebook template
+4. Create a new Jupyter experiment notebook using the [notebooks/_template.ipynb](notebooks/_template.ipynb) experiment notebook template
 5. Execute your experiment, post-process and analyze the results, and create Plotly charts!
 
 ## Development
@@ -166,7 +106,7 @@ Otherwise, follow the steps below.
 
 ### Requirements
 
-* Python versions: tested with 3.7, 3.8
+* Python versions: tested with 3.7, 3.8, 3.9
 * Python dependencies: tested against versions in `requirements.txt`
 
 ### Setup
