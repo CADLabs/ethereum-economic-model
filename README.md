@@ -14,7 +14,7 @@ Features:
 * Enables both state space (simulation over time) and phase space (analysis of system state) simulations and analyses
 * Customizable processes for ETH price, ETH staked, validator adoption, EIP1559, and transaction rates
 * Modular model structure
-* Referrences to [Eth2 specs](https://github.com/ethereum/eth2.0-specs) in Policy and State Update Function logic
+* References to [Eth2 specs](https://github.com/ethereum/eth2.0-specs) in Policy and State Update Function logic
 
 ## Table of Contents
 * [Model](#model)
