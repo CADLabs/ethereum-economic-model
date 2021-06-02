@@ -10,11 +10,14 @@ An Ethereum Validator Economics model.
 **Eth2 specs version**: implements the [Altair](https://github.com/ethereum/eth2.0-specs#altair) updates in the [Beige Gorgon / v1.1.0-alpha.3](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.3) release.
 
 Features:
-* Simulate the different phases of the Ethereum system upgrade process (Phase 0, EIP1559 enabled, The Merge)
-* Enables both State Space (simulation over time) and Phase Space (analysis of system state) simulations and analyses
-* Customizable processes for ETH price, ETH staked, validator adoption, EIP1559, and transaction rates
-* Modular model structure
-* Referrences to [Eth2 specs](https://github.com/ethereum/eth2.0-specs) in Policy and State Update Function logic
+* Configurable to reflect protocol behavior at different points in time of the development roadmap 
+*  1) post Beacon Chain launch, pre EIP 1559, pre PoS (TODO: Mention in brackets high-level the most important configuration elements)
+*  2) post Beacon Chain launch, post EIP 1559, pre PoS (TODO: Mention in brackets high-level the most important configuration elements)
+*  3) post Beacon Chain launch, post EIP 1559, post PoS (TODO: Mention in brackets high-level the most important configuration elements)
+* Supports [state space analysis](https://en.wikipedia.org/wiki/State-space_representation#:~:text=The%20%22state%20space%22%20is%20the,variables%20are%20expressed%20as%20vectors) (i.e. simulation of system behavior over time) and [phase space analysis] (https://en.wikipedia.org/wiki/Phase_space) (i.e. generation of all unique system states in a given experimental setup)
+* Customizable processes for important variables such as ETH price, ETH staked, validator adoption, EIP1559 transaction pricing, and transaction rates
+* Modular model structure for convenient extension and modification (TODO: say why modular model structure is valuable; structure of these bullets is: feature-->value add of feature)
+* Referrences to official [Eth2 specs](https://github.com/ethereum/eth2.0-specs) in Policy and State Update Function logic (TODO: Add value add; see last comment)
 
 ## Table of Contents
 * [Model](#model)
