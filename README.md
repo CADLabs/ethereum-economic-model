@@ -109,6 +109,7 @@ The purpose of this experiment is to determine what the expected network yields 
 
 ### 5. EIP1559 Transaction Pricing
 
+#### Research Question
 What effect will EIP1559 transaction pricing have on network yields?
 
 #### Experiment Purpose
