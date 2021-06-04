@@ -78,7 +78,7 @@ There are in total 8 experiment notebooks. These experiments answer specific res
 ### 1. Model Validation
 
 #### Research Question
-> How do we validate the model meets the specification?
+How do we validate the model meets the specification?
 
 #### Experiment Purpose
 The purpose of this experiment is to validate whether the model meets the specification by comparing multiple scenario analyses seen in the Hoban/Borgers Economic Model with those same analyses performed with our model.
@@ -86,7 +86,7 @@ The purpose of this experiment is to validate whether the model meets the specif
 ### 2. Network Issuance
 
 #### Research Question
-> What validator rewards and penalties make up network issuance?
+What validator rewards and penalties make up network issuance?
 
 #### Experiment Purpose
 The purpose of this experiment is to explore the rewards and penalties that make up network issuance under different scenarios.
@@ -94,7 +94,7 @@ The purpose of this experiment is to explore the rewards and penalties that make
 ### 3. Network Costs
 
 #### Research Question
-> What costs do validators incur to secure the network?
+What costs do validators incur to secure the network?
 
 #### Experiment Purpose
 The purpose of this experiment is to explore the cost incurred by validators to secure the network under different scenarios.
@@ -102,14 +102,14 @@ The purpose of this experiment is to explore the cost incurred by validators to 
 ### 4. Network Yields
 
 #### Research Question
-> What are the best and worst case network yields?
+What are the best and worst case network yields?
 
 #### Experiment Purpose
 The purpose of this experiment is to determine what the expected network yields are under different scenarios.
 
 ### 5. EIP1559 Transaction Pricing
 
-> What effect will EIP1559 transaction pricing have on network yields?
+What effect will EIP1559 transaction pricing have on network yields?
 
 #### Experiment Purpose
 The purpose of this experiment is to explore the effect of the EIP1559 transaction pricing mechanism on network yields under different scenarios.
@@ -117,7 +117,7 @@ The purpose of this experiment is to explore the effect of the EIP1559 transacti
 ### 6. Utra-Sound Barrier
 
 #### Research Question
-> At what point will the Ethereum system break the ultra-sound barrier (become deflationary), and what will the peak ETH supply be?
+At what point will the Ethereum system break the ultra-sound barrier (become deflationary), and what will the peak ETH supply be?
 
 #### Experiment Purpose
 The purpose of this experiment is to analyse the network suppy inflation, and determine under what scenarios the network becomes deflationary.
@@ -125,7 +125,7 @@ The purpose of this experiment is to analyse the network suppy inflation, and de
 ### 7. Validator Environment Yields
 
 #### Research Question
-> What are the expected validator yields for staking in different environments?
+What are the expected validator yields for staking in different environments?
 
 #### Experiment Purpose
 The purpose of this experiment is to explore the different validator environments and their yields under different scenarios.
@@ -133,7 +133,7 @@ The purpose of this experiment is to explore the different validator environment
 ### 8. Individual Validator Performance
 
 #### Research Question
-> What is the performance of an individual validator with a custom environment configuration?
+What is the performance of an individual validator with a custom environment configuration?
 
 #### Experiment Purpose
 The purpose of this experiment is to determine the performance of an individual validator using a custom environment configuration.
