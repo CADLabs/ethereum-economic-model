@@ -69,7 +69,9 @@ The model is configured using modules in the [model/](model/) directory:
 
 ## Experiments
 
-The [experiments/](experiments/) directory contains different experiment templates which are used in the Jupyter experiment notebooks in the [notebooks/](notebooks/) directory to answer research questions and perform scenario analyses.
+The [experiments/](experiments/) directory contains modules for configuring and executing experiments, as well as performing post-processing of results.
+
+The [experiments/templates/](experiments/templates/) directory contains different experiment templates which are used in the Jupyter experiment notebooks in the [notebooks/](notebooks/) directory to answer research questions and perform scenario analyses.
 
 See the [experiments/README.ipynb](experiments/README.ipynb) notebook for a walk-through of how to configure and execute an experiment.
 
@@ -141,12 +143,12 @@ The purpose of this experiment is to determine the performance of an individual 
 
 ### Experiment Execution
 
-The base experiment template is an experiment that uses the default cadCAD System Parameters, Initial State, and State Update Blocks defined in the [models/](models/) directory. To run the base experiment from the terminal, execute the `experiments.run` module:
+The base experiment is an experiment that uses the default cadCAD System Parameters, Initial State, and State Update Blocks defined in the [models/](models/) directory. To run the base experiment from the terminal, execute the `experiments.run` module:
 ```bash
 python3 -m experiments.run
 ```
 
-Alternatively, open and run one of the Jupyter experiment notebooks in Jupyter Lab.
+Alternatively, open and run one of the Jupyter experiment notebooks in Jupyter Lab or Notebook.
 
 ### Experiment Workflow
 
@@ -243,3 +245,5 @@ See [CHANGELOG.md](CHANGELOG.md) for notable changes and versions.
 See [CONTRIBUTORS.md](CONTRIBUTORS.md) for contributions to this project repo.
 
 ## Acknowledgements
+
+* Ethereum 2.0 Economic Review. July 16, 2020. "An Analysis of Ethereum’s Proof of Stake Incentive Model". By Tanner Hoban and Thomas Borgers. For the extensive research that inspired the development of our model and the assumptions we adopted.
