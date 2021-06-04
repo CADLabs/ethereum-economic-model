@@ -10,11 +10,14 @@ An Ethereum Validator Economics model.
 **Eth2 specs version**: implements the [Altair](https://github.com/ethereum/eth2.0-specs#altair) updates in the [Beige Gorgon / v1.1.0-alpha.3](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.3) release.
 
 Features:
-* Simulate the different phases of the Ethereum system upgrade process (Phase 0, EIP1559 enabled, The Merge)
-* Enables both state space (simulation over time) and phase space (analysis of system state) simulations and analyses
-* Customizable processes for ETH price, ETH staked, validator adoption, EIP1559, and transaction rates
-* Modular model structure
-* References to [Eth2 specs](https://github.com/ethereum/eth2.0-specs) in Policy and State Update Function logic
+* Configurable to reflect protocol behavior at different points in time of the development roadmap:
+  1. post Beacon Chain launch, pre EIP1559, pre PoS (validators receive PoS incentives, EIP1559 disabled, and PoW still in operation)
+  2. post Beacon Chain launch, post EIP1559, pre PoS (validators receive PoS incentives, EIP1559 enabled with miners receiving tips, and PoW still in operation)
+  3. post Beacon Chain launch, post EIP1559, post PoS (validators receive PoS incentives, EIP1559 enabled with validators receiving tips, and PoW deprecated)
+* Supports [state space analysis](https://en.wikipedia.org/wiki/State-space_representation) (i.e. simulation of system behavior over time) and [phase space analysis](https://en.wikipedia.org/wiki/Phase_space) (i.e. generation of all unique system states in a given experimental setup)
+* Customizable processes for important variables such as ETH price, ETH staked, validator adoption, EIP1559 transaction pricing, and transaction rates
+* Modular model structure for convenient extension and modification. This allows different user groups to refactor the model for different purposes, rapidly test new incentive mechanisms, or to update the model as Ethereum implements new protocol improvements.
+* References to official [Eth2 specs](https://github.com/ethereum/eth2.0-specs) in Policy and State Update Function logic. This enables seamless onboarding of protocol developers or for the more advanced cadCAD user to dig into the underlying protocol design that inspired the logic.
 
 ## Table of Contents
 * [Model](#model)
