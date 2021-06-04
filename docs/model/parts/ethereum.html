@@ -95,6 +95,7 @@ def policy_eip1559_transaction_pricing(
         return {
             &#34;basefee&#34;: 0,
             &#34;total_basefee&#34;: 0,
+            &#34;total_tips_to_miners&#34;: 0,
             &#34;total_tips_to_validators&#34;: 0,
         }
 
@@ -135,7 +136,14 @@ def policy_eip1559_transaction_pricing(
     # Calculate total basefee and tips to validators
     gas_used = transactions_per_epoch * transaction_average_gas  # Gas
     total_basefee = gas_used * basefee  # Gwei
-    total_tips_to_validators = gas_used * avg_tip_amount  # Gwei
+    total_tips = gas_used * avg_tip_amount  # Gwei
+
+    if phase in [Phase.POST_MERGE]:
+        total_tips_to_miners = 0
+        total_tips_to_validators = total_tips
+    else:
+        total_tips_to_miners = total_tips
+        total_tips_to_validators = 0
 
     # Check if the block used too much gas
     assert (
@@ -145,13 +153,14 @@ def policy_eip1559_transaction_pricing(
     return {
         &#34;basefee&#34;: basefee,
         &#34;total_basefee&#34;: total_basefee * dt,
+        &#34;total_tips_to_miners&#34;: total_tips_to_miners * dt,
         &#34;total_tips_to_validators&#34;: total_tips_to_validators * dt,
     }
 
 
 def update_eth_price(
     params, substep, state_history, previous_state, policy_input
-) -&gt; (str, USD_per_ETH):
+) -&gt; typing.Tuple[str, USD_per_ETH]:
     # Parameters
     dt = params[&#34;dt&#34;]
     eth_price_process = params[&#34;eth_price_process&#34;]
@@ -168,7 +177,7 @@ def update_eth_price(
 
 def update_eth_supply(
     params, substep, state_history, previous_state, policy_input
-) -&gt; (str, ETH):
+) -&gt; typing.Tuple[str, ETH]:
     # Policy Inputs
     network_issuance = policy_input[&#34;network_issuance&#34;]
 
@@ -216,6 +225,7 @@ that is burned and dynamically expands/contracts block sizes to deal with transi
         return {
             &#34;basefee&#34;: 0,
             &#34;total_basefee&#34;: 0,
+            &#34;total_tips_to_miners&#34;: 0,
             &#34;total_tips_to_validators&#34;: 0,
         }
 
@@ -256,7 +266,14 @@ that is burned and dynamically expands/contracts block sizes to deal with transi
     # Calculate total basefee and tips to validators
     gas_used = transactions_per_epoch * transaction_average_gas  # Gas
     total_basefee = gas_used * basefee  # Gwei
-    total_tips_to_validators = gas_used * avg_tip_amount  # Gwei
+    total_tips = gas_used * avg_tip_amount  # Gwei
+
+    if phase in [Phase.POST_MERGE]:
+        total_tips_to_miners = 0
+        total_tips_to_validators = total_tips
+    else:
+        total_tips_to_miners = total_tips
+        total_tips_to_validators = 0
 
     # Check if the block used too much gas
     assert (
@@ -266,6 +283,7 @@ that is burned and dynamically expands/contracts block sizes to deal with transi
     return {
         &#34;basefee&#34;: basefee,
         &#34;total_basefee&#34;: total_basefee * dt,
+        &#34;total_tips_to_miners&#34;: total_tips_to_miners * dt,
         &#34;total_tips_to_validators&#34;: total_tips_to_validators * dt,
     }</code></pre>
 </details>
@@ -316,7 +334,7 @@ that is burned and dynamically expands/contracts block sizes to deal with transi
 </details>
 </dd>
 <dt id="model.parts.ethereum.update_eth_price"><code class="name flex">
-<span>def <span class="ident">update_eth_price</span></span>(<span>params, substep, state_history, previous_state, policy_input) ‑> (<class 'str'>, <class 'float'>)</span>
+<span>def <span class="ident">update_eth_price</span></span>(<span>params, substep, state_history, previous_state, policy_input) ‑> Tuple[str, float]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -326,7 +344,7 @@ that is burned and dynamically expands/contracts block sizes to deal with transi
 </summary>
 <pre><code class="python">def update_eth_price(
     params, substep, state_history, previous_state, policy_input
-) -&gt; (str, USD_per_ETH):
+) -&gt; typing.Tuple[str, USD_per_ETH]:
     # Parameters
     dt = params[&#34;dt&#34;]
     eth_price_process = params[&#34;eth_price_process&#34;]
@@ -342,7 +360,7 @@ that is burned and dynamically expands/contracts block sizes to deal with transi
 </details>
 </dd>
 <dt id="model.parts.ethereum.update_eth_supply"><code class="name flex">
-<span>def <span class="ident">update_eth_supply</span></span>(<span>params, substep, state_history, previous_state, policy_input) ‑> (<class 'str'>, <class 'float'>)</span>
+<span>def <span class="ident">update_eth_supply</span></span>(<span>params, substep, state_history, previous_state, policy_input) ‑> Tuple[str, float]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -352,7 +370,7 @@ that is burned and dynamically expands/contracts block sizes to deal with transi
 </summary>
 <pre><code class="python">def update_eth_supply(
     params, substep, state_history, previous_state, policy_input
-) -&gt; (str, ETH):
+) -&gt; typing.Tuple[str, ETH]:
     # Policy Inputs
     network_issuance = policy_input[&#34;network_issuance&#34;]
 

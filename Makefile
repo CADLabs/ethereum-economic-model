@@ -19,11 +19,13 @@ build-docs: docs-pdoc docs-jupyter-book
 
 docs-pdoc:
 	pdoc --html model -o docs --force
-	sed -i 's/\"index.html/\"model\/index.html/g' ./docs/model/*.html
+	# sed -i 's/\"index.html/\"model\/index.html/g' ./docs/model/*.html
 
 docs-jupyter-book:
 	rm -rf docs/notebooks/*
 	cp -r notebooks/* docs/notebooks/
+	sed -i 's/media/_static/g' ./docs/notebooks/*.ipynb
+	jupyter-book clean docs
 	jupyter-book build docs
 
 serve-docs:
