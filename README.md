@@ -73,6 +73,71 @@ The [experiments/](experiments/) directory contains different experiment templat
 
 See the [experiments/README.ipynb](experiments/README.ipynb) notebook for a walk-through of how to configure and execute an experiment.
 
+There are in total 8 experiment notebooks. These experiments answer specific research questions, and follow on logically from one to the next:
+
+### 1. Model Validation
+
+#### Research Question
+> How do we validate the model meets the specification?
+
+#### Experiment Purpose
+The purpose of this experiment is to validate whether the model meets the specification by comparing multiple scenario analyses seen in the Hoban/Borgers Economic Model with those same analyses performed with our model.
+
+### 2. Network Issuance
+
+#### Research Question
+> What validator rewards and penalties make up network issuance?
+
+#### Experiment Purpose
+The purpose of this experiment is to explore the rewards and penalties that make up network issuance under different scenarios.
+
+### 3. Network Costs
+
+#### Research Question
+> What costs do validators incur to secure the network?
+
+#### Experiment Purpose
+The purpose of this experiment is to explore the cost incurred by validators to secure the network under different scenarios.
+
+### 4. Network Yields
+
+#### Research Question
+> What are the best and worst case network yields?
+
+#### Experiment Purpose
+The purpose of this experiment is to determine what the expected network yields are under different scenarios.
+
+### 5. EIP1559 Transaction Pricing
+
+> What effect will EIP1559 transaction pricing have on network yields?
+
+#### Experiment Purpose
+The purpose of this experiment is to explore the effect of the EIP1559 transaction pricing mechanism on network yields under different scenarios.
+
+### 6. Utra-Sound Barrier
+
+#### Research Question
+> At what point will the Ethereum system break the ultra-sound barrier (become deflationary), and what will the peak ETH supply be?
+
+#### Experiment Purpose
+The purpose of this experiment is to analyse the network suppy inflation, and determine under what scenarios the network becomes deflationary.
+
+### 7. Validator Environment Yields
+
+#### Research Question
+> What are the expected validator yields for staking in different environments?
+
+#### Experiment Purpose
+The purpose of this experiment is to explore the different validator environments and their yields under different scenarios.
+
+### 8. Individual Validator Performance
+
+#### Research Question
+> What is the performance of an individual validator with a custom environment configuration?
+
+#### Experiment Purpose
+The purpose of this experiment is to determine the performance of an individual validator using a custom environment configuration.
+
 ### Experiment Execution
 
 The base experiment template is an experiment that uses the default cadCAD System Parameters, Initial State, and State Update Blocks defined in the [models/](models/) directory. To run the base experiment from the terminal, execute the `experiments.run` module:
