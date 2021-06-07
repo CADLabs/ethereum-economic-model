@@ -37,7 +37,7 @@ def policy_network_issuance(
     # Calculate Proof of Work issuance
     pow_issuance = (
         daily_pow_issuance / constants.epochs_per_day
-        if Stage(stage) in [Stage.PHASE_0, Stage.POST_EIP1559]
+        if Stage(stage) in [Stage.BEACON_CHAIN, Stage.EIP1559]
         else 0
     )
     network_issuance += pow_issuance * dt
@@ -61,7 +61,7 @@ def policy_eip1559_transaction_pricing(
     """
 
     stage = Stage(previous_state["stage"])
-    if not stage in [Stage.POST_EIP1559, Stage.POST_MERGE]:
+    if not stage in [Stage.EIP1559, Stage.PROOF_OF_STAKE]:
         return {
             "basefee": 0,
             "total_basefee": 0,
@@ -108,7 +108,7 @@ def policy_eip1559_transaction_pricing(
     total_basefee = gas_used * basefee  # Gwei
     total_tips = gas_used * avg_tip_amount  # Gwei
 
-    if stage in [Stage.POST_MERGE]:
+    if stage in [Stage.PROOF_OF_STAKE]:
         total_tips_to_miners = 0
         total_tips_to_validators = total_tips
     else:

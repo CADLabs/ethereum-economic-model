@@ -191,10 +191,19 @@ pip install -r requirements.txt
 
 ## Tests
 
-To run the tests using Pytest:
+### Pytest Tests
+
+To execute the Pytest tests:
 ```bash
 source venv/bin/activate
 python3 -m pytest tests
+```
+
+### Notebook Tests
+
+```bash
+source venv/bin/activate
+make execute-notebooks
 ```
 
 ## Jupyter Environment

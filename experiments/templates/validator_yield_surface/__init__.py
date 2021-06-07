@@ -14,7 +14,7 @@ sweep = generate_cartesion_product({
 })
 
 parameter_overrides = {
-    "stage": [Stage.PHASE_0],
+    "stage": [Stage.BEACON_CHAIN],
     "eth_price_process": [
         lambda run, _timestep: sweep["eth_price_samples"][run - 1]
     ],

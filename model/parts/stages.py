@@ -44,24 +44,24 @@ def policy_stages(params, substep, state_history, previous_state):
     if stage == Stage.ALL:
         # If Stage ALL selected, transition through all stages
         # at different timestamps
-        if current_stage in [Stage.ALL, Stage.PHASE_0] and timestamp < date_eip1559:
-            current_stage = Stage.PHASE_0
+        if current_stage in [Stage.ALL, Stage.BEACON_CHAIN] and timestamp < date_eip1559:
+            current_stage = Stage.BEACON_CHAIN
         elif (
-            current_stage in [Stage.PHASE_0, Stage.POST_EIP1559]
+            current_stage in [Stage.BEACON_CHAIN, Stage.EIP1559]
             and timestamp < date_merge
         ):
-            current_stage = Stage.POST_EIP1559
+            current_stage = Stage.EIP1559
         else:
-            current_stage = Stage.POST_MERGE
-    elif stage == Stage.PHASE_0:
-        # If Stage PHASE_0 selected, only execute single stage
-        current_stage = Stage.PHASE_0
-    elif stage == Stage.POST_EIP1559:
-        # If Stage POST_EIP1559 selected, only execute single stage
-        current_stage = Stage.POST_EIP1559
-    elif stage == Stage.POST_MERGE:
-        # If Stage POST_MERGE selected, only execute single stage
-        current_stage = Stage.POST_MERGE
+            current_stage = Stage.PROOF_OF_STAKE
+    elif stage == Stage.BEACON_CHAIN:
+        # If Stage BEACON_CHAIN selected, only execute single stage
+        current_stage = Stage.BEACON_CHAIN
+    elif stage == Stage.EIP1559:
+        # If Stage EIP1559 selected, only execute single stage
+        current_stage = Stage.EIP1559
+    elif stage == Stage.PROOF_OF_STAKE:
+        # If Stage PROOF_OF_STAKE selected, only execute single stage
+        current_stage = Stage.PROOF_OF_STAKE
     else:
         # Else, raise exception if invalid Stage
         raise Exception("Invalid Stage selected")

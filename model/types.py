@@ -33,11 +33,11 @@ class Stage(Enum):
 
     ALL = 1
     """Transition through all stages"""
-    PHASE_0 = 2
+    BEACON_CHAIN = 2
     """EIP1559 disabled; POW issuance enabled"""
-    POST_EIP1559 = 3
+    EIP1559 = 3
     """EIP1559 enabled; POW issuance enabled"""
-    POST_MERGE = 4
+    PROOF_OF_STAKE = 4
     """EIP1559 enabled; POW issuance disabled"""
 
 

@@ -9,7 +9,7 @@ from model.types import Stage
 eth_price_samples = np.linspace(start=100, stop=3000, num=50)
 
 parameter_overrides = {
-    "stage": [Stage.PHASE_0],
+    "stage": [Stage.BEACON_CHAIN],
     "eth_price_process": [
         lambda run, _timestep: eth_price_samples[run - 1]
     ],

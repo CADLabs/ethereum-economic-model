@@ -49,7 +49,7 @@ class StateVariables:
     """
     The stage of the network upgrade process.
 
-    By default set to POST_MERGE Stage, where EIP1559 is enabled and POW issuance is disabled.
+    By default set to PROOF_OF_STAKE Stage, where EIP1559 is enabled and POW issuance is disabled.
 
     Otherwise set to ALL Stage, which transitions through each stage, updating the `stage` State Variable.
 

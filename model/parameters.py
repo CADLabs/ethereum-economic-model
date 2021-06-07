@@ -159,11 +159,11 @@ class Parameters:
     By default set to constants.epochs_per_day (225)
     """
 
-    stage: List[Stage] = default([Stage.POST_MERGE])
+    stage: List[Stage] = default([Stage.PROOF_OF_STAKE])
     """
     Which stage or stages of the network upgrade process to simulate.
 
-    By default set to POST_MERGE stage, where EIP1559 is enabled and POW issuance is disabled.
+    By default set to PROOF_OF_STAKE stage, where EIP1559 is enabled and POW issuance is disabled.
 
     See model.types.Stage Enum for further documentation.
     """

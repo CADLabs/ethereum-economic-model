@@ -13,7 +13,7 @@ eth_staked_samples = np.linspace(
 )
 
 parameter_overrides = {
-    "stage": [Stage.PHASE_0],
+    "stage": [Stage.BEACON_CHAIN],
     "eth_staked_process": [
         lambda run, _timestep: eth_staked_samples[run - 1],
     ],
