@@ -1,8 +1,8 @@
-from model.types import Phase
+from model.types import Stage
 import model.constants as constants
 import model.simulation_configuration as simulation_configuration
 from model.processes import create_stochastic_process_realizations
-from model.types import Phase
+from model.types import Stage
 from experiments.base import experiment
 
 
@@ -15,7 +15,7 @@ stochastic_process_realizations = create_stochastic_process_realizations(TIMESTE
 eth_price_samples = stochastic_process_realizations['eth_price_samples']
 
 parameter_overrides = {
-    "phase": [Phase.ALL],
+    "stage": [Stage.ALL],
     "eth_price_process": [lambda run, timestep: eth_price_samples[run - 1][timestep]],
 }
 

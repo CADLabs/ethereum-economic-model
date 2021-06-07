@@ -1,4 +1,4 @@
-from model.types import Phase
+from model.types import Stage
 import model.constants as constants
 import model.simulation_configuration as simulation_configuration
 from model.processes import create_stochastic_process_realizations
@@ -18,7 +18,7 @@ validator_samples = stochastic_process_realizations['validator_samples']
 validator_uptime_samples = stochastic_process_realizations['validator_uptime_samples']
 
 parameter_overrides = {
-    "phase": [Phase.ALL],
+    "stage": [Stage.ALL],
     "eth_price_process": [lambda run, timestep: eth_price_samples[run - 1][timestep]],
     "validator_process": [lambda run, timestep: validator_samples[run - 1][timestep]],
     "validator_uptime_process": [lambda run, timestep: validator_uptime_samples[run - 1][timestep]]

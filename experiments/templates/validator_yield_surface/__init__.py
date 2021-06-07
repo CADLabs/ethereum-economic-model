@@ -3,7 +3,7 @@ import numpy as np
 from model.state_variables import eth_staked, eth_supply
 from experiments.base import experiment, TIMESTEPS, DELTA_TIME
 from experiments.utils import generate_cartesion_product
-from model.types import Phase
+from model.types import Stage
 
 
 sweep = generate_cartesion_product({
@@ -14,7 +14,7 @@ sweep = generate_cartesion_product({
 })
 
 parameter_overrides = {
-    "phase": [Phase.PHASE_0],
+    "stage": [Stage.PHASE_0],
     "eth_price_process": [
         lambda run, _timestep: sweep["eth_price_samples"][run - 1]
     ],
