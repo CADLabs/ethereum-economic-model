@@ -32,4 +32,7 @@ serve-docs:
 	gunicorn -w 4 -b 127.0.0.1:5000 docs.server:app
 
 execute-notebooks:
+	jupyter nbconvert --execute --to notebook notebooks/*.ipynb
+
+update-notebooks:
 	jupyter nbconvert --execute --to notebook --inplace notebooks/*.ipynb
