@@ -10,7 +10,7 @@ An Ethereum Validator Economics model.
 **Eth2 specs version**: implements the [Altair](https://github.com/ethereum/eth2.0-specs#altair) updates in the [Beige Gorgon / v1.1.0-alpha.3](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.3) release.
 
 Features:
-* Simulate the different phases of the Ethereum system upgrade process (Phase 0, EIP1559 enabled, The Merge)
+* Simulate the different stages of the Ethereum system upgrade process (Beacon Chain, EIP1559 enabled, POS)
 * Enables both state space (simulation over time) and phase space (analysis of system state) simulations and analyses
 * Customizable processes for ETH price, ETH staked, validator adoption, EIP1559, and transaction rates
 * Modular model structure
@@ -48,7 +48,7 @@ The model is composed of different modules in the [model/parts/](model/parts/) d
 | [ethereum.py](model/parts/ethereum.py) | Genereal Ethereum mechanisms, such as the EIP1559 transaction pricing mechanism, and updating the ETH price and ETH supply |
 | [incentives.py](model/parts/incentives.py) | Proof of Stake incentives |
 | [metrics.py](model/parts/metrics.py) | Calculation of validator costs, revenue, profit, and yield metrics |
-| [phases.py](model/parts/phases.py) | Management of phases of the Ethereum system upgrade process |
+| [stages.py](model/parts/stages.py) | Management of stages of the Ethereum system upgrade process |
 | [spec.py](model/parts/spec.py) | Relevant extracts from the Eth2 spec |
 | [validators.py](model/parts/validators.py) | Validator processes such as validator activation, staking, uptime |
 
@@ -64,7 +64,7 @@ The model is configured using modules in the [model/](model/) directory:
 | [simulation_configuration.py](model/simulation_configuration.py) | Simulation configuration such as the number of timesteps and Monte Carlo runs |
 | [state_update_blocks.py](model/state_update_blocks.py) | cadCAD model state update block structure, composed of Policy and State Update Functions |
 | [state_variables.py](model/state_variables.py) | Model State Variable definition, configuration, and defaults |
-| [types.py](model/types.py) | Various types used in the model, such as the `Phase` Enum and calculation units |
+| [types.py](model/types.py) | Various types used in the model, such as the `Stage` Enum and calculation units |
 | [utils.py](model/utils.py) | Misc. utility and helper functions |
 
 ## Experiments
@@ -232,7 +232,7 @@ jupyter labextension install jupyterlab-plotly@4.14.3
 The following is a non-exhaustive list of possible model extensions and future features:
 * Implement a dynamic EIP1559 basefee with a feedback loop based on blockspace demand / network congestion
 * Backtest the model against historical data such as the ETH price, ETH staked to determine expected historical yields
-* Extend the model to cover future Eth2 phases after merge, such as sharding
+* Extend the model to cover future Ethereum upgrade stages after merge, such as sharding
 * Apply Hoban/Borgers security (cost of attack) and required rate of return (RSAVY) analysis to simulation results
 * ...
 
