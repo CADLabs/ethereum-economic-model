@@ -20,8 +20,7 @@ from model.types import (
     USD,
     USD_per_ETH,
     Percentage,
-    Uninitialized,
-    Phase,
+    Stage,
 )
 from model.parameters import validator_environments
 
@@ -46,15 +45,15 @@ class StateVariables:
     """
 
     # Time state variables
-    phase: Phase = None
+    stage: Stage = None
     """
-    The phase of the network upgrade process.
+    The stage of the network upgrade process.
 
-    By default set to POST_MERGE Phase, where EIP1559 is enabled and POW issuance is disabled.
+    By default set to POST_MERGE Stage, where EIP1559 is enabled and POW issuance is disabled.
 
-    Otherwise set to ALL Phase, which transitions through each phase, updating the `phase` State Variable.
+    Otherwise set to ALL Stage, which transitions through each stage, updating the `stage` State Variable.
 
-    See model.types.Phase Enum for further documentation.
+    See model.types.Stage Enum for further documentation.
     """
     timestamp: datetime = None
     """

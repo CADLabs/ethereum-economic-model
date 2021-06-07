@@ -28,11 +28,11 @@ Gwei_per_Gas = float
 ETH = float
 
 
-class Phase(Enum):
-    """Phases of the Ethereum network upgrade process finite-state machine"""
+class Stage(Enum):
+    """Stages of the Ethereum network upgrade process finite-state machine"""
 
     ALL = 1
-    """Transition through all phases"""
+    """Transition through all stages"""
     PHASE_0 = 2
     """EIP1559 disabled; POW issuance enabled"""
     POST_EIP1559 = 3

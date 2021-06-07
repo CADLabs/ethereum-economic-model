@@ -29,7 +29,7 @@ from model.types import (
     List,
     Callable,
     Epoch,
-    Phase,
+    Stage,
 )
 from model.utils import default
 from model.processes import create_stochastic_process_realizations
@@ -159,13 +159,13 @@ class Parameters:
     By default set to constants.epochs_per_day (225)
     """
 
-    phase: List[Phase] = default([Phase.POST_MERGE])
+    stage: List[Stage] = default([Stage.POST_MERGE])
     """
-    Which phase or phases of the network upgrade process to simulate.
+    Which stage or stages of the network upgrade process to simulate.
 
-    By default set to POST_MERGE Phase, where EIP1559 is enabled and POW issuance is disabled.
+    By default set to POST_MERGE stage, where EIP1559 is enabled and POW issuance is disabled.
 
-    See model.types.Phase Enum for further documentation.
+    See model.types.Stage Enum for further documentation.
     """
 
     date_start: List[datetime] = default([datetime.now()])

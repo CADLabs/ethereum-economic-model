@@ -1,4 +1,4 @@
-import model.parts.phases as phases
+import model.parts.stages as stages
 import model.parts.ethereum as ethereum
 import model.parts.validators as validators
 import model.parts.incentives as incentives
@@ -7,13 +7,13 @@ from model.parameters import parameters
 from model.utils import update_from_signal
 
 
-state_update_block_phases = {
+state_update_block_stages = {
     "description": """
-    Transition between phases of network upgrade process
+    Transition between stages of network upgrade process
     """,
-    "policies": {"update_phases": phases.policy_phases},
+    "policies": {"update_stages": stages.policy_stages},
     "variables": {
-        "phase": update_from_signal("phase"),
+        "stage": update_from_signal("stage"),
         "timestamp": update_from_signal("timestamp"),
     },
 }
@@ -208,7 +208,7 @@ _state_update_blocks = [
 # Conditionally update the order of the State Update Blocks
 _state_update_blocks = (
     [
-        state_update_block_phases,
+        state_update_block_stages,
         state_update_block_staking,
         state_update_block_validators,
     ]
@@ -216,7 +216,7 @@ _state_update_blocks = (
     if parameters["eth_staked_process"][0](0, 0) != None
     # If driving with validator process, switch first two blocks
     else [
-        state_update_block_phases,
+        state_update_block_stages,
         state_update_block_validators,
         state_update_block_staking,
     ]
