@@ -24,9 +24,17 @@ This is a validator economics model, and does not model security issues such as 
 
 That being said, there is an abstraction for slashing with a simple process of x number of slashing events per 1000 epochs.
 
-## 2. At most 1/3 of validators can be offline at any time i.e. the inactivity leak threshold is never reached
+## 2. Validators have imperfect participation
 
-## 3. Epoch level granularity
+We assume that not all validators carry out their duties perfectly.
+
+We do not make any assumptions about why aggregators act imperfectly, but rather we’ll assume validators are online and operating perfectly, or offline and not fulfilling their duties.
+
+We capture this participation rate using the `validator_uptime_process` System Parameter, which returns the percentage of online validators.
+
+## 3. At most 1/3 of validators can be offline at any time i.e. the inactivity leak threshold is never reached
+
+## 4. Epoch level granularity
 
 Unless specified otherwise, all State Variables, System Metrics, and System Parameters are time-dependent and calculated at epoch level granularity. For ease of notation, units of time will be assumed implicitly. In the model implementation, calculations can be aggregated across epochs where necessary - for example for performance reasons.
 
