@@ -72,6 +72,8 @@ def policy_attestation_penalties(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
     """Attestation Penalties Policy Function
+    Validators are penalized for not attesting to the source, target, and head.
+
     Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#get_flag_index_deltas
 
     Extract from spec:
