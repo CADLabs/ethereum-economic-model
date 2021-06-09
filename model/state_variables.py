@@ -90,7 +90,10 @@ class StateVariables:
 
     # Reward and penalty state variables
     base_reward: Gwei = 0
-    """Validator rewards and penalties are calculated in terms of the base reward"""
+    """
+    Validator rewards and penalties are calculated in terms of the base reward.
+    Under perfect network conditions, each validator should receive 1 base reward per epoch for performing their duties.
+    """
     validating_rewards: Gwei = 0
     """The total rewards received for PoS validation (attestation, block proposal, sync vote)"""
     validating_penalties: Gwei = 0

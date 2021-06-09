@@ -23,8 +23,10 @@ def run(experiment=experiment):
   experiment.run()
   logging.info("Experiment complete")
 
+  logging.info("Post-processing results")
   df = pd.DataFrame(experiment.results)
   df = post_process(df)
+  logging.info("Post-processing complete")
 
   return df, experiment.exceptions
 

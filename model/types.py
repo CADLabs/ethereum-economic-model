@@ -34,11 +34,11 @@ class Stage(Enum):
     ALL = 1
     """Transition through all stages"""
     BEACON_CHAIN = 2
-    """EIP1559 disabled; POW issuance enabled"""
+    """Beacon Chain implemented; EIP1559 disabled; POW issuance enabled"""
     EIP1559 = 3
-    """EIP1559 enabled; POW issuance enabled"""
+    """Beacon Chain implemented; EIP1559 enabled; POW issuance enabled"""
     PROOF_OF_STAKE = 4
-    """EIP1559 enabled; POW issuance disabled"""
+    """Beacon Chain implemented; EIP1559 enabled; POW issuance disabled"""
 
 
 # US Dollar types
