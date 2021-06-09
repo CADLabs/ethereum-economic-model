@@ -26,9 +26,11 @@ That being said, there is an abstraction for slashing with a simple process of x
 
 ## 2. Validators have imperfect participation
 
-We assume that not all validators carry out their duties perfectly.
+We assume that not all online validators carry out their duties perfectly.
 
 We do not make any assumptions about why aggregators act imperfectly, but rather we’ll assume validators are online and operating perfectly, or offline and not fulfilling their duties.
+
+Those validators that are offline are penalized for not attesting to the source, target, and head.
 
 We capture this participation rate using the `validator_uptime_process` System Parameter, which returns the percentage of online validators.
 
@@ -46,6 +48,14 @@ Whereas in reality the majority of slashing events have been due to institutiona
 
 This assumption is adequate for calculations of validator economics under steady-state conditions, but might fail if slashing events increase significantly for a specific validator environment type, or if the network is under attack by a specific validator environment type.
 
+See https://youtu.be/iaAEGs1DMgQ?t=574 for a good answer to the question of slashing for specific validator environments.
+
 ## 6. The same validator uptime is assumed for all validator environments
 
 Whereas we could perhaps expect better uptime for cloud environments than local hardware environments, we do not have the necessary data to make these assumptions, and so we make the simplifying assumption that the same validator uptime is applied to all validator environments.
+
+## 7. Validator environment costs are adopted from the Hoban/Borgers Ethereum 2.0 Economic Model
+
+By analysing the expected costs of validating and infrastructure costs globally, Hoban/Borgers made certain assumptions about validator environment operational costs. These assumptions are listed in their spreadsheet model and report.
+
+For example, they estimate 1 machine per 1000 validators, and global electricity and bandwidth averages are based on Ethereum node distribution.
