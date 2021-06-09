@@ -260,6 +260,12 @@ class Parameters:
     """
     Used to calculate the penalty applied for a slashable offence.
     """
+    PROPORTIONAL_SLASHING_MULTIPLIER: List[int] = default([2])
+    """
+    Scales the slashing penalty proportional to the total slashings for the current epoch
+
+    i.e. the more slashing events there are, the greater the individual penalty
+    """
     TIMELY_HEAD_WEIGHT: List[int] = default([12])
     """
     Used to calculate the reward received for getting a head vote in time and correctly.
