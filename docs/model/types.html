@@ -56,17 +56,17 @@ Gwei_per_Gas = float
 ETH = float
 
 
-class Phase(Enum):
-    &#34;&#34;&#34;Phases of the Ethereum network upgrade process finite-state machine&#34;&#34;&#34;
+class Stage(Enum):
+    &#34;&#34;&#34;Stages of the Ethereum network upgrade process finite-state machine&#34;&#34;&#34;
 
     ALL = 1
-    &#34;&#34;&#34;Transition through all phases&#34;&#34;&#34;
-    PHASE_0 = 2
-    &#34;&#34;&#34;EIP1559 disabled; POW issuance enabled&#34;&#34;&#34;
-    POST_EIP1559 = 3
-    &#34;&#34;&#34;EIP1559 enabled; POW issuance enabled&#34;&#34;&#34;
-    POST_MERGE = 4
-    &#34;&#34;&#34;EIP1559 enabled; POW issuance disabled&#34;&#34;&#34;
+    &#34;&#34;&#34;Transition through all stages&#34;&#34;&#34;
+    BEACON_CHAIN = 2
+    &#34;&#34;&#34;Beacon Chain implemented; EIP1559 disabled; POW issuance enabled&#34;&#34;&#34;
+    EIP1559 = 3
+    &#34;&#34;&#34;Beacon Chain implemented; EIP1559 enabled; POW issuance enabled&#34;&#34;&#34;
+    PROOF_OF_STAKE = 4
+    &#34;&#34;&#34;Beacon Chain implemented; EIP1559 enabled; POW issuance disabled&#34;&#34;&#34;
 
 
 # US Dollar types
@@ -104,27 +104,27 @@ class ValidatorEnvironment:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="model.types.Phase"><code class="flex name class">
-<span>class <span class="ident">Phase</span></span>
+<dt id="model.types.Stage"><code class="flex name class">
+<span>class <span class="ident">Stage</span></span>
 <span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Phases of the Ethereum network upgrade process finite-state machine</p></div>
+<div class="desc"><p>Stages of the Ethereum network upgrade process finite-state machine</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class Phase(Enum):
-    &#34;&#34;&#34;Phases of the Ethereum network upgrade process finite-state machine&#34;&#34;&#34;
+<pre><code class="python">class Stage(Enum):
+    &#34;&#34;&#34;Stages of the Ethereum network upgrade process finite-state machine&#34;&#34;&#34;
 
     ALL = 1
-    &#34;&#34;&#34;Transition through all phases&#34;&#34;&#34;
-    PHASE_0 = 2
-    &#34;&#34;&#34;EIP1559 disabled; POW issuance enabled&#34;&#34;&#34;
-    POST_EIP1559 = 3
-    &#34;&#34;&#34;EIP1559 enabled; POW issuance enabled&#34;&#34;&#34;
-    POST_MERGE = 4
-    &#34;&#34;&#34;EIP1559 enabled; POW issuance disabled&#34;&#34;&#34;</code></pre>
+    &#34;&#34;&#34;Transition through all stages&#34;&#34;&#34;
+    BEACON_CHAIN = 2
+    &#34;&#34;&#34;Beacon Chain implemented; EIP1559 disabled; POW issuance enabled&#34;&#34;&#34;
+    EIP1559 = 3
+    &#34;&#34;&#34;Beacon Chain implemented; EIP1559 enabled; POW issuance enabled&#34;&#34;&#34;
+    PROOF_OF_STAKE = 4
+    &#34;&#34;&#34;Beacon Chain implemented; EIP1559 enabled; POW issuance disabled&#34;&#34;&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -132,21 +132,21 @@ class ValidatorEnvironment:
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="model.types.Phase.ALL"><code class="name">var <span class="ident">ALL</span></code></dt>
+<dt id="model.types.Stage.ALL"><code class="name">var <span class="ident">ALL</span></code></dt>
 <dd>
-<div class="desc"><p>Transition through all phases</p></div>
+<div class="desc"><p>Transition through all stages</p></div>
 </dd>
-<dt id="model.types.Phase.PHASE_0"><code class="name">var <span class="ident">PHASE_0</span></code></dt>
+<dt id="model.types.Stage.BEACON_CHAIN"><code class="name">var <span class="ident">BEACON_CHAIN</span></code></dt>
 <dd>
-<div class="desc"><p>EIP1559 disabled; POW issuance enabled</p></div>
+<div class="desc"><p>Beacon Chain implemented; EIP1559 disabled; POW issuance enabled</p></div>
 </dd>
-<dt id="model.types.Phase.POST_EIP1559"><code class="name">var <span class="ident">POST_EIP1559</span></code></dt>
+<dt id="model.types.Stage.EIP1559"><code class="name">var <span class="ident">EIP1559</span></code></dt>
 <dd>
-<div class="desc"><p>EIP1559 enabled; POW issuance enabled</p></div>
+<div class="desc"><p>Beacon Chain implemented; EIP1559 enabled; POW issuance enabled</p></div>
 </dd>
-<dt id="model.types.Phase.POST_MERGE"><code class="name">var <span class="ident">POST_MERGE</span></code></dt>
+<dt id="model.types.Stage.PROOF_OF_STAKE"><code class="name">var <span class="ident">PROOF_OF_STAKE</span></code></dt>
 <dd>
-<div class="desc"><p>EIP1559 enabled; POW issuance disabled</p></div>
+<div class="desc"><p>Beacon Chain implemented; EIP1559 enabled; POW issuance disabled</p></div>
 </dd>
 </dl>
 </dd>
@@ -209,12 +209,12 @@ class ValidatorEnvironment:
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="model.types.Phase" href="#model.types.Phase">Phase</a></code></h4>
+<h4><code><a title="model.types.Stage" href="#model.types.Stage">Stage</a></code></h4>
 <ul class="">
-<li><code><a title="model.types.Phase.ALL" href="#model.types.Phase.ALL">ALL</a></code></li>
-<li><code><a title="model.types.Phase.PHASE_0" href="#model.types.Phase.PHASE_0">PHASE_0</a></code></li>
-<li><code><a title="model.types.Phase.POST_EIP1559" href="#model.types.Phase.POST_EIP1559">POST_EIP1559</a></code></li>
-<li><code><a title="model.types.Phase.POST_MERGE" href="#model.types.Phase.POST_MERGE">POST_MERGE</a></code></li>
+<li><code><a title="model.types.Stage.ALL" href="#model.types.Stage.ALL">ALL</a></code></li>
+<li><code><a title="model.types.Stage.BEACON_CHAIN" href="#model.types.Stage.BEACON_CHAIN">BEACON_CHAIN</a></code></li>
+<li><code><a title="model.types.Stage.EIP1559" href="#model.types.Stage.EIP1559">EIP1559</a></code></li>
+<li><code><a title="model.types.Stage.PROOF_OF_STAKE" href="#model.types.Stage.PROOF_OF_STAKE">PROOF_OF_STAKE</a></code></li>
 </ul>
 </li>
 <li>

@@ -5,7 +5,6 @@ from one stage in the Ethereum network upgrade process to the next at different 
 
 import datetime
 
-import model.simulation_configuration as simulation
 import model.constants as constants
 from model.types import Stage
 

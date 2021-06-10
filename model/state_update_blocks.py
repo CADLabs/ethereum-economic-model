@@ -3,7 +3,7 @@ import model.parts.ethereum as ethereum
 import model.parts.validators as validators
 import model.parts.incentives as incentives
 import model.parts.metrics as metrics
-from model.parameters import parameters
+from model.system_parameters import parameters
 from model.utils import update_from_signal
 
 
