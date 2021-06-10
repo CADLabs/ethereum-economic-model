@@ -1,4 +1,4 @@
-# CADLabs Ethereum Model
+# CADLabs Ethereum Validator Economics Model
 [![Python package](https://github.com/cadCAD-edu/ethereum-model/actions/workflows/python.yml/badge.svg)](https://github.com/cadCAD-edu/ethereum-model/actions/workflows/python.yml)
 
 An Ethereum Validator Economics model.
