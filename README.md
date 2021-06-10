@@ -1,7 +1,7 @@
 # CADLabs Ethereum Validator Economics Model
 [![Python package](https://github.com/cadCAD-edu/ethereum-model/actions/workflows/python.yml/badge.svg)](https://github.com/cadCAD-edu/ethereum-model/actions/workflows/python.yml)
 
-A modular, highly extensible dynamical systems model implemented using the open-source radCAD Python library (TODO: ADD LINK TO CADLABS REPO)
+A modular dynamical systems model implemented using the open-source Python library OpenCAD (TODO: ADD LINK TO CADLABS REPO)
 
 **Official Eth2 specs version**: implements the [Altair](https://github.com/ethereum/eth2.0-specs#altair) updates in the [Beige Gorgon / v1.1.0-alpha.3](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.3) release.
 
@@ -48,7 +48,7 @@ The model/ directory contains the model's software architecture in the form of t
 
 ### Structural Modules (TODO: Discuss renaming modules and/or reordering code for better accessibiltiy)
 
-The model is composed of different structural modules in the [model/parts/](model/parts/) directory:
+The model is composed of several structural modules in the [model/parts/](model/parts/) directory:
 
 | Module | Description |
 | --- | --- |
@@ -61,7 +61,7 @@ The model is composed of different structural modules in the [model/parts/](mode
 
 ### Configuration Modules
 
-The model is configured using configuration modules in the [model/](model/) directory:
+The model is configured using several configuration modules in the [model/](model/) directory:
 
 | Module | Description |
 | --- | --- |
@@ -87,14 +87,12 @@ There are in total 8 experiment notebooks (TODO:Rename notebooks to match edited
 ### 1. Model Validation
 
 #### Research Question
-Does the CADLabs model actually implement its <specification> and does it match the ? 
+How accurately does that CADLabs model perform compared to a) other validator economics models and b) past on-chain data?
 
-#### Notebook Overview
-This experiment notebook is used to efficiently validate that the CADLabs model actually implements the Model Specification. Since the model specification is based on two main sources, the official Eth2 spec, and the (excellent) Hoban/Borgers Eth2 Economic Model (TODO: Add Link to Online Version), 
+#### Experiment Overview
+The purpose of this notebook is to recreate selected scenario analysis from the (excellent and widely acknowledged) Hoban/Borgers Ethereum 2.0 Economic Model using the CADLabs model, and to compare the results. We suggest that the CADLabs model has a high degree of validity.
 
-validates that the CADLabs model meets the (TODO: specify which specification we are talking about) specification by comparing multiple scenario analyses with those same analysis as per the (excellent) Hoban/Borgers Eth2 Economic Model (TODO: Add Link to Online Version).
-
-### 2. Network Issuance
+### 2. Network Issuance (NOTE: BELOW NOT YET REVIEWED)
 
 #### Research Question
 What validator rewards and penalties make up network issuance?
