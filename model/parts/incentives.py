@@ -5,12 +5,8 @@
 * Calculation of PoS slashing penalties
 """
 
-import math
 import typing
 
-from numpy import number
-
-import model.constants as constants
 from model.types import Gwei
 import model.parts.spec as spec
 

@@ -72,7 +72,7 @@ The [experiments/](experiments/) directory contains modules for configuring and 
 
 The [experiments/templates/](experiments/templates/) directory contains different experiment templates which are used in the Jupyter experiment notebooks in the [notebooks/](notebooks/) directory to answer research questions and perform scenario analyses.
 
-See the [experiments/README.ipynb](experiments/README.ipynb) notebook for a walk-through of how to configure and execute an experiment.
+See the [notebooks/README.ipynb](notebooks/README.ipynb) notebook for a walk-through of how to configure and execute an experiment.
 
 There are in total 8 experiment notebooks. These experiments answer specific research questions, and follow on logically from one to the next:
 

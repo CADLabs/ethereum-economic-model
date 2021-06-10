@@ -5,8 +5,6 @@ Policy Functions and State Update Functions shared between the Eth1 and Eth2 sys
 """
 
 import typing
-import math
-import logging
 
 import model.constants as constants
 from model.types import ETH, USD_per_ETH, Gwei, Stage
