@@ -71,7 +71,7 @@ for scenario in range(len(eth_staked_scenarios)):
 
 # %%
 parameter_overrides = {
-    "phase": [Phase.POST_MERGE],
+    "phase": [Phase.PROOF_OF_STAKE],
     "eth_price_process": [lambda _run=None, _timestep=None: 3000],
     "eth_staked_process": [lambda _run=None, _timestep=None, eth_staked=eth_staked: eth_staked for eth_staked in eth_staked_scenarios],  # ETH
     "eip1559_basefee_process": [lambda _run=None, _timestep=None, basefee=basefee: basefee for basefee in basefee_values],  # Gwei per gas

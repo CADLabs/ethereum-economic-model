@@ -53,10 +53,9 @@ from model.types import (
     USD,
     USD_per_ETH,
     Percentage,
-    Uninitialized,
-    Phase,
+    Stage,
 )
-from model.parameters import validator_environments
+from model.system_parameters import validator_environments
 
 
 # Get number of validator environments for initializing Numpy array size
@@ -79,15 +78,15 @@ class StateVariables:
     &#34;&#34;&#34;
 
     # Time state variables
-    phase: Phase = None
+    stage: Stage = None
     &#34;&#34;&#34;
-    The phase of the network upgrade process.
+    The stage of the network upgrade process.
 
-    By default set to POST_MERGE Phase, where EIP1559 is enabled and POW issuance is disabled.
+    By default set to PROOF_OF_STAKE Stage, where EIP1559 is enabled and POW issuance is disabled.
 
-    Otherwise set to ALL Phase, which transitions through each phase, updating the `phase` State Variable.
+    Otherwise set to ALL Stage, which transitions through each stage, updating the `stage` State Variable.
 
-    See model.types.Phase Enum for further documentation.
+    See model.types.Stage Enum for further documentation.
     &#34;&#34;&#34;
     timestamp: datetime = None
     &#34;&#34;&#34;
@@ -124,7 +123,10 @@ class StateVariables:
 
     # Reward and penalty state variables
     base_reward: Gwei = 0
-    &#34;&#34;&#34;Validator rewards and penalties are calculated in terms of the base reward&#34;&#34;&#34;
+    &#34;&#34;&#34;
+    Validator rewards and penalties are calculated in terms of the base reward.
+    Under perfect network conditions, each validator should receive 1 base reward per epoch for performing their duties.
+    &#34;&#34;&#34;
     validating_rewards: Gwei = 0
     &#34;&#34;&#34;The total rewards received for PoS validation (attestation, block proposal, sync vote)&#34;&#34;&#34;
     validating_penalties: Gwei = 0
@@ -230,7 +232,7 @@ initial_state = StateVariables().__dict__</code></pre>
 <dl>
 <dt id="model.state_variables.StateVariables"><code class="flex name class">
 <span>class <span class="ident">StateVariables</span></span>
-<span>(</span><span>phase: <a title="model.types.Phase" href="types.html#model.types.Phase">Phase</a> = None, timestamp: datetime.datetime = None, eth_price: float = 0, eth_supply: float = 115538828, eth_staked: float = 3868555, supply_inflation: float = 0, network_issuance: float = 0, pow_issuance: float = 0, number_of_validators_in_activation_queue: int = 230, average_effective_balance: float = 32000000000.0, number_of_validators: int = 120894, number_of_validators_online: int = 0, number_of_validators_offline: int = 0, base_reward: float = 0, validating_rewards: float = 0, validating_penalties: float = 0, source_reward: float = 0, target_reward: float = 0, head_reward: float = 0, block_proposer_reward: float = 0, sync_reward: float = 0, amount_slashed: float = 0, whistleblower_rewards: float = 0, basefee: float = 1, total_basefee: float = 0, total_tips_to_miners: float = 0, total_tips_to_validators: float = 0, validator_eth_staked: numpy.ndarray = array([[0],
+<span>(</span><span>stage: <a title="model.types.Stage" href="types.html#model.types.Stage">Stage</a> = None, timestamp: datetime.datetime = None, eth_price: float = 0, eth_supply: float = 115538828, eth_staked: float = 3868555, supply_inflation: float = 0, network_issuance: float = 0, pow_issuance: float = 0, number_of_validators_in_activation_queue: int = 230, average_effective_balance: float = 32000000000.0, number_of_validators: int = 120894, number_of_validators_online: int = 0, number_of_validators_offline: int = 0, base_reward: float = 0, validating_rewards: float = 0, validating_penalties: float = 0, source_reward: float = 0, target_reward: float = 0, head_reward: float = 0, block_proposer_reward: float = 0, sync_reward: float = 0, amount_slashed: float = 0, whistleblower_rewards: float = 0, basefee: float = 1, total_basefee: float = 0, total_tips_to_miners: float = 0, total_tips_to_validators: float = 0, validator_eth_staked: numpy.ndarray = array([[0],
 [0],
 [0],
 [0],
@@ -317,15 +319,15 @@ state variable key: state variable type = default state variable value</p></div>
     &#34;&#34;&#34;
 
     # Time state variables
-    phase: Phase = None
+    stage: Stage = None
     &#34;&#34;&#34;
-    The phase of the network upgrade process.
+    The stage of the network upgrade process.
 
-    By default set to POST_MERGE Phase, where EIP1559 is enabled and POW issuance is disabled.
+    By default set to PROOF_OF_STAKE Stage, where EIP1559 is enabled and POW issuance is disabled.
 
-    Otherwise set to ALL Phase, which transitions through each phase, updating the `phase` State Variable.
+    Otherwise set to ALL Stage, which transitions through each stage, updating the `stage` State Variable.
 
-    See model.types.Phase Enum for further documentation.
+    See model.types.Stage Enum for further documentation.
     &#34;&#34;&#34;
     timestamp: datetime = None
     &#34;&#34;&#34;
@@ -362,7 +364,10 @@ state variable key: state variable type = default state variable value</p></div>
 
     # Reward and penalty state variables
     base_reward: Gwei = 0
-    &#34;&#34;&#34;Validator rewards and penalties are calculated in terms of the base reward&#34;&#34;&#34;
+    &#34;&#34;&#34;
+    Validator rewards and penalties are calculated in terms of the base reward.
+    Under perfect network conditions, each validator should receive 1 base reward per epoch for performing their duties.
+    &#34;&#34;&#34;
     validating_rewards: Gwei = 0
     &#34;&#34;&#34;The total rewards received for PoS validation (attestation, block proposal, sync vote)&#34;&#34;&#34;
     validating_penalties: Gwei = 0
@@ -464,7 +469,8 @@ state variable key: state variable type = default state variable value</p></div>
 </dd>
 <dt id="model.state_variables.StateVariables.base_reward"><code class="name">var <span class="ident">base_reward</span> : float</code></dt>
 <dd>
-<div class="desc"><p>Validator rewards and penalties are calculated in terms of the base reward</p></div>
+<div class="desc"><p>Validator rewards and penalties are calculated in terms of the base reward.
+Under perfect network conditions, each validator should receive 1 base reward per epoch for performing their duties.</p></div>
 </dd>
 <dt id="model.state_variables.StateVariables.basefee"><code class="name">var <span class="ident">basefee</span> : float</code></dt>
 <dd>
@@ -510,13 +516,6 @@ state variable key: state variable type = default state variable value</p></div>
 <dd>
 <div class="desc"><p>The total number of online validators</p></div>
 </dd>
-<dt id="model.state_variables.StateVariables.phase"><code class="name">var <span class="ident">phase</span> : <a title="model.types.Phase" href="types.html#model.types.Phase">Phase</a></code></dt>
-<dd>
-<div class="desc"><p>The phase of the network upgrade process.</p>
-<p>By default set to POST_MERGE Phase, where EIP1559 is enabled and POW issuance is disabled.</p>
-<p>Otherwise set to ALL Phase, which transitions through each phase, updating the <code>phase</code> State Variable.</p>
-<p>See model.types.Phase Enum for further documentation.</p></div>
-</dd>
 <dt id="model.state_variables.StateVariables.pow_issuance"><code class="name">var <span class="ident">pow_issuance</span> : float</code></dt>
 <dd>
 <div class="desc"><p>The total Proof of Work issuance in ETH</p></div>
@@ -524,6 +523,13 @@ state variable key: state variable type = default state variable value</p></div>
 <dt id="model.state_variables.StateVariables.source_reward"><code class="name">var <span class="ident">source_reward</span> : float</code></dt>
 <dd>
 <div class="desc"><p>The total rewards received for getting a source vote in time and correctly</p></div>
+</dd>
+<dt id="model.state_variables.StateVariables.stage"><code class="name">var <span class="ident">stage</span> : <a title="model.types.Stage" href="types.html#model.types.Stage">Stage</a></code></dt>
+<dd>
+<div class="desc"><p>The stage of the network upgrade process.</p>
+<p>By default set to PROOF_OF_STAKE Stage, where EIP1559 is enabled and POW issuance is disabled.</p>
+<p>Otherwise set to ALL Stage, which transitions through each stage, updating the <code>stage</code> State Variable.</p>
+<p>See model.types.Stage Enum for further documentation.</p></div>
 </dd>
 <dt id="model.state_variables.StateVariables.supply_inflation"><code class="name">var <span class="ident">supply_inflation</span> : float</code></dt>
 <dd>
@@ -666,9 +672,9 @@ per validator environment</p></div>
 <li><code><a title="model.state_variables.StateVariables.number_of_validators_in_activation_queue" href="#model.state_variables.StateVariables.number_of_validators_in_activation_queue">number_of_validators_in_activation_queue</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.number_of_validators_offline" href="#model.state_variables.StateVariables.number_of_validators_offline">number_of_validators_offline</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.number_of_validators_online" href="#model.state_variables.StateVariables.number_of_validators_online">number_of_validators_online</a></code></li>
-<li><code><a title="model.state_variables.StateVariables.phase" href="#model.state_variables.StateVariables.phase">phase</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.pow_issuance" href="#model.state_variables.StateVariables.pow_issuance">pow_issuance</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.source_reward" href="#model.state_variables.StateVariables.source_reward">source_reward</a></code></li>
+<li><code><a title="model.state_variables.StateVariables.stage" href="#model.state_variables.StateVariables.stage">stage</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.supply_inflation" href="#model.state_variables.StateVariables.supply_inflation">supply_inflation</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.sync_reward" href="#model.state_variables.StateVariables.sync_reward">sync_reward</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.target_reward" href="#model.state_variables.StateVariables.target_reward">target_reward</a></code></li>

@@ -12,7 +12,7 @@ from pygments.formatters import HtmlFormatter
 from IPython.core.display import HTML
 
 import model.constants as constants
-from model.parameters import parameters, validator_environments
+from model.system_parameters import parameters, validator_environments
 
 
 def inspect_module(module):

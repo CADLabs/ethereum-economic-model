@@ -22,7 +22,7 @@ from model.types import (
     Percentage,
     Stage,
 )
-from model.parameters import validator_environments
+from model.system_parameters import validator_environments
 
 
 # Get number of validator environments for initializing Numpy array size

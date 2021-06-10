@@ -3,7 +3,7 @@ import inspect
 import model
 from model.state_update_blocks import state_update_blocks
 from model.state_variables import initial_state
-from model.parameters import parameters
+from model.system_parameters import parameters
 
 
 def test_lint_state_variables():
