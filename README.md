@@ -188,6 +188,13 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+#### Known Issues
+
+##### Windows
+> DLL load failed while importing win32api: The specified procedure could not be found.
+
+If using Anaconda, try: `conda install -c anaconda pywin32`
+
 ## Tests
 
 ### Pytest Tests
