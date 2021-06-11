@@ -43,7 +43,10 @@ def policy_stages(params, substep, state_history, previous_state):
     if stage == Stage.ALL:
         # If Stage ALL selected, transition through all stages
         # at different timestamps
-        if current_stage in [Stage.ALL, Stage.BEACON_CHAIN] and timestamp < date_eip1559:
+        if (
+            current_stage in [Stage.ALL, Stage.BEACON_CHAIN]
+            and timestamp < date_eip1559
+        ):
             current_stage = Stage.BEACON_CHAIN
         elif (
             current_stage in [Stage.BEACON_CHAIN, Stage.EIP1559]

@@ -270,12 +270,14 @@ def policy_slashing(
     total_balance = spec.get_total_active_balance(params, previous_state)
     adjusted_total_slashing_balance = min(
         slashing * number_of_slashing_events * PROPORTIONAL_SLASHING_MULTIPLIER,
-        total_balance
+        total_balance,
     )
     increment = EFFECTIVE_BALANCE_INCREMENT
-    penalty_numerator = average_effective_balance // increment * adjusted_total_slashing_balance
+    penalty_numerator = (
+        average_effective_balance // increment * adjusted_total_slashing_balance
+    )
     proportional_penalty = penalty_numerator // total_balance * increment
-    
+
     # Scale penalty by the number of slashing events per epoch
     amount_slashed = (slashing + proportional_penalty) * number_of_slashing_events
     # Scale rewards by the number of slashing events per epoch
