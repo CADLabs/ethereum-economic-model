@@ -88,23 +88,23 @@ def policy_attestation_penalties(
     base_reward = previous_state["base_reward"]
     number_of_validators_offline = previous_state["number_of_validators_offline"]
 
-    # Calculate validating penalties
-    validating_penalties = (
+    # Calculate attestation penalties
+    attestation_penalties = (
         (TIMELY_SOURCE_WEIGHT + TIMELY_TARGET_WEIGHT + TIMELY_HEAD_WEIGHT)
         / WEIGHT_DENOMINATOR
         * base_reward
     )
     # Aggregation over all offline validators
-    validating_penalties *= number_of_validators_offline
+    attestation_penalties *= number_of_validators_offline
 
-    return {"validating_penalties": validating_penalties}
+    return {"attestation_penalties": attestation_penalties}
 
 
 def policy_sync_committee_reward(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
     """Sync Committee Reward Policy Function
-    Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#sync-committee-processing
+    Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#sync-aggregate-processing
 
     Extract from spec:
     ```python
@@ -127,13 +127,49 @@ def policy_sync_committee_reward(
     number_of_validators_online = previous_state["number_of_validators_online"]
 
     # Calculate total base rewards
-    total_base_rewards = base_reward * number_of_validators_online
+    total_base_rewards = base_reward * number_of_validators
     # Set sync reward to proportion of total base rewards
     sync_reward = total_base_rewards * SYNC_REWARD_WEIGHT // WEIGHT_DENOMINATOR
     # Scale reward by the percentage of online validators
     sync_reward *= number_of_validators_online / number_of_validators
 
     return {"sync_reward": sync_reward}
+
+
+def policy_sync_committee_penalties(
+    params, substep, state_history, previous_state
+) -> typing.Dict[str, Gwei]:
+    """Sync Committee Penalty Policy Function
+    Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#sync-aggregate-processing
+
+    Extract from spec:
+    ```python
+    # Compute participant and proposer rewards
+    total_active_increments = get_total_active_balance(state) // EFFECTIVE_BALANCE_INCREMENT
+    total_base_rewards = Gwei(get_base_reward_per_increment(state) * total_active_increments)
+    max_participant_rewards = Gwei(total_base_rewards * SYNC_REWARD_WEIGHT // WEIGHT_DENOMINATOR // SLOTS_PER_EPOCH)
+    participant_reward = Gwei(max_participant_rewards // SYNC_COMMITTEE_SIZE)
+    proposer_reward = Gwei(participant_reward * PROPOSER_WEIGHT // (WEIGHT_DENOMINATOR - PROPOSER_WEIGHT))
+    ```
+    """
+
+    # Parameters
+    SYNC_REWARD_WEIGHT = params["SYNC_REWARD_WEIGHT"]
+    WEIGHT_DENOMINATOR = params["WEIGHT_DENOMINATOR"]
+
+    # State Variables
+    base_reward = previous_state["base_reward"]
+    number_of_validators = previous_state["number_of_validators"]
+    number_of_validators_offline = previous_state["number_of_validators_offline"]
+
+    # Calculate total base rewards
+    total_base_rewards = base_reward * number_of_validators
+    # Set sync penalty to proportion of total base rewards
+    sync_penalty = total_base_rewards * SYNC_REWARD_WEIGHT // WEIGHT_DENOMINATOR
+    # Scale penalty by the percentage of offline validators
+    sync_penalty *= number_of_validators_offline / number_of_validators
+
+    return {"sync_committee_penalties": sync_penalty}
 
 
 def policy_block_proposal_reward(
@@ -308,3 +344,22 @@ def update_validating_rewards(
     assert validating_rewards <= max_validating_rewards
 
     return "validating_rewards", validating_rewards
+
+def update_validating_penalties(
+    params, substep, state_history, previous_state, policy_input
+) -> typing.Tuple[str, Gwei]:
+    """Validating Penalties State Update Function
+    Calculate and update total validating penalties
+    i.e. penalties received for failing to attest, or failing to perform sync committee duties
+    """
+    # State Variables
+    attestation_penalties = previous_state["attestation_penalties"]
+    sync_committee_penalties = previous_state["sync_committee_penalties"]
+
+    # Calculate total validating rewards
+    validating_penalties = (
+        attestation_penalties
+        + sync_committee_penalties
+    )
+
+    return "validating_penalties", validating_penalties

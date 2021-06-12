@@ -88,6 +88,19 @@ _state_update_blocks = [
     },
     {
         "description": """
+            Sync committee and attestation penalties
+        """,
+        "policies": {
+            "attestation": incentives.policy_attestation_penalties,
+            "sync_committee": incentives.policy_sync_committee_penalties,
+        },
+        "variables": {
+            "attestation_penalties": update_from_signal("attestation_penalties"),
+            "sync_committee_penalties": update_from_signal("sync_committee_penalties"),
+        },
+    },
+    {
+        "description": """
             Block proposal rewards
         """,
         "policies": {
@@ -102,11 +115,11 @@ _state_update_blocks = [
             Total validating rewards and penalties
         """,
         "policies": {
-            "penalties": incentives.policy_attestation_penalties,
         },
         "variables": {
             "validating_rewards": incentives.update_validating_rewards,
-            "validating_penalties": update_from_signal("validating_penalties"),
+            "validating_penalties":
+            incentives.update_validating_penalties,
         },
     },
     {

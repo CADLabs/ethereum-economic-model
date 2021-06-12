@@ -36,12 +36,12 @@ def check_validating_rewards(params, substep, state_history, previous_state):
     head_reward = previous_state["head_reward"]
 
     # Assert sync reward is 1/8 of validating rewards
-    assert math.isclose(sync_reward, (1 / 8) * validating_rewards)
+    assert math.isclose(sync_reward, (2 / 64) * validating_rewards)
     # Assert block proposer reward is 1/8 of validating rewards
-    assert math.isclose(block_proposer_reward, (1 / 8) * validating_rewards)
+    assert math.isclose(block_proposer_reward, (8 / 64) * validating_rewards)
     # Assert source reward is 3/4 of validating rewards
-    assert math.isclose(source_reward + target_reward + head_reward, (3 / 4) * validating_rewards)
-    
+    assert math.isclose(source_reward + target_reward + head_reward, (54 / 64) * validating_rewards)
+
     return
 
 
