@@ -357,7 +357,7 @@ def update_validating_penalties(
     attestation_penalties = previous_state["attestation_penalties"]
     sync_committee_penalties = previous_state["sync_committee_penalties"]
 
-    # Calculate total validating rewards
+    # Calculate total validating penalties
     validating_penalties = attestation_penalties + sync_committee_penalties
 
     return "validating_penalties", validating_penalties
