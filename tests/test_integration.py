@@ -5,6 +5,7 @@ import pandas as pd
 from radcad import Simulation
 
 import experiments.base as base
+from model.parameters import parameters
 
 
 def test_dt():
@@ -27,6 +28,11 @@ def test_dt():
 
 
 def check_validating_rewards(params, substep, state_history, previous_state):
+    # Parameters
+    WEIGHT_DENOMINATOR = params["WEIGHT_DENOMINATOR"]
+    PROPOSER_REWARD_QUOTIENT = params["PROPOSER_REWARD_QUOTIENT"]
+    SYNC_REWARD_WEIGHT = params["SYNC_REWARD_WEIGHT"]
+    
     # State Variables
     validating_rewards = previous_state["validating_rewards"]
     block_proposer_reward = previous_state["block_proposer_reward"]
@@ -34,14 +40,14 @@ def check_validating_rewards(params, substep, state_history, previous_state):
     source_reward = previous_state["source_reward"]
     target_reward = previous_state["target_reward"]
     head_reward = previous_state["head_reward"]
-
-    # Assert sync reward is 1/8 of validating rewards
-    assert math.isclose(sync_reward, (1 / 8) * validating_rewards)
-    # Assert block proposer reward is 1/8 of validating rewards
-    assert math.isclose(block_proposer_reward, (1 / 8) * validating_rewards)
-    # Assert source reward is 3/4 of validating rewards
-    assert math.isclose(source_reward + target_reward + head_reward, (3 / 4) * validating_rewards)
     
+    # Assert block proposer reward is 1/8 of validating rewards
+    assert math.isclose(block_proposer_reward, (PROPOSER_REWARD_QUOTIENT / WEIGHT_DENOMINATOR) * validating_rewards)
+    # Assert sync reward is 1/8 of validating rewards
+    assert math.isclose(sync_reward, (SYNC_REWARD_WEIGHT / WEIGHT_DENOMINATOR) * validating_rewards)
+    # Assert source reward is 3/4 of validating rewards
+    assert math.isclose(source_reward + target_reward + head_reward, ((WEIGHT_DENOMINATOR - PROPOSER_REWARD_QUOTIENT - SYNC_REWARD_WEIGHT) / WEIGHT_DENOMINATOR) * validating_rewards)
+
     return
 
 
