@@ -345,6 +345,7 @@ def update_validating_rewards(
 
     return "validating_rewards", validating_rewards
 
+
 def update_validating_penalties(
     params, substep, state_history, previous_state, policy_input
 ) -> typing.Tuple[str, Gwei]:
@@ -357,9 +358,6 @@ def update_validating_penalties(
     sync_committee_penalties = previous_state["sync_committee_penalties"]
 
     # Calculate total validating rewards
-    validating_penalties = (
-        attestation_penalties
-        + sync_committee_penalties
-    )
+    validating_penalties = attestation_penalties + sync_committee_penalties
 
     return "validating_penalties", validating_penalties

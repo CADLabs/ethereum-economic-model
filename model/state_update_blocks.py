@@ -114,8 +114,7 @@ _state_update_blocks = [
         "description": """
             Total validating rewards and penalties
         """,
-        "policies": {
-        },
+        "policies": {},
         "variables": {
             "validating_rewards": incentives.update_validating_rewards,
             "validating_penalties": incentives.update_validating_penalties,
