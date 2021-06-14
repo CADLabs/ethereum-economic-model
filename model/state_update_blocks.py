@@ -118,8 +118,7 @@ _state_update_blocks = [
         },
         "variables": {
             "validating_rewards": incentives.update_validating_rewards,
-            "validating_penalties":
-            incentives.update_validating_penalties,
+            "validating_penalties": incentives.update_validating_penalties,
         },
     },
     {
