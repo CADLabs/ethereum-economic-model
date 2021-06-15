@@ -1,22 +1,15 @@
 # CADLabs Ethereum Validator Economics Model
+
 [![Python package](https://github.com/cadCAD-edu/ethereum-model/actions/workflows/python.yml/badge.svg)](https://github.com/cadCAD-edu/ethereum-model/actions/workflows/python.yml)
 
-A modular dynamical systems model implemented using the open-source Python library OpenCAD (TODO: ADD LINK TO CADLABS REPO)
+A modular dynamical systems model implemented using the open-source Python library radCAD (TODO: ADD LINK TO CADLABS REPO), a next-gen implementation of [cadCAD](https://cadcad.org).
 
-**Official Eth2 specs version**: implements the [Altair](https://github.com/ethereum/eth2.0-specs#altair) updates in the [Beige Gorgon / v1.1.0-alpha.3](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.3) release.
-
-**Model Features**:
-* Configurable to reflect protocol behavior at different points in time of the development roadmap:
-  - post Beacon Chain launch, pre EIP1559, pre PoS (validators receive PoS incentives, EIP1559 disabled, and PoW still in operation)
-  - post Beacon Chain launch, post EIP1559, pre PoS (validators receive PoS incentives, EIP1559 enabled with miners receiving tips, and PoW still in operation)
-  - post Beacon Chain launch, post EIP1559, post PoS (validators receive PoS incentives, EIP1559 enabled with validators receiving tips, and PoW deprecated)
-* Supports [state space analysis](https://en.wikipedia.org/wiki/State-space_representation) (i.e. simulation of system behavior over time) and [phase space analysis](https://en.wikipedia.org/wiki/Phase_space) (i.e. generation of all unique system states in a given experimental setup)
-* Customizable processes to set important variables such as ETH price, ETH staked, EIP1559 transaction pricing, and transaction rates
-* Modular model structure for convenient extension and modification. This allows different user groups to refactor the model for different purposes, rapidly test new incentive mechanisms, or to update the model as Ethereum implements new protocol improvements.
-* References to official [Eth2 specs](https://github.com/ethereum/eth2.0-specs) in Policy and State Update Function logic. This enables seamless onboarding of protocol developers or for the more advanced cadCAD user to dig into the underlying protocol design that inspired the logic.
+**Official Eth2 specs version**: 
+* Implements the [Altair](https://github.com/ethereum/eth2.0-specs#altair) updates in the [Beige Gorgon / v1.1.0-alpha.3](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.3) release. (TODO: UPDATE FOR LATEST ALTAIR VERSION?)
 
 ## Table of Contents
 * [Context](#context)
+* [Model Features](#model-features)
 * [Directory Structure](#directory-structure)
 * [Model Architecture](#model-architecture)
 * [Running Experiments](#running-experiments)
@@ -25,12 +18,27 @@ A modular dynamical systems model implemented using the open-source Python libra
 * [Jupyter Lab Environment](#jupyter-lab-environment)
 * [Change Log](#change-log)
 * [Contributors](#contributors)
+* [Acknowledgements](#contributors)
+* [Copyleft](#copyleft)
 
 ---
 
 ## Context
 
+This open-source model was developed in collaboration with the Ethereum Robust Incentives Group, and funded by the Ethereum Foundation Eth2 Staking Community Grants. It accompanies the cadCAD Edu course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum)". It intends to provide the Ethereum community with a highly versatile, customizable and extensible research tool, and includes a list of model extension ideas (TODO: link to model extension ideas here).  
+
 (TODO: Describe in a few sentences how this model came about)
+
+## Model Features
+
+* Configurable to reflect protocol behavior at different points in time of the development roadmap (referred to as "development stages" in this model):<br />
+  * post Beacon Chain launch, pre EIP1559, pre PoS (validators receive PoS incentives, EIP1559 disabled, and PoW still in operation)<br />
+  * post Beacon Chain launch, post EIP1559, pre PoS (validators receive PoS incentives, EIP1559 enabled with miners receiving tips, and PoW still in operation)<br />
+  * post Beacon Chain launch, post EIP1559, post PoS (validators receive PoS incentives, EIP1559 enabled with validators receiving tips, and PoW deprecated)<br />
+* Supports [state space analysis](https://en.wikipedia.org/wiki/State-space_representation) (i.e. simulation of system behavior over time) and [phase space analysis](https://en.wikipedia.org/wiki/Phase_space) (i.e. generation of all unique system states in a given experimental setup)
+* Customizable processes to set important variables such as ETH price, ETH staked, EIP1559 transaction pricing, and transaction rates
+* Modular model structure for convenient extension and modification. This allows different user groups to refactor the model for different purposes, rapidly test new incentive mechanisms, or to update the model as Ethereum implements new protocol improvements.
+* References to official [Eth2 specs](https://github.com/ethereum/eth2.0-specs) in Policy and State Update Function logic. This enables seamless onboarding of protocol developers or for the more advanced cadCAD user to dig into the underlying protocol design that inspired the logic.
 
 ## Directory Structure
 * [data/](data/): datasets used in model
@@ -87,10 +95,10 @@ There are in total 8 experiment notebooks (TODO:Rename notebooks to match edited
 ### 1. Model Validation
 
 #### Research Question
-How accurately does that CADLabs model perform compared to a) other validator economics models and b) past on-chain data?
+How accurately does that CADLabs model perform compared to a) other, well-established validator economics models and b) past on-chain data?
 
 #### Experiment Overview
-The purpose of this notebook is to recreate selected scenario analysis from the (excellent and widely acknowledged) Hoban/Borgers Ethereum 2.0 Economic Model using the CADLabs model, and to compare the results. We suggest that the CADLabs model has a high degree of validity.
+The purpose of this notebook is to recreate selected simulations from the widely acknowledged Hoban/Borgers Ethereum 2.0 Economic Model using the CADLabs model, and to compare the results. We suggest that the CADLabs model has a high degree of validity.
 
 ### 2. Network Issuance (NOTE: BELOW NOT YET REVIEWED)
 
@@ -264,3 +272,7 @@ See [CONTRIBUTORS.md](CONTRIBUTORS.md) for contributions to this project repo.
 ## Acknowledgements
 
 * Ethereum 2.0 Economic Review. July 16, 2020. "An Analysis of Ethereum’s Proof of Stake Incentive Model". By Tanner Hoban and Thomas Borgers. For the extensive research that inspired the development of our model and the assumptions we adopted.
+
+## Copyleft
+
+(TODO: Which license options do we have? Can we keep attribution of base model in all distributions?)
