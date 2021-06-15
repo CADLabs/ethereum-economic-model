@@ -1,6 +1,6 @@
-from functools import partial
 import copy
 from dataclasses import field
+from functools import partial
 
 
 def _update_from_signal(

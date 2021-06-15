@@ -7,8 +7,8 @@
 
 import typing
 
-from model.types import Gwei
 import model.parts.spec as spec
+from model.types import Gwei
 
 
 def policy_attestation_rewards(

@@ -1,11 +1,10 @@
-import model.parts.stages as stages
 import model.parts.ethereum as ethereum
-import model.parts.validators as validators
 import model.parts.incentives as incentives
 import model.parts.metrics as metrics
+import model.parts.stages as stages
+import model.parts.validators as validators
 from model.system_parameters import parameters
 from model.utils import update_from_signal
-
 
 state_update_block_stages = {
     "description": """

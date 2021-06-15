@@ -8,13 +8,14 @@ By using a dataclass to represent the System Parameters:
 """
 
 
+import logging
 import numpy as np
 from dataclasses import dataclass
-import logging
 from datetime import datetime
 
-import model.simulation_configuration as simulation
 import model.constants as constants
+import model.simulation_configuration as simulation
+from model.stochastic_processes import create_stochastic_process_realizations
 from model.types import (
     Run,
     Timestep,
@@ -32,8 +33,6 @@ from model.types import (
     Stage,
 )
 from model.utils import default
-from model.stochastic_processes import create_stochastic_process_realizations
-
 
 # Create stochastic (random) process realizations
 stochastic_process_realizations = create_stochastic_process_realizations()
@@ -43,7 +42,7 @@ eth_price_samples = stochastic_process_realizations["eth_price_samples"]
 validator_environments = [
     ValidatorEnvironment(
         # Configure a custom environment
-        # Used for dissagregation of single validator performance
+        # Used for disaggregation of single validator performance
         type="custom",
         percentage_distribution=0.01,  # Set to 1% by default
         hardware_costs_per_epoch=0.0014,

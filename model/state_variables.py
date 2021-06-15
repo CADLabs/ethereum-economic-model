@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from datetime import datetime
 
 import model.constants as constants
+from model.system_parameters import validator_environments
 from model.types import (
     Gwei,
     Gwei_per_Gas,
@@ -22,8 +23,6 @@ from model.types import (
     Percentage,
     Stage,
 )
-from model.system_parameters import validator_environments
-
 
 # Get number of validator environments for initializing Numpy array size
 number_of_validator_environments = len(validator_environments)
