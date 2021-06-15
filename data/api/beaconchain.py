@@ -4,7 +4,7 @@ import diskcache
 from model.types import Gwei
 
 
-cache = diskcache.Cache()
+cache = diskcache.Cache('.beaconchain_api.cache')
 
 @cache.memoize(expire=(6 * 60 * 60))  # cached for 6 hours
 def get_epoch_data(epoch="latest"):
