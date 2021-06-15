@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from datetime import datetime
 
 import model.constants as constants
+import data.api as api
 from model.system_parameters import validator_environments
 from model.types import (
     Gwei,
@@ -28,11 +29,9 @@ from model.types import (
 number_of_validator_environments = len(validator_environments)
 
 # Intial state from external live data source
-# Updated from https://beaconscan.com/ as of 20/04/21
-number_of_validators = 120_894
-eth_staked = 3_868_555
-# Updated from https://etherscan.io/chart/ethersupplygrowth as of 20/04/21
-eth_supply = 115_538_828
+number_of_validators = api.beaconchain.get_validators_count()
+eth_staked = api.beaconchain.get_total_validator_balance()
+eth_supply = api.etherscan.get_eth_supply()
 
 
 @dataclass
