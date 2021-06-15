@@ -174,13 +174,15 @@ class Parameters:
         [datetime.strptime("2021/07/14", "%Y/%m/%d")]
     )
     """
-    EIP1559 activation date as Python datetime
+    EIP1559 activation date as Python datetime.
+    
     Source: https://github.com/ethereum/pm/issues/245#issuecomment-825751460
     """
 
-    date_merge: List[datetime] = default([datetime.strptime("2021/12/1", "%Y/%m/%d")])
+    date_pos: List[datetime] = default([datetime.strptime("2021/12/1", "%Y/%m/%d")])
     """
-    Eth1/Eth2 merge date as Python datetime
+    Eth1/Eth2 merge date as Python datetime, after which POW is disabled and POS is enabled.
+    
     Source: https://twitter.com/drakefjustin/status/1379052831982956547
     """
 

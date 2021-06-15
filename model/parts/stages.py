@@ -21,7 +21,7 @@ def policy_stages(params, substep, state_history, previous_state):
     stage: Stage = params["stage"]
     date_start = params["date_start"]
     date_eip1559 = params["date_eip1559"]
-    date_merge = params["date_merge"]
+    date_pos = params["date_pos"]
 
     # State Variables
     current_stage = previous_state["stage"]
@@ -50,7 +50,7 @@ def policy_stages(params, substep, state_history, previous_state):
             current_stage = Stage.BEACON_CHAIN
         elif (
             current_stage in [Stage.BEACON_CHAIN, Stage.EIP1559]
-            and timestamp < date_merge
+            and timestamp < date_pos
         ):
             current_stage = Stage.EIP1559
         else:
