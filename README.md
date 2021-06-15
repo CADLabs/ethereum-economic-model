@@ -166,7 +166,7 @@ python3 -m venv venv
 source venv/bin/activate
 
 make setup # Setup environment
-make start # Start Jupyter Lab
+make start-lab # Start Jupyter Lab
 ```
 
 Otherwise, follow the steps below.

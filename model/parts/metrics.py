@@ -137,15 +137,15 @@ def policy_total_online_validator_rewards(
 ) -> typing.Dict[str, Gwei]:
     # State Variables
     validating_rewards = previous_state["validating_rewards"]
-    whistleblower_rewards = previous_state["whistleblower_rewards"]
     validating_penalties = previous_state["validating_penalties"]
+    whistleblower_rewards = previous_state["whistleblower_rewards"]
     total_tips_to_validators = previous_state["total_tips_to_validators"]
 
     # Calculate total rewards for online validators
     total_online_validator_rewards = (
         validating_rewards
-        + whistleblower_rewards
         - validating_penalties
+        + whistleblower_rewards
         + total_tips_to_validators
     )
 

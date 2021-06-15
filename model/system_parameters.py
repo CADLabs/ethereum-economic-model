@@ -155,7 +155,7 @@ class Parameters:
     Used to scale calculations that depend on the number of epochs that have passed.
 
     For example, for dt = 100, each timestep equals 100 epochs.
-    
+
     By default set to constants.epochs_per_day (225)
     """
 
@@ -198,7 +198,7 @@ class Parameters:
     )
     """
     A process that returns the ETH staked at each epoch.
-    
+
     If set to `none`, the model is driven by the validator process,
     where new validators enter the system and stake accordingly.
 
@@ -213,7 +213,7 @@ class Parameters:
     )
     """
     A process that returns the number of new validators per epoch.
-    
+
     Used if model not driven using `eth_staked_process`.
 
     By default set to a static value from https://beaconscan.com/statistics.
@@ -266,25 +266,25 @@ class Parameters:
 
     i.e. the more slashing events there are, the greater the individual penalty
     """
-    TIMELY_HEAD_WEIGHT: List[int] = default([12])
+    TIMELY_HEAD_WEIGHT: List[int] = default([14])
     """
     Used to calculate the reward received for getting a head vote in time and correctly.
 
     `head_reward = (TIMELY_HEAD_WEIGHT / WEIGHT_DENOMINATOR) * base_reward`
     """
-    TIMELY_SOURCE_WEIGHT: List[int] = default([12])
+    TIMELY_SOURCE_WEIGHT: List[int] = default([14])
     """
     Used to calculate the reward received for getting a source vote in time and correctly.
 
     `source_reward = (TIMELY_SOURCE_WEIGHT / WEIGHT_DENOMINATOR) * base_reward`
     """
-    TIMELY_TARGET_WEIGHT: List[int] = default([24])
+    TIMELY_TARGET_WEIGHT: List[int] = default([26])
     """
     Used to calculate the reward received for getting a target vote in time and correctly.
 
     `target_reward = (TIMELY_TARGET_WEIGHT / WEIGHT_DENOMINATOR) * base_reward`
     """
-    SYNC_REWARD_WEIGHT: List[int] = default([8])
+    SYNC_REWARD_WEIGHT: List[int] = default([2])
     """
     Used to calculate the reward received for attesting as part of a sync committee.
     """
@@ -300,7 +300,7 @@ class Parameters:
     """
     Used to calculate the churn limit for validator entry and exit. The maximum number of validators that can
     enter or exit the system per epoch.
-    
+
     In this system it is used for the validator activation queue process.
     """
     CHURN_LIMIT_QUOTIENT: List[int] = default([2 ** 16])
@@ -338,7 +338,7 @@ class Parameters:
     )
     """
     The validator hardware costs per epoch in dollars.
-    
+
     A vector with a value for each validator environment.
     """
     validator_cloud_costs_per_epoch: List[np.ndarray] = default(
@@ -364,7 +364,7 @@ class Parameters:
     slashing_events_per_1000_epochs: List[int] = default([1])  # 1 / 1000 epochs
     """
     The number of slashing events per 1000 epochs.
-    
+
     Asssumption from Hoban/Borgers report.
     """
 
@@ -374,14 +374,14 @@ class Parameters:
     )
     """
     The basefee burned, in Gwei per gas, for each transaction.
-    
+
     An average of 100 Gwei per gas expected to be set as transaction fee cap,
     split between the basefee and tips - the fee cap less the basefee is sent as a tip to miners/validators.
 
     Approximated using average gas price from https://etherscan.io/gastracker as of 20/04/21
 
     An extract from https://notes.ethereum.org/@vbuterin/eip-1559-faq
-    
+
     > Each “full block” (ie. a block whose gas is 2x the TARGET) increases the BASEFEE by 1.125x,
     > so a series of constant full blocks will increase the gas price by a factor of 10 every
     > ~20 blocks (~4.3 min on average).
@@ -393,9 +393,9 @@ class Parameters:
     )
     """
     EIP1559 transaction pricing tip, in Gwei per gas.
-    
+
     Due to MEV, average tips expected to be higher than usual as bid for inclusion in blockscpace market.
-    
+
     The tip is the difference between the fee cap set per transaction, and the basefee.
 
     For PoW system without MEV influence, the tip level compensates for uncle risk:
@@ -422,7 +422,7 @@ class Parameters:
 
     fees_per_day = daily_transactions * transaction_average_gas * (basefee + tip) / 1e9 ~= 10k ETH
     (see https://etherscan.io/chart/transactionfee)
-    
+
     Where:
     * daily_transactions ~= 1_400_000
     * transaction_average_gas ~= 73_123

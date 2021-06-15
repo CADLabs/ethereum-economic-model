@@ -97,7 +97,7 @@ class StateVariables:
     validating_rewards: Gwei = 0
     """The total rewards received for PoS validation (attestation, block proposal, sync vote)"""
     validating_penalties: Gwei = 0
-    """The total penalties received for failing to perform PoS validation duties"""
+    """The total penalties received for failing to perform PoS validation duties (attestation, sync vote)"""
     source_reward: Gwei = 0
     """The total rewards received for getting a source vote in time and correctly"""
     target_reward: Gwei = 0
@@ -108,6 +108,10 @@ class StateVariables:
     """The total rewards received for successfully proposing a block"""
     sync_reward: Gwei = 0
     """The total rewards received for attesting as part of a sync committee"""
+    attestation_penalties: Gwei = 0
+    """The total penalties received for failing to perform attestation duties"""
+    sync_committee_penalties: Gwei = 0
+    """The total penalties received for failing to perform sync committee duties"""
 
     # Slashing state variables
     amount_slashed: Gwei = 0
