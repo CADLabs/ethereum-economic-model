@@ -14,6 +14,26 @@ from IPython.core.display import HTML
 import model.constants as constants
 from model.system_parameters import parameters, validator_environments
 
+import notebooks.plotly_theme
+
+
+state_variable_name_mapping = {
+    'eth_price': 'ETH Price',
+    'eth_staked': 'ETH Staked',
+    'eth_supply': 'ETH Supply',
+    'source_reward_eth': 'Source Reward',
+    'target_reward_eth': 'Target Reward',
+    'head_reward_eth': 'Head Reward',
+    'block_proposer_reward_eth': 'Block Proposer Reward',
+    'sync_reward_eth': 'Sync Reward',
+    'total_tips_to_validators_eth': 'Tips',
+    'supply_inflation_pct': 'ETH Supply inflation',
+    'total_revenue_yields_pct': 'Total Revenue Yields',
+    'total_profit_yields_pct': 'Total Profit Yields',
+    'revenue_profit_yield_spread_pct': 'Revenue-Profit Yield Spread',
+    **dict([(validator.type + '_profit_yields_pct', f'{validator.type} Profit Yields') for validator in validator_environments])
+}
+
 
 def inspect_module(module):
     formatter = HtmlFormatter()
@@ -22,17 +42,31 @@ def inspect_module(module):
     return Code(inspect.getsource(module), language='python')
 
 
+def update_legend_names(fig, name_mapping):
+    for i, dat in enumerate(fig.data):
+        for elem in dat:
+            if elem == 'name':
+                try:
+                    fig.data[i].name = name_mapping[fig.data[i].name]
+                except KeyError:
+                    continue
+    return(fig)
+
+
 def plot_validating_rewards(df):
-    validator_rewards = ['source_reward_eth', 'target_reward_eth', 'head_reward_eth', 'block_proposer_reward_eth', 'sync_reward_eth']
-    
-    fig = df.plot.area(
+    validating_rewards = [
+        'source_reward_eth',
+        'target_reward_eth',
+        'head_reward_eth',
+        'block_proposer_reward_eth',
+        'sync_reward_eth',
+    ]
+
+    fig = px.area(
+        df,
         x='timestamp', 
-        y=validator_rewards,
+        y=list(validating_rewards),
         title="Validating Rewards",
-        labels={
-            "timestamp": "Date",
-            "value": "Reward (ETH)",
-        },
         height=800
     )
     
@@ -42,7 +76,16 @@ def plot_validating_rewards(df):
                 visible=True
             ),
             type="date"
-        )
+        ),
+    )
+
+    update_legend_names(fig, state_variable_name_mapping)
+
+    fig.update_layout(
+        title="Validating Rewards",
+        xaxis_title="Date",
+        yaxis_title="Reward (ETH)",
+        legend_title="",
     )
     
     return fig
@@ -52,13 +95,11 @@ def plot_validating_rewards_pie_chart(df, with_tips=False):
     if with_tips:
         title = 'Validating Rewards with Tips'
         validator_rewards = df.iloc[-1][['total_tips_to_validators_eth', 'source_reward_eth', 'target_reward_eth', 'head_reward_eth', 'block_proposer_reward_eth', 'sync_reward_eth']].to_dict()
-        names = ["Tips", "Source Reward", "Target Reward", "Head Reward", "Block Proposer Reward", "Sync Reward"]
     else:
         title = 'Validating Rewards'
         validator_rewards = df.iloc[-1][['source_reward_eth', 'target_reward_eth', 'head_reward_eth', 'block_proposer_reward_eth', 'sync_reward_eth']].to_dict()
-        names = ["Source Reward", "Target Reward", "Head Reward", "Block Proposer Reward", "Sync Reward"]
 
-    fig = px.pie(df, values=validator_rewards.values(), names=names, title=title, height=600)
+    fig = px.pie(df, values=validator_rewards.values())
 
     fig.for_each_trace(
         lambda trace: trace.update(
@@ -68,26 +109,42 @@ def plot_validating_rewards_pie_chart(df, with_tips=False):
         ),
     )
 
-    fig.show()
+    update_legend_names(fig, state_variable_name_mapping)
+
+    fig.update_layout(
+        title=title,
+        xaxis_title="Date",
+        yaxis_title="Reward (ETH)",
+        height=600,
+    )
+
+    return fig
 
 
 def plot_validator_environment_yields(df):
     validator_profit_yields_pct = [validator.type + '_profit_yields_pct' for validator in validator_environments]
 
-    return df.plot(
+    fig = df.plot(
         x='eth_price',
         y=(validator_profit_yields_pct + ['total_profit_yields_pct']),
-        title=f'Net Yields of Validator Environments @ {df.eth_staked.iloc[0]} ETH Staked',
-        height=800
     )
+
+    fig.update_layout(
+        title=f'Profit Yields of Validator Environments @ {df.eth_staked.iloc[0]} ETH Staked',
+        xaxis_title="ETH Price ($/ETH)",
+        yaxis_title="Profit Yields (%/year)",
+        legend_title="",
+    )
+
+    update_legend_names(fig, state_variable_name_mapping)
+
+    return fig
 
 
 def plot_three_region_yield_analysis(fig_df):
     fig = fig_df.plot(
         x='eth_price',
         y=['total_revenue_yields_pct','total_profit_yields_pct'],
-        title=f'Three Region Yield Analysis @ {fig_df.eth_staked.iloc[0]} ETH Staked',
-        height=800
     )
 
     fig.add_annotation(
@@ -111,6 +168,15 @@ def plot_three_region_yield_analysis(fig_df):
         yshift=10
     )
 
+    update_legend_names(fig, state_variable_name_mapping)
+
+    fig.update_layout(
+        title=f"Three Region Yield Analysis @ {fig_df.eth_staked.iloc[0]} ETH Staked",
+        xaxis_title="ETH Price (%/year)",
+        yaxis_title="Revenue Yields (%/year)",
+        legend_title="",
+    )
+
     return fig
 
 
@@ -123,37 +189,37 @@ def plot_revenue_yields_vs_network_inflation(df):
 
     # Add traces
     fig.add_trace(
-        go.Scatter(x=df_subset_0.eth_staked, y=df_subset_0.total_revenue_yields_pct, name="Revenue yields (%)"),
+        go.Scatter(x=df_subset_0.eth_staked, y=df_subset_0.total_revenue_yields_pct, name='Revenue Yields'),
         secondary_y=False,
     )
 
     fig.add_trace(
-        go.Scatter(x=df_subset_0.eth_staked, y=df_subset_0.total_profit_yields_pct, name=f"Net yields @ {df_subset_0.eth_price.iloc[0]} $/ETH (%)"),
+        go.Scatter(x=df_subset_0.eth_staked, y=df_subset_0.total_profit_yields_pct, name=f"Profit yields @ {df_subset_0.eth_price.iloc[0]} $/ETH"),
         secondary_y=False,
     )
 
     fig.add_trace(
-        go.Scatter(x=df_subset_1.eth_staked, y=df_subset_1.total_profit_yields_pct, name=f"Net yields @ {df_subset_1.eth_price.iloc[0]} $/ETH (%)"),
+        go.Scatter(x=df_subset_1.eth_staked, y=df_subset_1.total_profit_yields_pct, name=f"Profit yields @ {df_subset_1.eth_price.iloc[0]} $/ETH"),
         secondary_y=False,
     )
 
     fig.add_trace(
-        go.Scatter(x=df_subset_0.eth_staked, y=df_subset_0.supply_inflation_pct, name="ETH Supply inflation (%)"),
+        go.Scatter(x=df_subset_0.eth_staked, y=df_subset_0.supply_inflation_pct, name='Network Inflation Rate'),
         secondary_y=True,
     )
 
-    # Add figure title
+    update_legend_names(fig, state_variable_name_mapping)
+
     fig.update_layout(
-        title_text="Revenue Yields vs. Network Inflation",
-        height=800
+        title="Revenue Yields vs. Network Inflation",
+        xaxis_title="ETH Staked (ETH)",
+        # yaxis_title="",
+        legend_title="",
     )
 
-    # Set x-axis title
-    fig.update_xaxes(title_text="ETH Staked (Ether)")
-
-    # Set y-axes titles
-    fig.update_yaxes(title_text="Revenue Yields", secondary_y=False)
-    fig.update_yaxes(title_text="Network Inflation Rate (Annualized)", secondary_y=True)
+    # Set secondary y-axes titles
+    fig.update_yaxes(title_text="Revenue Yields (%/year)", secondary_y=False)
+    fig.update_yaxes(title_text="Network Inflation Rate (%/year)", secondary_y=True)
 
     return fig
 
@@ -184,13 +250,16 @@ def plot_validator_environment_yield_contour(df):
         )
     ])
 
+    update_legend_names(fig, state_variable_name_mapping)
+
     fig.update_layout(
         title="Contour Plot of Annualized Validator Yield over ETH Price vs. ETH Staked",
+        xaxis_title="ETH Price ($/ETH)",
+        yaxis_title="ETH Staked (ETH)",
+        width=1000,
+        legend_title="",
         autosize=False,
-        width=1000, height=800,
     )
-    fig.update_yaxes(title_text="ETH Staked (ETH)")
-    fig.update_xaxes(title_text="ETH Price ($/ETH)")
 
     return fig
 
@@ -228,13 +297,16 @@ def plot_revenue_profit_yield_spread(df):
         )
     ])
 
+    update_legend_names(fig, state_variable_name_mapping)
+
     fig.update_layout(
-        title="Contour Plot of Revenue-Net Yield Spread over ETH Price vs. ETH Staked",
+        title="Contour Plot of Revenue-Profit Yield Spread over ETH Price vs. ETH Staked",
+        xaxis_title="ETH Price ($/ETH)",
+        yaxis_title="ETH Staked (ETH)",
+        width=1000,
+        legend_title="",
         autosize=False,
-        width=1000, height=800,
     )
-    fig.update_yaxes(title_text="ETH Staked (ETH)")
-    fig.update_xaxes(title_text="ETH Price ($/ETH)")
 
     return fig
 
@@ -268,10 +340,13 @@ def plot_validator_environment_yield_surface(df):
         project_z=True
     ))
 
+    update_legend_names(fig, state_variable_name_mapping)
+
     fig.update_layout(
         title="Surface Plot of Annualized Validator Yield over ETH Price vs. ETH Staked",
         autosize=False,
-        width=1000, height=800,
+        width=1000,
+        legend_title="",
         margin=dict(l=65, r=50, b=65, t=90),
         scene={
             "xaxis": {"title" : { "text": "ETH Price ($/ETH)" }, "type": "log",},
@@ -289,7 +364,7 @@ def plot_eth_supply_over_all_stages(df):
     date_pos = parameters["date_pos"][0]
     date_end = df.index[0]
 
-    fig = df.plot(y='eth_supply', title='ETH Supply', height=600)
+    fig = df.plot(y='eth_supply')
 
     fig.add_shape(
         type="rect",
@@ -346,7 +421,7 @@ def plot_eth_supply_over_all_stages(df):
 
     fig.add_annotation(
         x=date_pos, y=df.loc[date_pos.strftime("%Y-%m-%d")]['eth_supply'][0],
-        text="The Merge",
+        text="Proof of Stake",
         showarrow=True,
         arrowhead=1,
     )
@@ -360,9 +435,15 @@ def plot_eth_supply_over_all_stages(df):
             type="date"
         )
     )
-    
-    fig.update_yaxes(title_text="ETH Supply (Ether)")
-    fig.update_xaxes(title_text="Timestamp")
+
+    update_legend_names(fig, state_variable_name_mapping)
+
+    fig.update_layout(
+        title="ETH Supply",
+        xaxis_title="Date",
+        yaxis_title="ETH Supply (ETH)",
+        legend_title="",
+    )
 
     return fig
     
@@ -371,9 +452,8 @@ def plot_eth_supply_inflation_over_all_stages(df):
     date_start = parameters["date_start"][0]
     date_eip1559 = parameters["date_eip1559"][0]
     date_pos = parameters["date_pos"][0]
-    date_end = df.index[0]
     
-    fig = df.plot(x='timestamp', y='supply_inflation_pct', title='ETH Supply Inflation', height=600)
+    fig = df.plot(x='timestamp', y='supply_inflation_pct')
 
     fig.add_annotation(
         x=date_start, y=df['supply_inflation_pct'][0],
@@ -391,7 +471,7 @@ def plot_eth_supply_inflation_over_all_stages(df):
 
     fig.add_annotation(
         x=date_pos, y=df.loc[date_pos.strftime("%Y-%m-%d")]['supply_inflation_pct'][0],
-        text="POS",
+        text="Proof of Stake",
         showarrow=True,
         arrowhead=1,
     )
@@ -404,9 +484,15 @@ def plot_eth_supply_inflation_over_all_stages(df):
             type="date"
         )
     )
-    
-    fig.update_yaxes(title_text="ETH Supply Inflation (%/year)")
-    fig.update_xaxes(title_text="Timestamp")
+
+    update_legend_names(fig, state_variable_name_mapping)
+
+    fig.update_layout(
+        title="ETH Supply Inflation",
+        xaxis_title="Date",
+        yaxis_title="ETH Supply Inflation (%/year)",
+        legend_title="",
+    )
 
     return fig
 
@@ -415,9 +501,8 @@ def plot_eth_staked_over_all_stages(df):
     date_start = parameters["date_start"][0]
     date_eip1559 = parameters["date_eip1559"][0]
     date_pos = parameters["date_pos"][0]
-    date_end = df.index[0]
     
-    fig = df.plot(x='timestamp', y='eth_staked', title='ETH Staked')
+    fig = df.plot(x='timestamp', y='eth_staked')
 
     fig.add_annotation(
         x=date_start, y=df['eth_staked'][0],
@@ -435,7 +520,7 @@ def plot_eth_staked_over_all_stages(df):
 
     fig.add_annotation(
         x=date_pos, y=df.loc[date_pos.strftime("%Y-%m-%d")]['eth_staked'][0],
-        text="POS",
+        text="Proof of Stake",
         showarrow=True,
         arrowhead=1,
     )
@@ -447,6 +532,15 @@ def plot_eth_staked_over_all_stages(df):
             ),
             type="date"
         )
+    )
+
+    update_legend_names(fig, state_variable_name_mapping)
+
+    fig.update_layout(
+        title="ETH Staked",
+        xaxis_title="Date",
+        yaxis_title="ETH Staked (ETH)",
+        legend_title="",
     )
 
     return fig
