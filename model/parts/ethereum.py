@@ -5,11 +5,9 @@ Policy Functions and State Update Functions shared between the Eth1 and Eth2 sys
 """
 
 import typing
-import math
-import logging
 
 import model.constants as constants
-from model.types import ETH, USD_per_ETH, Gwei, Phase
+from model.types import ETH, USD_per_ETH, Gwei, Stage
 
 
 def policy_network_issuance(
@@ -20,7 +18,7 @@ def policy_network_issuance(
     daily_pow_issuance = params["daily_pow_issuance"]
 
     # State Variables
-    phase = previous_state["phase"]
+    stage = previous_state["stage"]
     amount_slashed = previous_state["amount_slashed"]
     total_basefee = previous_state["total_basefee"]
     total_tips_to_validators = previous_state["total_tips_to_validators"]
@@ -37,7 +35,7 @@ def policy_network_issuance(
     # Calculate Proof of Work issuance
     pow_issuance = (
         daily_pow_issuance / constants.epochs_per_day
-        if Phase(phase) in [Phase.PHASE_0, Phase.POST_EIP1559]
+        if Stage(stage) in [Stage.BEACON_CHAIN, Stage.EIP1559]
         else 0
     )
     network_issuance += pow_issuance * dt
@@ -60,8 +58,8 @@ def policy_eip1559_transaction_pricing(
     * https://eips.ethereum.org/EIPS/eip-1559
     """
 
-    phase = Phase(previous_state["phase"])
-    if not phase in [Phase.POST_EIP1559, Phase.POST_MERGE]:
+    stage = Stage(previous_state["stage"])
+    if not stage in [Stage.EIP1559, Stage.PROOF_OF_STAKE]:
         return {
             "basefee": 0,
             "total_basefee": 0,
@@ -108,7 +106,7 @@ def policy_eip1559_transaction_pricing(
     total_basefee = gas_used * basefee  # Gwei
     total_tips = gas_used * avg_tip_amount  # Gwei
 
-    if phase in [Phase.POST_MERGE]:
+    if stage in [Stage.PROOF_OF_STAKE]:
         total_tips_to_miners = 0
         total_tips_to_validators = total_tips
     else:

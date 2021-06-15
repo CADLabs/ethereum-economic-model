@@ -5,7 +5,7 @@ import pandas as pd
 from radcad import Simulation
 
 import experiments.base as base
-from model.parameters import parameters
+from model.system_parameters import parameters
 
 
 def test_dt():

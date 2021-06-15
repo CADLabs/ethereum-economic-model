@@ -1,10 +1,9 @@
 import numpy as np
 import sys
-from enum import Enum
 
 # See https://docs.python.org/3/library/dataclasses.html
 from dataclasses import dataclass, field
-
+from enum import Enum
 
 # If Python version is greater than equal to 3.8, import from typing module
 # Else also import from typing_extensions module
@@ -28,17 +27,17 @@ Gwei_per_Gas = float
 ETH = float
 
 
-class Phase(Enum):
-    """Phases of the Ethereum network upgrade process finite-state machine"""
+class Stage(Enum):
+    """Stages of the Ethereum network upgrade process finite-state machine"""
 
     ALL = 1
-    """Transition through all phases"""
-    PHASE_0 = 2
-    """EIP1559 disabled; POW issuance enabled"""
-    POST_EIP1559 = 3
-    """EIP1559 enabled; POW issuance enabled"""
-    POST_MERGE = 4
-    """EIP1559 enabled; POW issuance disabled"""
+    """Transition through all stages"""
+    BEACON_CHAIN = 2
+    """Beacon Chain implemented; EIP1559 disabled; POW issuance enabled"""
+    EIP1559 = 3
+    """Beacon Chain implemented; EIP1559 enabled; POW issuance enabled"""
+    PROOF_OF_STAKE = 4
+    """Beacon Chain implemented; EIP1559 enabled; POW issuance disabled"""
 
 
 # US Dollar types

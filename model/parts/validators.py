@@ -7,7 +7,6 @@
 """
 
 import typing
-import numpy as np
 from pytest import approx
 
 import model.constants as constants

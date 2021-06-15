@@ -2,14 +2,14 @@ import numpy as np
 
 from model.state_variables import eth_staked
 from experiments.base import experiment, TIMESTEPS, DELTA_TIME
-from model.types import Phase
+from model.types import Stage
 
 
 # ETH price range from 100 $/ETH to 3000 $/ETH
 eth_price_samples = np.linspace(start=100, stop=3000, num=50)
 
 parameter_overrides = {
-    "phase": [Phase.PHASE_0],
+    "stage": [Stage.BEACON_CHAIN],
     "eth_price_process": [
         lambda run, _timestep: eth_price_samples[run - 1]
     ],

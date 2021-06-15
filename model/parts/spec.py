@@ -8,9 +8,9 @@
 import math
 
 import model.constants as constants
-from model.types import Gwei, ValidatorIndex, Epoch
-from model.parameters import Parameters
 from model.state_variables import StateVariables
+from model.system_parameters import Parameters
+from model.types import Gwei
 
 
 # Beacon state accessors

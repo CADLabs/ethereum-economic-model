@@ -1,30 +1,27 @@
-- file: landing-page
-
-- part: Model Specification
-  chapters:
-  - file: hackmd_mathematical_specification.md
-
-# - part: Code Documentation
-#   chapters:
-#   - file: docs/index.html
-
-- part: Experiment Notebooks
-  chapters:
-  - file: notebooks/0_README
-  - file: notebooks/1_model_validation
-  - file: notebooks/2_validator_environment_yields
-  - file: notebooks/3_network_yields
-  - file: notebooks/4_ultra_sound_barrier
-  - file: notebooks/5_eip1559_transaction_pricing
-  - file: notebooks/6_individual_validator_performance
-  - file: notebooks/7_validator_incentives
-  - file: notebooks/8_validator_costs
-
-- part: Example Model Outputs
-  chapters:
-  - file: notebooks/examples/monte_carlo
-  - file: notebooks/examples/revenue_net_yield_spread
-  - file: notebooks/examples/revenue_yields_vs_network_inflation
-  - file: notebooks/examples/state_space
-  - file: notebooks/examples/validator_environment_yields
-  - file: notebooks/examples/validator_yield_surface
+format: jb-book
+root: docs/landing-page
+parts:
+  - caption: Introduction
+    chapters:
+    - file: README
+      title: README
+    - file: ASSUMPTIONS
+    - file: GLOSSARY
+    - file: CONTRIBUTORS
+    - file: CHANGELOG
+  - caption: Model Specification
+    chapters:
+    - file: docs/hackmd_mathematical_specification.md
+  - caption: Documentation
+    chapters:
+    - url: https://cadlabs.gitlab.io/cadlabs-ethereum-model-docs/docs/index.html
+      title: Model Code Documentation
+  - caption: Experiment Notebooks
+    chapters:
+    - glob: notebooks/*_*
+  - caption: Example Model Outputs
+    chapters:
+    - glob: notebooks/examples/*
+  - caption: Simulation Profiling
+    chapters:
+    - glob: notebooks/simulation_profiling/*

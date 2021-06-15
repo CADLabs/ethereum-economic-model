@@ -5,12 +5,10 @@
 * Calculation of PoS slashing penalties
 """
 
-import math
 import typing
 
-import model.constants as constants
-from model.types import Gwei
 import model.parts.spec as spec
+from model.types import Gwei
 
 
 def policy_attestation_rewards(
@@ -70,6 +68,8 @@ def policy_attestation_penalties(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
     """Attestation Penalties Policy Function
+    Validators are penalized for not attesting to the source, target, and head.
+
     Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#get_flag_index_deltas
 
     Extract from spec:
@@ -260,11 +260,29 @@ def policy_slashing(
     increase_balance(state, proposer_index, proposer_reward)
     increase_balance(state, whistleblower_index, Gwei(whistleblower_reward - proposer_reward))
     ```
+
+    Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#slashings
+
+    Extract from spec:
+    ```python
+    def process_slashings(state: BeaconState) -> None:
+        epoch = get_current_epoch(state)
+        total_balance = get_total_active_balance(state)
+        adjusted_total_slashing_balance = min(sum(state.slashings) * PROPORTIONAL_SLASHING_MULTIPLIER_ALTAIR, total_balance)
+        for index, validator in enumerate(state.validators):
+            if validator.slashed and epoch + EPOCHS_PER_SLASHINGS_VECTOR // 2 == validator.withdrawable_epoch:
+                increment = EFFECTIVE_BALANCE_INCREMENT  # Factored out from penalty numerator to avoid uint64 overflow
+                penalty_numerator = validator.effective_balance // increment * adjusted_total_slashing_balance
+                penalty = penalty_numerator // total_balance * increment
+                decrease_balance(state, ValidatorIndex(index), penalty)
+    ```
     """
     # Parameters
     dt = params["dt"]
     slashing_events_per_1000_epochs = params["slashing_events_per_1000_epochs"]
     MIN_SLASHING_PENALTY_QUOTIENT = params["MIN_SLASHING_PENALTY_QUOTIENT"]
+    PROPORTIONAL_SLASHING_MULTIPLIER = params["PROPORTIONAL_SLASHING_MULTIPLIER"]
+    EFFECTIVE_BALANCE_INCREMENT = params["EFFECTIVE_BALANCE_INCREMENT"]
     WHISTLEBLOWER_REWARD_QUOTIENT = params["WHISTLEBLOWER_REWARD_QUOTIENT"]
     PROPOSER_WEIGHT = params["PROPOSER_WEIGHT"]
     WEIGHT_DENOMINATOR = params["WEIGHT_DENOMINATOR"]
@@ -272,17 +290,33 @@ def policy_slashing(
     # State Variables
     average_effective_balance = previous_state["average_effective_balance"]
 
-    # Calculate amount slashed, whistleblower reward, and proposer reward for a single slashing event
-    amount_slashed = Gwei(average_effective_balance // MIN_SLASHING_PENALTY_QUOTIENT)
+    # Calculate slashing, whistleblower reward, and proposer reward for a single slashing event
+    slashing = Gwei(average_effective_balance // MIN_SLASHING_PENALTY_QUOTIENT)
     whistleblower_reward = Gwei(
         average_effective_balance // WHISTLEBLOWER_REWARD_QUOTIENT
     )
     proposer_reward = Gwei(whistleblower_reward * PROPOSER_WEIGHT // WEIGHT_DENOMINATOR)
     whistleblower_reward = Gwei(whistleblower_reward - proposer_reward)
 
-    # Scale amount slashed and rewards by the number of slashing events per epoch
+    # Calculate number of slashing events for current epoch
     number_of_slashing_events = slashing_events_per_1000_epochs / 1000
-    amount_slashed *= number_of_slashing_events
+
+    # Calculate the individual penalty proportional to total slashings
+    # in current time period using `PROPORTIONAL_SLASHING_MULTIPLIER`
+    total_balance = spec.get_total_active_balance(params, previous_state)
+    adjusted_total_slashing_balance = min(
+        slashing * number_of_slashing_events * PROPORTIONAL_SLASHING_MULTIPLIER,
+        total_balance,
+    )
+    increment = EFFECTIVE_BALANCE_INCREMENT
+    penalty_numerator = (
+        average_effective_balance // increment * adjusted_total_slashing_balance
+    )
+    proportional_penalty = penalty_numerator // total_balance * increment
+
+    # Scale penalty by the number of slashing events per epoch
+    amount_slashed = (slashing + proportional_penalty) * number_of_slashing_events
+    # Scale rewards by the number of slashing events per epoch
     whistleblower_reward *= number_of_slashing_events
     proposer_reward *= number_of_slashing_events
 

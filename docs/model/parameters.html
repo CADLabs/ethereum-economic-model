@@ -62,7 +62,7 @@ from model.types import (
     List,
     Callable,
     Epoch,
-    Phase,
+    Stage,
 )
 from model.utils import default
 from model.processes import create_stochastic_process_realizations
@@ -192,13 +192,13 @@ class Parameters:
     By default set to constants.epochs_per_day (225)
     &#34;&#34;&#34;
 
-    phase: List[Phase] = default([Phase.POST_MERGE])
+    stage: List[Stage] = default([Stage.PROOF_OF_STAKE])
     &#34;&#34;&#34;
-    Which phase or phases of the network upgrade process to simulate.
+    Which stage or stages of the network upgrade process to simulate.
 
-    By default set to POST_MERGE Phase, where EIP1559 is enabled and POW issuance is disabled.
+    By default set to PROOF_OF_STAKE stage, where EIP1559 is enabled and POW issuance is disabled.
 
-    See model.types.Phase Enum for further documentation.
+    See model.types.Stage Enum for further documentation.
     &#34;&#34;&#34;
 
     date_start: List[datetime] = default([datetime.now()])
@@ -292,6 +292,12 @@ class Parameters:
     MIN_SLASHING_PENALTY_QUOTIENT: List[int] = default([2 ** 6])
     &#34;&#34;&#34;
     Used to calculate the penalty applied for a slashable offence.
+    &#34;&#34;&#34;
+    PROPORTIONAL_SLASHING_MULTIPLIER: List[int] = default([2])
+    &#34;&#34;&#34;
+    Scales the slashing penalty proportional to the total slashings for the current epoch
+
+    i.e. the more slashing events there are, the greater the individual penalty
     &#34;&#34;&#34;
     TIMELY_HEAD_WEIGHT: List[int] = default([12])
     &#34;&#34;&#34;
@@ -501,7 +507,7 @@ See "Ethereum Lighthouse: Chasing Serenity" survey report by Empire Ventures: <a
 <dl>
 <dt id="model.parameters.Parameters"><code class="flex name class">
 <span>class <span class="ident">Parameters</span></span>
-<span>(</span><span>dt: List[int] = &lt;factory&gt;, phase: List[<a title="model.types.Phase" href="types.html#model.types.Phase">Phase</a>] = &lt;factory&gt;, date_start: List[datetime.datetime] = &lt;factory&gt;, date_eip1559: List[datetime.datetime] = &lt;factory&gt;, date_merge: List[datetime.datetime] = &lt;factory&gt;, eth_price_process: List[Callable[[int, int], float]] = &lt;factory&gt;, eth_staked_process: List[Callable[[int, int], float]] = &lt;factory&gt;, validator_process: List[Callable[[int, int], int]] = &lt;factory&gt;, daily_pow_issuance: List[float] = &lt;factory&gt;, BASE_REWARD_FACTOR: List[int] = &lt;factory&gt;, MAX_EFFECTIVE_BALANCE: List[float] = &lt;factory&gt;, EFFECTIVE_BALANCE_INCREMENT: List[float] = &lt;factory&gt;, PROPOSER_REWARD_QUOTIENT: List[int] = &lt;factory&gt;, WHISTLEBLOWER_REWARD_QUOTIENT: List[int] = &lt;factory&gt;, MIN_SLASHING_PENALTY_QUOTIENT: List[int] = &lt;factory&gt;, TIMELY_HEAD_WEIGHT: List[int] = &lt;factory&gt;, TIMELY_SOURCE_WEIGHT: List[int] = &lt;factory&gt;, TIMELY_TARGET_WEIGHT: List[int] = &lt;factory&gt;, SYNC_REWARD_WEIGHT: List[int] = &lt;factory&gt;, PROPOSER_WEIGHT: List[int] = &lt;factory&gt;, WEIGHT_DENOMINATOR: List[int] = &lt;factory&gt;, MIN_PER_EPOCH_CHURN_LIMIT: List[int] = &lt;factory&gt;, CHURN_LIMIT_QUOTIENT: List[int] = &lt;factory&gt;, BASE_FEE_MAX_CHANGE_DENOMINATOR: List[int] = &lt;factory&gt;, ELASTICITY_MULTIPLIER: List[int] = &lt;factory&gt;, validator_uptime_process: List[float] = &lt;factory&gt;, validator_percentage_distribution: List[numpy.ndarray] = &lt;factory&gt;, validator_hardware_costs_per_epoch: List[numpy.ndarray] = &lt;factory&gt;, validator_cloud_costs_per_epoch: List[numpy.ndarray] = &lt;factory&gt;, validator_third_party_costs_per_epoch: List[numpy.ndarray] = &lt;factory&gt;, slashing_events_per_1000_epochs: List[int] = &lt;factory&gt;, eip1559_basefee_process: List[Callable[[int, int], float]] = &lt;factory&gt;, eip1559_tip_process: List[Callable[[int, int], float]] = &lt;factory&gt;, gas_target: List[int] = &lt;factory&gt;, daily_transactions_process: List[int] = &lt;factory&gt;, transaction_average_gas: List[int] = &lt;factory&gt;)</span>
+<span>(</span><span>dt: List[int] = &lt;factory&gt;, stage: List[<a title="model.types.Stage" href="types.html#model.types.Stage">Stage</a>] = &lt;factory&gt;, date_start: List[datetime.datetime] = &lt;factory&gt;, date_eip1559: List[datetime.datetime] = &lt;factory&gt;, date_merge: List[datetime.datetime] = &lt;factory&gt;, eth_price_process: List[Callable[[int, int], float]] = &lt;factory&gt;, eth_staked_process: List[Callable[[int, int], float]] = &lt;factory&gt;, validator_process: List[Callable[[int, int], int]] = &lt;factory&gt;, daily_pow_issuance: List[float] = &lt;factory&gt;, BASE_REWARD_FACTOR: List[int] = &lt;factory&gt;, MAX_EFFECTIVE_BALANCE: List[float] = &lt;factory&gt;, EFFECTIVE_BALANCE_INCREMENT: List[float] = &lt;factory&gt;, PROPOSER_REWARD_QUOTIENT: List[int] = &lt;factory&gt;, WHISTLEBLOWER_REWARD_QUOTIENT: List[int] = &lt;factory&gt;, MIN_SLASHING_PENALTY_QUOTIENT: List[int] = &lt;factory&gt;, PROPORTIONAL_SLASHING_MULTIPLIER: List[int] = &lt;factory&gt;, TIMELY_HEAD_WEIGHT: List[int] = &lt;factory&gt;, TIMELY_SOURCE_WEIGHT: List[int] = &lt;factory&gt;, TIMELY_TARGET_WEIGHT: List[int] = &lt;factory&gt;, SYNC_REWARD_WEIGHT: List[int] = &lt;factory&gt;, PROPOSER_WEIGHT: List[int] = &lt;factory&gt;, WEIGHT_DENOMINATOR: List[int] = &lt;factory&gt;, MIN_PER_EPOCH_CHURN_LIMIT: List[int] = &lt;factory&gt;, CHURN_LIMIT_QUOTIENT: List[int] = &lt;factory&gt;, BASE_FEE_MAX_CHANGE_DENOMINATOR: List[int] = &lt;factory&gt;, ELASTICITY_MULTIPLIER: List[int] = &lt;factory&gt;, validator_uptime_process: List[float] = &lt;factory&gt;, validator_percentage_distribution: List[numpy.ndarray] = &lt;factory&gt;, validator_hardware_costs_per_epoch: List[numpy.ndarray] = &lt;factory&gt;, validator_cloud_costs_per_epoch: List[numpy.ndarray] = &lt;factory&gt;, validator_third_party_costs_per_epoch: List[numpy.ndarray] = &lt;factory&gt;, slashing_events_per_1000_epochs: List[int] = &lt;factory&gt;, eip1559_basefee_process: List[Callable[[int, int], float]] = &lt;factory&gt;, eip1559_tip_process: List[Callable[[int, int], float]] = &lt;factory&gt;, gas_target: List[int] = &lt;factory&gt;, daily_transactions_process: List[int] = &lt;factory&gt;, transaction_average_gas: List[int] = &lt;factory&gt;)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>System Parameters
@@ -532,13 +538,13 @@ system parameter key: system parameter type = default system parameter value</p>
     By default set to constants.epochs_per_day (225)
     &#34;&#34;&#34;
 
-    phase: List[Phase] = default([Phase.POST_MERGE])
+    stage: List[Stage] = default([Stage.PROOF_OF_STAKE])
     &#34;&#34;&#34;
-    Which phase or phases of the network upgrade process to simulate.
+    Which stage or stages of the network upgrade process to simulate.
 
-    By default set to POST_MERGE Phase, where EIP1559 is enabled and POW issuance is disabled.
+    By default set to PROOF_OF_STAKE stage, where EIP1559 is enabled and POW issuance is disabled.
 
-    See model.types.Phase Enum for further documentation.
+    See model.types.Stage Enum for further documentation.
     &#34;&#34;&#34;
 
     date_start: List[datetime] = default([datetime.now()])
@@ -632,6 +638,12 @@ system parameter key: system parameter type = default system parameter value</p>
     MIN_SLASHING_PENALTY_QUOTIENT: List[int] = default([2 ** 6])
     &#34;&#34;&#34;
     Used to calculate the penalty applied for a slashable offence.
+    &#34;&#34;&#34;
+    PROPORTIONAL_SLASHING_MULTIPLIER: List[int] = default([2])
+    &#34;&#34;&#34;
+    Scales the slashing penalty proportional to the total slashings for the current epoch
+
+    i.e. the more slashing events there are, the greater the individual penalty
     &#34;&#34;&#34;
     TIMELY_HEAD_WEIGHT: List[int] = default([12])
     &#34;&#34;&#34;
@@ -848,6 +860,11 @@ enter or exit the system per epoch.</p>
 <dd>
 <div class="desc"><p>Used to calculate the penalty applied for a slashable offence.</p></div>
 </dd>
+<dt id="model.parameters.Parameters.PROPORTIONAL_SLASHING_MULTIPLIER"><code class="name">var <span class="ident">PROPORTIONAL_SLASHING_MULTIPLIER</span> : List[int]</code></dt>
+<dd>
+<div class="desc"><p>Scales the slashing penalty proportional to the total slashings for the current epoch</p>
+<p>i.e. the more slashing events there are, the greater the individual penalty</p></div>
+</dd>
 <dt id="model.parameters.Parameters.PROPOSER_REWARD_QUOTIENT"><code class="name">var <span class="ident">PROPOSER_REWARD_QUOTIENT</span> : List[int]</code></dt>
 <dd>
 <div class="desc"><p>Used to calculate the proportion of rewards distributed between attesters and proposers.</p></div>
@@ -963,16 +980,16 @@ where new validators enter the system and stake accordingly.</p>
 <p>EIP1559 gas limit = gas_target * ELASTICITY_MULTIPLIER
 See <a href="https://eips.ethereum.org/EIPS/eip-1559">https://eips.ethereum.org/EIPS/eip-1559</a></p></div>
 </dd>
-<dt id="model.parameters.Parameters.phase"><code class="name">var <span class="ident">phase</span> : List[<a title="model.types.Phase" href="types.html#model.types.Phase">Phase</a>]</code></dt>
-<dd>
-<div class="desc"><p>Which phase or phases of the network upgrade process to simulate.</p>
-<p>By default set to POST_MERGE Phase, where EIP1559 is enabled and POW issuance is disabled.</p>
-<p>See model.types.Phase Enum for further documentation.</p></div>
-</dd>
 <dt id="model.parameters.Parameters.slashing_events_per_1000_epochs"><code class="name">var <span class="ident">slashing_events_per_1000_epochs</span> : List[int]</code></dt>
 <dd>
 <div class="desc"><p>The number of slashing events per 1000 epochs.</p>
 <p>Asssumption from Hoban/Borgers report.</p></div>
+</dd>
+<dt id="model.parameters.Parameters.stage"><code class="name">var <span class="ident">stage</span> : List[<a title="model.types.Stage" href="types.html#model.types.Stage">Stage</a>]</code></dt>
+<dd>
+<div class="desc"><p>Which stage or stages of the network upgrade process to simulate.</p>
+<p>By default set to PROOF_OF_STAKE stage, where EIP1559 is enabled and POW issuance is disabled.</p>
+<p>See model.types.Stage Enum for further documentation.</p></div>
 </dd>
 <dt id="model.parameters.Parameters.transaction_average_gas"><code class="name">var <span class="ident">transaction_average_gas</span> : List[int]</code></dt>
 <dd>
@@ -1047,6 +1064,7 @@ but executing a trade on a decentralized exchange can cost 100,000 gas or more.<
 <li><code><a title="model.parameters.Parameters.MAX_EFFECTIVE_BALANCE" href="#model.parameters.Parameters.MAX_EFFECTIVE_BALANCE">MAX_EFFECTIVE_BALANCE</a></code></li>
 <li><code><a title="model.parameters.Parameters.MIN_PER_EPOCH_CHURN_LIMIT" href="#model.parameters.Parameters.MIN_PER_EPOCH_CHURN_LIMIT">MIN_PER_EPOCH_CHURN_LIMIT</a></code></li>
 <li><code><a title="model.parameters.Parameters.MIN_SLASHING_PENALTY_QUOTIENT" href="#model.parameters.Parameters.MIN_SLASHING_PENALTY_QUOTIENT">MIN_SLASHING_PENALTY_QUOTIENT</a></code></li>
+<li><code><a title="model.parameters.Parameters.PROPORTIONAL_SLASHING_MULTIPLIER" href="#model.parameters.Parameters.PROPORTIONAL_SLASHING_MULTIPLIER">PROPORTIONAL_SLASHING_MULTIPLIER</a></code></li>
 <li><code><a title="model.parameters.Parameters.PROPOSER_REWARD_QUOTIENT" href="#model.parameters.Parameters.PROPOSER_REWARD_QUOTIENT">PROPOSER_REWARD_QUOTIENT</a></code></li>
 <li><code><a title="model.parameters.Parameters.PROPOSER_WEIGHT" href="#model.parameters.Parameters.PROPOSER_WEIGHT">PROPOSER_WEIGHT</a></code></li>
 <li><code><a title="model.parameters.Parameters.SYNC_REWARD_WEIGHT" href="#model.parameters.Parameters.SYNC_REWARD_WEIGHT">SYNC_REWARD_WEIGHT</a></code></li>
@@ -1066,8 +1084,8 @@ but executing a trade on a decentralized exchange can cost 100,000 gas or more.<
 <li><code><a title="model.parameters.Parameters.eth_price_process" href="#model.parameters.Parameters.eth_price_process">eth_price_process</a></code></li>
 <li><code><a title="model.parameters.Parameters.eth_staked_process" href="#model.parameters.Parameters.eth_staked_process">eth_staked_process</a></code></li>
 <li><code><a title="model.parameters.Parameters.gas_target" href="#model.parameters.Parameters.gas_target">gas_target</a></code></li>
-<li><code><a title="model.parameters.Parameters.phase" href="#model.parameters.Parameters.phase">phase</a></code></li>
 <li><code><a title="model.parameters.Parameters.slashing_events_per_1000_epochs" href="#model.parameters.Parameters.slashing_events_per_1000_epochs">slashing_events_per_1000_epochs</a></code></li>
+<li><code><a title="model.parameters.Parameters.stage" href="#model.parameters.Parameters.stage">stage</a></code></li>
 <li><code><a title="model.parameters.Parameters.transaction_average_gas" href="#model.parameters.Parameters.transaction_average_gas">transaction_average_gas</a></code></li>
 <li><code><a title="model.parameters.Parameters.validator_cloud_costs_per_epoch" href="#model.parameters.Parameters.validator_cloud_costs_per_epoch">validator_cloud_costs_per_epoch</a></code></li>
 <li><code><a title="model.parameters.Parameters.validator_hardware_costs_per_epoch" href="#model.parameters.Parameters.validator_hardware_costs_per_epoch">validator_hardware_costs_per_epoch</a></code></li>

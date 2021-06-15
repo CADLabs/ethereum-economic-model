@@ -13,6 +13,9 @@ from dataclasses import dataclass
 from datetime import datetime
 
 import model.constants as constants
+import data.api.beaconchain as beaconchain
+import data.api.etherscan as etherscan
+from model.system_parameters import validator_environments
 from model.types import (
     Gwei,
     Gwei_per_Gas,
@@ -20,22 +23,16 @@ from model.types import (
     USD,
     USD_per_ETH,
     Percentage,
-    Uninitialized,
-    Phase,
+    Stage,
 )
-from model.parameters import validator_environments
-
 
 # Get number of validator environments for initializing Numpy array size
 number_of_validator_environments = len(validator_environments)
 
 # Intial state from external live data source
-# Updated from https://beaconscan.com/ as of 20/04/21
-number_of_validators = 120_894
-number_of_validators_in_activation_queue = 230
-eth_staked = 3_868_555
-# Updated from https://etherscan.io/chart/ethersupplygrowth as of 20/04/21
-eth_supply = 115_538_828
+number_of_validators: int = beaconchain.get_validators_count()
+eth_staked: ETH = beaconchain.get_total_validator_balance() / constants.gwei
+eth_supply: ETH = etherscan.get_eth_supply() / constants.wei
 
 
 @dataclass
@@ -46,15 +43,15 @@ class StateVariables:
     """
 
     # Time state variables
-    phase: Phase = None
+    stage: Stage = None
     """
-    The phase of the network upgrade process.
+    The stage of the network upgrade process.
 
-    By default set to POST_MERGE Phase, where EIP1559 is enabled and POW issuance is disabled.
+    By default set to PROOF_OF_STAKE Stage, where EIP1559 is enabled and POW issuance is disabled.
 
-    Otherwise set to ALL Phase, which transitions through each phase, updating the `phase` State Variable.
+    Otherwise set to ALL Stage, which transitions through each stage, updating the `stage` State Variable.
 
-    See model.types.Phase Enum for further documentation.
+    See model.types.Stage Enum for further documentation.
     """
     timestamp: datetime = None
     """
@@ -76,9 +73,7 @@ class StateVariables:
     """The total Proof of Work issuance in ETH"""
 
     # Validator state variables
-    number_of_validators_in_activation_queue: int = (
-        number_of_validators_in_activation_queue
-    )
+    number_of_validators_in_activation_queue: int = 0
     """The number of validators in activation queue"""
     average_effective_balance: Gwei = 32 * constants.gwei
     """The validator average effective balance"""
@@ -91,7 +86,10 @@ class StateVariables:
 
     # Reward and penalty state variables
     base_reward: Gwei = 0
-    """Validator rewards and penalties are calculated in terms of the base reward"""
+    """
+    Validator rewards and penalties are calculated in terms of the base reward.
+    Under perfect network conditions, each validator should receive 1 base reward per epoch for performing their duties.
+    """
     validating_rewards: Gwei = 0
     """The total rewards received for PoS validation (attestation, block proposal, sync vote)"""
     validating_penalties: Gwei = 0

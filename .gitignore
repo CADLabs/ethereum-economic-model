@@ -136,3 +136,4 @@ dmypy.json
 scratchpad.*
 scratchpad/
 .DS_Store
+.idea/

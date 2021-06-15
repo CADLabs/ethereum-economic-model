@@ -4,7 +4,7 @@ from radcad.core import generate_parameter_sweep
 
 import model.simulation_configuration as simulation
 import model.constants as constants
-from model.parameters import parameters, Parameters, validator_environments
+from model.system_parameters import parameters, Parameters, validator_environments
 
 
 def assign_parameters(df: pd.DataFrame, parameters: Parameters, set_params=[]):
@@ -50,11 +50,15 @@ def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameter
     df['total_profit_yields_pct'] = df['total_profit_yields'] * 100
 
     # Calculate revenue-net yield spread
-    df['revenue_net_yield_spread_pct'] = df['total_revenue_yields_pct'] - df['total_profit_yields_pct']
+    df['revenue_profit_yield_spread_pct'] = df['total_revenue_yields_pct'] - df['total_profit_yields_pct']
 
     # Convert validator rewards from Gwei to ETH
-    validator_rewards = ['total_online_validator_rewards', 'total_tips_to_validators', 'source_reward', 'target_reward', 'head_reward', 'block_proposer_reward', 'sync_reward']
+    validator_rewards = ['total_online_validator_rewards', 'total_tips_to_validators', 'source_reward', 'target_reward', 'head_reward', 'block_proposer_reward', 'sync_reward', 'whistleblower_rewards']
     df[[reward + '_eth' for reward in validator_rewards]] = df[validator_rewards] / constants.gwei
+
+    # Convert validator penalties from Gwei to ETH
+    validator_penalties = ['validating_penalties', 'amount_slashed']
+    df[[penalty + '_eth' for penalty in validator_penalties]] = df[validator_penalties] / constants.gwei
 
     # Drop the initial state for plotting
     if drop_timestep_zero:

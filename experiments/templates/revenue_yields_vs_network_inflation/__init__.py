@@ -3,7 +3,7 @@ import numpy as np
 from model.simulation_configuration import TIMESTEPS, DELTA_TIME
 from model.state_variables import eth_staked, eth_supply
 from experiments.base import experiment
-from model.types import Phase
+from model.types import Stage
 
 
 eth_staked_samples = np.linspace(
@@ -13,7 +13,7 @@ eth_staked_samples = np.linspace(
 )
 
 parameter_overrides = {
-    "phase": [Phase.PHASE_0],
+    "stage": [Stage.BEACON_CHAIN],
     "eth_staked_process": [
         lambda run, _timestep: eth_staked_samples[run - 1],
     ],

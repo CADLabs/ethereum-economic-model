@@ -12,7 +12,7 @@ from pygments.formatters import HtmlFormatter
 from IPython.core.display import HTML
 
 import model.constants as constants
-from model.parameters import parameters, validator_environments
+from model.system_parameters import parameters, validator_environments
 
 
 def inspect_module(module):
@@ -195,8 +195,8 @@ def plot_validator_environment_yield_contour(df):
     return fig
 
 
-def plot_revenue_net_yield_spread(df):
-    grouped = df.groupby(["eth_price", "eth_staked"]).last()["revenue_net_yield_spread_pct"]
+def plot_revenue_profit_yield_spread(df):
+    grouped = df.groupby(["eth_price", "eth_staked"]).last()["revenue_profit_yield_spread_pct"]
 
     x = df.groupby(["run"]).first()["eth_price"].unique()
     y = df.groupby(["run"]).first()["eth_staked"].unique()
@@ -283,7 +283,7 @@ def plot_validator_environment_yield_surface(df):
     return fig
 
 
-def plot_eth_supply_over_all_phases(df):
+def plot_eth_supply_over_all_stages(df):
     date_start = parameters["date_start"][0]
     date_eip1559 = parameters["date_eip1559"][0]
     date_merge = parameters["date_merge"][0]
@@ -367,7 +367,7 @@ def plot_eth_supply_over_all_phases(df):
     return fig
     
 
-def plot_eth_supply_inflation_over_all_phases(df):
+def plot_eth_supply_inflation_over_all_stages(df):
     date_start = parameters["date_start"][0]
     date_eip1559 = parameters["date_eip1559"][0]
     date_merge = parameters["date_merge"][0]
@@ -411,7 +411,7 @@ def plot_eth_supply_inflation_over_all_phases(df):
     return fig
 
     
-def plot_eth_staked_over_all_phases(df):
+def plot_eth_staked_over_all_stages(df):
     date_start = parameters["date_start"][0]
     date_eip1559 = parameters["date_eip1559"][0]
     date_merge = parameters["date_merge"][0]

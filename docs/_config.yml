@@ -1,5 +1,6 @@
 title: "CADLabs Ethereum Model Documentation"
-logo: _static/eth-masterclass-horizontal.png
+# logo: media/_.png
+only_build_toc_files: true
 execute:
   execute_notebooks: "off"
 sphinx:
