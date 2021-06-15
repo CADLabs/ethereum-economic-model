@@ -30,7 +30,6 @@ number_of_validator_environments = len(validator_environments)
 # Intial state from external live data source
 # Updated from https://beaconscan.com/ as of 20/04/21
 number_of_validators = 120_894
-number_of_validators_in_activation_queue = 230
 eth_staked = 3_868_555
 # Updated from https://etherscan.io/chart/ethersupplygrowth as of 20/04/21
 eth_supply = 115_538_828
@@ -74,9 +73,7 @@ class StateVariables:
     """The total Proof of Work issuance in ETH"""
 
     # Validator state variables
-    number_of_validators_in_activation_queue: int = (
-        number_of_validators_in_activation_queue
-    )
+    number_of_validators_in_activation_queue: int = 0
     """The number of validators in activation queue"""
     average_effective_balance: Gwei = 32 * constants.gwei
     """The validator average effective balance"""
