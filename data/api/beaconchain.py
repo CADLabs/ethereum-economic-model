@@ -1,7 +1,7 @@
 import requests
 import diskcache
 
-from model.types import ETH
+from model.types import Gwei
 
 
 cache = diskcache.Cache()
@@ -10,7 +10,7 @@ cache = diskcache.Cache()
 def get_epoch_data(epoch="latest"):
     return requests.get(f"https://beaconcha.in/api/v1/epoch/{epoch}", headers={"accept":"application/json"}).json()["data"]
 
-def get_total_validator_balance() -> ETH:
+def get_total_validator_balance() -> Gwei:
     return int(get_epoch_data()["totalvalidatorbalance"])
 
 def get_validators_count() -> int:

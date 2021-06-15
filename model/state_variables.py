@@ -31,8 +31,8 @@ number_of_validator_environments = len(validator_environments)
 
 # Intial state from external live data source
 number_of_validators: int = beaconchain.get_validators_count()
-eth_staked: ETH = beaconchain.get_total_validator_balance()
-eth_supply: ETH = etherscan.get_eth_supply() / constants.gwei
+eth_staked: ETH = beaconchain.get_total_validator_balance() / constants.gwei
+eth_supply: ETH = etherscan.get_eth_supply() / constants.wei
 
 
 @dataclass
