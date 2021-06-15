@@ -33,6 +33,7 @@ jobs:
         python -m black --check --diff model
     - name: Test notebooks
       run: |
+        make kernel
         make execute-notebooks
     - name: Test with pytest
       run: |
