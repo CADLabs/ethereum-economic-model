@@ -8,9 +8,9 @@ from model.types import Stage
 
 sweep = generate_cartesion_product({
     # ETH price range from 100 $/ETH to 3000 $/ETH
-    "eth_price_samples": np.linspace(start=10, stop=100, num=20),
-    # ETH staked range from genesis requirement to 5e6 ETH staked as in Hoban/Borgers report
-    "eth_staked_samples": np.linspace(start=524_288, stop=5e6, num=20),
+    "eth_price_samples": np.linspace(start=100, stop=3000, num=20),
+    # ETH staked range from genesis requirement to current ETH staked
+    "eth_staked_samples": np.linspace(start=524_288, stop=eth_staked, num=20),
 })
 
 parameter_overrides = {

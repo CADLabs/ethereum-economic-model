@@ -195,8 +195,8 @@ def plot_validator_environment_yield_contour(df):
     return fig
 
 
-def plot_revenue_net_yield_spread(df):
-    grouped = df.groupby(["eth_price", "eth_staked"]).last()["revenue_net_yield_spread_pct"]
+def plot_revenue_profit_yield_spread(df):
+    grouped = df.groupby(["eth_price", "eth_staked"]).last()["revenue_profit_yield_spread_pct"]
 
     x = df.groupby(["run"]).first()["eth_price"].unique()
     y = df.groupby(["run"]).first()["eth_staked"].unique()
