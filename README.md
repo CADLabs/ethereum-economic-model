@@ -1,28 +1,44 @@
 # CADLabs Ethereum Validator Economics Model
+
 [![Python package](https://github.com/cadCAD-edu/ethereum-model/actions/workflows/python.yml/badge.svg)](https://github.com/cadCAD-edu/ethereum-model/actions/workflows/python.yml)
 
-An Ethereum Validator Economics model.
+A modular dynamical systems model implemented using the open-source Python library [radCAD](https://github.com/BenSchZA/radCAD), a next-gen implementation of [cadCAD](https://cadcad.org).
 
-**Official Eth2 specs version**: implements the [Altair](https://github.com/ethereum/eth2.0-specs#altair) updates in the [Beige Gorgon / v1.1.0-alpha.3](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.3) release.
-
-Features:
-* Configurable to reflect protocol behavior at different points in time of the development roadmap:
-  1. post Beacon Chain launch, pre EIP1559, pre PoS (validators receive PoS incentives, EIP1559 disabled, and PoW still in operation)
-  2. post Beacon Chain launch, post EIP1559, pre PoS (validators receive PoS incentives, EIP1559 enabled with miners receiving tips, and PoW still in operation)
-  3. post Beacon Chain launch, post EIP1559, post PoS (validators receive PoS incentives, EIP1559 enabled with validators receiving tips, and PoW deprecated)
-* Supports [state space analysis](https://en.wikipedia.org/wiki/State-space_representation) (i.e. simulation of system behavior over time) and [phase space analysis](https://en.wikipedia.org/wiki/Phase_space) (i.e. generation of all unique system states in a given experimental setup)
-* Customizable processes for important variables such as ETH price, ETH staked, validator adoption, EIP1559 transaction pricing, and transaction rates
-* Modular model structure for convenient extension and modification. This allows different user groups to refactor the model for different purposes, rapidly test new incentive mechanisms, or to update the model as Ethereum implements new protocol improvements.
-* References to official [Eth2 specs](https://github.com/ethereum/eth2.0-specs) in Policy and State Update Function logic. This enables seamless onboarding of protocol developers or for the more advanced cadCAD user to dig into the underlying protocol design that inspired the logic.
+**Official Eth2 specs version**: 
+* Implements the [Altair](https://github.com/ethereum/eth2.0-specs#altair) updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release.
 
 ## Table of Contents
-* [Model](#model)
-* [Experiments](#experiments)
+* [Context](#context)
+* [Model Features](#model-features)
+* [Directory Structure](#directory-structure)
+* [Model Architecture](#model-architecture)
+* [Running Experiments](#running-experiments)
 * [Development](#development)
 * [Tests](#tests)
-* [Jupyter Lab Environment](#jupyter-lab-environment)
+* [Jupyter Environment](#jupyter-environment)
 * [Change Log](#change-log)
 * [Contributors](#contributors)
+* [Acknowledgements](#contributors)
+* [Copyleft](#copyleft)
+
+---
+
+## Context
+
+This open-source model was developed in collaboration with the Ethereum Robust Incentives Group, and funded by the Ethereum Foundation Eth2 Staking Community Grants. It accompanies the cadCAD Edu course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum)". It intends to provide the Ethereum community with a highly versatile, customizable and extensible research tool, and includes a list of [model extension ideas](#roadmap).  
+
+TODO: Describe in a few sentences how this model came about
+
+## Model Features
+
+* Configurable to reflect protocol behavior at different points in time of the development roadmap (referred to as "upgrade stages" in this model):
+  * post Beacon Chain launch, pre EIP1559, pre PoS (validators receive PoS incentives, EIP1559 disabled, and PoW still in operation)
+  * post Beacon Chain launch, post EIP1559, pre PoS (validators receive PoS incentives, EIP1559 enabled with miners receiving tips, and PoW still in operation)
+  * post Beacon Chain launch, post EIP1559, post PoS (validators receive PoS incentives, EIP1559 enabled with validators receiving tips, and PoW deprecated)
+* Supports [state space analysis](https://en.wikipedia.org/wiki/State-space_representation) (i.e. simulation of system behavior over time) and [phase space analysis](https://en.wikipedia.org/wiki/Phase_space) (i.e. generation of all unique system states in a given experimental setup)
+* Customizable processes to set important variables such as ETH price, ETH staked, EIP1559 transaction pricing, and transaction rates
+* Modular model structure for convenient extension and modification. This allows different user groups to refactor the model for different purposes, rapidly test new incentive mechanisms, or to update the model as Ethereum implements new protocol improvements.
+* References to official [Eth2 specs](https://github.com/ethereum/eth2.0-specs) in Policy and State Update Function logic. This enables seamless onboarding of protocol developers or for the more advanced cadCAD user to dig into the underlying protocol design that inspired the logic.
 
 ## Directory Structure
 * [data/](data/): datasets used in model
@@ -34,13 +50,13 @@ Features:
 * [outputs/](outputs/): experiment outputs (images, datasets, etc.)
 * [tests/](tests/): unit and integration tests for model and notebooks
 
----
+## Model Architecture
 
-## Model
+The [model/](model/) directory contains the model's software architecture in the form of two categories of modules: structural modules and configuration modules.
 
-### Parts
+### Structural Modules
 
-The model is composed of different modules in the [model/parts/](model/parts/) directory:
+The model is composed of several structural modules in the [model/parts/](model/parts/) directory:
 
 | Module | Description |
 | --- | --- |
@@ -50,9 +66,9 @@ The model is composed of different modules in the [model/parts/](model/parts/) d
 | [validators.py](model/parts/validators.py) | Validator processes such as validator activation, staking, uptime |
 | [utils/ethereum_spec.py](model/parts/utils/ethereum_spec.py) | Relevant extracts from the official Eth2 spec |
 
-### Configuration
+### Configuration Modules
 
-The model is configured using modules in the [model/](model/) directory:
+The model is configured using several configuration modules in the [model/](model/) directory:
 
 | Module | Description |
 | --- | --- |
@@ -65,9 +81,9 @@ The model is configured using modules in the [model/](model/) directory:
 | [types.py](model/types.py) | Various Python types used in the model, such as the `Stage` Enum and calculation units |
 | [utils.py](model/utils.py) | Misc. utility and helper functions |
 
-## Experiments
+## Running Experiments
 
-The [experiments/](experiments/) directory contains modules for configuring and executing experiments, as well as performing post-processing of results.
+The [experiments/](experiments/) directory contains modules for configuring and executing simulation experiments, as well as performing post-processing of the results.
 
 The [experiments/templates/](experiments/templates/) directory contains different experiment templates which are used in the Jupyter experiment notebooks in the [notebooks/](notebooks/) directory to answer research questions and perform scenario analyses.
 
@@ -78,17 +94,17 @@ There are in total 8 experiment notebooks. These experiments answer specific res
 ### 1. Model Validation
 
 #### Research Question
-How do we validate the model meets the specification?
+How accurately does that CADLabs model perform compared to a) other, well-established validator economics models and b) past on-chain data?
 
-#### Experiment Purpose
-The purpose of this experiment is to validate whether the model meets the specification by comparing multiple scenario analyses seen in the Hoban/Borgers Economic Model with those same analyses performed with our model.
+#### Experiment Overview
+The purpose of this notebook is to recreate selected simulations from the widely acknowledged Hoban/Borgers Ethereum 2.0 Economic Model using the CADLabs model, and to compare the results. We suggest that the CADLabs model has a high degree of validity.
 
 ### 2. Network Issuance
 
 #### Research Question
 What validator rewards and penalties make up network issuance?
 
-#### Experiment Purpose
+#### Experiment Overview
 The purpose of this experiment is to explore the rewards and penalties that make up network issuance under different scenarios.
 
 ### 3. Network Costs
@@ -96,7 +112,7 @@ The purpose of this experiment is to explore the rewards and penalties that make
 #### Research Question
 What costs do validators incur to secure the network?
 
-#### Experiment Purpose
+#### Experiment Overview
 The purpose of this experiment is to explore the cost incurred by validators to secure the network under different scenarios.
 
 ### 4. Network Yields
@@ -104,7 +120,7 @@ The purpose of this experiment is to explore the cost incurred by validators to 
 #### Research Question
 What are the best and worst case network yields?
 
-#### Experiment Purpose
+#### Experiment Overview
 The purpose of this experiment is to determine what the expected network yields are under different scenarios.
 
 ### 5. EIP1559 Transaction Pricing
@@ -112,7 +128,7 @@ The purpose of this experiment is to determine what the expected network yields 
 #### Research Question
 What effect will EIP1559 transaction pricing have on network yields?
 
-#### Experiment Purpose
+#### Experiment Overview
 The purpose of this experiment is to explore the effect of the EIP1559 transaction pricing mechanism on network yields under different scenarios.
 
 ### 6. Utra-Sound Barrier
@@ -120,7 +136,7 @@ The purpose of this experiment is to explore the effect of the EIP1559 transacti
 #### Research Question
 At what point will the Ethereum system break the ultra-sound barrier (become deflationary), and what will the peak ETH supply be?
 
-#### Experiment Purpose
+#### Experiment Overview
 The purpose of this experiment is to analyse the network suppy inflation, and determine under what scenarios the network becomes deflationary.
 
 ### 7. Validator Environment Yields
@@ -128,7 +144,7 @@ The purpose of this experiment is to analyse the network suppy inflation, and de
 #### Research Question
 What are the expected validator yields for staking in different environments?
 
-#### Experiment Purpose
+#### Experiment Overview
 The purpose of this experiment is to explore the different validator environments and their yields under different scenarios.
 
 ### 8. Individual Validator Performance
@@ -136,12 +152,14 @@ The purpose of this experiment is to explore the different validator environment
 #### Research Question
 What is the performance of an individual validator with a custom environment configuration?
 
-#### Experiment Purpose
+#### Experiment Overview
 The purpose of this experiment is to determine the performance of an individual validator using a custom environment configuration.
 
 ### Experiment Execution
 
-The default experiment is an experiment that uses the default cadCAD System Parameters, Initial State, and State Update Blocks defined in the [models/](models/) directory. To run the default experiment from the terminal, execute the `experiments.run` module:
+The default experiment is an experiment that uses the default cadCAD System Parameters, Initial State, and State Update Blocks defined in the [models/](models/) directory.
+
+To run the default experiment from the terminal, execute the `experiments.run` module:
 ```bash
 python3 -m experiments.run
 ```
@@ -262,3 +280,9 @@ See [CONTRIBUTORS.md](CONTRIBUTORS.md) for contributions to this project repo.
 ## Acknowledgements
 
 * Ethereum 2.0 Economic Review. July 16, 2020. "An Analysis of Ethereum’s Proof of Stake Incentive Model". By Tanner Hoban and Thomas Borgers. For the extensive research that inspired the development of our model and the assumptions we adopted.
+
+## License
+
+`cadCAD-edu/ethereum-model` is licensed under the GNU General Public License v3.0.
+
+Permissions of this strong copyleft license are conditioned on making available complete source code of licensed works and modifications, which include larger works using a licensed work, under the same license. Copyright and license notices must be preserved. Contributors provide an express grant of patent rights.
