@@ -1,7 +1,7 @@
 import numpy as np
 
 from model.state_variables import eth_staked
-from experiments.base import experiment, TIMESTEPS, DELTA_TIME
+from experiments.default_experiment import experiment, TIMESTEPS, DELTA_TIME
 from model.types import Stage
 
 
@@ -19,7 +19,7 @@ parameter_overrides = {
     ],
 }
 
-# Override base experiment parameters
+# Override default experiment parameters
 experiment.simulations[0].model.params.update(parameter_overrides)
 # Set runs to number of combinations in sweep
 experiment.simulations[0].runs = len(eth_price_samples)

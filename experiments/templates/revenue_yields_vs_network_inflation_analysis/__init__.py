@@ -2,7 +2,7 @@ import numpy as np
 
 from model.simulation_configuration import TIMESTEPS, DELTA_TIME
 from model.state_variables import eth_staked, eth_supply
-from experiments.base import experiment
+from experiments.default_experiment import experiment
 from model.types import Stage
 
 
@@ -24,7 +24,7 @@ parameter_overrides = {
     ]
 }
 
-# Override base experiment parameters
+# Override default experiment parameters
 experiment.simulations[0].model.params.update(parameter_overrides)
 # Set runs to number of items in eth_staked_samples
 experiment.simulations[0].runs = len(eth_staked_samples)

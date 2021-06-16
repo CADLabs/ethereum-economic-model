@@ -3,7 +3,7 @@ import logging
 import sys
 from datetime import datetime
 
-from experiments.base import experiment
+from experiments.default_experiment import experiment
 from experiments.post_processing import post_process
 
 

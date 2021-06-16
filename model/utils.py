@@ -1,3 +1,7 @@
+"""
+Various model utility and helper functions
+"""
+
 import copy
 from dataclasses import field
 from functools import partial

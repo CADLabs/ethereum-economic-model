@@ -7,7 +7,7 @@
 
 import typing
 
-import model.parts.spec as spec
+import model.parts.utils.ethereum_spec as spec
 from model.types import Gwei
 
 

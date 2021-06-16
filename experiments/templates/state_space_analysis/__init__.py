@@ -3,7 +3,7 @@ import model.constants as constants
 import model.simulation_configuration as simulation_configuration
 from model.stochastic_processes import create_stochastic_process_realizations
 from model.types import Stage
-from experiments.base import experiment
+from experiments.default_experiment import experiment
 
 
 DELTA_TIME = constants.epochs_per_day  # epochs per timestep
@@ -20,5 +20,5 @@ parameter_overrides = {
 }
 
 experiment.simulations[0].timesteps = TIMESTEPS
-# Override base experiment System Parameters
+# Override default experiment System Parameters
 experiment.simulations[0].model.params.update(parameter_overrides)
