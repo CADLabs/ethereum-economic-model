@@ -60,12 +60,11 @@ The model is composed of several structural modules in the [model/parts/](model/
 
 | Module | Description |
 | --- | --- |
-| [ethereum.py](model/parts/ethereum.py) | Basic Ethereum mechanisms such as EIP1559 transaction pricing, and updates to ETH price and supply |
-| [incentives.py](model/parts/incentives.py) | Calculation of Proof of Stake reward, penalty and slashing incentives |
-| [metrics.py](model/parts/metrics.py) | Calculation of validator operational cost, revenue, profit, and yield metrics |
-| [stages.py](model/parts/stages.py) | Management of stages of the Ethereum system upgrade process |
-| [spec.py](model/parts/spec.py) | Relevant extracts from the official Eth2 spec |
-| [validators.py](model/parts/validators.py) | Implementation of validator processes such as activation, staking, uptime |
+| [ethereum_system.py](model/parts/ethereum_system.py) | Genereal Ethereum mechanisms, such as managing the system upgrade process, the EIP1559 transaction pricing mechanism, and updating the ETH price and ETH supply |
+| [pos_incentives.py](model/parts/pos_incentives.py) | Proof of Stake incentives |
+| [system_metrics.py](model/parts/system_metrics.py) | Calculation of validator costs, revenue, profit, and yield metrics |
+| [validators.py](model/parts/validators.py) | Validator processes such as validator activation, staking, uptime |
+| [utils/ethereum_spec.py](model/parts/utils/ethereum_spec.py) | Relevant extracts from the official Eth2 spec |
 
 ### Configuration Modules
 
@@ -79,7 +78,7 @@ The model is configured using several configuration modules in the [model/](mode
 | [state_variables.py](model/state_variables.py) | Model State Variable definition, configuration, and defaults |
 | [stochastic_processes.py](model/stochastic_processes.py) | Helper functions to generate stochastic environmental processes |
 | [system_parameters.py](model/system_parameters.py) | Model System Parameter definition, configuration, and defaults |
-| [types.py](model/types.py) | Various types used in the model, such as the `Stage` Enum and calculation units |
+| [types.py](model/types.py) | Various Python types used in the model, such as the `Stage` Enum and calculation units |
 | [utils.py](model/utils.py) | Misc. utility and helper functions |
 
 ## Running Experiments
@@ -158,7 +157,9 @@ The purpose of this experiment is to determine the performance of an individual 
 
 ### Experiment Execution
 
-The base experiment is an experiment that uses the default cadCAD System Parameters, Initial State, and State Update Blocks defined in the [models/](models/) directory. To run the base experiment from the terminal, execute the `experiments.run` module:
+The default experiment is an experiment that uses the default cadCAD System Parameters, Initial State, and State Update Blocks defined in the [models/](models/) directory.
+
+To run the default experiment from the terminal, execute the `experiments.run` module:
 ```bash
 python3 -m experiments.run
 ```
@@ -169,7 +170,7 @@ Alternatively, open and run one of the Jupyter experiment notebooks in Jupyter L
 
 1. Choose or create a new experiment template in the [experiments/templates/](experiments/templates/) directory
 2. Copy the template experiment from [experiments/template.py](experiments/template.py) into the directory
-3. Customize the base experiment using the template
+3. Customize the default experiment using the template
 4. Create a new Jupyter experiment notebook using the [notebooks/template.ipynb](notebooks/template.ipynb) experiment notebook template
 5. Execute your experiment, post-process and analyze the results, and create Plotly charts!
 
