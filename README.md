@@ -254,7 +254,7 @@ See [CONTRIBUTORS.md](CONTRIBUTORS.md) for contributions to this project repo.
 
 * Ethereum 2.0 Economic Review. July 16, 2020. "An Analysis of Ethereum’s Proof of Stake Incentive Model". By Tanner Hoban and Thomas Borgers. For the extensive research that inspired the development of our model and the assumptions we adopted.
 
--## License
+## License
 
 `cadCAD-edu/ethereum-model` is licensed under the GNU General Public License v3.0.
  
