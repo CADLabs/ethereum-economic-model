@@ -60,12 +60,11 @@ The model is composed of several structural modules in the [model/parts/](model/
 
 | Module | Description |
 | --- | --- |
-| [ethereum.py](model/parts/ethereum.py) | Basic Ethereum mechanisms such as EIP1559 transaction pricing, and updates to ETH price and supply |
-| [incentives.py](model/parts/incentives.py) | Calculation of Proof of Stake reward, penalty and slashing incentives |
-| [metrics.py](model/parts/metrics.py) | Calculation of validator operational cost, revenue, profit, and yield metrics |
-| [stages.py](model/parts/stages.py) | Management of stages of the Ethereum system upgrade process |
-| [spec.py](model/parts/spec.py) | Relevant extracts from the official Eth2 spec |
-| [validators.py](model/parts/validators.py) | Implementation of validator processes such as activation, staking, uptime |
+| [ethereum_system.py](model/parts/ethereum_system.py) | Genereal Ethereum mechanisms, such as managing the system upgrade process, the EIP1559 transaction pricing mechanism, and updating the ETH price and ETH supply |
+| [pos_incentives.py](model/parts/pos_incentives.py) | Proof of Stake incentives |
+| [system_metrics.py](model/parts/system_metrics.py) | Calculation of validator costs, revenue, profit, and yield metrics |
+| [validators.py](model/parts/validators.py) | Validator processes such as validator activation, staking, uptime |
+| [utils/ethereum_spec.py](model/parts/utils/ethereum_spec.py) | Relevant extracts from the official Eth2 spec |
 
 ### Configuration Modules
 
