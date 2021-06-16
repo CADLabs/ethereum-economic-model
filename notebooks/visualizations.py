@@ -195,8 +195,8 @@ def plot_validator_environment_yield_contour(df):
     return fig
 
 
-def plot_revenue_net_yield_spread(df):
-    grouped = df.groupby(["eth_price", "eth_staked"]).last()["revenue_net_yield_spread_pct"]
+def plot_revenue_profit_yield_spread(df):
+    grouped = df.groupby(["eth_price", "eth_staked"]).last()["revenue_profit_yield_spread_pct"]
 
     x = df.groupby(["run"]).first()["eth_price"].unique()
     y = df.groupby(["run"]).first()["eth_staked"].unique()
@@ -286,7 +286,7 @@ def plot_validator_environment_yield_surface(df):
 def plot_eth_supply_over_all_stages(df):
     date_start = parameters["date_start"][0]
     date_eip1559 = parameters["date_eip1559"][0]
-    date_merge = parameters["date_merge"][0]
+    date_pos = parameters["date_pos"][0]
     date_end = df.index[0]
 
     fig = df.plot(y='eth_supply', title='ETH Supply', height=600)
@@ -310,7 +310,7 @@ def plot_eth_supply_over_all_stages(df):
         yref="paper",
         x0=date_eip1559,
         y0=0,
-        x1=date_merge,
+        x1=date_pos,
         y1=1,
         line=dict(color="rgba(0,0,0,0)",width=3,),
         fillcolor="rgba(0,0,0,0.2)",
@@ -321,7 +321,7 @@ def plot_eth_supply_over_all_stages(df):
         type="rect",
         xref="x",
         yref="paper",
-        x0=date_merge,
+        x0=date_pos,
         y0=0,
         x1=date_end,
         y1=1,
@@ -345,7 +345,7 @@ def plot_eth_supply_over_all_stages(df):
     )
 
     fig.add_annotation(
-        x=date_merge, y=df.loc[date_merge.strftime("%Y-%m-%d")]['eth_supply'][0],
+        x=date_pos, y=df.loc[date_pos.strftime("%Y-%m-%d")]['eth_supply'][0],
         text="The Merge",
         showarrow=True,
         arrowhead=1,
@@ -370,7 +370,7 @@ def plot_eth_supply_over_all_stages(df):
 def plot_eth_supply_inflation_over_all_stages(df):
     date_start = parameters["date_start"][0]
     date_eip1559 = parameters["date_eip1559"][0]
-    date_merge = parameters["date_merge"][0]
+    date_pos = parameters["date_pos"][0]
     date_end = df.index[0]
     
     fig = df.plot(x='timestamp', y='supply_inflation_pct', title='ETH Supply Inflation', height=600)
@@ -390,8 +390,8 @@ def plot_eth_supply_inflation_over_all_stages(df):
     )
 
     fig.add_annotation(
-        x=date_merge, y=df.loc[date_merge.strftime("%Y-%m-%d")]['supply_inflation_pct'][0],
-        text="The Merge",
+        x=date_pos, y=df.loc[date_pos.strftime("%Y-%m-%d")]['supply_inflation_pct'][0],
+        text="POS",
         showarrow=True,
         arrowhead=1,
     )
@@ -414,7 +414,7 @@ def plot_eth_supply_inflation_over_all_stages(df):
 def plot_eth_staked_over_all_stages(df):
     date_start = parameters["date_start"][0]
     date_eip1559 = parameters["date_eip1559"][0]
-    date_merge = parameters["date_merge"][0]
+    date_pos = parameters["date_pos"][0]
     date_end = df.index[0]
     
     fig = df.plot(x='timestamp', y='eth_staked', title='ETH Staked')
@@ -434,8 +434,8 @@ def plot_eth_staked_over_all_stages(df):
     )
 
     fig.add_annotation(
-        x=date_merge, y=df.loc[date_merge.strftime("%Y-%m-%d")]['eth_staked'][0],
-        text="The Merge",
+        x=date_pos, y=df.loc[date_pos.strftime("%Y-%m-%d")]['eth_staked'][0],
+        text="POS",
         showarrow=True,
         arrowhead=1,
     )

@@ -15,7 +15,7 @@ A modular dynamical systems model implemented using the open-source Python libra
 * [Running Experiments](#running-experiments)
 * [Development](#development)
 * [Tests](#tests)
-* [Jupyter Lab Environment](#jupyter-lab-environment)
+* [Jupyter Environment](#jupyter-environment)
 * [Change Log](#change-log)
 * [Contributors](#contributors)
 * [Acknowledgements](#contributors)
@@ -79,7 +79,7 @@ The model is configured using several configuration modules in the [model/](mode
 | [state_variables.py](model/state_variables.py) | Model State Variable definition, configuration, and defaults |
 | [stochastic_processes.py](model/stochastic_processes.py) | Helper functions to generate stochastic environmental processes |
 | [system_parameters.py](model/system_parameters.py) | Model System Parameter definition, configuration, and defaults |
-| [types.py](model/types.py) | Various types used in the model, such as the `Stage` Enum and calculation units |
+| [types.py](model/types.py) | Various Python types used in the model, such as the `Stage` Enum and calculation units |
 | [utils.py](model/utils.py) | Misc. utility and helper functions |
 
 ## Running Experiments (TODO: Combine Notebooks into Experiment directory and make respective changes below)
@@ -131,7 +131,9 @@ The purpose of this notebook is to provide inspiration for other analysis that t
 
 ### Experiment Execution
 
-The base experiment is an experiment that uses the default cadCAD System Parameters, Initial State, and State Update Blocks defined in the [models/](models/) directory. To run the base experiment from the terminal, execute the `experiments.run` module:
+The default experiment is an experiment that uses the default cadCAD System Parameters, Initial State, and State Update Blocks defined in the [models/](models/) directory.
+
+To run the default experiment from the terminal, execute the `experiments.run` module:
 ```bash
 python3 -m experiments.run
 ```
@@ -142,7 +144,7 @@ Alternatively, open and run one of the Jupyter experiment notebooks in Jupyter L
 
 1. Choose or create a new experiment template in the [experiments/templates/](experiments/templates/) directory
 2. Copy the template experiment from [experiments/template.py](experiments/template.py) into the directory
-3. Customize the base experiment using the template
+3. Customize the default experiment using the template
 4. Create a new Jupyter experiment notebook using the [notebooks/template.ipynb](notebooks/template.ipynb) experiment notebook template
 5. Execute your experiment, post-process and analyze the results, and create Plotly charts!
 
@@ -155,7 +157,7 @@ python3 -m venv venv
 source venv/bin/activate
 
 make setup # Setup environment
-make start # Start Jupyter Lab
+make start-lab # Start Jupyter Lab
 ```
 
 Otherwise, follow the steps below.
@@ -176,6 +178,13 @@ source venv/bin/activate
 # Install Python 3 dependencies inside virtual environment
 pip install -r requirements.txt
 ```
+
+#### Known Issues
+
+##### Windows
+> DLL load failed while importing win32api: The specified procedure could not be found.
+
+If using Anaconda, try: `conda install -c anaconda pywin32`
 
 ## Tests
 

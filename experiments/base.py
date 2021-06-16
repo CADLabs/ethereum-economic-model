@@ -1,5 +1,7 @@
 """
-The base experiment with default System Parameters, State Variables, and Simulation Configuration
+The base experiment with default System Parameters, State Variables, and Simulation Configuration.
+
+The defaults are defined in their respective modules (e.g. `model/system_parameters.py`).
 """
 
 from radcad import Model, Simulation, Experiment, Engine

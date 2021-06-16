@@ -137,3 +137,4 @@ scratchpad.*
 scratchpad/
 .DS_Store
 .idea/
+*.cache/

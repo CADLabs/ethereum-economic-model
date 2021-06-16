@@ -1,10 +1,9 @@
 import numpy as np
 import sys
-from enum import Enum
 
 # See https://docs.python.org/3/library/dataclasses.html
 from dataclasses import dataclass, field
-
+from enum import Enum
 
 # If Python version is greater than equal to 3.8, import from typing module
 # Else also import from typing_extensions module

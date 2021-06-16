@@ -1,11 +1,10 @@
-import model.parts.stages as stages
 import model.parts.ethereum as ethereum
-import model.parts.validators as validators
 import model.parts.incentives as incentives
 import model.parts.metrics as metrics
+import model.parts.stages as stages
+import model.parts.validators as validators
 from model.system_parameters import parameters
 from model.utils import update_from_signal
-
 
 state_update_block_stages = {
     "description": """
@@ -88,6 +87,19 @@ _state_update_blocks = [
     },
     {
         "description": """
+            Sync committee and attestation penalties
+        """,
+        "policies": {
+            "attestation": incentives.policy_attestation_penalties,
+            "sync_committee": incentives.policy_sync_committee_penalties,
+        },
+        "variables": {
+            "attestation_penalties": update_from_signal("attestation_penalties"),
+            "sync_committee_penalties": update_from_signal("sync_committee_penalties"),
+        },
+    },
+    {
+        "description": """
             Block proposal rewards
         """,
         "policies": {
@@ -101,12 +113,10 @@ _state_update_blocks = [
         "description": """
             Total validating rewards and penalties
         """,
-        "policies": {
-            "penalties": incentives.policy_attestation_penalties,
-        },
+        "policies": {},
         "variables": {
             "validating_rewards": incentives.update_validating_rewards,
-            "validating_penalties": update_from_signal("validating_penalties"),
+            "validating_penalties": incentives.update_validating_penalties,
         },
     },
     {
