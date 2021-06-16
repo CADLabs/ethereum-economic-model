@@ -90,71 +90,44 @@ The [experiments/templates/](experiments/templates/) directory contains differen
 
 See the [notebooks/README.ipynb](notebooks/README.ipynb) notebook for a walk-through of how to configure and execute an experiment.
 
-There are in total 8 experiment notebooks (TODO:Rename notebooks to match edited names below). These experiments answer specific research questions, and follow on logically from one to the next:
+We created several experiment notebooks as a basis for analyzing the economics Ethereum validators are confronted with under a variety of scenarios. These notebooks and analysis don't aim to comprehensively illuminate the Ethereum protocol, but rather to answer the most salient questions and serve as inspiration for building out more customized analysis and model extensions.
 
 ### 1. Model Validation
 
-#### Research Question
-How accurately does that CADLabs model perform compared to a) other, well-established validator economics models and b) past on-chain data?
-
-#### Experiment Overview
 The purpose of this notebook is to recreate selected simulations from the widely acknowledged Hoban/Borgers Ethereum 2.0 Economic Model using the CADLabs model, and to compare the results. We suggest that the CADLabs model has a high degree of validity.
 
-### 2. Network Issuance (NOTE: BELOW NOT YET REVIEWED)
+### 2. Validator Revenue Yields and Profit Yields (Validator-level Analysis)
 
-#### Research Question
-What validator rewards and penalties make up network issuance?
+The purpose of this notebook is to explore the returns validators can expect from staking in the Ethereum protocol across different time horizons, adoption scenarios, ETH price scenarios and validator environments.
 
-#### Experiment Purpose
-The purpose of this experiment is to explore the rewards and penalties that make up network issuance under different scenarios.
+(TODO: Draft analysis, below first cut)
 
-### 3. Network Costs
+Analysis 1: Revenue and Profit Yields Over Time 
+(Notes: can we include a slider for time horizon below the chart, and another one, maybe a dropdown, where peopel can set the average adoption level over the set time period? premium version would be three different adoption scenarios, a) extrapolated linearly from past; then one 50% less aggressive and one 50% more aggressive than past growth; something like that; then in a second slider people can set the average ETH price; premium version similar to the above) 
 
-#### Research Question
-What costs do validators incur to secure the network?
+Analysis 2: Revenue and Profit Yields Over Adoption Curve
+(Notes: Same as Analysis 1 but x-axis is ETH staked levels; while above analysis will be more interesting to validators (time value of money matters), this one will have more analytical value to the Ethereum Community; Sliders in this )
 
-#### Experiment Purpose
-The purpose of this experiment is to explore the cost incurred by validators to secure the network under different scenarios.
+Analysis 3: Revenue and Profit Yields Over ETH Price Curve
+(Notes: Same as Analysis 1 but x-axis is ETH Price levels; while above analysis will be more interesting to validators (time value of money matters), this one will have more analytical value to the Ethereum Community)
 
-### 4. Network Yields
+Analysis 4: Profit Yields By Validator Environment Over Time
+(Notes: Same as Analysis 1 but y axis has profit yields of the different environments)
 
-#### Research Question
-What are the best and worst case network yields?
 
-#### Experiment Purpose
-The purpose of this experiment is to determine what the expected network yields are under different scenarios.
+### 3. Network Issuance and Inflation Rate (Network-level Analysis)
 
-### 5. EIP1559 Transaction Pricing
+The purpose of this notebook is to explore the ETH issuance and resulting annualized inflation rate across different time horizons and adoption scenarios. It includes a breakdown of issuance into reward types , the well-known "Ultrasound Monday" (peak ETH) analysis by Just Drake, and an analyis of the inflation impact of EIP1559. 
 
-#### Research Question
-What effect will EIP1559 transaction pricing have on network yields?
+(TODO: Draft analysis, below first cut)
 
-#### Experiment Purpose
-The purpose of this experiment is to explore the effect of the EIP1559 transaction pricing mechanism on network yields under different scenarios.
+Analysis 1: TBC, let's define once the previous notebook is done
+Analysis 2: TBC, let's define once the previous notebook is done
+Analysis 3: TBC, let's define once the previous notebook is done
 
-### 6. Utra-Sound Barrier
+### 4. Other Analysis
 
-#### Research Question
-At what point will the Ethereum system break the ultra-sound barrier (become deflationary), and what will the peak ETH supply be?
-
-#### Experiment Purpose
-The purpose of this experiment is to analyse the network suppy inflation, and determine under what scenarios the network becomes deflationary.
-
-### 7. Validator Environment Yields
-
-#### Research Question
-What are the expected validator yields for staking in different environments?
-
-#### Experiment Purpose
-The purpose of this experiment is to explore the different validator environments and their yields under different scenarios.
-
-### 8. Individual Validator Performance
-
-#### Research Question
-What is the performance of an individual validator with a custom environment configuration?
-
-#### Experiment Purpose
-The purpose of this experiment is to determine the performance of an individual validator using a custom environment configuration.
+The purpose of this notebook is to provide inspiration for other analysis that the model supports. Most of these analysis are in a work-in-progres  and marked as such. 
 
 ### Experiment Execution
 
