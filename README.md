@@ -99,34 +99,34 @@ The purpose of this notebook is to recreate selected simulations from the widely
 
 The purpose of this notebook is to explore the returns validators can expect from staking in the Ethereum protocol across different time horizons, adoption scenarios, ETH price scenarios and validator environments.
 
-(TODO: Draft analysis, below first cut)
+TODO: Draft analysis, below first cut
 
-Analysis 1: Revenue and Profit Yields Over Time 
-(Notes: can we include a slider for time horizon below the chart, and another one, maybe a dropdown, where peopel can set the average adoption level over the set time period? premium version would be three different adoption scenarios, a) extrapolated linearly from past; then one 50% less aggressive and one 50% more aggressive than past growth; something like that; then in a second slider people can set the average ETH price; premium version similar to the above) 
+* Analysis 1: Revenue and Profit Yields Over Time 
+Notes: can we include a slider for time horizon below the chart, and another one, maybe a dropdown, where peopel can set the average adoption level over the set time period? premium version would be three different adoption scenarios, a) extrapolated linearly from past; then one 50% less aggressive and one 50% more aggressive than past growth; something like that; then in a second slider people can set the average ETH price; premium version similar to the above
 
-Analysis 2: Revenue and Profit Yields Over Adoption Curve
-(Notes: Same as Analysis 1 but x-axis is ETH staked levels; while above analysis will be more interesting to validators (time value of money matters), this one will have more analytical value to the Ethereum Community; Sliders in this )
+* Analysis 2: Revenue and Profit Yields Over Adoption Curve
+Notes: Same as Analysis 1 but x-axis is ETH staked levels; while above analysis will be more interesting to validators (time value of money matters), this one will have more analytical value to the Ethereum Community; Sliders in this
 
-Analysis 3: Revenue and Profit Yields Over ETH Price Curve
-(Notes: Same as Analysis 1 but x-axis is ETH Price levels; while above analysis will be more interesting to validators (time value of money matters), this one will have more analytical value to the Ethereum Community)
+* Analysis 3: Revenue and Profit Yields Over ETH Price Curve
+Notes: Same as Analysis 1 but x-axis is ETH Price levels; while above analysis will be more interesting to validators (time value of money matters), this one will have more analytical value to the Ethereum Community
 
-Analysis 4: Profit Yields By Validator Environment Over Time
-(Notes: Same as Analysis 1 but y axis has profit yields of the different environments)
+* Analysis 4: Profit Yields By Validator Environment Over Time
+Notes: Same as Analysis 1 but y axis has profit yields of the different environments
 
 
 ### 3. Network Issuance and Inflation Rate (Network-level Analysis)
 
 The purpose of this notebook is to explore the ETH issuance and resulting annualized inflation rate across different time horizons and adoption scenarios. It includes a breakdown of issuance into reward types , the well-known "Ultrasound Monday" (peak ETH) analysis by Just Drake, and an analyis of the inflation impact of EIP1559. 
 
-(TODO: Draft analysis, below first cut)
+TODO: Draft analysis, below first cut
 
-Analysis 1: TBC, let's define once the previous notebook is done
-Analysis 2: TBC, let's define once the previous notebook is done
-Analysis 3: TBC, let's define once the previous notebook is done
+* Analysis 1: TBC, let's define once the previous notebook is done
+* Analysis 2: TBC, let's define once the previous notebook is done
+* Analysis 3: TBC, let's define once the previous notebook is done
 
 ### 4. Other Analysis
 
-The purpose of this notebook is to provide inspiration for other analysis that the model supports. Most of these analysis are in a work-in-progres  and marked as such. 
+The purpose of this notebook is to provide inspiration for other analysis that the model supports. Most of these analyses are in a work-in-progress and marked as such. 
 
 ### Experiment Execution
 
