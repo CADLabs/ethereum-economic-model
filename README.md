@@ -73,11 +73,14 @@ The model is configured using several configuration modules in the [model/](mode
 
 | Module | Description |
 | --- | --- |
-| [ethereum_system.py](model/parts/ethereum_system.py) | Genereal Ethereum mechanisms, such as managing the system upgrade process, the EIP1559 transaction pricing mechanism, and updating the ETH price and ETH supply |
-| [pos_incentives.py](model/parts/pos_incentives.py) | Proof of Stake incentives |
-| [system_metrics.py](model/parts/system_metrics.py) | Calculation of validator costs, revenue, profit, and yield metrics |
-| [validators.py](model/parts/validators.py) | Validator processes such as validator activation, staking, uptime |
-| [utils/ethereum_spec.py](model/parts/utils/ethereum_spec.py) | Relevant extracts from the official Eth2 spec |
+| [constants.py](model/constants.py) | Constants used in the model e.g. number of epochs in a year, Gwei in 1 Ether |
+| [simulation_configuration.py](model/simulation_configuration.py) | Simulation configuration such as the number of timesteps and Monte Carlo runs |
+| [state_update_blocks.py](model/state_update_blocks.py) | cadCAD model state update block structure, composed of Policy and State Update Functions |
+| [state_variables.py](model/state_variables.py) | Model State Variable definition, configuration, and defaults |
+| [stochastic_processes.py](model/stochastic_processes.py) | Helper functions to generate stochastic environmental processes |
+| [system_parameters.py](model/system_parameters.py) | Model System Parameter definition, configuration, and defaults |
+| [types.py](model/types.py) | Various Python types used in the model, such as the `Stage` Enum and calculation units |
+| [utils.py](model/utils.py) | Misc. utility and helper functions |
 
 ## Running Experiments
 
