@@ -2,10 +2,10 @@
 
 [![Python package](https://github.com/cadCAD-edu/ethereum-model/actions/workflows/python.yml/badge.svg)](https://github.com/cadCAD-edu/ethereum-model/actions/workflows/python.yml)
 
-A modular dynamical systems model implemented using the open-source Python library radCAD (TODO: ADD LINK TO CADLABS REPO), a next-gen implementation of [cadCAD](https://cadcad.org).
+A modular dynamical systems model implemented using the open-source Python library [radCAD](https://github.com/BenSchZA/radCAD), a next-gen implementation of [cadCAD](https://cadcad.org).
 
 **Official Eth2 specs version**: 
-* Implements the [Altair](https://github.com/ethereum/eth2.0-specs#altair) updates in the [Beige Gorgon / v1.1.0-alpha.3](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.3) release. (TODO: UPDATE FOR LATEST ALTAIR VERSION?)
+* Implements the [Altair](https://github.com/ethereum/eth2.0-specs#altair) updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release.
 
 ## Table of Contents
 * [Context](#context)
@@ -19,22 +19,22 @@ A modular dynamical systems model implemented using the open-source Python libra
 * [Change Log](#change-log)
 * [Contributors](#contributors)
 * [Acknowledgements](#contributors)
-* [Copyleft](#copyleft)
+* [License](#license)
 
 ---
 
 ## Context
 
-This open-source model was developed in collaboration with the Ethereum Robust Incentives Group, and funded by the Ethereum Foundation Eth2 Staking Community Grants. It accompanies the cadCAD Edu course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum)". It intends to provide the Ethereum community with a highly versatile, customizable and extensible research tool, and includes a list of model extension ideas (TODO: link to model extension ideas here).  
+This open-source model was developed in collaboration with the Ethereum Robust Incentives Group, and funded by the Ethereum Foundation Eth2 Staking Community Grants. It accompanies the cadCAD Edu course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum)". It intends to provide the Ethereum community with a highly versatile, customizable and extensible research tool, and includes a list of [model extension ideas](#roadmap).  
 
-(TODO: Describe in a few sentences how this model came about)
+TODO: Describe in a few sentences how this model came about
 
 ## Model Features
 
-* Configurable to reflect protocol behavior at different points in time of the development roadmap (referred to as "development stages" in this model):<br />
-  * post Beacon Chain launch, pre EIP1559, pre PoS (validators receive PoS incentives, EIP1559 disabled, and PoW still in operation)<br />
-  * post Beacon Chain launch, post EIP1559, pre PoS (validators receive PoS incentives, EIP1559 enabled with miners receiving tips, and PoW still in operation)<br />
-  * post Beacon Chain launch, post EIP1559, post PoS (validators receive PoS incentives, EIP1559 enabled with validators receiving tips, and PoW deprecated)<br />
+* Configurable to reflect protocol behavior at different points in time of the development roadmap (referred to as "upgrade stages" in this model):
+  * post Beacon Chain launch, pre EIP1559, pre PoS (validators receive PoS incentives, EIP1559 disabled, and PoW still in operation)
+  * post Beacon Chain launch, post EIP1559, pre PoS (validators receive PoS incentives, EIP1559 enabled with miners receiving tips, and PoW still in operation)
+  * post Beacon Chain launch, post EIP1559, post PoS (validators receive PoS incentives, EIP1559 enabled with validators receiving tips, and PoW deprecated)
 * Supports [state space analysis](https://en.wikipedia.org/wiki/State-space_representation) (i.e. simulation of system behavior over time) and [phase space analysis](https://en.wikipedia.org/wiki/Phase_space) (i.e. generation of all unique system states in a given experimental setup)
 * Customizable processes to set important variables such as ETH price, ETH staked, EIP1559 transaction pricing, and transaction rates
 * Modular model structure for convenient extension and modification. This allows different user groups to refactor the model for different purposes, rapidly test new incentive mechanisms, or to update the model as Ethereum implements new protocol improvements.
@@ -46,15 +46,15 @@ This open-source model was developed in collaboration with the Ethereum Robust I
 * [experiments/](experiments/): experiment workflow configuration and execution
 * [logs/](logs/): experiment log files
 * [model/](model/): model structure, parts, and configuration
-* [notebooks/](notebooks/): experiment analysis notebooks (TODO: Integrate into experiments directory, TBC)
+* [notebooks/](notebooks/): experiment analysis notebooks
 * [outputs/](outputs/): experiment outputs (images, datasets, etc.)
 * [tests/](tests/): unit and integration tests for model and notebooks
 
 ## Model Architecture
 
-The model/ directory contains the model's software architecture in the form of two categories of modules: structural modules and configuration modules.
+The [model/](model/) directory contains the model's software architecture in the form of two categories of modules: structural modules and configuration modules.
 
-### Structural Modules (TODO: Discuss renaming modules and/or reordering code for better accessibiltiy)
+### Structural Modules
 
 The model is composed of several structural modules in the [model/parts/](model/parts/) directory:
 
@@ -73,16 +73,13 @@ The model is configured using several configuration modules in the [model/](mode
 
 | Module | Description |
 | --- | --- |
-| [constants.py](model/constants.py) | Constants used in the model e.g. number of epochs in a year, Gwei in 1 Ether |
-| [simulation_configuration.py](model/simulation_configuration.py) | Simulation configuration such as the number of timesteps and Monte Carlo runs |
-| [state_update_blocks.py](model/state_update_blocks.py) | cadCAD model state update block structure, composed of Policy and State Update Functions |
-| [state_variables.py](model/state_variables.py) | Model State Variable definition, configuration, and defaults |
-| [stochastic_processes.py](model/stochastic_processes.py) | Helper functions to generate stochastic environmental processes |
-| [system_parameters.py](model/system_parameters.py) | Model System Parameter definition, configuration, and defaults |
-| [types.py](model/types.py) | Various Python types used in the model, such as the `Stage` Enum and calculation units |
-| [utils.py](model/utils.py) | Misc. utility and helper functions |
+| [ethereum_system.py](model/parts/ethereum_system.py) | Genereal Ethereum mechanisms, such as managing the system upgrade process, the EIP1559 transaction pricing mechanism, and updating the ETH price and ETH supply |
+| [pos_incentives.py](model/parts/pos_incentives.py) | Proof of Stake incentives |
+| [system_metrics.py](model/parts/system_metrics.py) | Calculation of validator costs, revenue, profit, and yield metrics |
+| [validators.py](model/parts/validators.py) | Validator processes such as validator activation, staking, uptime |
+| [utils/ethereum_spec.py](model/parts/utils/ethereum_spec.py) | Relevant extracts from the official Eth2 spec |
 
-## Running Experiments (TODO: Combine Notebooks into Experiment directory and make respective changes below)
+## Running Experiments
 
 The [experiments/](experiments/) directory contains modules for configuring and executing simulation experiments, as well as performing post-processing of the results.
 
@@ -255,6 +252,8 @@ See [CONTRIBUTORS.md](CONTRIBUTORS.md) for contributions to this project repo.
 
 * Ethereum 2.0 Economic Review. July 16, 2020. "An Analysis of Ethereum’s Proof of Stake Incentive Model". By Tanner Hoban and Thomas Borgers. For the extensive research that inspired the development of our model and the assumptions we adopted.
 
-## Copyleft
+-## License
 
-(TODO: Which license options do we have? Can we keep attribution of base model in all distributions?)
+`cadCAD-edu/ethereum-model` is licensed under the GNU General Public License v3.0.
+ 
+Permissions of this strong copyleft license are conditioned on making available complete source code of licensed works and modifications, which include larger works using a licensed work, under the same license. Copyright and license notices must be preserved. Contributors provide an express grant of patent rights.
