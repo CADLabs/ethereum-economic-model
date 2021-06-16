@@ -1,3 +1,7 @@
+"""
+Helper functions to generate stochastic environmental processes
+"""
+
 import numpy as np
 from stochastic import processes
 

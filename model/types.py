@@ -1,3 +1,7 @@
+"""
+Various Python types used in the model
+"""
+
 import numpy as np
 import sys
 

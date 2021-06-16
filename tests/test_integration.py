@@ -4,7 +4,7 @@ from copy import deepcopy
 import pandas as pd
 from radcad import Simulation
 
-import experiments.base as base
+import experiments.default_experiment as base
 from model.system_parameters import parameters
 
 

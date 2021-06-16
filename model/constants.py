@@ -1,3 +1,7 @@
+"""
+Constants used in the model e.g. number of epochs in a year, Gwei in 1 Ether
+"""
+
 gwei = 1e9
 wei = 1e18
 slots_per_epoch = 32
