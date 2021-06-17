@@ -46,7 +46,7 @@ TODO: Describe in a few sentences how this model came about
 * [experiments/](experiments/): experiment workflow configuration and execution
 * [logs/](logs/): experiment log files
 * [model/](model/): model structure, parts, and configuration
-* [notebooks/](notebooks/): experiment analysis notebooks
+* [notebooks/](experiments/notebooks/): experiment analysis notebooks
 * [outputs/](outputs/): experiment outputs (images, datasets, etc.)
 * [tests/](tests/): unit and integration tests for model and notebooks
 
@@ -85,9 +85,9 @@ The model is configured using several configuration modules in the [model/](mode
 
 The [experiments/](experiments/) directory contains modules for configuring and executing simulation experiments, as well as performing post-processing of the results.
 
-The [experiments/templates/](experiments/templates/) directory contains different experiment templates which are used in the Jupyter experiment notebooks in the [notebooks/](notebooks/) directory to answer research questions and perform scenario analyses.
+The [experiments/templates/](experiments/templates/) directory contains different experiment templates which are used in the Jupyter experiment notebooks in the [notebooks/](experiments/notebooks/) directory to answer research questions and perform scenario analyses.
 
-See the [notebooks/README.ipynb](notebooks/README.ipynb) notebook for a walk-through of how to configure and execute an experiment.
+See the [notebooks/README.ipynb](experiments/notebooks/README.ipynb) notebook for a walk-through of how to configure and execute an experiment.
 
 We created several experiment notebooks as a basis for analyzing the economics Ethereum validators are confronted with under a variety of scenarios. These notebooks and analysis don't aim to comprehensively illuminate the Ethereum protocol, but rather to answer the most salient questions and serve as inspiration for building out more customized analysis and model extensions.
 
@@ -142,9 +142,9 @@ Alternatively, open and run one of the Jupyter experiment notebooks in Jupyter L
 ### Experiment Workflow
 
 1. Choose or create a new experiment template in the [experiments/templates/](experiments/templates/) directory
-2. Copy the template experiment from [experiments/template.py](experiments/template.py) into the directory
+2. Copy the template experiment from [experiments/template.py](experiments/templates/__init__.py) into the directory
 3. Customize the default experiment using the template
-4. Create a new Jupyter experiment notebook using the [notebooks/template.ipynb](notebooks/template.ipynb) experiment notebook template
+4. Create a new Jupyter experiment notebook using the [notebooks/template.ipynb](experiments/notebooks/template.ipynb) experiment notebook template
 5. Execute your experiment, post-process and analyze the results, and create Plotly charts!
 
 ## Development

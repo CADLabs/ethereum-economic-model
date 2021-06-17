@@ -23,7 +23,7 @@ docs-pdoc:
 
 docs-jupyter-book:
 	rm -rf docs/notebooks/*
-	cp -r notebooks/* docs/notebooks/
+	cp -r experiments/notebooks/* docs/notebooks/
 	sed -i 's/media/_static/g' ./docs/notebooks/*.ipynb
 	jupyter-book clean docs
 	jupyter-book build --config docs/_config.yml --toc docs/_toc.yml --path-output docs .
@@ -32,10 +32,10 @@ serve-docs:
 	gunicorn -w 4 -b 127.0.0.1:5000 docs.server:app
 
 execute-notebooks:
-	jupyter nbconvert --ExecutePreprocessor.timeout=-1 --execute --to notebook notebooks/*.ipynb notebooks/*/*.ipynb
+	jupyter nbconvert --ExecutePreprocessor.timeout=-1 --execute --to notebook experiments/notebooks/*.ipynb experiments/notebooks/*/*.ipynb
 
 update-notebooks:
-	jupyter nbconvert --ExecutePreprocessor.timeout=-1 --execute --to notebook --inplace notebooks/*.ipynb notebooks/*/*.ipynb
+	jupyter nbconvert --ExecutePreprocessor.timeout=-1 --execute --to notebook --inplace experiments/notebooks/*.ipynb experiments/notebooks/*/*.ipynb
 
 clear-notebook-outputs:
-	jupyter nbconvert --clear-output --inplace notebooks/*.ipynb notebooks/*/*.ipynb
+	jupyter nbconvert --clear-output --inplace experiments/notebooks/*.ipynb experiments/notebooks/*/*.ipynb

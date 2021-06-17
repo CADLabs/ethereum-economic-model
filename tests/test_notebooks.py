@@ -6,7 +6,7 @@ def test_notebooks():
     Test that the notebooks run to completion
     NOTE We can't use glob library here, which only works on Unix systems
     """
-    directory = "notebooks/"
+    directory = "experiments/notebooks/"
     for notebook in os.listdir(directory):
         if notebook.endswith(".ipynb"):
             result = os.popen(
@@ -20,7 +20,7 @@ def test_notebook_examples():
     Test that the notebooks run to completion
     NOTE We can't use glob library here, which only works on Unix systems
     """
-    directory = "notebooks/examples/"
+    directory = "experiments/notebooks/examples/"
     for notebook in os.listdir(directory):
         if notebook.endswith(".ipynb"):
             result = os.popen(
