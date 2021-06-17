@@ -138,3 +138,4 @@ scratchpad/
 .DS_Store
 .idea/
 *.cache/
+*.nbconvert.ipynb

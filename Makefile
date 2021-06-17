@@ -32,7 +32,9 @@ serve-docs:
 	gunicorn -w 4 -b 127.0.0.1:5000 docs.server:app
 
 execute-notebooks:
+	rm notebooks/*.nbconvert*
 	jupyter nbconvert --ExecutePreprocessor.timeout=-1 --execute --to notebook notebooks/*.ipynb notebooks/*/*.ipynb
+	rm notebooks/*.nbconvert*
 
 update-notebooks:
 	jupyter nbconvert --ExecutePreprocessor.timeout=-1 --execute --to notebook --inplace notebooks/*.ipynb notebooks/*/*.ipynb
