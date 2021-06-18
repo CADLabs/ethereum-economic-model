@@ -87,7 +87,7 @@ The [experiments/](experiments/) directory contains modules for configuring and 
 
 The [experiments/templates/](experiments/templates/) directory contains different experiment templates which are used in the Jupyter experiment notebooks in the [notebooks/](experiments/notebooks/) directory to answer research questions and perform scenario analyses.
 
-See the [notebooks/README.ipynb](experiments/notebooks/README.ipynb) notebook for a walk-through of how to configure and execute an experiment.
+See the [notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) notebook for a walk-through of how to configure and execute an experiment.
 
 We created several experiment notebooks as a basis for analyzing the economics Ethereum validators are confronted with under a variety of scenarios. These notebooks and analysis don't aim to comprehensively illuminate the Ethereum protocol, but rather to answer the most salient questions and serve as inspiration for building out more customized analysis and model extensions.
 
