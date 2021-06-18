@@ -95,24 +95,14 @@ We created several experiment notebooks as a basis for analyzing the economics E
 
 The purpose of this notebook is to recreate selected simulations from the widely acknowledged Hoban/Borgers Ethereum 2.0 Economic Model using the CADLabs model, and to compare the results. We suggest that the CADLabs model has a high degree of validity.
 
-### 2. Validator Revenue Yields and Profit Yields (Validator-level Analysis)
+### 2. Validator Revenue and Profit Yields (Validator-level Analysis)
 
 The purpose of this notebook is to explore the returns validators can expect from staking in the Ethereum protocol across different time horizons, adoption scenarios, ETH price scenarios and validator environments.
 
-TODO: Draft analysis, below first cut
-
-* Analysis 1: Revenue and Profit Yields Over Time 
-Notes: can we include a slider for time horizon below the chart, and another one, maybe a dropdown, where peopel can set the average adoption level over the set time period? premium version would be three different adoption scenarios, a) extrapolated linearly from past; then one 50% less aggressive and one 50% more aggressive than past growth; something like that; then in a second slider people can set the average ETH price; premium version similar to the above
-
+* Analysis 1: Revenue and Profit Yields Over Time
 * Analysis 2: Revenue and Profit Yields Over Adoption Curve
-Notes: Same as Analysis 1 but x-axis is ETH staked levels; while above analysis will be more interesting to validators (time value of money matters), this one will have more analytical value to the Ethereum Community; Sliders in this
-
 * Analysis 3: Revenue and Profit Yields Over ETH Price Curve
-Notes: Same as Analysis 1 but x-axis is ETH Price levels; while above analysis will be more interesting to validators (time value of money matters), this one will have more analytical value to the Ethereum Community
-
-* Analysis 4: Profit Yields By Validator Environment Over Time
-Notes: Same as Analysis 1 but y axis has profit yields of the different environments
-
+* Analysis 4: Profit Yields By Validator Environment Over Time 
 
 ### 3. Network Issuance and Inflation Rate (Network-level Analysis)
 

@@ -18,7 +18,6 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
-from experiments.templates.state_space_analysis import experiment
 def run(experiment=experiment):
   logging.info("Running experiment")
   start_time = time.time()
