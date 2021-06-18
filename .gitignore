@@ -139,3 +139,4 @@ scratchpad/
 .idea/
 *.cache/
 *.nbconvert.ipynb
+*.dat
