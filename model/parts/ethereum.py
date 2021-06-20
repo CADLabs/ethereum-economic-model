@@ -95,10 +95,10 @@ def policy_eip1559_transaction_pricing(
 
     avg_tip_amount = eip1559_tip_process(run, timestep * dt)  # Gwei per Gas
 
-    if stage in [Stage.EIP1559]:
+    if stage in [Stage.BEACON_CHAIN, Stage.EIP1559]:
         gas_used = constants.pow_blocks_per_epoch * gas_target  # Gas
-    else: # stage is Stage.PROOF_OF_STAKE
-        gas_used = constants.slots_per_epoch * gas_target
+    else:  # stage is Stage.PROOF_OF_STAKE
+        gas_used = constants.slots_per_epoch * gas_target  # Gas
 
     # Calculate total basefee and tips to validators
     total_basefee = gas_used * basefee  # Gwei
