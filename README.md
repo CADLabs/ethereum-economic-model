@@ -19,7 +19,7 @@ A modular dynamical systems model implemented using the open-source Python libra
 * [Change Log](#change-log)
 * [Contributors](#contributors)
 * [Acknowledgements](#contributors)
-* [Copyleft](#copyleft)
+* [License](#license)
 
 ---
 
