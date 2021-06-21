@@ -1,4 +1,5 @@
 import numpy as np
+import copy
 
 from model.simulation_configuration import TIMESTEPS, DELTA_TIME
 from model.state_variables import eth_staked, eth_supply
@@ -6,8 +7,11 @@ from experiments.default_experiment import experiment
 from model.types import Stage
 
 
+# Make a copy of the default experiment to avoid mutation
+experiment = copy.deepcopy(experiment)
+
 eth_staked_samples = np.linspace(
-    eth_staked,  # From https://beaconscan.com/ as of 20/04/21
+    eth_staked,
     eth_supply * 0.3,  # 30% of current total ETH supply
     50
 )

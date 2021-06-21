@@ -1,10 +1,14 @@
 import numpy as np
+import copy
 
 from model.state_variables import eth_staked, eth_supply
 from experiments.default_experiment import experiment, TIMESTEPS, DELTA_TIME
 from experiments.utils import generate_cartesion_product
 from model.types import Stage
 
+
+# Make a copy of the default experiment to avoid mutation
+experiment = copy.deepcopy(experiment)
 
 sweep = generate_cartesion_product({
     # ETH price range from 100 $/ETH to 3000 $/ETH

@@ -2,7 +2,13 @@
 An example of overriding and customizing the default experiment to create a new template.
 """
 
+import copy
+
 from experiments.default_experiment import experiment
+
+
+# Make a copy of the default experiment to avoid mutation
+experiment = copy.deepcopy(experiment)
 
 parameter_overrides = {
     "dt": [1],

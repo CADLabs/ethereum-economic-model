@@ -1,9 +1,13 @@
 import numpy as np
+import copy
 
 from model.state_variables import eth_staked
 from experiments.default_experiment import experiment, TIMESTEPS, DELTA_TIME
 from model.types import Stage
 
+
+# Make a copy of the default experiment to avoid mutation
+experiment = copy.deepcopy(experiment)
 
 # ETH price range from 100 $/ETH to 3000 $/ETH
 eth_price_samples = np.linspace(start=100, stop=3000, num=50)
@@ -14,8 +18,7 @@ parameter_overrides = {
         lambda run, _timestep: eth_price_samples[run - 1]
     ],
     "eth_staked_process": [
-        # A sweep of two fixed ETH staked points
-        lambda _run, _timestep: eth_staked,  # From https://beaconscan.com/ as of 20/04/21
+        lambda _run, _timestep: eth_staked,
     ],
 }
 
