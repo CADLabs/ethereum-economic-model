@@ -17,16 +17,18 @@ default_template.layout.yaxis = dict(
     showgrid=True
 )
 
-default_template.layout.legend = dict(
-    title=dict(
-        text="",
-    ),
-    orientation="h",
-    yanchor="bottom",
-    y=-0.2,
-    xanchor="center",
-    x=0.5,
-)
+# Legend at bottom of chart
+# default_template.layout.legend = dict(
+#     title=dict(
+#         text="",
+#     ),
+#     orientation="h",
+#     yanchor="bottom",
+#     y=-0.2,
+#     xanchor="center",
+#     x=0.5,
+# )
 
 pio.templates["default"] = default_template
-pio.templates.default = "simple_white+default"
+# Other options: "presentation", "simple_white"
+pio.templates.default = "plotly_white+default"

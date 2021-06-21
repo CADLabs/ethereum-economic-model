@@ -18,5 +18,6 @@ model = Model(params=parameters, initial_state=initial_state, state_update_block
 simulation = Simulation(model=model, timesteps=TIMESTEPS, runs=MONTE_CARLO_RUNS)
 # Create Experiment of single Simulation
 experiment = Experiment([simulation])
-# Configure Experiment engine
-experiment.engine = Engine(drop_substeps=True)
+# Configure Simulation & Experiment engine
+simulation.engine = experiment.engine
+experiment.engine.drop_substeps = True
