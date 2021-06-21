@@ -175,14 +175,14 @@ class Parameters:
     )
     """
     EIP1559 activation date as Python datetime.
-    
+
     Source: https://github.com/ethereum/pm/issues/245#issuecomment-825751460
     """
 
     date_pos: List[datetime] = default([datetime.strptime("2021/12/1", "%Y/%m/%d")])
     """
     Eth1/Eth2 merge date as Python datetime, after which POW is disabled and POS is enabled.
-    
+
     Source: https://twitter.com/drakefjustin/status/1379052831982956547
     """
 
@@ -403,7 +403,9 @@ class Parameters:
     See https://notes.ethereum.org/@vbuterin/BkSQmQTS8#Why-would-miners-include-transactions-at-all
     """
 
-    gas_target: List[Gas] = default([15e6])
+    gas_target_process: List[Callable[[Run, Timestep], Gas]] = default(
+        [lambda _run, _timestep: 15e6]  # Gas per block
+    )
     """
     The long-term average gas target per block.
 
@@ -413,33 +415,6 @@ class Parameters:
 
     EIP1559 gas limit = gas_target * ELASTICITY_MULTIPLIER
     See https://eips.ethereum.org/EIPS/eip-1559
-    """
-
-    daily_transactions_process: List[int] = default(
-        [lambda _run=None, _timestep=None: 1_400_000]
-    )
-    """
-    A process that returns the number of transactions per day.
-
-    fees_per_day = daily_transactions * transaction_average_gas * (basefee + tip) / 1e9 ~= 10k ETH
-    (see https://etherscan.io/chart/transactionfee)
-
-    Where:
-    * daily_transactions ~= 1_400_000
-    * transaction_average_gas ~= 73_123
-    * (basefee + tip) ~= 100
-
-    Default static daily transactions from https://etherscan.io/chart/tx as of 20/04/21
-    """
-
-    transaction_average_gas: List[Gas] = default([73_123])
-    """
-    The average gas used per transaction.
-
-    A simple ETH transfer takes 21,000 gas,
-    but executing a trade on a decentralized exchange can cost 100,000 gas or more.
-
-    See https://coinmetrics.io/the-ethereum-gas-report/
     """
 
 

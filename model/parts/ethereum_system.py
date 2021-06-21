@@ -136,13 +136,11 @@ def policy_eip1559_transaction_pricing(
 
     # Parameters
     dt = params["dt"]
-    gas_target = params["gas_target"]  # Gas
+    gas_target_process = params["gas_target_process"]  # Gas
     ELASTICITY_MULTIPLIER = params["ELASTICITY_MULTIPLIER"]
     BASE_FEE_MAX_CHANGE_DENOMINATOR = params["BASE_FEE_MAX_CHANGE_DENOMINATOR"]
     eip1559_basefee_process = params["eip1559_basefee_process"]
     eip1559_tip_process = params["eip1559_tip_process"]
-    daily_transactions_process = params["daily_transactions_process"]
-    transaction_average_gas = params["transaction_average_gas"]
 
     # State Variables
     run = previous_state["run"]
@@ -151,6 +149,8 @@ def policy_eip1559_transaction_pricing(
 
     # Get samples for current run and timestep from basefee, tip, and transaction processes
     basefee = eip1559_basefee_process(run, timestep * dt)  # Gwei per Gas
+
+    gas_target = gas_target_process(run, timestep * dt)  # Gas
 
     # Ensure basefee changes by no more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %
     # assert (
@@ -161,15 +161,13 @@ def policy_eip1559_transaction_pricing(
     # ), "basefee changed by more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %"
 
     avg_tip_amount = eip1559_tip_process(run, timestep * dt)  # Gwei per Gas
-    transactions_per_day = daily_transactions_process(
-        run, timestep * dt
-    )  # Transactions per day
-    transactions_per_epoch = (
-        transactions_per_day / constants.epochs_per_day
-    )  # Transactions per epoch
+
+    if stage in [Stage.EIP1559]:
+        gas_used = constants.pow_blocks_per_epoch * gas_target  # Gas
+    else:  # stage is Stage.PROOF_OF_STAKE
+        gas_used = constants.slots_per_epoch * gas_target  # Gas
 
     # Calculate total basefee and tips to validators
-    gas_used = transactions_per_epoch * transaction_average_gas  # Gas
     total_basefee = gas_used * basefee  # Gwei
     total_tips = gas_used * avg_tip_amount  # Gwei
 
