@@ -1,4 +1,6 @@
 import itertools
+import types as types
+import collections
 
 
 def generate_cartesion_product(sweeps):
@@ -16,17 +18,24 @@ def generate_cartesion_product(sweeps):
 
 
 def get_simulation_hash(sim):
+    # Get inputs for hash function
     model = sim.model
     timesteps = sim.timesteps
     runs = sim.runs
 
-    filtered_initial_state = filter(lambda x: isinstance(x, collections.Hashable), model.initial_state.items())
-    initial_state_hashable = frozenset({key: value for key, value in filtered_initial_state})
+    # Filter out unhashable types
+    initial_state = filter(lambda x: isinstance(x, collections.Hashable), model.initial_state.items())
+    # Create a hashable frozen set from dictionary
+    initial_state = frozenset({key: value for key, value in initial_state})
 
-    param_keys_hashable = tuple(model.params.keys())
+    param_keys = tuple(model.params.keys())
     param_values = [value for param_list in model.params.values() for value in param_list]
-    param_values_hashable = tuple(filter(lambda x: isinstance(x, collections.Hashable), param_values))
+    # Convert unhashable types to code
+    param_values = [value.__code__ if isinstance(value, types.FunctionType) else None for value in param_values]
+    # Filter out unhashable types
+    param_values = tuple(filter(lambda x: isinstance(x, collections.Hashable), param_values))
 
-    to_hash = (initial_state_hashable, param_keys_hashable, param_values_hashable, timesteps, runs)
+    # Create tuple of all hash inputs
+    to_hash = (initial_state, param_keys, param_values, timesteps, runs)
 
     return hash(to_hash)
