@@ -10,7 +10,7 @@ Assorted technical extensions ("future features") and advanced scenario analyses
 * Backtest the model against historical data such as the ETH price, ETH staked to determine expected historical yields
 * Apply Hoban/Borgers security (cost of attack) and required rate of return (RSAVY) analysis to simulation results
 
-### 1 Simplified POW-only Model to study the behaviour of EIP-1559
+### 1 Simplified POW-only Model to study the behaviour of EIP-1559 under various network conditions
 
 #### Description
 
