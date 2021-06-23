@@ -10,7 +10,7 @@ Assorted technical extensions ("future features") and advanced scenario analyses
 * Backtest the model against historical data such as the ETH price, ETH staked to determine expected historical yields
 * Apply Hoban/Borgers security (cost of attack) and required rate of return (RSAVY) analysis to simulation results
 
-### 1 Simplified POW-only Model to study the behaviour of EIP-1559 under various network conditions
+### 1. Simplified POW-only Model to study the behaviour of EIP-1559 under various network conditions
 
 #### Description
 
@@ -39,7 +39,7 @@ The changes to the model are not very complicated. The area that will require th
 * Add multiple agent types that represent how different types of users will respond to a varying `base_fee`, introducing a feedback loop between `base_fee` and network usage.
 * Extend the model to investigate under what scenarios do tips to miners come into play, and what do the tipping dynamics look like.
 
-### 2 Investigate what the cost would be to artificially manipulate the `base_fee` that EIP-1559 introduces.
+### 2. Investigate what the cost would be to artificially manipulate the `base_fee` that EIP-1559 introduces
 
 #### Description
 
@@ -72,7 +72,7 @@ As an extension to [extension 1](#1-Simplified-POW-only-Model-to-study-the-behav
 * What would the cost/benefit to the participants in the collusion be?
 
 
-### 3 Investigate the effect on transaction cost on layer 1 taking into account the introduction of layer 2 solutions.
+### 3. Investigate the effect on transaction cost on layer 1 taking into account the introduction of layer 2 solutions
 
 #### Description
 
@@ -99,7 +99,7 @@ Building on [extension 1](#1-Simplified-POW-only-Model-to-study-the-behaviour-of
 * If transactions become extremely cheap due to the introduction of L2 solutions and the introduction of the data layer that comes with Serenity, at what point does it become financially impractical for miners to keep mining?
 * If transactions become so cheap due to L2 that transactions on L1 almost fall to zero, what does the return on investment for validators look like if they have to rely entirely on Beacon chain rewards, and what does the network inflation look like under those conditions?
 
-### 4 Compare the yields for different types of validators taking into account the ability for validators participating in pools to earn compounding returns.
+### 4. Compare the yields for different types of validators taking into account the ability for validators participating in pools to earn compounding returns
 
 #### Description
 
