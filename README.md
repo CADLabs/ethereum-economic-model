@@ -262,12 +262,16 @@ jupyter labextension install jupyterlab-plotly@4.14.3
 ## Roadmap
 
 The following is a non-exhaustive list of possible model extensions and future features:
+
+* [Simplified POW-only Model to study the behaviour of EIP-1559 under various network conditions](docs/ROADMAP.md#1-simplified-pow-only-model-to-study-the-behaviour-of-eip-1559-under-various-network-conditions)
+* [Investigate what the cost would be to artificially manipulate the base_fee that EIP-1559 introduces](docs/ROADMAP.md#2-investigate-what-the-cost-would-be-to-artificially-manipulate-the-base_fee-that-eip-1559-introduces)
+* [Investigate the effect on transaction cost on layer 1 taking into account the introduction of layer 2 solutions](docs/ROADMAP.md#3-investigate-the-effect-on-transaction-cost-on-layer-1-taking-into-account-the-introduction-of-layer-2-solutions)
+* [Compare the yields for different types of validators taking into account the ability for validators participating in pools to earn compounding returns](docs/ROADMAP.md#4-compare-the-yields-for-different-types-of-validators-taking-into-account-the-ability-for-validators-participating-in-pools-to-earn-compounding-returns)
 * Implement the ability to simulate an inactivity leak scenario
-* Implement a dynamic EIP1559 basefee with a feedback loop based on blockspace demand / network congestion
 * Backtest the model against historical data such as the ETH price, ETH staked to determine expected historical yields
 * Extend the model to cover future Ethereum upgrade stages after merge, such as sharding
 * Apply Hoban/Borgers security (cost of attack) and required rate of return (RSAVY) analysis to simulation results
-* ...
+* Implement a dynamic EIP1559 basefee with a feedback loop based on blockspace demand / network congestion
 
 ## Change Log
 
