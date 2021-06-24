@@ -18,20 +18,25 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
-def run(experiment=experiment):
+def run(executable=experiment):
   logging.info("Running experiment")
   start_time = time.time()
-  experiment.run()
+  executable.run()
   experiment_duration = time.time() - start_time
   logging.info(f"Experiment complete in {experiment_duration} seconds")
 
   logging.info("Post-processing results")
-  df = pd.DataFrame(experiment.results)
-  df = post_process(df)
+  df = pd.DataFrame(executable.results)
+  parameters = {}
+  try:
+    parameters = executable.simulations[0].model.params
+  except:
+    parameters = executable.model.params
+  df = post_process(df, parameters=parameters)
   post_processing_duration = time.time() - start_time - experiment_duration
   logging.info(f"Post-processing complete in {post_processing_duration} seconds")
 
-  return df, experiment.exceptions
+  return df, executable.exceptions
 
 
 if __name__ == '__main__':

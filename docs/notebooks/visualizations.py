@@ -128,12 +128,12 @@ def plot_revenue_yields_vs_network_inflation(df):
     )
 
     fig.add_trace(
-        go.Scatter(x=df_subset_0.eth_staked, y=df_subset_0.total_profit_yields_pct, name=f"Net yields @ {df_subset_0.eth_price.iloc[0]} $/ETH (%)"),
+        go.Scatter(x=df_subset_0.eth_staked, y=df_subset_0.total_profit_yields_pct, name=f"Net yields @ {df_subset_0.eth_price.iloc[0]} USD/ETH (%)"),
         secondary_y=False,
     )
 
     fig.add_trace(
-        go.Scatter(x=df_subset_1.eth_staked, y=df_subset_1.total_profit_yields_pct, name=f"Net yields @ {df_subset_1.eth_price.iloc[0]} $/ETH (%)"),
+        go.Scatter(x=df_subset_1.eth_staked, y=df_subset_1.total_profit_yields_pct, name=f"Net yields @ {df_subset_1.eth_price.iloc[0]} USD/ETH (%)"),
         secondary_y=False,
     )
 
@@ -190,7 +190,7 @@ def plot_validator_environment_yield_contour(df):
         width=1000, height=800,
     )
     fig.update_yaxes(title_text="ETH Staked (ETH)")
-    fig.update_xaxes(title_text="ETH Price ($/ETH)")
+    fig.update_xaxes(title_text="ETH Price (USD/ETH)")
 
     return fig
 
@@ -234,7 +234,7 @@ def plot_revenue_profit_yield_spread(df):
         width=1000, height=800,
     )
     fig.update_yaxes(title_text="ETH Staked (ETH)")
-    fig.update_xaxes(title_text="ETH Price ($/ETH)")
+    fig.update_xaxes(title_text="ETH Price (USD/ETH)")
 
     return fig
 
@@ -274,7 +274,7 @@ def plot_validator_environment_yield_surface(df):
         width=1000, height=800,
         margin=dict(l=65, r=50, b=65, t=90),
         scene={
-            "xaxis": {"title" : { "text": "ETH Price ($/ETH)" }, "type": "log",},
+            "xaxis": {"title" : { "text": "ETH Price (USD/ETH)" }, "type": "log",},
             "yaxis": {"title" : { "text": "ETH Staked (ETH; Logarithmic axis)" }},
             "zaxis": {"title" : { "text": "Yield (%)" }},
         }

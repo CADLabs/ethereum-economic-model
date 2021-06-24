@@ -168,6 +168,10 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+#### Docker
+
+See [CADLabs Jupyter Lab Environment](https://github.com/cadCAD-edu/jupyter-lab-environment)
+
 #### Known Issues
 
 ##### Windows

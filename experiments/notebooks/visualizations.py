@@ -2,6 +2,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+from ipywidgets import widgets
 
 pd.options.plotting.backend = "plotly"
 
@@ -177,7 +178,7 @@ def plot_validating_rewards_pie_chart(df, with_tips=False):
     return fig
 
 
-def plot_revenue_yields_over_eth_staked(df):
+def plot_revenue_profit_yields_over_eth_staked(df):
     fig = go.Figure()
 
     df_subset_0 = df.query("subset == 0")
@@ -190,25 +191,61 @@ def plot_revenue_yields_over_eth_staked(df):
 
     fig.add_trace(
         go.Scatter(x=df_subset_0.eth_staked, y=df_subset_0.total_profit_yields_pct,
-                   name=f"Profit Yields @ {df_subset_0.eth_price.iloc[0]} USD/ETH"),
+                   name=f"Profit Yields @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH"),
     )
 
     fig.add_trace(
         go.Scatter(x=df_subset_1.eth_staked, y=df_subset_1.total_profit_yields_pct,
-                   name=f"Profit Yields @ {df_subset_1.eth_price.iloc[0]} USD/ETH"),
+                   name=f"Profit Yields @ {df_subset_1.eth_price.iloc[0]:.0f} USD/ETH"),
     )
 
     update_legend_names(fig)
 
     fig.update_layout(
-        title="Revenue Yields over ETH Staked",
+        title="Revenue and Profit Yields Over ETH Staked",
         xaxis_title="ETH Staked (ETH)",
         # yaxis_title="",
         legend_title="",
     )
 
     # Set secondary y-axes titles
-    fig.update_yaxes(title_text="Revenue Yields (%/year)")
+    fig.update_yaxes(title_text="Yield (%/year)")
+
+    return fig
+
+
+def plot_revenue_profit_yields_over_eth_price(df):
+    fig = go.Figure()
+
+    df_subset_0 = df.query("subset == 0")
+    df_subset_1 = df.query("subset == 1")
+
+    # Add traces
+    fig.add_trace(
+        go.Scatter(x=df_subset_0.eth_price, y=df_subset_0.total_revenue_yields_pct, name='Revenue Yields'),
+    )
+
+    fig.add_trace(
+        go.Scatter(x=df_subset_0.eth_price, y=df_subset_0.total_profit_yields_pct,
+                   name=f"Profit Yields @ {df_subset_0.eth_staked.iloc[0]:.0f} ETH"),
+    )
+
+    fig.add_trace(
+        go.Scatter(x=df_subset_1.eth_price, y=df_subset_1.total_profit_yields_pct,
+                   name=f"Profit Yields @ {df_subset_1.eth_staked.iloc[0]:.0f} ETH"),
+    )
+
+    update_legend_names(fig)
+
+    fig.update_layout(
+        title="Revenue and Profit Yields Over ETH Price",
+        xaxis_title="ETH Price (USD/ETH)",
+        # yaxis_title="",
+        legend_title="",
+    )
+
+    # Set secondary y-axes titles
+    fig.update_yaxes(title_text="Yield (%/year)")
 
     return fig
 
@@ -224,7 +261,7 @@ def plot_validator_environment_yields(df):
         facet_col_spacing=0.05
     )
 
-    fig.for_each_annotation(lambda a: a.update(text="ETH Staked = " + str(df.query(f'subset == {a.text.split("=")[1]}').eth_staked.iloc[0]) + " ETH"))
+    fig.for_each_annotation(lambda a: a.update(text=f"ETH Staked = {df.query(f'subset == {a.text.split(chr(61))[1]}').eth_staked.iloc[0]:.0f} ETH"))
 
     fig.update_layout(
         title=f'Profit Yields of Validator Environments',
@@ -346,7 +383,7 @@ def plot_validator_environment_yield_contour(df):
             x=x, y=y, z=z,
             line_smoothing=0.85,
             colorbar=dict(
-                title='Yield (%)',
+                title='Profit Yield (%/year)',
                 titleside='right',
                 titlefont=dict(size=14)
             )
@@ -356,7 +393,7 @@ def plot_validator_environment_yield_contour(df):
     update_legend_names(fig)
 
     fig.update_layout(
-        title="Contour Plot of Annualized Validator Yield over ETH Price vs. ETH Staked",
+        title="Profit Yield Over ETH Price vs. ETH Staked",
         xaxis_title="ETH Price (USD/ETH)",
         yaxis_title="ETH Staked (ETH)",
         width=1000,
@@ -393,7 +430,7 @@ def plot_revenue_profit_yield_spread(df):
                 )
             ),
             colorbar=dict(
-                title='Spread (%)',
+                title='Spread (%/year)',
                 titleside='right',
                 titlefont=dict(size=14)
             )
@@ -403,7 +440,7 @@ def plot_revenue_profit_yield_spread(df):
     update_legend_names(fig)
 
     fig.update_layout(
-        title="Contour Plot of Revenue-Profit Yield Spread over ETH Price vs. ETH Staked",
+        title="Revenue-Profit Yield Spread Over ETH Price vs. ETH Staked",
         xaxis_title="ETH Price (USD/ETH)",
         yaxis_title="ETH Staked (ETH)",
         width=1000,
@@ -446,7 +483,7 @@ def plot_validator_environment_yield_surface(df):
     update_legend_names(fig)
 
     fig.update_layout(
-        title="Surface Plot of Annualized Validator Yield over ETH Price vs. ETH Staked",
+        title="Profit Yields over ETH Price vs. ETH Staked",
         autosize=False,
         width=1000,
         legend_title="",
@@ -454,7 +491,7 @@ def plot_validator_environment_yield_surface(df):
         scene={
             "xaxis": {"title": {"text": "ETH Price (USD/ETH)"}, "type": "log", },
             "yaxis": {"title": {"text": "ETH Staked (ETH; Logarithmic axis)"}},
-            "zaxis": {"title": {"text": "Yield (%)"}},
+            "zaxis": {"title": {"text": "Profit Yield (%/year)"}},
         }
     )
 
@@ -678,5 +715,195 @@ def plot_eth_staked_over_all_stages(df):
         yaxis_title="ETH Staked (ETH)",
         legend_title="",
     )
+
+    return fig
+
+
+def plot_number_of_validators_over_time_foreach_subset(df):
+    fig = df.plot(x='timestamp', y='number_of_validators', color='subset')
+
+    fig.update_layout(
+        title="Number of Validators Over Time",
+        xaxis_title="Date",
+        yaxis_title="Number of Validators",
+    )
+
+    return fig
+
+
+'''
+Experiment 2: Analysis 1
+'''
+
+def plot_number_of_validators_in_activation_queue_over_time(df):
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+    fig_df = df.query('subset == 2')
+
+    fig.add_trace(
+        go.Scatter(
+            x=fig_df['timestamp'], y=fig_df['number_of_validators'],
+            name='Number of validators'
+        ),
+        secondary_y=False
+    )
+
+    fig.add_trace(
+        go.Scatter(
+            x=fig_df['timestamp'], y=fig_df['number_of_validators_in_activation_queue'],
+            name='Activation queue'
+        ),
+        secondary_y=True
+    )
+
+    fig.update_layout(
+        title="Number of Validators in Activation Queue Over Time",
+        xaxis_title="Date",
+    )
+
+    fig.update_yaxes(title_text="Number of Validators", secondary_y=False)
+    fig.update_yaxes(title_text="Activation Queue", secondary_y=True)
+
+    update_legend_names(fig)
+
+    return fig
+
+
+def plot_revenue_profit_yields_over_time_foreach_subset(df):
+    fig = df.plot(
+        x='timestamp', y=['total_revenue_yields_pct', 'total_profit_yields_pct'],
+        facet_col='subset',
+        facet_col_wrap=3,
+    )
+
+    fig.update_layout(
+        title="Revenue and Profit Yields Over Time",
+        yaxis_title="Revenue Yield (%/year)",
+        hovermode="x"
+    )
+
+    fig.for_each_xaxis(lambda x: x.update(dict(title=dict(text='Date'))))
+
+    update_legend_names(fig)
+
+    return fig
+
+
+def plot_figure_widget_revenue_yields_over_time_foreach_subset(df):
+    subset = widgets.Dropdown(
+        options=list(df['subset'].unique()),
+        value=0,
+        description='Scenario:',
+    )
+
+    fig_df = df.query('subset == 0')
+
+    trace1 = go.Scatter(
+        x=fig_df['timestamp'], y=fig_df['total_revenue_yields_pct'],
+    )
+
+    fig = go.FigureWidget(data=[trace1])
+
+    fig.update_layout(
+        title="Revenue Yields Over Time",
+        xaxis_title="Date",
+        yaxis_title="Revenue Yield (%/year)",
+        yaxis=dict(
+            tickmode='linear',
+            dtick=0.5
+        )
+    )
+
+    max_y = fig_df['total_revenue_yields_pct'].max()
+    min_y = fig_df['total_revenue_yields_pct'].min()
+    fig.add_hline(y=max_y, line_dash="dot",
+                  annotation_text=f"Default scenario max={max_y:.2f}%/year",
+                  annotation_position="bottom right")
+    fig.add_hline(y=min_y, line_dash="dot",
+                  annotation_text=f"Default scenario min={min_y:.2f}%/year",
+                  annotation_position="bottom right")
+
+    def response(change):
+        _subset = subset.value
+        fig_df = df.query(f'subset == {_subset}')
+
+        with fig.batch_update():
+            fig.data[0].x = fig_df['timestamp']
+            fig.data[0].y = fig_df['total_revenue_yields_pct']
+
+    subset.observe(response, names="value")
+
+    container = widgets.HBox([subset])
+
+    update_legend_names(fig)
+
+    return widgets.VBox([container,
+                  fig])
+
+
+def plot_revenue_yields_rolling_mean(df_rolling):
+    fig = go.Figure([
+        go.Scatter(
+            name='Mean',
+            x=df_rolling['timestamp'],
+            y=df_rolling['rolling_mean'],
+            mode='lines',
+            line=dict(color='rgb(31, 119, 180)'),
+        ),
+        go.Scatter(
+            name='Upper Bound (max)',
+            x=df_rolling['timestamp'],
+            y=df_rolling['max'],
+            mode='lines',
+            marker=dict(color="#444"),
+            line=dict(width=0),
+            showlegend=False
+        ),
+        go.Scatter(
+            name='Lower Bound (min)',
+            x=df_rolling['timestamp'],
+            y=df_rolling['min'],
+            marker=dict(color="#444"),
+            line=dict(width=0),
+            mode='lines',
+            fillcolor='rgba(68, 68, 68, 0.3)',
+            fill='tonexty',
+            showlegend=False
+        )
+    ])
+    fig.update_layout(
+        yaxis_title='Revenue Yield (%/year)',
+        xaxis_title='Date',
+        title='Revenue Yields Rolling Mean Over Time',
+        hovermode="x"
+    )
+
+    update_legend_names(fig)
+
+    return fig
+
+
+'''
+Experiment 2: Analysis 5
+'''
+
+def plot_profit_yields_by_environment_over_time(df):
+    validator_profit_yields = [validator.type + '_profit_yields_pct' for validator in validator_environments]
+
+    fig = df.plot(x='timestamp', y=validator_profit_yields)
+
+    fig.update_layout(
+        title="Profit Yields by Environment Over Time",
+        xaxis_title="Date",
+        yaxis_title="Profit Yield (%/year)",
+        xaxis=dict(
+            rangeslider=dict(
+                visible=True
+            ),
+            type="date"
+        )
+    )
+
+    update_legend_names(fig)
 
     return fig

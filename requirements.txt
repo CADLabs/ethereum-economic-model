@@ -1,3 +1,4 @@
+cadCAD==0.4.23
 radcad==0.7.1  # A cadCAD model execution engine / reference implementation
 pytest==6.2.2
 ipykernel==5.5.3

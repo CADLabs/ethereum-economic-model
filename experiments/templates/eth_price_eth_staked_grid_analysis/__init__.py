@@ -11,10 +11,10 @@ from model.types import Stage
 experiment = copy.deepcopy(experiment)
 
 sweep = generate_cartesion_product({
-    # ETH price range from 100 $/ETH to 3000 $/ETH
+    # ETH price range from 100 USD/ETH to 3000 USD/ETH
     "eth_price_samples": np.linspace(start=100, stop=3000, num=20),
-    # ETH staked range from genesis requirement to current ETH staked
-    "eth_staked_samples": np.linspace(start=524_288, stop=eth_staked, num=20),
+    # ETH staked range from current ETH staked to minimum of 2 x ETH staked and 30% of total ETH supply
+    "eth_staked_samples": np.linspace(start=eth_staked, stop=min(eth_staked * 2, eth_supply * 0.3), num=20),
 })
 
 parameter_overrides = {
