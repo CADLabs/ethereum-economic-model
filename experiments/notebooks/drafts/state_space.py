@@ -44,7 +44,7 @@ import experiments.notebooks.visualizations as visualizations
 
 # Import the experiment to be run and analysed in this notebook:
 
-from experiments.templates.state_space_analysis import experiment
+from experiments.templates.time_domain_analysis import experiment
 
 # Run the experiment, and get the post-processed Pandas DataFrame:
 
