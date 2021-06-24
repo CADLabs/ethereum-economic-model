@@ -100,9 +100,10 @@ The purpose of this notebook is to recreate selected simulations from the widely
 The purpose of this notebook is to explore the returns validators can expect from staking in the Ethereum protocol across different time horizons, adoption scenarios, ETH price scenarios and validator environments.
 
 * Analysis 1: Revenue and Profit Yields Over Time
-* Analysis 2: Revenue and Profit Yields Over Adoption Curve
-* Analysis 3: Revenue and Profit Yields Over ETH Price Curve
-* Analysis 4: Profit Yields By Validator Environment Over Time 
+* Analysis 2: Revenue and Profit Yields Over ETH Staked
+* Analysis 3: Revenue and Profit Yields Over ETH Price
+* Analysis 4: Profit Yields Over ETH Staked vs. ETH Price (Yield Surface)
+* Analysis 5: Profit Yields By Validator Environment Over Time
 
 ### 3. Network Issuance and Inflation Rate (Network-level Analysis)
 
