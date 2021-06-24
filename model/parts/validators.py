@@ -50,6 +50,9 @@ def policy_staking(
 
 
 def policy_validators(params, substep, state_history, previous_state):
+    """Valdiator Policy Function
+    Calculate the number of validators driven by the ETH staked or validator processes.
+    """
     # Parameters
     dt = params["dt"]
     eth_staked_process = params["eth_staked_process"]
@@ -112,6 +115,9 @@ def policy_validators(params, substep, state_history, previous_state):
 def policy_average_effective_balance(
     params, substep, state_history, previous_state
 ) -> typing.Tuple[str, Gwei]:
+    """Average Effective Balance Policy Function
+    Calculate the validator average effective balance.
+    """
     # State Variables
     number_of_validators = previous_state["number_of_validators"]
 

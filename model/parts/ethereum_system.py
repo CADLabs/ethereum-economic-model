@@ -19,6 +19,7 @@ def policy_upgrade_stages(params, substep, state_history, previous_state):
 
     This is essentially a finite-state machine: https://en.wikipedia.org/wiki/Finite-state_machine
     """
+
     # Parameters
     dt = params["dt"]
     stage: Stage = params["stage"]
@@ -80,6 +81,10 @@ def policy_upgrade_stages(params, substep, state_history, previous_state):
 def policy_network_issuance(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, ETH]:
+    """Network Issuance Policy Function
+    Calculate the total network issuance and issuance from Proof of Work block rewards.
+    """
+
     # Parameters
     dt = params["dt"]
     daily_pow_issuance = params["daily_pow_issuance"]
@@ -194,6 +199,10 @@ def policy_eip1559_transaction_pricing(
 def update_eth_price(
     params, substep, state_history, previous_state, policy_input
 ) -> typing.Tuple[str, USD_per_ETH]:
+    """ETH Price State Update Function
+    Update the ETH price from the `eth_price_process`.
+    """
+
     # Parameters
     dt = params["dt"]
     eth_price_process = params["eth_price_process"]
@@ -211,6 +220,10 @@ def update_eth_price(
 def update_eth_supply(
     params, substep, state_history, previous_state, policy_input
 ) -> typing.Tuple[str, ETH]:
+    """ETH Supply State Update Function
+    Update the ETH supply from the Network Issuance Policy Function.
+    """
+
     # Policy Inputs
     network_issuance = policy_input["network_issuance"]
 

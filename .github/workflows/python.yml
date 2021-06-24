@@ -31,6 +31,9 @@ jobs:
     - name: Check formatting
       run: |
         python -m black --check --diff model
+    - name: Check docstrings
+      run: |
+        pylint --disable=all --enable=missing-docstring model
     - name: Test notebooks
       run: |
         make kernel

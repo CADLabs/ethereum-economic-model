@@ -17,18 +17,18 @@ from model.types import Gwei
 
 
 def get_total_active_balance(params: Parameters, state: StateVariables) -> Gwei:
-    '''
+    """
     See https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/beacon-chain.md#get_total_active_balance
 
     ```python
     def get_total_active_balance(state: BeaconState) -> Gwei:
-        """
+        '''
         Return the combined effective balance of the active validators.
         Note: ``get_total_balance`` returns ``EFFECTIVE_BALANCE_INCREMENT`` Gwei minimum to avoid divisions by zero.
-        """
+        '''
         return get_total_balance(state, set(get_active_validator_indices(state, get_current_epoch(state))))
     ```
-    '''
+    """
 
     # Parameters
     EFFECTIVE_BALANCE_INCREMENT = params["EFFECTIVE_BALANCE_INCREMENT"]
@@ -51,6 +51,8 @@ def get_total_active_balance(params: Parameters, state: StateVariables) -> Gwei:
 
 
 def get_base_reward_per_increment(params: Parameters, state: StateVariables) -> Gwei:
+    """Get the base reward per increment (single validator)"""
+
     EFFECTIVE_BALANCE_INCREMENT = params["EFFECTIVE_BALANCE_INCREMENT"]
     BASE_REWARD_FACTOR = params["BASE_REWARD_FACTOR"]
 
@@ -62,6 +64,8 @@ def get_base_reward_per_increment(params: Parameters, state: StateVariables) -> 
 
 
 def get_base_reward(params: Parameters, state: StateVariables) -> Gwei:
+    """Get the base reward for the current epoch"""
+
     # Parameters
     MAX_EFFECTIVE_BALANCE = params["MAX_EFFECTIVE_BALANCE"]
     EFFECTIVE_BALANCE_INCREMENT = params["EFFECTIVE_BALANCE_INCREMENT"]
@@ -78,6 +82,8 @@ def get_base_reward(params: Parameters, state: StateVariables) -> Gwei:
 
 
 def get_proposer_reward(params: Parameters, state: StateVariables) -> Gwei:
+    """Get the proposer reward as a proportion of the base reward"""
+
     PROPOSER_REWARD_QUOTIENT = params["PROPOSER_REWARD_QUOTIENT"]
     return Gwei(get_base_reward(params, state) // PROPOSER_REWARD_QUOTIENT)
 

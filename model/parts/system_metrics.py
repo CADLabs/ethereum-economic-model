@@ -14,6 +14,9 @@ from model.types import Percentage, Gwei
 def policy_validator_costs(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, any]:
+    """Validator Costs Policy Function
+    Calculate the aggregate validator costs.
+    """
     # Parameters
     dt = params["dt"]
     validator_percentage_distribution = params["validator_percentage_distribution"]
@@ -68,6 +71,9 @@ def policy_validator_costs(
 def policy_validator_yields(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, any]:
+    """Validator Yields Policy Function
+    Calculate the aggregate validator revenue and profit yields.
+    """
     # Parameters
     dt = params["dt"]
     validator_percentage_distribution = params["validator_percentage_distribution"]
@@ -135,6 +141,9 @@ def policy_validator_yields(
 def policy_total_online_validator_rewards(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
+    """Total Online Validator Rewards Policy Function
+    Calculate the aggregate total online validator rewards.
+    """
     # State Variables
     validating_rewards = previous_state["validating_rewards"]
     validating_penalties = previous_state["validating_penalties"]
@@ -155,6 +164,9 @@ def policy_total_online_validator_rewards(
 def update_supply_inflation(
     params, substep, state_history, previous_state, policy_input
 ) -> typing.Tuple[str, Percentage]:
+    """Supply Inflation State Update Function
+    Update the annualized ETH supply inflation.
+    """
     # Policy Inputs
     network_issuance = policy_input["network_issuance"]
 
