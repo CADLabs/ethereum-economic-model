@@ -2,6 +2,8 @@ import plotly.graph_objects as go
 import plotly.io as pio
 import sys
 
+cadlabs_colors = [[0,'#1AD5A0'],[0.33,'#30B4F1'],[0.66,'#D03DD2'],[1.0,'#F76746']]
+cadlabs_colors_r = [[0,'#F76746'],[0.33,'#D03DD2'],[0.66,'#30B4F1'],[1.0,'#1AD5A0']]
 
 pio.templates["cadlabs"] = go.layout.Template(
     layout_font={'color': '#2a3f5f'},   
@@ -94,12 +96,7 @@ pio.templates["cadlabs"] = go.layout.Template(
             }
     },
     layout_colorscale={
-             'sequential': [
-                 [0,'#F76746'],
-                 [0.33,'#D03DD2'],
-                 [0.66,'#30B4F1'],
-                 [1.0,'#1AD5A0']
-             ],
+             'sequential': cadlabs_colors
      },
     layout_hoverlabel={
         'align': 'left'
@@ -157,12 +154,7 @@ pio.templates["cadlabs_dark"] = go.layout.Template(
             'zerolinecolor': '#283442',
             'zerolinewidth': 2},
      layout_colorscale={
-             'sequential': [
-                 [0,'#F76746'],
-                 [0.33,'#D03DD2'],
-                 [0.66,'#30B4F1'],
-                 [1.0,'#1AD5A0']
-             ],
+             'sequential': cadlabs_colors
      }
 )
 
@@ -192,16 +184,11 @@ pio.templates["cadlabs_frontend"] = go.layout.Template(
             'zerolinecolor': '#3C3D56',
             'zerolinewidth': 3},
      layout_colorscale={
-             'sequential': [
-                 [0,'#F76746'],
-                 [0.33,'#D03DD2'],
-                 [0.66,'#30B4F1'],
-                 [1.0,'#1AD5A0']
-             ],
+             'sequential': cadlabs_colors
      }
 )
 
-cadlabs_colors = [[0,'#F76746'],[0.33,'#D03DD2'],[0.66,'#30B4F1'],[1.0,'#1AD5A0']]
+
 pio.templates.default = "cadlabs"
 
 # Legend at bottom of chart
