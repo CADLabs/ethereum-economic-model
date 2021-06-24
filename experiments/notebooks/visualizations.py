@@ -16,6 +16,7 @@ import model.constants as constants
 from model.system_parameters import parameters, validator_environments
 
 import experiments.notebooks.plotly_theme
+from experiments.notebooks.plotly_theme import cadlabs_colors
 
 
 legend_state_variable_name_mapping = {
@@ -382,6 +383,7 @@ def plot_validator_environment_yield_contour(df):
         go.Contour(
             x=x, y=y, z=z,
             line_smoothing=0.85,
+            colorscale=cadlabs_colors,
             colorbar=dict(
                 title='Profit Yield (%/year)',
                 titleside='right',
@@ -433,7 +435,8 @@ def plot_revenue_profit_yield_spread(df):
                 title='Spread (%/year)',
                 titleside='right',
                 titlefont=dict(size=14)
-            )
+            ),
+            colorscale=cadlabs_colors
         )
     ])
 
@@ -471,7 +474,8 @@ def plot_validator_environment_yield_surface(df):
             title='Yield (%)',
             titleside='right',
             titlefont=dict(size=14)
-        )
+        ),
+        colorscale=cadlabs_colors
     )])
 
     fig.update_traces(contours_z=dict(
@@ -533,7 +537,7 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None):
             mode="markers", x=[date_start], y=[df[column][0]],
             marker_symbol=["diamond"],
             # marker_line_color="midnightblue", marker_color="lightskyblue",
-            marker_line_width=2, marker_size=15,
+            marker_line_width=2, marker_size=10,
             hovertemplate="Today",
             name="Today",
             # text="Today",
@@ -548,7 +552,7 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None):
             mode="markers", x=[date_eip1559], y=[df.loc[date_eip1559.strftime("%Y-%m-%d")][column][0]],
             marker_symbol=["diamond"],
             # marker_line_color="midnightblue", marker_color="lightskyblue",
-            marker_line_width=2, marker_size=15,
+            marker_line_width=2, marker_size=10,
             hovertemplate="EIP1559 Enabled",
             name="EIP1559 Enabled",
             # text="EIP1559 Enabled 🔥",
@@ -563,7 +567,7 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None):
             mode="markers", x=[date_pos], y=[df.loc[date_pos.strftime("%Y-%m-%d")][column][0]],
             marker_symbol=["diamond"],
             # marker_line_color="midnightblue", marker_color="lightskyblue",
-            marker_line_width=2, marker_size=15,
+            marker_line_width=2, marker_size=10,
             hovertemplate="Proof of Stake",
             name="Proof of Stake",
             # text="Proof of Stake 🔱",
