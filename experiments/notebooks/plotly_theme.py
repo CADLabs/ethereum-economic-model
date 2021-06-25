@@ -9,6 +9,7 @@ pio.templates["cadlabs"] = go.layout.Template(
     layout_font={'color': '#2a3f5f'},   
     layout_plot_bgcolor='white',
     layout_paper_bgcolor='white',
+    layout_height=800,
     layout_colorway=['#FC1CBF','#3283FE','#AA0DFE','#F6222E','#1CBE4F','#FA0087','#B10DA1','#1C8356','#FE00FA','#782AB6'],
     layout_xaxis={
             'automargin': True,
