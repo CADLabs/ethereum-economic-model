@@ -4,13 +4,14 @@ import sys
 
 cadlabs_colors = [[0,'#1AD5A0'],[0.33,'#30B4F1'],[0.66,'#D03DD2'],[1.0,'#F76746']]
 cadlabs_colors_r = [[0,'#F76746'],[0.33,'#D03DD2'],[0.66,'#30B4F1'],[1.0,'#1AD5A0']]
+cadlabs_colorway_sequence = ['#FC1CBF','#3283FE','#1CBE4F','#AA0DFE','#FA0087','#FE00FA','#1C8356','#782AB6','#F6222E','#B10DA1']
 
 pio.templates["cadlabs"] = go.layout.Template(
     layout_font={'color': '#2a3f5f'},   
     layout_plot_bgcolor='white',
     layout_paper_bgcolor='white',
     layout_height=800,
-    layout_colorway=['#FC1CBF','#3283FE','#AA0DFE','#F6222E','#1CBE4F','#FA0087','#B10DA1','#1C8356','#FE00FA','#782AB6'],
+    layout_colorway=cadlabs_colorway_sequence,
     layout_xaxis={
             'automargin': True,
             'showgrid': True,
@@ -21,8 +22,10 @@ pio.templates["cadlabs"] = go.layout.Template(
             'zerolinecolor': '#EBF0F8',
             'zerolinewidth': 2,
             'rangeslider' : {
-                'bgcolor' : '#EEEEEE',
-                'thickness' : 0.17
+                'bordercolor': '#E0E0E0',
+                'borderwidth': 2,
+                'bgcolor' : '#FCFCFC',
+                'thickness' : 0.18,
             }
     },
     layout_title = {'x': 0.05},
@@ -137,7 +140,9 @@ pio.templates["cadlabs_dark"] = go.layout.Template(
     layout_font={'color': '#f2f5fa'},   
     layout_plot_bgcolor='rgb(17,17,17)',
     layout_paper_bgcolor='rgb(17,17,17)',
-    layout_colorway=['#FC1CBF','#3283FE','#AA0DFE','#F6222E','#1CBE4F','#FA0087','#B10DA1','#1C8356','#FE00FA','#782AB6'],
+    layout_height=800,
+
+    layout_colorway = cadlabs_colorway_sequence,
     layout_xaxis={
             'automargin': True,
             'showgrid': True,
@@ -147,6 +152,12 @@ pio.templates["cadlabs_dark"] = go.layout.Template(
             'title': {'standoff': 15},
             'zerolinecolor': '#283442',
             'zerolinewidth': 2,
+            'rangeslider' : {
+                'bordercolor': '#3A3A3A',
+                'borderwidth': 2,
+                'bgcolor' : 'rgb(17,17,17)',
+                'thickness' : 0.18,
+                }
     },
     layout_title = {'x': 0.05},
     layout_yaxis={
@@ -167,7 +178,7 @@ pio.templates["cadlabs_frontend"] = go.layout.Template(
     layout_font={'color': '#ffffff'},
     layout_plot_bgcolor='#272838',
     layout_paper_bgcolor='#272838',
-    layout_colorway=['#FC1CBF','#3283FE','#AA0DFE','#F6222E','#1CBE4F','#FA0087','#B10DA1','#1C8356','#FE00FA','#782AB6'],
+    layout_colorway=cadlabs_colorway_sequence,
     layout_xaxis={
             'automargin': True,
             'showgrid': True,
@@ -177,6 +188,12 @@ pio.templates["cadlabs_frontend"] = go.layout.Template(
             'title': {'standoff': 15},
             'zerolinecolor': '#272838',
             'zerolinewidth': 3,
+             'rangeslider' : {
+                'bordercolor': '#3C3D56',
+                'borderwidth': 2,
+                'bgcolor' : '#272838',
+                'thickness' : 0.18,
+                }
     },
     layout_title = {'x': 0.05},
     layout_yaxis={
