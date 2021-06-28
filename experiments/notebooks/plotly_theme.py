@@ -20,6 +20,10 @@ pio.templates["cadlabs"] = go.layout.Template(
             'title': {'standoff': 15},
             'zerolinecolor': '#EBF0F8',
             'zerolinewidth': 2,
+            'rangeslider' : {
+                'bgcolor' : '#EEEEEE',
+                'thickness' : 0.17
+            }
     },
     layout_title = {'x': 0.05},
     layout_yaxis={
