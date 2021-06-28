@@ -274,7 +274,7 @@ def plot_validator_environment_yield_surface(df):
         width=1000, height=800,
         margin=dict(l=65, r=50, b=65, t=90),
         scene={
-            "xaxis": {"title" : { "text": "ETH Price ($/ETH)" }, "type": "log",},
+            "xaxis": {"title" : { "text": "ETH Price (USD/ETH)" }, "type": "log",},
             "yaxis": {"title" : { "text": "ETH Staked (ETH; Logarithmic axis)" }},
             "zaxis": {"title" : { "text": "Yield (%)" }},
         }
