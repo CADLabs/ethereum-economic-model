@@ -18,7 +18,7 @@ As per the scoping description above, and although our model will implement comp
     * Average validator uptime
     * Frequency of slashing events
 
-## 1. Validators act altruisticly
+## 1. Validators act altruistically
 
 This is a validator economics model, and does not model security issues such as collusion, supermajority attacks, etc. Validators act altruistically, for the good of the network.
 
