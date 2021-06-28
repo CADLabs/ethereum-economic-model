@@ -2,11 +2,11 @@ import numpy as np
 
 from model.state_variables import eth_staked, eth_supply
 from experiments.base import experiment, TIMESTEPS, DELTA_TIME
-from experiments.utils import generate_cartesion_product
+from experiments.utils import generate_cartesian_product
 from model.types import Stage
 
 
-sweep = generate_cartesion_product({
+sweep = generate_cartesian_product({
     # ETH price range from 100 $/ETH to 3000 $/ETH
     "eth_price_samples": np.linspace(start=100, stop=3000, num=20),
     # ETH staked range from genesis requirement to current ETH staked
