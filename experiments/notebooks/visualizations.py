@@ -119,7 +119,6 @@ def plot_validating_rewards(df):
         x='timestamp',
         y=list(validating_rewards),
         title="Validating Rewards",
-        height=800
     )
 
     fig.update_layout(
@@ -530,7 +529,7 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None):
 
     fig.add_trace(
         go.Scatter(
-            mode="markers", x=[date_start], y=[df[column][0]],
+            mode="markers", x=[date_start], y=[df.loc[date_start.strftime("%Y-%m-%d")][column][0]],
             marker_symbol=["diamond"],
             # marker_line_color="midnightblue", marker_color="lightskyblue",
             marker_line_width=2, marker_size=15,
@@ -630,6 +629,7 @@ def plot_eth_supply_and_inflation_over_all_stages(df):
 
     # Add range slider
     fig.update_layout(
+        height=800,
         xaxis=dict(
             rangeslider=dict(
                 visible=True
