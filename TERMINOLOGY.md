@@ -1,6 +1,6 @@
-# Model Terminology
+# Model Terminology (WORK IN PROGRESS; TODO: DECIDE TO CUT OUT OR REFINE)
 
-## Validator Economics
+This notebook defines some of the terms and expressions repeatedly used in the repo. It is not a comprehensive glossary, but rather a living document meant to support consistency as the repo evolves. 
 
 | Term | Definition |
 | -- | -- |

@@ -1,4 +1,4 @@
-# CADLabs Ethereum Validator Economics Model
+# Readme - CADLabs Ethereum Validator Economics Model
 
 [![Python package](https://github.com/cadCAD-edu/ethereum-model/actions/workflows/python.yml/badge.svg)](https://github.com/cadCAD-edu/ethereum-model/actions/workflows/python.yml)
 
@@ -25,9 +25,7 @@ A modular dynamical systems model implemented using the open-source Python libra
 
 ## Context
 
-This open-source model was developed in collaboration with the Ethereum Robust Incentives Group, and funded by the Ethereum Foundation Eth2 Staking Community Grants. It accompanies the cadCAD Edu course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum)". It intends to provide the Ethereum community with a highly versatile, customizable and extensible research tool, and includes a list of [model extension ideas](#roadmap).  
-
-TODO: Describe in a few sentences how this model came about
+This open-source model has been developed in collaboration with the Ethereum Robust Incentives Group, funded by the Ethereum Foundation Eth2 Staking Community Grants program. While originally scoped with purely modeling-educational intent as part of the cadCAD Edu online course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum), it has evolved to become a highly versatile, customizable and extensible research tool, and includes a list of [model extension ideas](#roadmap). The model is focused on epoch- and population-level Ethereum validator economics across different deployment types and - at least in its initial setup - abstracts from slot- and agent-level dynamics. Please see [model assumptions] (assumptions.md) for further further context.
 
 ## Model Features
 
