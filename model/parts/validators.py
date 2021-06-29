@@ -74,11 +74,6 @@ def policy_validators(params, substep, state_history, previous_state):
         number_of_validators = int(
             round(eth_staked / (average_effective_balance / constants.gwei))
         )
-    elif number_of_validators == 0:
-        eth_staked = previous_state["eth_staked"]
-        number_of_validators = int(
-            round(eth_staked / (average_effective_balance / constants.gwei))
-        )
     else:
         new_validators_per_epoch = validator_process(run, timestep * dt)
         number_of_validators_in_activation_queue += new_validators_per_epoch * dt
