@@ -470,7 +470,7 @@ def plot_validator_environment_yield_surface(df):
     fig = go.Figure(data=[go.Surface(
         x=x, y=y, z=z,
         colorbar=dict(
-            title='Yield (%)',
+            title='Profit Yield (%/year)',
             titleside='right',
             titlefont=dict(size=14)
         ),
