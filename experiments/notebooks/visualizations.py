@@ -12,10 +12,8 @@ from IPython.display import Code
 from pygments.formatters import HtmlFormatter
 from IPython.core.display import HTML
 
-import model.constants as constants
 from model.system_parameters import parameters, validator_environments
 
-import experiments.notebooks.plotly_theme
 from experiments.notebooks.plotly_theme import cadlabs_colors
 
 

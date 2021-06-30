@@ -28,7 +28,6 @@ pio.templates["cadlabs"] = go.layout.Template(
                 'thickness' : 0.18,
             }
     },
-    layout_title = {'x': 0.05},
     layout_yaxis={
             'automargin': True,
             'showgrid' : True,
@@ -159,7 +158,6 @@ pio.templates["cadlabs_dark"] = go.layout.Template(
                 'thickness' : 0.18,
                 }
     },
-    layout_title = {'x': 0.05},
     layout_yaxis={
             'automargin': True,
             'showgrid' : True,
@@ -195,7 +193,6 @@ pio.templates["cadlabs_frontend"] = go.layout.Template(
                 'thickness' : 0.18,
                 }
     },
-    layout_title = {'x': 0.05},
     layout_yaxis={
             'automargin': True,
             'showgrid' : True,
