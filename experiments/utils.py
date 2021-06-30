@@ -8,8 +8,8 @@ from pygments.formatters import HtmlFormatter
 from IPython.core.display import HTML
 
 
-def generate_cartesion_product(sweeps):
-    """Generates a parameter sweep using a cartesion product of System Parameter dictionary
+def generate_cartesian_product(sweeps):
+    """Generates a parameter sweep using a cartesian product of System Parameter dictionary
 
         Args:
             sweeps (Dict[str, List]): A cadCAD System Parameter dictionary to sweep
