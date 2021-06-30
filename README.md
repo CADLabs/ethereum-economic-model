@@ -1,18 +1,15 @@
-# Readme - CADLabs Ethereum Validator Economics Model
+# CADLabs Ethereum Research Model
 
 [![Python package](https://github.com/cadCAD-edu/ethereum-model/actions/workflows/python.yml/badge.svg)](https://github.com/cadCAD-edu/ethereum-model/actions/workflows/python.yml)
 
-A modular dynamical systems model implemented using the open-source Python library [radCAD](https://github.com/BenSchZA/radCAD), a next-gen implementation of [cadCAD](https://cadcad.org).
-
-**Official Eth2 specs version**: 
-* Implements the [Altair](https://github.com/ethereum/eth2.0-specs#altair) updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release.
+A modular dynamical systems model of Ethereum's validator economics, implemented using the open-source Python library [radCAD](https://github.com/BenSchZA/radCAD), a next-gen implementation of [cadCAD](https://cadcad.org). Implements the official Ethereum [Altair](https://github.com/ethereum/eth2.0-specs#altair) spec updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release.
 
 ## Table of Contents
 * [Context](#context)
 * [Model Features](#model-features)
 * [Directory Structure](#directory-structure)
 * [Model Architecture](#model-architecture)
-* [Running Experiments](#running-experiments)
+* [Experiments](#simulation-experiments)
 * [Development](#development)
 * [Tests](#tests)
 * [Jupyter Environment](#jupyter-environment)
@@ -25,27 +22,25 @@ A modular dynamical systems model implemented using the open-source Python libra
 
 ## Context
 
-This open-source model has been developed in collaboration with the Ethereum Robust Incentives Group, funded by the Ethereum Foundation Eth2 Staking Community Grants program. While originally scoped with purely modeling-educational intent as part of the cadCAD Edu online course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum), it has evolved to become a highly versatile, customizable and extensible research tool, and includes a list of [model extension ideas](#roadmap). The model is focused on epoch- and population-level Ethereum validator economics across different deployment types and - at least in its initial setup - abstracts from slot- and agent-level dynamics. Please see [model assumptions] (assumptions.md) for further further context.
+This open-source model has been developed in collaboration with the Ethereum Robust Incentives Group, funded by the Ethereum Foundation Eth2 Staking Community Grants program. While originally scoped with purely modeling-educational intent as part of the cadCAD Edu online course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum)", it has evolved to become a highly versatile, customizable and extensible research tool, and includes a list of [model extension ideas](#roadmap). The model is focused on epoch- and population-level Ethereum validator economics across different deployment types and - at least in its initial setup - abstracts from slot- and agent-level dynamics. Please see [model assumptions](assumptions.md) for further context.
 
-## Model Features
+## Model features
 
-* Configurable to reflect protocol behavior at different points in time of the development roadmap (referred to as "upgrade stages" in this model):
+* Configurable to reflect protocol behavior at different points in time of the development roadmap (referred to as "upgrade stages"):
   * post Beacon Chain launch, pre EIP1559, pre PoS (validators receive PoS incentives, EIP1559 disabled, and PoW still in operation)
   * post Beacon Chain launch, post EIP1559, pre PoS (validators receive PoS incentives, EIP1559 enabled with miners receiving tips, and PoW still in operation)
   * post Beacon Chain launch, post EIP1559, post PoS (validators receive PoS incentives, EIP1559 enabled with validators receiving tips, and PoW deprecated)
-* Supports [state space analysis](https://en.wikipedia.org/wiki/State-space_representation) (i.e. simulation of system behavior over time) and [phase space analysis](https://en.wikipedia.org/wiki/Phase_space) (i.e. generation of all unique system states in a given experimental setup)
+* Supports [state-space analysis](https://en.wikipedia.org/wiki/State-space_representation) (i.e. simulation of system behavior over time) and [phase-space analysis](https://en.wikipedia.org/wiki/Phase_space) (i.e. generation of all unique system states in a given experimental setup)
 * Customizable processes to set important variables such as ETH price, ETH staked, EIP1559 transaction pricing, and transaction rates
 * Modular model structure for convenient extension and modification. This allows different user groups to refactor the model for different purposes, rapidly test new incentive mechanisms, or to update the model as Ethereum implements new protocol improvements.
 * References to official [Eth2 specs](https://github.com/ethereum/eth2.0-specs) in Policy and State Update Function logic. This enables seamless onboarding of protocol developers or for the more advanced cadCAD user to dig into the underlying protocol design that inspired the logic.
 
-## Directory Structure
+## Model Directory Structure
 * [data/](data/): datasets used in model
-* [docs/](docs/): work-in-progress documentation of model software architecture
-* [experiments/](experiments/): experiment workflow configuration and execution
+* [docs/](docs/): work-in-progress (TODO: finalize?) documentation of model software architecture (TODO: Finalize and keep in; our out?)
+* [experiments/](experiments/): analysis notebooks, experiment workflow configuration and execution
 * [logs/](logs/): experiment log files
-* [model/](model/): model structure, parts, and configuration
-* [notebooks/](experiments/notebooks/): experiment analysis notebooks
-* [outputs/](outputs/): experiment outputs (images, datasets, etc.)
+* [model/](model/): model software architecture (structural and configuration modules)
 * [tests/](tests/): unit and integration tests for model and notebooks
 
 ## Model Architecture
@@ -79,15 +74,13 @@ The model is configured using several configuration modules in the [model/](mode
 | [types.py](model/types.py) | Various Python types used in the model, such as the `Stage` Enum and calculation units |
 | [utils.py](model/utils.py) | Misc. utility and helper functions |
 
-## Running Experiments
+## Experiments
 
 The [experiments/](experiments/) directory contains modules for configuring and executing simulation experiments, as well as performing post-processing of the results.
 
-The [experiments/templates/](experiments/templates/) directory contains different experiment templates which are used in the Jupyter experiment notebooks in the [notebooks/](experiments/notebooks/) directory to answer research questions and perform scenario analyses.
+The [experiments/notebooks/](experiments/notebooks/) directory contains several initial experiment notebooks we have created as a basis for analyzing the economics Ethereum validators are confronted with under a variety of scenarios. These notebooks and analyses don't aim to comprehensively illuminate the Ethereum protocol, but rather to answer the most salient questions and serve as inspiration for building out more customized analyses and model extensions.
 
-See the [notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) notebook for a walk-through of how to configure and execute an experiment.
-
-We created several experiment notebooks as a basis for analyzing the economics Ethereum validators are confronted with under a variety of scenarios. These notebooks and analysis don't aim to comprehensively illuminate the Ethereum protocol, but rather to answer the most salient questions and serve as inspiration for building out more customized analysis and model extensions.
+The [experiments/templates/](experiments/templates/) directory contains different experiment templates which can be used to create custom experiment notebooks. See the [experiments/notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) notebook for a walk-through of how to configure and execute a new experiment.
 
 ### 1. Model Validation
 
