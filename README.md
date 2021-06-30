@@ -1,4 +1,4 @@
-# Readme - CADLabs Ethereum Validator Economics Model
+# CADLabs Ethereum Validator Economics Model
 
 [![Python package](https://github.com/cadCAD-edu/ethereum-model/actions/workflows/python.yml/badge.svg)](https://github.com/cadCAD-edu/ethereum-model/actions/workflows/python.yml)
 
