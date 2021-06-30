@@ -4,7 +4,7 @@ The default experiment with default System Parameters, State Variables, and Simu
 The defaults are defined in their respective modules (e.g. `model/system_parameters.py`).
 """
 
-from radcad import Model, Simulation, Experiment, Engine
+from radcad import Model, Simulation, Experiment, Backend
 
 from model.system_parameters import parameters
 from model.state_variables import initial_state
@@ -20,4 +20,6 @@ simulation = Simulation(model=model, timesteps=TIMESTEPS, runs=MONTE_CARLO_RUNS)
 experiment = Experiment([simulation])
 # Configure Simulation & Experiment engine
 simulation.engine = experiment.engine
+experiment.engine.backend = Backend.SINGLE_PROCESS
+experiment.engine.deepcopy = False
 experiment.engine.drop_substeps = True
