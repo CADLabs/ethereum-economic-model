@@ -24,7 +24,7 @@ A modular dynamical systems model of Ethereum's validator economics, implemented
 
 This open-source model has been developed in collaboration with the Ethereum Robust Incentives Group, funded by the Ethereum Foundation Eth2 Staking Community Grants program. While originally scoped with purely modeling-educational intent as part of the cadCAD Edu online course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum)", it has evolved to become a highly versatile, customizable and extensible research tool, and includes a list of [model extension ideas](#roadmap). The model is focused on epoch- and population-level Ethereum validator economics across different deployment types and - at least in its initial setup - abstracts from slot- and agent-level dynamics. Please see [model assumptions](assumptions.md) for further context.
 
-## Model features
+## Model Features
 
 * Configurable to reflect protocol behavior at different points in time of the development roadmap (referred to as "upgrade stages"):
   * post Beacon Chain launch, pre EIP1559, pre PoS (validators receive PoS incentives, EIP1559 disabled, and PoW still in operation)
