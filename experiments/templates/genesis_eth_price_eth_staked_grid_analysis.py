@@ -1,16 +1,16 @@
 import numpy as np
 import copy
 
-from model.state_variables import eth_staked, eth_supply
+from model.state_variables import eth_staked
 from experiments.default_experiment import experiment, TIMESTEPS, DELTA_TIME
-from experiments.utils import generate_cartesion_product
+from experiments.utils import generate_cartesian_product
 from model.types import Stage
 
 
 # Make a copy of the default experiment to avoid mutation
 experiment = copy.deepcopy(experiment)
 
-sweep = generate_cartesion_product({
+sweep = generate_cartesian_product({
     # ETH price range from 100 USD/ETH to 3000 USD/ETH
     "eth_price_samples": np.linspace(start=100, stop=3000, num=20),
     # ETH staked range from genesis requirement to current ETH staked
