@@ -9,7 +9,7 @@ A modular dynamical systems model of Ethereum's validator economics, implemented
 * [Model Features](#model-features)
 * [Directory Structure](#directory-structure)
 * [Model Architecture](#model-architecture)
-* [Experiments](#simulation-experiments)
+* [Experiments](#experiments)
 * [Development](#development)
 * [Tests](#tests)
 * [Jupyter Environment](#jupyter-environment)
@@ -123,11 +123,10 @@ Alternatively, open and run one of the Jupyter experiment notebooks in Jupyter L
 
 ### Experiment Workflow
 
-1. Choose or create a new experiment template in the [experiments/templates/](experiments/templates/) directory
-2. Copy the template experiment from [experiments/template.py](experiments/templates/__init__.py) into the directory
-3. Customize the default experiment using the template
-4. Create a new Jupyter experiment notebook using the [notebooks/template.ipynb](experiments/notebooks/template.ipynb) experiment notebook template
-5. Execute your experiment, post-process and analyze the results, and create Plotly charts!
+1. Select a base experiment template from the [experiments/templates/](experiments/templates/) directory to start from. The template [example_analysis](experiments/templates/example_analysis) gives an example of extending the default experiment to override default State Variables and System Parameters.
+2. Create a new notebook in [experiments/notebooks/](experiments/notebooks/), using the [template.ipynb](experiments/notebooks/template.ipynb) notebook as a guide, and import the experiment template.
+3. Customize the experiment template for your specific analysis.
+4. Execute your experiment, post-process and analyze the results, and create Plotly charts!
 
 ## Development
 
