@@ -9,7 +9,7 @@ A modular dynamical systems model of Ethereum's validator economics, implemented
 * [Model Features](#model-features)
 * [Directory Structure](#directory-structure)
 * [Model Architecture](#model-architecture)
-* [Experiments](#simulation-experiments)
+* [Experiments](#experiments)
 * [Development](#development)
 * [Tests](#tests)
 * [Jupyter Environment](#jupyter-environment)
@@ -24,7 +24,7 @@ A modular dynamical systems model of Ethereum's validator economics, implemented
 
 This open-source model has been developed in collaboration with the Ethereum Robust Incentives Group, funded by the Ethereum Foundation Eth2 Staking Community Grants program. While originally scoped with purely modeling-educational intent as part of the cadCAD Edu online course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum)", it has evolved to become a highly versatile, customizable and extensible research tool, and includes a list of [model extension ideas](#roadmap). The model is focused on epoch- and population-level Ethereum validator economics across different deployment types and - at least in its initial setup - abstracts from slot- and agent-level dynamics. Please see [model assumptions](assumptions.md) for further context.
 
-## Model features
+## Model Features
 
 * Configurable to reflect protocol behavior at different points in time of the development roadmap (referred to as "upgrade stages"):
   * post Beacon Chain launch, pre EIP1559, pre PoS (validators receive PoS incentives, EIP1559 disabled, and PoW still in operation)
@@ -123,11 +123,10 @@ Alternatively, open and run one of the Jupyter experiment notebooks in Jupyter L
 
 ### Experiment Workflow
 
-1. Choose or create a new experiment template in the [experiments/templates/](experiments/templates/) directory
-2. Copy the template experiment from [experiments/template.py](experiments/templates/__init__.py) into the directory
-3. Customize the default experiment using the template
-4. Create a new Jupyter experiment notebook using the [notebooks/template.ipynb](experiments/notebooks/template.ipynb) experiment notebook template
-5. Execute your experiment, post-process and analyze the results, and create Plotly charts!
+1. Select a base experiment template from the [experiments/templates/](experiments/templates/) directory to start from. The template [example_analysis.py](experiments/templates/example_analysis.py) gives an example of extending the default experiment to override default State Variables and System Parameters.
+2. Create a new notebook in [experiments/notebooks/](experiments/notebooks/), using the [template.ipynb](experiments/notebooks/template.ipynb) notebook as a guide, and import the experiment from the experiment template.
+3. Customize the experiment for your specific analysis (see the [experiments/notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) notebook as a guide).
+4. Execute your experiment, post-process and analyze the results, and create Plotly charts!
 
 ## Development
 

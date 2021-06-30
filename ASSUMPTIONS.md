@@ -13,7 +13,6 @@ While the model implements the official Ethereum Specification wherever possible
     * [Participation rate](#participation-rate)
 * [Epoch level granularity](#epoch-level-granularity)
 
-
 ## Validator environment assumptions
 
 The model supports the simulation of validator economics across different "validator environments" to account for the different deployment setups validators are using to access the network, each with slightly different economics. 
@@ -30,7 +29,7 @@ By default, the model implements the 7 validators environment categories and ass
 - Setup: Validator running his node on a cloud service
 - Economics: Validator receives full revenue yield and carries cost of cloud service
 - Example: AWS
-3. **Validate via a pool Staking-as-a-Service provider ("Pool-Staas")** - TODO: Clearly describe 3 vs 4 vs. 5
+3. **Validate via a pool Staking-as-a-Service provider ("Pool-StaaS")** - TODO: Clearly describe 3 vs 4 vs. 5
 - Setup: TODO 
 - Economics: TODO
 - Example: TODO
@@ -38,15 +37,15 @@ By default, the model implements the 7 validators environment categories and ass
 - Setup: TODO 
 - Economics: TODO
 - Example: TODO
-5. **Validate via a pool Cloud providers ("Pool-Cloud")**- TODO: Clearly describe 3 vs 4
+5. **Validate via a pool Cloud provider ("Pool-Cloud")**- TODO: Clearly describe 3 vs 4
 - Setup: TODO 
 - Economics: TODO
 - Example: TODO
-6. **Validate via a custodial Staking-as-a-Service provider** ("StaaS-Full")
+6. **Validate via a custodial Staking-as-a-Service provider ("StaaS-Full")**
 - Setup: TODO 
 - Economics: TODO
 - Example: TODO
-7. **Validate via a non-custodial Staking-as-a-Service provider** ("StaaS-Self-custoried")
+7. **Validate via a non-custodial Staking-as-a-Service provider ("StaaS-Self-custodied")**
 - Setup: TODO 
 - Economics: TODO
 - Example: TODO
@@ -83,11 +82,17 @@ Whereas we arguably expect better uptime for some validator environments than ot
 
 ### Average Uptime
 
-By default, the model assumes... (TODO: ADD)
+By default, the model assumes an average of 98% uptime.
+
+In reality this value has varied between lows of 95% and highs of 99.7% with an average of approximately 98%.
+
+We capture the average uptime using the `validator_uptime_process` System Parameter - a function that returns the average uptime, which allows us to create stochastic or time-dependent uptime processes.
 
 ### Frequency of Slashing Events
 
-By default, the model assumes...  (TODO: ADD)
+By default, the model assumes 1 slashing event every 1000 epochs (~= 3 hours).
+
+As more statistical data is collected about slashing in different validator environments, this assumption could be updated.
 
 ### Participation rate
 
@@ -95,11 +100,8 @@ The model assumes that validators are either online and operating perfectly, or 
 
 In it's initial version, the model does not model Ethereum's inactivity leak mechanism. We assume a participation of more than 2/3 at all times. We assert this requirement in the `policy_validators(...)` Policy Function.
 
-
 ## Epoch-level granularity
 
 Unless specified otherwise, all State Variables, System Metrics, and System Parameters are time-dependent and calculated at epoch level granularity. For ease of notation, units of time will be assumed implicitly. In the model implementation, calculations can be aggregated across epochs where necessary - for example for performance reasons.
 
 By default calculations will be aggregated across 1 day in epochs (~= 225 epochs), using the delta-time or `dt` parameter - the simulation results will have the same aggregation i.e. State Variables will be per-day, assuming `dt = 225`.
-
-
