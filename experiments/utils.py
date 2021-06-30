@@ -1,6 +1,11 @@
 import itertools
 import types as types
 import collections
+import inspect
+
+from IPython.display import Code
+from pygments.formatters import HtmlFormatter
+from IPython.core.display import HTML
 
 
 def generate_cartesion_product(sweeps):
@@ -39,3 +44,10 @@ def get_simulation_hash(sim):
     to_hash = (initial_state, param_keys, param_values, timesteps, runs)
 
     return hash(to_hash)
+
+
+def inspect_module(module):
+    formatter = HtmlFormatter()
+    display(HTML(f'<style>{formatter.get_style_defs(".highlight")}</style>'))
+
+    return Code(inspect.getsource(module), language='python')

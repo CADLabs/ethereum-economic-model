@@ -4,17 +4,10 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from ipywidgets import widgets
 
-pd.options.plotting.backend = "plotly"
-
-import inspect
-from IPython.display import Code
-
-from pygments.formatters import HtmlFormatter
-from IPython.core.display import HTML
-
 from model.system_parameters import parameters, validator_environments
-
 from experiments.notebooks.plotly_theme import cadlabs_colors
+
+pd.options.plotting.backend = "plotly"
 
 
 legend_state_variable_name_mapping = {
@@ -42,13 +35,6 @@ axis_state_variable_name_mapping = {
     'eth_staked': 'ETH Staked (ETH)',
     'eth_supply': 'ETH Supply (ETH)',
 }
-
-
-def inspect_module(module):
-    formatter = HtmlFormatter()
-    display(HTML(f'<style>{formatter.get_style_defs(".highlight")}</style>'))
-
-    return Code(inspect.getsource(module), language='python')
 
 
 def update_legend_names(fig, name_mapping=legend_state_variable_name_mapping):
