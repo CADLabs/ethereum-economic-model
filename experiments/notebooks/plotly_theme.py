@@ -1,6 +1,6 @@
 import plotly.graph_objects as go
 import plotly.io as pio
-import sys
+
 
 cadlabs_colors = [[0,'#1AD5A0'],[0.33,'#30B4F1'],[0.66,'#D03DD2'],[1.0,'#F76746']]
 cadlabs_colors_r = [[0,'#F76746'],[0.33,'#D03DD2'],[0.66,'#30B4F1'],[1.0,'#1AD5A0']]
