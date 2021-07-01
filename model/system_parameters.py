@@ -319,7 +319,7 @@ class Parameters:
 
     # Validator parameters
     validator_uptime_process: List[Percentage] = default(
-        [lambda _run, _timestep: max(0.98, 2/3)]
+        [lambda _run, _timestep: max(0.98, 2 / 3)]
     )
     """
     The combination of validator internet, power, and technical uptime, as a percentage.
