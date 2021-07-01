@@ -7,6 +7,17 @@ from IPython.display import Code
 from pygments.formatters import HtmlFormatter
 from IPython.core.display import HTML
 
+import numpy as np
+
+
+def rng_generator(*args):
+    global master_seed_sequence
+    if args:
+        master_rng = np.random.default_rng(args[0])
+        master_seed_sequence = master_rng.bit_generator._seed_seq
+    else:
+        return np.random.default_rng(master_seed_sequence.spawn(1)[0])
+        
 
 def generate_cartesian_product(sweeps):
     """Generates a parameter sweep using a cartesian product of System Parameter dictionary

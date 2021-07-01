@@ -21,3 +21,8 @@ sys.path.append("../../..")
 
 # Configure Pandas to raise for chained assignment, rather than warn, so that we can fix the issue!
 pd.options.mode.chained_assignment = 'raise'
+
+# Initialize random seed generator
+from experiments.utils import rng_generator
+seed = 1234
+rng_generator(seed)
