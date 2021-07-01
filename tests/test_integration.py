@@ -1,11 +1,9 @@
-import pytest
 import math
 from copy import deepcopy
 import pandas as pd
 from radcad import Simulation
 
 import experiments.default_experiment as base
-from model.system_parameters import parameters
 
 
 def test_dt():

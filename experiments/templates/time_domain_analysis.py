@@ -1,6 +1,5 @@
 import copy
 
-from model.types import Stage
 import model.constants as constants
 from model.stochastic_processes import create_stochastic_process_realizations
 from model.types import Stage
