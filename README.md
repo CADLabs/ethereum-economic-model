@@ -5,17 +5,16 @@
 A modular dynamical systems model of Ethereum's validator economics, implemented using the open-source Python library [radCAD](https://github.com/BenSchZA/radCAD), a next-gen implementation of [cadCAD](https://cadcad.org). Implements the official Ethereum [Altair](https://github.com/ethereum/eth2.0-specs#altair) spec updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release.
 
 ## Table of Contents
-(TODO: If you agree, let's arrange content of notebook as per TOC structure, and double-check correct wording and links)
 
 * [Introduction](#introduction)
-  * [Model Context](#context)
+  * [Model Context](#model-context)
   * [Model Features](#model-features)
-  * [Model Directory Structure](#model-directory-structure)
+  * [Directory Structure](#directory-structure)
   * [Model Architecture](#model-architecture)
   * [Model Assumptions](#model-assumptions)
-* [Environment Setup](#getting-started)
-* [Simulation Experiments](#simulation-experiments) (TODO: Complete after Notebook/Readme is completed)
-* [Model Extension Roadmap](#roadmap)
+* [Environment Setup](#environment-setup)
+* [Simulation Experiments](#simulation-experiments)
+* [Model Extension Roadmap](#model-extension-roadmap)
 * [Tests](#tests)
 * [Change Log](#change-log)
 * [Acknowledgements](#contributors)
@@ -25,7 +24,7 @@ A modular dynamical systems model of Ethereum's validator economics, implemented
 
 ## Introduction
 
-### Context
+### Model Context
 
 This open-source model has been developed in collaboration with the Ethereum Robust Incentives Group, funded by the Ethereum Foundation Eth2 Staking Community Grants program. While originally scoped with purely modeling-educational intent as part of the cadCAD Edu online course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum)", it has evolved to become a highly versatile, customizable and extensible research tool, and includes a list of [model extension ideas](#roadmap). The model is focused on epoch- and population-level Ethereum validator economics across different deployment types and - at least in its initial setup - abstracts from slot- and agent-level dynamics. Please see [model assumptions](ASSUMPTIONS.md) for further context.
 
@@ -40,9 +39,10 @@ This open-source model has been developed in collaboration with the Ethereum Rob
 * Modular model structure for convenient extension and modification. This allows different user groups to refactor the model for different purposes, rapidly test new incentive mechanisms, or to update the model as Ethereum implements new protocol improvements.
 * References to official [Eth2 specs](https://github.com/ethereum/eth2.0-specs) in Policy and State Update Function logic. This enables seamless onboarding of protocol developers or for the more advanced cadCAD user to dig into the underlying protocol design that inspired the logic.
 
-### Model Directory Structure
+### Directory Structure
+
 * [data/](data/): datasets used in model
-* [docs/](docs/): work-in-progress (TODO: finalize?) documentation of model software architecture (TODO: Finalize and keep in; our out?)
+* [docs/](docs/): various documentation including documentation of model software architecture using Python docstrings
 * [experiments/](experiments/): analysis notebooks, experiment workflow configuration and execution
 * [logs/](logs/): experiment log files
 * [model/](model/): model software architecture (structural and configuration modules)
@@ -80,13 +80,14 @@ The model is configured using several configuration modules in the [model/](mode
 | [utils.py](model/utils.py) | Misc. utility and helper functions |
 
 ## Simulation Experiments
-(TODO: Refine / contextualize this section after the Notebook/Readme has been completed)
 
 The [experiments/](experiments/) directory contains modules for configuring and executing simulation experiments, as well as performing post-processing of the results.
 
-The [experiments/notebooks/](experiments/notebooks/) directory contains several initial experiment notebooks we have created as a basis for analyzing the economics Ethereum validators are confronted with under a variety of scenarios. These notebooks and analyses don't aim to comprehensively illuminate the Ethereum protocol, but rather to answer the most salient questions and serve as inspiration for building out more customized analyses and model extensions.
+The [experiments/notebooks/](experiments/notebooks/) directory contains several initial experiment notebooks we have created as a basis for analyzing the economics Ethereum validators are confronted with under a variety of scenarios.
+These notebooks and analyses don't aim to comprehensively illuminate the Ethereum protocol, but rather to answer the most salient questions and serve as inspiration for building out more customized analyses and model extensions.
 
-The [experiments/templates/](experiments/templates/) directory contains different experiment templates which can be used to create custom experiment notebooks. See the [experiments/notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) notebook for a walk-through of how to configure and execute a new experiment.
+The [experiments/templates/](experiments/templates/) directory contains different experiment templates which can be used to create custom experiment notebooks.
+See the [experiments/notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) notebook for a walk-through of how to execute existing experiment notebooks, or configure and execute a new experiment.
 
 #### 1. Model Validation
 
@@ -107,18 +108,13 @@ The purpose of this notebook is to explore the returns validators can expect fro
 The purpose of this notebook is to explore the ETH issuance and resulting annualized inflation rate across different time horizons and adoption scenarios. 
 
 * Analysis 1: Inflation Rate and ETH Supply Over Time
-* Analysis 2: TBC, let's define once the previous notebook is done (TODO: Fill or delete)
-* Analysis 3: TBC, let's define once the previous notebook is done (TODO: Fill or delete)
+* Analysis 2: TODO - add remaining analyses
 
-### Assumptions
+### Model Assumptions
 
 We detail the model assumptions in the [ASSUMPTIONS.md](ASSUMPTIONS.md) document.
 
-### Terminology
-
-The economic and technical terminology used in this project can be found in the [TERMINOLOGY.md](TERMINOLOGY.md) document.
-
-## Getting Started
+## Environment Setup
 
 1. Clone or download the Git repository: `git clone https://github.com/cadCAD-edu/ethereum-model` or using GitHub Desktop
 2. If completing the cadCAD Edu Masterclass MOOC, check out the version `v1.0.0` tag: `git checkout tags/v1.0.0`
@@ -216,8 +212,7 @@ To create a new experiment:
 3. Customize the experiment for your specific analysis (see the [experiments/notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) notebook as a guide).
 4. Execute your experiment, post-process and analyze the results, and create Plotly charts!
 
-## Model Extension Rodamap 
-(TODO: Here we should link to the document Roger did, correct? The below content can be delete then)
+## Model Extension Roadmap 
 
 The following is a non-exhaustive list of possible model extensions and future features:
 * Implement the ability to simulate an inactivity leak scenario
