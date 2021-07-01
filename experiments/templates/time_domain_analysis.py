@@ -14,7 +14,7 @@ SIMULATION_TIME_MONTHS = 12 * 5  # number of months
 TIMESTEPS = constants.epochs_per_month * SIMULATION_TIME_MONTHS // DELTA_TIME
 
 # Generate stochastic process realizations
-eth_price_samples = create_stochastic_process_realizations("eth_price_samples")
+eth_price_samples = create_stochastic_process_realizations("eth_price_samples", timesteps=TIMESTEPS, dt=DELTA_TIME)
 
 parameter_overrides = {
     "stage": [Stage.ALL],

@@ -1,5 +1,4 @@
 import sys
-import os
 import pandas as pd
 from IPython import get_ipython
 
@@ -24,3 +23,8 @@ pd.options.mode.chained_assignment = 'raise'
 
 # Set plotly as the default plotting backend for pandas
 pd.options.plotting.backend = "plotly"
+
+# Initialize RNG seed sequence
+from experiments.utils import rng_generator
+seed = 1
+rng_generator(seed)

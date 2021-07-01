@@ -54,7 +54,7 @@ def create_stochastic_process_realizations(
     process,
     timesteps=simulation.TIMESTEPS,
     dt=simulation.DELTA_TIME,
-    runs=simulation.MONTE_CARLO_RUNS,
+    runs=5,
 ):
     """Create stochastic process realizations
     Using the stochastic processes defined in `processes` module, create random number generator (RNG) seeds,

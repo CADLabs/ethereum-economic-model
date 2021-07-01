@@ -6,11 +6,6 @@ The defaults are defined in their respective modules (e.g. `model/system_paramet
 
 from radcad import Model, Simulation, Experiment, Backend
 
-# Initialize RNG seed sequence for each experiment
-from experiments.utils import rng_generator
-
-seed = 1234
-rng_generator(seed)
 
 from model.system_parameters import parameters
 from model.state_variables import initial_state

@@ -9,19 +9,23 @@ from pygments.formatters import HtmlFormatter
 from IPython.core.display import HTML
 
 
-def rng_generator(*args):
+def rng_generator(master_seed=1):
     """Generate a sequence of Numpy RNG seeds
 
-    This method is initialized using a master seed with rng_generater(123),
-    then every time the method is called without arguments, it generates a new seed with a reproducible sequence.
+    This method can be initialized using a master seed with `rng_generator(123)`.
+    If it isn't initialized, the first call to `rng_generator()`
+    will both initialize the seed sequence and return an RNG with the first seed of the sequence.
+
+    Every time the method is called without arguments, it generates a new seed with a reproducible sequence.
 
     This is useful, for example, if you wanted to have a number of stochastic processes
     with unique seeds across different runs, but reproducible results across simulations.
     """
     global seed_sequence
-    if args:
-        rng = np.random.default_rng(args[0])
+    if 'seed_sequence' not in globals():
+        rng = np.random.default_rng(master_seed)
         seed_sequence = rng.bit_generator._seed_seq
+        return np.random.default_rng(seed_sequence.spawn(1)[0])
     else:
         return np.random.default_rng(seed_sequence.spawn(1)[0])
         

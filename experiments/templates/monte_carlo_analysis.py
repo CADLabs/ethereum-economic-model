@@ -14,9 +14,9 @@ TIMESTEPS = constants.epochs_per_month * SIMULATION_TIME_MONTHS // DELTA_TIME
 
 # Generate stochastic process realizations
 MONTE_CARLO_RUNS = 5
-eth_price_samples = create_stochastic_process_realizations("eth_price_samples", runs=MONTE_CARLO_RUNS)
-validator_samples = create_stochastic_process_realizations("validator_samples", runs=MONTE_CARLO_RUNS)
-validator_uptime_samples = create_stochastic_process_realizations("validator_uptime_samples", runs=MONTE_CARLO_RUNS)
+eth_price_samples = create_stochastic_process_realizations("eth_price_samples", timesteps=TIMESTEPS, dt=DELTA_TIME, runs=MONTE_CARLO_RUNS)
+validator_samples = create_stochastic_process_realizations("validator_samples", timesteps=TIMESTEPS, dt=DELTA_TIME, runs=MONTE_CARLO_RUNS)
+validator_uptime_samples = create_stochastic_process_realizations("validator_uptime_samples", timesteps=TIMESTEPS, dt=DELTA_TIME, runs=MONTE_CARLO_RUNS)
 
 
 parameter_overrides = {
