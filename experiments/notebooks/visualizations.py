@@ -7,6 +7,7 @@ from ipywidgets import widgets
 from model.system_parameters import parameters, validator_environments
 from experiments.notebooks.plotly_theme import cadlabs_colors
 
+# Set plotly as the default plotting backend for pandas
 pd.options.plotting.backend = "plotly"
 
 
