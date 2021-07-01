@@ -37,10 +37,14 @@ serve-docs:
 	gunicorn -w 4 -b 127.0.0.1:5000 docs.server:app
 
 execute-notebooks:
+	rm experiments/notebooks/*.nbconvert.* || true
 	jupyter nbconvert --ExecutePreprocessor.timeout=-1 --ExecutePreprocessor.kernel_name=python-cadlabs-eth-model --execute --to notebook experiments/notebooks/*.ipynb
+	rm experiments/notebooks/*.nbconvert.* || true
 
 update-notebooks:
+	rm experiments/notebooks/*.nbconvert.* || true
 	jupyter nbconvert --ExecutePreprocessor.timeout=-1 --ExecutePreprocessor.kernel_name=python-cadlabs-eth-model --execute --to notebook --inplace experiments/notebooks/*.ipynb
+	rm experiments/notebooks/*.nbconvert.* || true
 
 clear-notebook-outputs:
 	jupyter nbconvert --clear-output --inplace experiments/notebooks/*.ipynb
