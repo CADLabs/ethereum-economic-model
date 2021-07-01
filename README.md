@@ -197,20 +197,16 @@ If you receive the following error and you use Anaconda, try: `conda install -c 
 
 ### Experiment Workflow
 
-The default experiment, [experiments/default_experiment.py](experiments/default_experiment.py), is an experiment that uses the default cadCAD System Parameters, Initial State, and State Update Blocks defined in the [models/](models/) directory.
+The default experiment, [experiments/default_experiment.py](experiments/default_experiment.py),
+is an experiment that uses the default cadCAD System Parameters, Initial State, and State Update Blocks defined in the [models/](models/) directory.
 
 To run the default experiment from the terminal, execute the `experiments.run` module:
 ```bash
 python3 -m experiments.run
 ```
 
-Alternatively, open and run one of the pre-existing Jupyter experiment notebooks in Jupyter Lab or Notebook.
-
-To create a new experiment:
-1. Select a base experiment template from the [experiments/templates/](experiments/templates/) directory to start from. The template [example_analysis.py](experiments/templates/example_analysis.py) gives an example of extending the default experiment to override default State Variables and System Parameters.
-2. Create a new notebook in [experiments/notebooks/](experiments/notebooks/), using the [template.ipynb](experiments/notebooks/template.ipynb) notebook as a guide, and import the experiment from the experiment template.
-3. Customize the experiment for your specific analysis (see the [experiments/notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) notebook as a guide).
-4. Execute your experiment, post-process and analyze the results, and create Plotly charts!
+Alternatively, open and run one of the pre-existing Jupyter experiment notebooks in Jupyter Lab or Notebook,
+following the [experiments/notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) notebook as a guide.
 
 ## Model Extension Roadmap 
 
