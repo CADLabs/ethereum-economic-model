@@ -56,8 +56,16 @@ def create_stochastic_process_realizations(
     Using the stochastic processes defined in `processes` module, create random number generator (RNG) seeds,
     and use RNG to pre-generate samples for number of simulation timesteps.
     """
+    
+     # Create Random Number Generator (RNG) with a seed from which child seeds can be generated for range of runs and sub processes.
+    
+    master_seed=1234
+    master_rng = np.random.default_rng(master_seed)
+    master_seed_sequence = master_rng.bit_generator._seed_seq
+    
+         
     # Create Random Number Generator (RNG) with a seed for range of runs
-    rngs = [np.random.default_rng(seed) for seed in range(runs)]
+    rngs = [np.random.default_rng(master_seed_sequence.spawn(1)[0]) for _ in range(runs)]
 
     eth_price_samples = [
         create_eth_price_process(timesteps=timesteps, dt=dt, rng=rng) for rng in rngs
