@@ -10,7 +10,6 @@ TODO: if agreed, move sections into introduction, possibly only link to top-leve
 * [Getting Started](#getting-started)
 * [Tests](#tests)
 * [Change Log](#change-log)
-* [Contributors](#contributors)
 * [Acknowledgements](#contributors)
 * [License](#license)
 
@@ -235,12 +234,11 @@ The following is a non-exhaustive list of possible model extensions and future f
 
 See [CHANGELOG.md](CHANGELOG.md) for notable changes and versions.
 
-## Contributors
+## Acknowledgements
 
 See [CONTRIBUTORS.md](CONTRIBUTORS.md) for contributions to this project repo.
 
-## Acknowledgements
-
+Special thanks goes to:
 * Ethereum 2.0 Economic Review. July 16, 2020. "An Analysis of Ethereum’s Proof of Stake Incentive Model". By Tanner Hoban and Thomas Borgers. For the extensive research that inspired the development of our model and the assumptions we adopted.
 
 ## License
