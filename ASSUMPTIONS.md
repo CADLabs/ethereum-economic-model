@@ -1,61 +1,107 @@
 # Model Assumptions
 
-## 0. Base assumptions adopted from Hoban/Borger's Ethereum 2.0 Economic Model
+While the model implements the official Ethereum Specification wherever possible - see the [README](README.md) for release version - and allows for the computational simulation of many different assumption scenarios, the model does rest on several validator-level assumptions by default. These validator-level assumptions are mostly taken from the well-known [Hoban/Borgers Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). The underlying desk and survey research is very extensive. We adapted some of these assumptions to reflect the evolution of the Ethereum protocol (e.g., Altair updates), and added new ones due to the nature of our dynamcial systems modeling paradigm (e.g., time-dependent, dynamic variables). The [Experiment Notebook: Model Validation](experiments\notebooks\1_model_validation.ipynb) validates selected _outputs_ of the CADLabs model against the Hoban/Borger model to allow for efficienty sanity checks. 
 
-The base assumptions are adopted from the Hoban/Borger's "Ethereum 2.0 Economic Model". Due to the Altair updates since their model was released, and the state-space representation of our model, some of these assumptions were updated or adapted where necessary.
+* [Validator environment assumptions](#validator-environment-assumptions)
+    * [Validator environment categories and cost structures](#validator-environment-categories-and-cost-structures)
+    * [Validator environment relative weights](#validator-environment-relative-weights)
+    * [Validator environment equal slashing assumption](#validator-environment-equal-slashing-assumption)
+    * [Validator environment equal uptime assumption](#validator-environment-equal-uptime-assumption)
+* [Validator performance assumptions](#validator-performance-assumptions)
+    * [Average uptime](#average-uptime)
+    * [Frequency of slashing events](#frequency-of-slashing-events)
+    * [Participation rate](#participation-rate)
+* [Epoch level granularity](#epoch-level-granularity)
 
-See Hoban/Borger's "Ethereum 2.0 Economic Review" section 6, "Model Walk Through" - "General Inputs and Assumptions", "Validator Cost Assumptions", and "Control Panel Assumptions".
+## Validator environment assumptions
 
-An extract from cadCAD Model Specification document:
-> As part of the cadCAD Masterclass online course, the to-be-built cadCAD model  serves an educational purpose first and foremost, and was scoped accordingly in the ESP application as an “extendable, open-source, minimum viable product (MVP), Ethereum validator economics cadCAD model replicating the core Ethereum validator yield dynamics based on assumptions in Hoban/Borger's well-known Ethereum 2.0 Economic Model. The term "minimum viable product" is understood to mean a model that is useful in the eyes of current and future Ethereum validators for simulating validator yield dynamics while making simplifying assumptions where that appears necessary and possible without prohibitive implications on yield dynamics.” We note this explicitly since this initial dynamical systems model will abstract from several Ethereum validator dynamics - notably any agent-level mechanisms/dynamics - potentially of interest for protocol analysis by scientific stakeholders.
+The model supports the simulation of validator economics across different "validator environments" to account for the different deployment setups validators are using to access the network, each with slightly different economics. 
 
-As per the scoping description above, and although our model will implement computational experiments with varying assumptions, we base the MVP model on survey and analysis based assumptions by Hoban/Borger’s across the following categories by default:
-* Validator environment assumptions
-    * Validator environment categories 
-    * Relative weight of validator environments
-    * Validator operational cost per validator environment
-* Validator performance assumptions
-    * Average validator uptime
-    * Frequency of slashing events
+### Validator environment categories and cost structures
 
-## 1. Validators act altruisticly
+By default, the model implements the 7 validators environment categories and associated cost structures as defined by 
+[Hoban/Borgers' Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). Below is a short charaterization of each environment. For the associated cost assumptions please refer to the tab "Cost of Validating" in [Hoban/Borger's model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE/edit#gid=1220504079).
 
-This is a validator economics model, and does not model security issues such as collusion, supermajority attacks, etc. Validators act altruistically, for the good of the network.
+1. **Run own hardware validator ("DYI-Hardware")**
+- Setup: Validator running his own hardware
+- Economics: Validator receives full revenue yield and carries full hardware, electricity and bandwith cost
+2. **Run own cloud validator ("DYI-Cloud")**
+- Setup: Validator running his node on a cloud service
+- Economics: Validator receives full revenue yield and carries cost of cloud service
+- Example: AWS
+3. **Validate via a pool Staking-as-a-Service provider ("Pool-StaaS")** - TODO: Clearly describe 3 vs 4 vs. 5
+- Setup: TODO 
+- Economics: TODO
+- Example: TODO
+4. **Validate via a pool hardware service provider ("Pool-Hardware")** - TODO: Clearly describe 3 vs 4 vs. 5
+- Setup: TODO 
+- Economics: TODO
+- Example: TODO
+5. **Validate via a pool Cloud provider ("Pool-Cloud")**- TODO: Clearly describe 3 vs 4
+- Setup: TODO 
+- Economics: TODO
+- Example: TODO
+6. **Validate via a custodial Staking-as-a-Service provider ("StaaS-Full")**
+- Setup: TODO 
+- Economics: TODO
+- Example: TODO
+7. **Validate via a non-custodial Staking-as-a-Service provider ("StaaS-Self-custodied")**
+- Setup: TODO 
+- Economics: TODO
+- Example: TODO
 
-That being said, there is an abstraction for slashing with a simple process of x number of slashing events per 1000 epochs.
+The model allows for the creation of custom validator environment and/or cost-structures. (TODO: Validate how? Describe more?)
 
-## 2. Validators have imperfect participation
+### Validator environment relative weights
 
-We assume that not all online validators carry out their duties perfectly.
+By default, the model assumes the following relative weights for the calculation of average validator revenue and profit yields, as defined by 
+[Hoban/Borgers' Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). These values could change substantially and the user is encouraged to experiment with other assumptions. 
 
-We do not make any assumptions about why aggregators act imperfectly, but rather we’ll assume validators are online and operating perfectly, or offline and not fulfilling their duties.
+1. **Run own hardware validator ("DYI-Hardware")**: 37%
+2. **Run own cloud validator ("DYI-Cloud")**: 13%
+3. **Validate via a pool Staking-as-a-Service provider ("Pool-Staas")**: 27% - TODO: Clearly describe 3 vs 4 vs. 5
+4. **Validate via a pool hardware service provider ("Pool-Hardware")**: 5% - TODO: Clearly describe 3 vs 4 vs. 5
+5. **Validate via a pool Cloud providers ("Pool-Cloud")**: 2% TODO: Clearly describe 3 vs 4
+6. **Validate via a custodial Staking-as-a-Service provider**: 8% ("StaaS-Full")
+7. **Validate via a non-custodial Staking-as-a-Service provider**: 8% ("StaaS-Self-custoried")
 
-Those validators that are offline are penalized for not attesting to the source, target, and head.
+### Validator Environment Equal Slashing Assumption
 
-We capture this participation rate using the `validator_uptime_process` System Parameter, which returns the percentage of online validators.
+Whereas in reality slashing events have occurred more often in some validator environments (e.g. institutional players getting their setup wrong and double-signing), we make the simplifying assumption that slashing events are applied equally across all validator environment types.
 
-## 3. At most 1/3 of validators can be offline at any time i.e. the inactivity leak threshold is never reached
+This assumption is adequate for calculations of validator economics under steady-state conditions, but might fail if slashing events increase significantly for a specific validator environment type, or if the network is under attack by a specific validator environment type.
 
-## 4. Epoch level granularity
+See https://youtu.be/iaAEGs1DMgQ?t=574 for additional contexts. 
+
+### Validator Environment Equal Uptime Assumption
+
+Whereas we arguably expect better uptime for some validator environments than others (e.g. better for cloud environments than local hardware environments), we make the simplifying assumption that the same validator uptime is applied to all validator environments. Once respective data becomes available over time, this assumption could be dropped in future model iterations.
+
+
+## Validator performance assumptions
+
+### Average Uptime
+
+By default, the model assumes an average of 98% uptime.
+
+In reality this value has varied between lows of 95% and highs of 99.7% with an average of approximately 98%.
+
+We capture the average uptime using the `validator_uptime_process` System Parameter - a function that returns the average uptime, which allows us to create stochastic or time-dependent uptime processes.
+
+### Frequency of Slashing Events
+
+By default, the model assumes 1 slashing event every 1000 epochs (~= 3 hours).
+
+As more statistical data is collected about slashing in different validator environments, this assumption could be updated.
+
+### Participation rate
+
+The model assumes that validators are either online and operating perfectly, or offline and not fulfilling their duties. Offline validators are penalized for not attesting to the source, target, and head. We do not model validators that fullfil some of their duties, and not other duties. We capture this participation rate (percentage of online validators) using the `validator_uptime_process` System Parameter.
+
+In it's initial version, the model does not model Ethereum's inactivity leak mechanism. We assume a participation of more than 2/3 at all times. We assert this requirement in the `policy_validators(...)` Policy Function.
+
+## Epoch-level granularity
 
 Unless specified otherwise, all State Variables, System Metrics, and System Parameters are time-dependent and calculated at epoch level granularity. For ease of notation, units of time will be assumed implicitly. In the model implementation, calculations can be aggregated across epochs where necessary - for example for performance reasons.
 
 By default calculations will be aggregated across 1 day in epochs (~= 225 epochs), using the delta-time or `dt` parameter - the simulation results will have the same aggregation i.e. State Variables will be per-day, assuming `dt = 225`.
-
-## 5. Slashing events are applied equally to all validator environments
-
-Whereas in reality the majority of slashing events have been due to institutional validators having too complex of a setup (StaaS for example), and as a result double-signing, we make the simplifying assumption that slashing events are applied equally to all validator environment types.
-
-This assumption is adequate for calculations of validator economics under steady-state conditions, but might fail if slashing events increase significantly for a specific validator environment type, or if the network is under attack by a specific validator environment type.
-
-See https://youtu.be/iaAEGs1DMgQ?t=574 for a good answer to the question of slashing for specific validator environments.
-
-## 6. The same validator uptime is assumed for all validator environments
-
-Whereas we could perhaps expect better uptime for cloud environments than local hardware environments, we do not have the necessary data to make these assumptions, and so we make the simplifying assumption that the same validator uptime is applied to all validator environments.
-
-## 7. Validator environment costs are adopted from the Hoban/Borgers Ethereum 2.0 Economic Model
-
-By analysing the expected costs of validating and infrastructure costs globally, Hoban/Borgers made certain assumptions about validator environment operational costs. These assumptions are listed in their spreadsheet model and report.
-
-For example, they estimate 1 machine per 1000 validators, and global electricity and bandwidth averages are based on Ethereum node distribution.

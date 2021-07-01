@@ -1,10 +1,15 @@
 import itertools
 import types as types
 import collections
+import inspect
+
+from IPython.display import Code
+from pygments.formatters import HtmlFormatter
+from IPython.core.display import HTML
 
 
-def generate_cartesion_product(sweeps):
-    """Generates a parameter sweep using a cartesion product of System Parameter dictionary
+def generate_cartesian_product(sweeps):
+    """Generates a parameter sweep using a cartesian product of System Parameter dictionary
 
         Args:
             sweeps (Dict[str, List]): A cadCAD System Parameter dictionary to sweep
@@ -39,3 +44,12 @@ def get_simulation_hash(sim):
     to_hash = (initial_state, param_keys, param_values, timesteps, runs)
 
     return hash(to_hash)
+
+
+def inspect_module(module):
+    """Inspect a Python module and return the syntax highlighted code
+    """
+    formatter = HtmlFormatter()
+    display(HTML(f'<style>{formatter.get_style_defs(".highlight")}</style>'))
+
+    return Code(inspect.getsource(module), language='python')

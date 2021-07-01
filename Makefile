@@ -13,6 +13,11 @@ start-lab:
 	jupyter lab
 
 test:
+	# Check formatting
+	python -m black --check --diff model
+	# Check docstrings
+	pylint --disable=all --enable=missing-docstring model
+	# Run Pytest tests
 	python3 -m pytest tests
 
 build-docs: docs-pdoc docs-jupyter-book

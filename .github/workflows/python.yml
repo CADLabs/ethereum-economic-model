@@ -28,16 +28,9 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Check formatting
-      run: |
-        python -m black --check --diff model
-    - name: Check docstrings
-      run: |
-        pylint --disable=all --enable=missing-docstring model
-    - name: Test notebooks
+    - name: Set up Jupyter kernel
       run: |
         make kernel
-        make execute-notebooks
-    - name: Test with pytest
+    - name: Execute tests
       run: |
-        PYTHONPATH=. pytest
+        PYTHONPATH=. make test
