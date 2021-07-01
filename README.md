@@ -20,7 +20,7 @@ TODO: if agreed, move sections into introduction, possibly only link to top-leve
 
 ### Context
 
-This open-source model has been developed in collaboration with the Ethereum Robust Incentives Group, funded by the Ethereum Foundation Eth2 Staking Community Grants program. While originally scoped with purely modeling-educational intent as part of the cadCAD Edu online course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum)", it has evolved to become a highly versatile, customizable and extensible research tool, and includes a list of [model extension ideas](#roadmap). The model is focused on epoch- and population-level Ethereum validator economics across different deployment types and - at least in its initial setup - abstracts from slot- and agent-level dynamics. Please see [model assumptions](assumptions.md) for further context.
+This open-source model has been developed in collaboration with the Ethereum Robust Incentives Group, funded by the Ethereum Foundation Eth2 Staking Community Grants program. While originally scoped with purely modeling-educational intent as part of the cadCAD Edu online course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum)", it has evolved to become a highly versatile, customizable and extensible research tool, and includes a list of [model extension ideas](#roadmap). The model is focused on epoch- and population-level Ethereum validator economics across different deployment types and - at least in its initial setup - abstracts from slot- and agent-level dynamics. Please see [model assumptions](ASSUMPTIONS.md) for further context.
 
 ### Model Features
 
@@ -118,19 +118,22 @@ The economic and technical terminology used in this project can be found in the 
 
 ## Getting Started
 
-To set up your Python and Jupyter development environment, we cover two options:
-* [Setup](#setup): Set up a custom development environment using Python 3 and Jupyter
-* [Docker](#docker): Use the prebuilt Docker image
+1. Clone or download the Git repository: `git clone https://github.com/cadCAD-edu/ethereum-model` or using GitHub Desktop
+2. If completing the cadCAD Edu Masterclass MOOC, check out the version `v1.0.0` tag: `git checkout tags/v1.0.0`
+3. Set up your development environment using the [Setup](#setup) section
+4. Follow the [Experiment Workflow](#experiment-workflow) section to execute your first experiment notebook!
 
-We also include [prerequisites](#prerequisites) and [known setup issues](#known-issues).
+### Setup
 
-### Prerequisites
+To set up your Python development environment, we cover two options:
+* [Python Development Environment](#python-development-environment): Set up a custom development environment using Python 3 and Jupyter
+* [Docker Development Environment](#docker-development-environment): Use the prebuilt Docker image
+
+#### Python Development Environment
 
 The following are prerequisites you'll need before completing the setup steps:
 * Python: tested with versions 3.7, 3.8, 3.9
 * NodeJS might be needed if using Plotly with Jupyter Lab (works out the box when using Anaconda/Conda package manager)
-
-### Setup
 
 First, set up a Python 3 [virtualenv](https://docs.python.org/3/library/venv.html) development environment:
 ```bash
@@ -170,7 +173,7 @@ make setup
 make start-lab
 ```
 
-#### Docker
+#### Docker Development Environment
 
 If you'd rather use Docker, there is a prebuilt Docker image you can use to set up a Jupyter Lab development environment with all the dependencies you need.
 
