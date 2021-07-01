@@ -21,3 +21,6 @@ sys.path.append("../../..")
 
 # Configure Pandas to raise for chained assignment, rather than warn, so that we can fix the issue!
 pd.options.mode.chained_assignment = 'raise'
+
+# Set plotly as the default plotting backend for pandas
+pd.options.plotting.backend = "plotly"
