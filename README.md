@@ -7,11 +7,6 @@ A modular dynamical systems model of Ethereum's validator economics, implemented
 ## Table of Contents
 TODO: if agreed, move sections into introduction, possibly only link to top-level
 * [Introduction](#introduction)
-  * [Context](#context)
-  * [Model Features](#model-features)
-  * [Directory Structure](#directory-structure)
-  * [Model Architecture](#model-architecture)
-  * [Experiments](#experiments)
 * [Getting Started](#getting-started)
 * [Tests](#tests)
 * [Change Log](#change-log)
@@ -21,11 +16,13 @@ TODO: if agreed, move sections into introduction, possibly only link to top-leve
 
 ---
 
-## Context
+## Introduction
+
+### Context
 
 This open-source model has been developed in collaboration with the Ethereum Robust Incentives Group, funded by the Ethereum Foundation Eth2 Staking Community Grants program. While originally scoped with purely modeling-educational intent as part of the cadCAD Edu online course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum)", it has evolved to become a highly versatile, customizable and extensible research tool, and includes a list of [model extension ideas](#roadmap). The model is focused on epoch- and population-level Ethereum validator economics across different deployment types and - at least in its initial setup - abstracts from slot- and agent-level dynamics. Please see [model assumptions](assumptions.md) for further context.
 
-## Model Features
+### Model Features
 
 * Configurable to reflect protocol behavior at different points in time of the development roadmap (referred to as "upgrade stages"):
   * post Beacon Chain launch, pre EIP1559, pre PoS (validators receive PoS incentives, EIP1559 disabled, and PoW still in operation)
@@ -36,7 +33,7 @@ This open-source model has been developed in collaboration with the Ethereum Rob
 * Modular model structure for convenient extension and modification. This allows different user groups to refactor the model for different purposes, rapidly test new incentive mechanisms, or to update the model as Ethereum implements new protocol improvements.
 * References to official [Eth2 specs](https://github.com/ethereum/eth2.0-specs) in Policy and State Update Function logic. This enables seamless onboarding of protocol developers or for the more advanced cadCAD user to dig into the underlying protocol design that inspired the logic.
 
-## Model Directory Structure
+### Model Directory Structure
 * [data/](data/): datasets used in model
 * [docs/](docs/): work-in-progress (TODO: finalize?) documentation of model software architecture (TODO: Finalize and keep in; our out?)
 * [experiments/](experiments/): analysis notebooks, experiment workflow configuration and execution
@@ -44,11 +41,11 @@ This open-source model has been developed in collaboration with the Ethereum Rob
 * [model/](model/): model software architecture (structural and configuration modules)
 * [tests/](tests/): unit and integration tests for model and notebooks
 
-## Model Architecture
+### Model Architecture
 
 The [model/](model/) directory contains the model's software architecture in the form of two categories of modules: structural modules and configuration modules.
 
-### Structural Modules
+#### Structural Modules
 
 The model is composed of several structural modules in the [model/parts/](model/parts/) directory:
 
@@ -60,7 +57,7 @@ The model is composed of several structural modules in the [model/parts/](model/
 | [validators.py](model/parts/validators.py) | Validator processes such as validator activation, staking, uptime |
 | [utils/ethereum_spec.py](model/parts/utils/ethereum_spec.py) | Relevant extracts from the official Eth2 spec |
 
-### Configuration Modules
+#### Configuration Modules
 
 The model is configured using several configuration modules in the [model/](model/) directory:
 
@@ -75,7 +72,7 @@ The model is configured using several configuration modules in the [model/](mode
 | [types.py](model/types.py) | Various Python types used in the model, such as the `Stage` Enum and calculation units |
 | [utils.py](model/utils.py) | Misc. utility and helper functions |
 
-## Experiments
+### Experiments
 
 The [experiments/](experiments/) directory contains modules for configuring and executing simulation experiments, as well as performing post-processing of the results.
 
@@ -83,11 +80,11 @@ The [experiments/notebooks/](experiments/notebooks/) directory contains several 
 
 The [experiments/templates/](experiments/templates/) directory contains different experiment templates which can be used to create custom experiment notebooks. See the [experiments/notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) notebook for a walk-through of how to configure and execute a new experiment.
 
-### 1. Model Validation
+#### 1. Model Validation
 
 The purpose of this notebook is to recreate selected simulations from the widely acknowledged Hoban/Borgers Ethereum 2.0 Economic Model using the CADLabs model, and to compare the results. We suggest that the CADLabs model has a high degree of validity.
 
-### 2. Validator Revenue and Profit Yields (Validator-level Analysis)
+#### 2. Validator Revenue and Profit Yields (Validator-level Analysis)
 
 The purpose of this notebook is to explore the returns validators can expect from staking in the Ethereum protocol across different time horizons, adoption scenarios, ETH price scenarios and validator environments.
 
@@ -97,7 +94,7 @@ The purpose of this notebook is to explore the returns validators can expect fro
 * Analysis 4: Profit Yields Over ETH Staked vs. ETH Price (Yield Surface)
 * Analysis 5: Profit Yields By Validator Environment Over Time
 
-### 3. Network Issuance and Inflation Rate (Network-level Analysis)
+#### 3. Network Issuance and Inflation Rate (Network-level Analysis)
 
 The purpose of this notebook is to explore the ETH issuance and resulting annualized inflation rate across different time horizons and adoption scenarios. It includes a breakdown of issuance into reward types , the well-known "Ultrasound Monday" (peak ETH) analysis by Just Drake, and an analyis of the inflation impact of EIP1559. 
 
@@ -107,9 +104,17 @@ TODO: Draft analysis, below first cut
 * Analysis 2: TBC, let's define once the previous notebook is done
 * Analysis 3: TBC, let's define once the previous notebook is done
 
-### 4. Other Analysis
+#### 4. Other Analysis
 
 The purpose of this notebook is to provide inspiration for other analysis that the model supports. Most of these analyses are in a work-in-progress and marked as such. 
+
+### Assumptions
+
+We detail the model assumptions in the [ASSUMPTIONS.md](ASSUMPTIONS.md) document.
+
+### Terminology
+
+The economic and technical terminology used in this project can be found in the [TERMINOLOGY.md](TERMINOLOGY.md) document.
 
 ## Getting Started
 
