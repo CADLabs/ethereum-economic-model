@@ -34,9 +34,9 @@ from model.types import (
 )
 from model.utils import default
 
+
 # Create stochastic (random) process realizations
-stochastic_process_realizations = create_stochastic_process_realizations()
-eth_price_samples = stochastic_process_realizations["eth_price_samples"]
+eth_price_samples = create_stochastic_process_realizations("eth_price_samples")
 
 # Configure validator environment distribution
 validator_environments = [

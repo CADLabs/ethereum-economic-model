@@ -6,6 +6,7 @@ import numpy as np
 from stochastic import processes
 
 import model.simulation_configuration as simulation
+from experiments.utils import rng_generator
 
 
 def create_eth_price_process(
@@ -40,7 +41,9 @@ def create_validator_process(
 
     See https://stochastic.readthedocs.io/en/latest/continuous.html
     """
-    process = processes.continuous.PoissonProcess(rate=1 / 3, rng=rng)
+    process = processes.continuous.PoissonProcess(
+        rate=1 / validator_adoption_rate, rng=rng
+    )
     samples = process.sample(timesteps * dt + 1)
     samples = np.diff(samples)
     samples = [int(sample) for sample in samples]
@@ -48,6 +51,7 @@ def create_validator_process(
 
 
 def create_stochastic_process_realizations(
+    process,
     timesteps=simulation.TIMESTEPS,
     dt=simulation.DELTA_TIME,
     runs=simulation.MONTE_CARLO_RUNS,
@@ -56,21 +60,19 @@ def create_stochastic_process_realizations(
     Using the stochastic processes defined in `processes` module, create random number generator (RNG) seeds,
     and use RNG to pre-generate samples for number of simulation timesteps.
     """
-    # Create Random Number Generator (RNG) with a seed for range of runs
-    rngs = [np.random.default_rng(seed) for seed in range(runs)]
 
-    eth_price_samples = [
-        create_eth_price_process(timesteps=timesteps, dt=dt, rng=rng) for rng in rngs
-    ]
-    validator_samples = [
-        create_validator_process(timesteps=timesteps, dt=dt, rng=rng) for rng in rngs
-    ]
-    validator_uptime_samples = [
-        rng.uniform(0.96, 0.99, timesteps * dt + 1) for rng in rngs
-    ]
-
-    return {
-        "eth_price_samples": eth_price_samples,
-        "validator_samples": validator_samples,
-        "validator_uptime_samples": validator_uptime_samples,
+    switcher = {
+        "eth_price_samples": [
+            create_eth_price_process(timesteps=timesteps, dt=dt, rng=rng_generator())
+            for _ in range(runs)
+        ],
+        "validator_samples": [
+            create_validator_process(timesteps=timesteps, dt=dt, rng=rng_generator())
+            for _ in range(runs)
+        ],
+        "validator_uptime_samples": [
+            rng_generator().uniform(0.96, 0.99, timesteps * dt + 1) for _ in range(runs)
+        ],
     }
+
+    return switcher.get(process, "Invalid Process")

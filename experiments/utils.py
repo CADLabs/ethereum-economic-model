@@ -2,11 +2,29 @@ import itertools
 import types as types
 import collections
 import inspect
+import numpy as np
 
 from IPython.display import Code
 from pygments.formatters import HtmlFormatter
 from IPython.core.display import HTML
 
+
+def rng_generator(*args):
+    """Generate a sequence of Numpy RNG seeds
+
+    This method is initialized using a master seed with rng_generater(123),
+    then every time the method is called without arguments, it generates a new seed with a reproducible sequence.
+
+    This is useful, for example, if you wanted to have a number of stochastic processes
+    with unique seeds across different runs, but reproducible results across simulations.
+    """
+    global seed_sequence
+    if args:
+        rng = np.random.default_rng(args[0])
+        seed_sequence = rng.bit_generator._seed_seq
+    else:
+        return np.random.default_rng(seed_sequence.spawn(1)[0])
+        
 
 def generate_cartesian_product(sweeps):
     """Generates a parameter sweep using a cartesian product of System Parameter dictionary
