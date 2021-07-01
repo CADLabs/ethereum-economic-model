@@ -5,11 +5,18 @@
 A modular dynamical systems model of Ethereum's validator economics, implemented using the open-source Python library [radCAD](https://github.com/BenSchZA/radCAD), a next-gen implementation of [cadCAD](https://cadcad.org). Implements the official Ethereum [Altair](https://github.com/ethereum/eth2.0-specs#altair) spec updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release.
 
 ## Table of Contents
-TODO: if agreed, move sections into introduction, possibly only link to top-level
+(TODO: If you agree, let's arrange content of notebook as per TOC structure, and double-check correct wording and links)
+
 * [Introduction](#introduction)
-* [Getting Started](#getting-started)
+  * [Model Context](#context)
+  * [Model Features](#model-features)
+  * [Model Directory Structure](#model-directory-structure)
+  * [Model Architecture](#model-architecture)
+  * [Model Assumptions](#model-assumptions)
+* [Environment Setup](#getting-started)
+* [Simulation Experiments](#simulation-experiments) (TODO: Complete after Notebook/Readme is completed)
+* [Model Extension Roadmap](#roadmap)
 * [Tests](#tests)
-* [Roadmap](#roadmap)
 * [Change Log](#change-log)
 * [Acknowledgements](#contributors)
 * [License](#license)
@@ -72,7 +79,8 @@ The model is configured using several configuration modules in the [model/](mode
 | [types.py](model/types.py) | Various Python types used in the model, such as the `Stage` Enum and calculation units |
 | [utils.py](model/utils.py) | Misc. utility and helper functions |
 
-### Experiments
+## Simulation Experiments
+(TODO: Refine / contextualize this section after the Notebook/Readme has been completed)
 
 The [experiments/](experiments/) directory contains modules for configuring and executing simulation experiments, as well as performing post-processing of the results.
 
@@ -96,17 +104,11 @@ The purpose of this notebook is to explore the returns validators can expect fro
 
 #### 3. Network Issuance and Inflation Rate (Network-level Analysis)
 
-The purpose of this notebook is to explore the ETH issuance and resulting annualized inflation rate across different time horizons and adoption scenarios. It includes a breakdown of issuance into reward types , the well-known "Ultrasound Monday" (peak ETH) analysis by Just Drake, and an analyis of the inflation impact of EIP1559. 
+The purpose of this notebook is to explore the ETH issuance and resulting annualized inflation rate across different time horizons and adoption scenarios. 
 
-TODO: Draft analysis, below first cut
-
-* Analysis 1: TBC, let's define once the previous notebook is done
-* Analysis 2: TBC, let's define once the previous notebook is done
-* Analysis 3: TBC, let's define once the previous notebook is done
-
-#### 4. Other Analysis
-
-The purpose of this notebook is to provide inspiration for other analysis that the model supports. Most of these analyses are in a work-in-progress and marked as such. 
+* Analysis 1: Inflation Rate and ETH Supply Over Time
+* Analysis 2: TBC, let's define once the previous notebook is done (TODO: Fill or delete)
+* Analysis 3: TBC, let's define once the previous notebook is done (TODO: Fill or delete)
 
 ### Assumptions
 
@@ -214,6 +216,17 @@ To create a new experiment:
 3. Customize the experiment for your specific analysis (see the [experiments/notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) notebook as a guide).
 4. Execute your experiment, post-process and analyze the results, and create Plotly charts!
 
+## Model Extension Rodamap 
+(TODO: Here we should link to the document Roger did, correct? The below content can be delete then)
+
+The following is a non-exhaustive list of possible model extensions and future features:
+* Implement the ability to simulate an inactivity leak scenario
+* Implement a dynamic EIP1559 basefee with a feedback loop based on blockspace demand / network congestion
+* Backtest the model against historical data such as the ETH price, ETH staked to determine expected historical yields
+* Extend the model to cover future Ethereum upgrade stages after merge, such as sharding
+* Apply Hoban/Borgers security (cost of attack) and required rate of return (RSAVY) analysis to simulation results
+* ...
+
 ## Tests
 
 We use Pytest to test the `model` module code, as well as the notebooks.
@@ -223,16 +236,6 @@ To execute the Pytest tests:
 source venv/bin/activate
 python3 -m pytest tests
 ```
-
-## Roadmap
-
-The following is a non-exhaustive list of possible model extensions and future features:
-* Implement the ability to simulate an inactivity leak scenario
-* Implement a dynamic EIP1559 basefee with a feedback loop based on blockspace demand / network congestion
-* Backtest the model against historical data such as the ETH price, ETH staked to determine expected historical yields
-* Extend the model to cover future Ethereum upgrade stages after merge, such as sharding
-* Apply Hoban/Borgers security (cost of attack) and required rate of return (RSAVY) analysis to simulation results
-* ...
 
 ## Change Log
 
