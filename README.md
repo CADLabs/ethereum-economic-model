@@ -5,14 +5,15 @@
 A modular dynamical systems model of Ethereum's validator economics, implemented using the open-source Python library [radCAD](https://github.com/BenSchZA/radCAD), a next-gen implementation of [cadCAD](https://cadcad.org). Implements the official Ethereum [Altair](https://github.com/ethereum/eth2.0-specs#altair) spec updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release.
 
 ## Table of Contents
-* [Context](#context)
-* [Model Features](#model-features)
-* [Directory Structure](#directory-structure)
-* [Model Architecture](#model-architecture)
-* [Experiments](#experiments)
-* [Development](#development)
+TODO: if agreed, move sections into introduction, possibly only link to top-level
+* [Introduction](#introduction)
+  * [Context](#context)
+  * [Model Features](#model-features)
+  * [Directory Structure](#directory-structure)
+  * [Model Architecture](#model-architecture)
+  * [Experiments](#experiments)
+* [Getting Started](#getting-started)
 * [Tests](#tests)
-* [Jupyter Environment](#jupyter-environment)
 * [Change Log](#change-log)
 * [Contributors](#contributors)
 * [Acknowledgements](#contributors)
@@ -70,7 +71,7 @@ The model is configured using several configuration modules in the [model/](mode
 | [state_update_blocks.py](model/state_update_blocks.py) | cadCAD model state update block structure, composed of Policy and State Update Functions |
 | [state_variables.py](model/state_variables.py) | Model State Variable definition, configuration, and defaults |
 | [stochastic_processes.py](model/stochastic_processes.py) | Helper functions to generate stochastic environmental processes |
-| [system_parameters.py](model/system_parameters.py) | Model System Parameter definition, configuration, and defaults |
+| [system_parameters.py](model/__init__.py) | Model System Parameter definition, configuration, and defaults |
 | [types.py](model/types.py) | Various Python types used in the model, such as the `Stage` Enum and calculation units |
 | [utils.py](model/utils.py) | Misc. utility and helper functions |
 
@@ -110,111 +111,109 @@ TODO: Draft analysis, below first cut
 
 The purpose of this notebook is to provide inspiration for other analysis that the model supports. Most of these analyses are in a work-in-progress and marked as such. 
 
-### Experiment Execution
+## Getting Started
 
-The default experiment is an experiment that uses the default cadCAD System Parameters, Initial State, and State Update Blocks defined in the [models/](models/) directory.
+To set up your Python and Jupyter development environment, we cover two options:
+* [Setup](#setup): Set up a custom development environment using Python 3 and Jupyter
+* [Docker](#docker): Use the prebuilt Docker image
+
+We also include [prerequisites](#prerequisites) and [known setup issues](#known-issues).
+
+### Prerequisites
+
+The following are prerequisites you'll need before completing the setup steps:
+* Python: tested with versions 3.7, 3.8, 3.9
+* NodeJS might be needed if using Plotly with Jupyter Lab (works out the box when using Anaconda/Conda package manager)
+
+### Setup
+
+First, set up a Python 3 [virtualenv](https://docs.python.org/3/library/venv.html) development environment:
+```bash
+# Create a virtual environment using Python 3 venv module
+python3 -m venv venv
+# Activate virtual environment
+source venv/bin/activate
+```
+
+Make sure to activate the virtual environment before each of the following steps.
+
+Secondly, install the Python 3 dependencies using [Pip](https://packaging.python.org/tutorials/installing-packages/), from the [requirements.txt](requirements.txt) file, within your new virtual environment:
+```bash
+# Install Python 3 dependencies inside virtual environment
+pip install -r requirements.txt
+```
+
+To create a new Jupyter Kernel specifically for this environment, execute the following command:
+```bash
+python3 -m ipykernel install --user --name python-cadlabs-eth-model --display-name "Python (CADLabs Ethereum Model)"
+```
+
+You'll then be able to select the kernel with display name `Python (CADLabs Ethereum Model)` to use for your notebook from within Jupyter.
+
+To start Jupyter Notebook or Lab (see notes about issues with [using Plotly with Jupyter Lab](#known-issues)):
+```bash
+jupyter notebook
+# Or:
+jupyter lab
+```
+
+For more advanced Unix/macOS users, a [Makefile](Makefile) is also included for convenience and simply executes all the setup steps. For example to setup your environment and start Jupyter Lab:
+```bash
+# Setup environment
+make setup
+# Start Jupyter Lab
+make start-lab
+```
+
+#### Docker
+
+If you'd rather use Docker, there is a prebuilt Docker image you can use to set up a Jupyter Lab development environment with all the dependencies you need.
+
+See [CADLabs Jupyter Lab Environment](https://github.com/cadCAD-edu/jupyter-lab-environment)
+
+#### Known Issues
+
+###### Plotly doesn't display in Jupyter Lab
+
+To install and use Plotly with Jupyter Lab, you might need NodeJS installed to build Node dependencies, unless you're using Anaconda/Conda package manager to manage your environment. Alternatively, use Jupyter Notebook which works out the box with Plotly.
+
+See https://plotly.com/python/getting-started/
+
+You might need to install the following "lab extension": 
+```bash
+jupyter labextension install jupyterlab-plotly@4.14.3
+```
+
+###### Windows issues
+
+If you receive the following error and you use Anaconda, try: `conda install -c anaconda pywin32`
+> DLL load failed while importing win32api: The specified procedure could not be found.
+
+### Experiment Workflow
+
+The default experiment, [experiments/default_experiment.py](experiments/default_experiment.py), is an experiment that uses the default cadCAD System Parameters, Initial State, and State Update Blocks defined in the [models/](models/) directory.
 
 To run the default experiment from the terminal, execute the `experiments.run` module:
 ```bash
 python3 -m experiments.run
 ```
 
-Alternatively, open and run one of the Jupyter experiment notebooks in Jupyter Lab or Notebook.
+Alternatively, open and run one of the pre-existing Jupyter experiment notebooks in Jupyter Lab or Notebook.
 
-### Experiment Workflow
-
+To create a new experiment:
 1. Select a base experiment template from the [experiments/templates/](experiments/templates/) directory to start from. The template [example_analysis.py](experiments/templates/example_analysis.py) gives an example of extending the default experiment to override default State Variables and System Parameters.
 2. Create a new notebook in [experiments/notebooks/](experiments/notebooks/), using the [template.ipynb](experiments/notebooks/template.ipynb) notebook as a guide, and import the experiment from the experiment template.
 3. Customize the experiment for your specific analysis (see the [experiments/notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) notebook as a guide).
 4. Execute your experiment, post-process and analyze the results, and create Plotly charts!
 
-## Development
-
-A [Makefile](Makefile) is included for convenience, for example to setup your environment and start Jupyter Lab:
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-
-make setup # Setup environment
-make start-lab # Start Jupyter Lab
-```
-
-Otherwise, follow the steps below.
-
-### Requirements
-
-* Python versions: tested with 3.7, 3.8, 3.9
-* Python dependencies: tested against versions in `requirements.txt`
-
-### Setup
-
-To setup a Python 3 development environment:
-```bash
-# Create a virtual environment using Python 3 venv module
-python3 -m venv venv
-# Activate virtual environment
-source venv/bin/activate
-# Install Python 3 dependencies inside virtual environment
-pip install -r requirements.txt
-```
-
-#### Docker
-
-See [CADLabs Jupyter Lab Environment](https://github.com/cadCAD-edu/jupyter-lab-environment)
-
-#### Known Issues
-
-##### Windows
-> DLL load failed while importing win32api: The specified procedure could not be found.
-
-If using Anaconda, try: `conda install -c anaconda pywin32`
-
 ## Tests
 
-### Pytest Tests
+We use Pytest to test the `model` module code, as well as the notebooks.
 
 To execute the Pytest tests:
 ```bash
 source venv/bin/activate
 python3 -m pytest tests
-```
-
-### Notebook Tests
-
-```bash
-source venv/bin/activate
-make execute-notebooks
-```
-
-## Jupyter Environment
-
-### Jupyter kernel
-
-To setup your Jupyter Kernel within your virtual environment:
-```bash
-source venv/bin/activate
-python3 -m ipykernel install --user --name python-cadlabs-eth-model --display-name "Python (CADLabs Ethereum Model)"
-```
-
-### Start environment
-
-```bash
-source venv/bin/activate
-jupyter notebook
-# Or Jupyter Lab, following additional steps below
-jupyter lab
-```
-
-### Plotly Jupyter Lab support
-
-To install and use Plotly with Jupyter Lab, you'll need NodeJS installed to build Node dependencies. Alternatively, use Jupyter Notebook which works out the box with Plotly.
-
-See https://plotly.com/python/getting-started/
-
-```bash
-pip install jupyterlab "ipywidgets>=7.5"
-jupyter labextension install jupyterlab-plotly@4.14.3
 ```
 
 ## Roadmap
