@@ -9,6 +9,7 @@ TODO: if agreed, move sections into introduction, possibly only link to top-leve
 * [Introduction](#introduction)
 * [Getting Started](#getting-started)
 * [Tests](#tests)
+* [Roadmap](#roadmap)
 * [Change Log](#change-log)
 * [Acknowledgements](#contributors)
 * [License](#license)
