@@ -47,6 +47,8 @@ def get_simulation_hash(sim):
 
 
 def inspect_module(module):
+    """Inspect a Python module and return the syntax highlighted code
+    """
     formatter = HtmlFormatter()
     display(HTML(f'<style>{formatter.get_style_defs(".highlight")}</style>'))
 
