@@ -4,8 +4,6 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from ipywidgets import widgets
 
-pd.options.plotting.backend = "plotly"
-
 import inspect
 from IPython.display import Code
 
@@ -18,6 +16,8 @@ from model.system_parameters import parameters, validator_environments
 import experiments.notebooks.plotly_theme
 from experiments.notebooks.plotly_theme import cadlabs_colors
 
+# Set plotly as the default plotting backend for pandas
+pd.options.plotting.backend = "plotly"
 
 legend_state_variable_name_mapping = {
     'timestamp': 'Date',
