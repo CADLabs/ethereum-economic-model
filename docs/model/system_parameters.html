@@ -41,13 +41,14 @@ By using a dataclass to represent the System Parameters:
 &#34;&#34;&#34;
 
 
+import logging
 import numpy as np
 from dataclasses import dataclass
-import logging
 from datetime import datetime
 
-import model.simulation_configuration as simulation
 import model.constants as constants
+import model.simulation_configuration as simulation
+from model.stochastic_processes import create_stochastic_process_realizations
 from model.types import (
     Run,
     Timestep,
@@ -65,18 +66,16 @@ from model.types import (
     Stage,
 )
 from model.utils import default
-from model.stochastic_processes import create_stochastic_process_realizations
 
 
 # Create stochastic (random) process realizations
-stochastic_process_realizations = create_stochastic_process_realizations()
-eth_price_samples = stochastic_process_realizations[&#34;eth_price_samples&#34;]
+eth_price_samples = create_stochastic_process_realizations(&#34;eth_price_samples&#34;)
 
 # Configure validator environment distribution
 validator_environments = [
     ValidatorEnvironment(
         # Configure a custom environment
-        # Used for dissagregation of single validator performance
+        # Used for disaggregation of single validator performance
         type=&#34;custom&#34;,
         percentage_distribution=0.01,  # Set to 1% by default
         hardware_costs_per_epoch=0.0014,
@@ -188,7 +187,7 @@ class Parameters:
     Used to scale calculations that depend on the number of epochs that have passed.
 
     For example, for dt = 100, each timestep equals 100 epochs.
-    
+
     By default set to constants.epochs_per_day (225)
     &#34;&#34;&#34;
 
@@ -208,13 +207,15 @@ class Parameters:
         [datetime.strptime(&#34;2021/07/14&#34;, &#34;%Y/%m/%d&#34;)]
     )
     &#34;&#34;&#34;
-    EIP1559 activation date as Python datetime
+    EIP1559 activation date as Python datetime.
+
     Source: https://github.com/ethereum/pm/issues/245#issuecomment-825751460
     &#34;&#34;&#34;
 
-    date_merge: List[datetime] = default([datetime.strptime(&#34;2021/12/1&#34;, &#34;%Y/%m/%d&#34;)])
+    date_pos: List[datetime] = default([datetime.strptime(&#34;2021/12/1&#34;, &#34;%Y/%m/%d&#34;)])
     &#34;&#34;&#34;
-    Eth1/Eth2 merge date as Python datetime
+    Eth1/Eth2 merge date as Python datetime, after which POW is disabled and POS is enabled.
+
     Source: https://twitter.com/drakefjustin/status/1379052831982956547
     &#34;&#34;&#34;
 
@@ -231,7 +232,7 @@ class Parameters:
     )
     &#34;&#34;&#34;
     A process that returns the ETH staked at each epoch.
-    
+
     If set to `none`, the model is driven by the validator process,
     where new validators enter the system and stake accordingly.
 
@@ -246,7 +247,7 @@ class Parameters:
     )
     &#34;&#34;&#34;
     A process that returns the number of new validators per epoch.
-    
+
     Used if model not driven using `eth_staked_process`.
 
     By default set to a static value from https://beaconscan.com/statistics.
@@ -299,25 +300,25 @@ class Parameters:
 
     i.e. the more slashing events there are, the greater the individual penalty
     &#34;&#34;&#34;
-    TIMELY_HEAD_WEIGHT: List[int] = default([12])
+    TIMELY_HEAD_WEIGHT: List[int] = default([14])
     &#34;&#34;&#34;
     Used to calculate the reward received for getting a head vote in time and correctly.
 
     `head_reward = (TIMELY_HEAD_WEIGHT / WEIGHT_DENOMINATOR) * base_reward`
     &#34;&#34;&#34;
-    TIMELY_SOURCE_WEIGHT: List[int] = default([12])
+    TIMELY_SOURCE_WEIGHT: List[int] = default([14])
     &#34;&#34;&#34;
     Used to calculate the reward received for getting a source vote in time and correctly.
 
     `source_reward = (TIMELY_SOURCE_WEIGHT / WEIGHT_DENOMINATOR) * base_reward`
     &#34;&#34;&#34;
-    TIMELY_TARGET_WEIGHT: List[int] = default([24])
+    TIMELY_TARGET_WEIGHT: List[int] = default([26])
     &#34;&#34;&#34;
     Used to calculate the reward received for getting a target vote in time and correctly.
 
     `target_reward = (TIMELY_TARGET_WEIGHT / WEIGHT_DENOMINATOR) * base_reward`
     &#34;&#34;&#34;
-    SYNC_REWARD_WEIGHT: List[int] = default([8])
+    SYNC_REWARD_WEIGHT: List[int] = default([2])
     &#34;&#34;&#34;
     Used to calculate the reward received for attesting as part of a sync committee.
     &#34;&#34;&#34;
@@ -333,7 +334,7 @@ class Parameters:
     &#34;&#34;&#34;
     Used to calculate the churn limit for validator entry and exit. The maximum number of validators that can
     enter or exit the system per epoch.
-    
+
     In this system it is used for the validator activation queue process.
     &#34;&#34;&#34;
     CHURN_LIMIT_QUOTIENT: List[int] = default([2 ** 16])
@@ -351,7 +352,7 @@ class Parameters:
 
     # Validator parameters
     validator_uptime_process: List[Percentage] = default(
-        [lambda _run, _timestep: max(0.98, 0.666)]
+        [lambda _run, _timestep: max(0.98, 2 / 3)]
     )
     &#34;&#34;&#34;
     The combination of validator internet, power, and technical uptime, as a percentage.
@@ -371,7 +372,7 @@ class Parameters:
     )
     &#34;&#34;&#34;
     The validator hardware costs per epoch in dollars.
-    
+
     A vector with a value for each validator environment.
     &#34;&#34;&#34;
     validator_cloud_costs_per_epoch: List[np.ndarray] = default(
@@ -397,7 +398,7 @@ class Parameters:
     slashing_events_per_1000_epochs: List[int] = default([1])  # 1 / 1000 epochs
     &#34;&#34;&#34;
     The number of slashing events per 1000 epochs.
-    
+
     Asssumption from Hoban/Borgers report.
     &#34;&#34;&#34;
 
@@ -407,14 +408,14 @@ class Parameters:
     )
     &#34;&#34;&#34;
     The basefee burned, in Gwei per gas, for each transaction.
-    
+
     An average of 100 Gwei per gas expected to be set as transaction fee cap,
     split between the basefee and tips - the fee cap less the basefee is sent as a tip to miners/validators.
 
     Approximated using average gas price from https://etherscan.io/gastracker as of 20/04/21
 
     An extract from https://notes.ethereum.org/@vbuterin/eip-1559-faq
-    
+
     &gt; Each “full block” (ie. a block whose gas is 2x the TARGET) increases the BASEFEE by 1.125x,
     &gt; so a series of constant full blocks will increase the gas price by a factor of 10 every
     &gt; ~20 blocks (~4.3 min on average).
@@ -426,16 +427,18 @@ class Parameters:
     )
     &#34;&#34;&#34;
     EIP1559 transaction pricing tip, in Gwei per gas.
-    
+
     Due to MEV, average tips expected to be higher than usual as bid for inclusion in blockscpace market.
-    
+
     The tip is the difference between the fee cap set per transaction, and the basefee.
 
     For PoW system without MEV influence, the tip level compensates for uncle risk:
     See https://notes.ethereum.org/@vbuterin/BkSQmQTS8#Why-would-miners-include-transactions-at-all
     &#34;&#34;&#34;
 
-    gas_target: List[Gas] = default([15e6])
+    gas_target_process: List[Callable[[Run, Timestep], Gas]] = default(
+        [lambda _run, _timestep: 15e6]  # Gas per block
+    )
     &#34;&#34;&#34;
     The long-term average gas target per block.
 
@@ -445,33 +448,6 @@ class Parameters:
 
     EIP1559 gas limit = gas_target * ELASTICITY_MULTIPLIER
     See https://eips.ethereum.org/EIPS/eip-1559
-    &#34;&#34;&#34;
-
-    daily_transactions_process: List[int] = default(
-        [lambda _run=None, _timestep=None: 1_400_000]
-    )
-    &#34;&#34;&#34;
-    A process that returns the number of transactions per day.
-
-    fees_per_day = daily_transactions * transaction_average_gas * (basefee + tip) / 1e9 ~= 10k ETH
-    (see https://etherscan.io/chart/transactionfee)
-    
-    Where:
-    * daily_transactions ~= 1_400_000
-    * transaction_average_gas ~= 73_123
-    * (basefee + tip) ~= 100
-
-    Default static daily transactions from https://etherscan.io/chart/tx as of 20/04/21
-    &#34;&#34;&#34;
-
-    transaction_average_gas: List[Gas] = default([73_123])
-    &#34;&#34;&#34;
-    The average gas used per transaction.
-
-    A simple ETH transfer takes 21,000 gas,
-    but executing a trade on a decentralized exchange can cost 100,000 gas or more.
-
-    See https://coinmetrics.io/the-ethereum-gas-report/
     &#34;&#34;&#34;
 
 
@@ -507,7 +483,7 @@ See "Ethereum Lighthouse: Chasing Serenity" survey report by Empire Ventures: <a
 <dl>
 <dt id="model.system_parameters.Parameters"><code class="flex name class">
 <span>class <span class="ident">Parameters</span></span>
-<span>(</span><span>dt: List[int] = &lt;factory&gt;, stage: List[<a title="model.types.Stage" href="types.html#model.types.Stage">Stage</a>] = &lt;factory&gt;, date_start: List[datetime.datetime] = &lt;factory&gt;, date_eip1559: List[datetime.datetime] = &lt;factory&gt;, date_merge: List[datetime.datetime] = &lt;factory&gt;, eth_price_process: List[Callable[[int, int], float]] = &lt;factory&gt;, eth_staked_process: List[Callable[[int, int], float]] = &lt;factory&gt;, validator_process: List[Callable[[int, int], int]] = &lt;factory&gt;, daily_pow_issuance: List[float] = &lt;factory&gt;, BASE_REWARD_FACTOR: List[int] = &lt;factory&gt;, MAX_EFFECTIVE_BALANCE: List[float] = &lt;factory&gt;, EFFECTIVE_BALANCE_INCREMENT: List[float] = &lt;factory&gt;, PROPOSER_REWARD_QUOTIENT: List[int] = &lt;factory&gt;, WHISTLEBLOWER_REWARD_QUOTIENT: List[int] = &lt;factory&gt;, MIN_SLASHING_PENALTY_QUOTIENT: List[int] = &lt;factory&gt;, PROPORTIONAL_SLASHING_MULTIPLIER: List[int] = &lt;factory&gt;, TIMELY_HEAD_WEIGHT: List[int] = &lt;factory&gt;, TIMELY_SOURCE_WEIGHT: List[int] = &lt;factory&gt;, TIMELY_TARGET_WEIGHT: List[int] = &lt;factory&gt;, SYNC_REWARD_WEIGHT: List[int] = &lt;factory&gt;, PROPOSER_WEIGHT: List[int] = &lt;factory&gt;, WEIGHT_DENOMINATOR: List[int] = &lt;factory&gt;, MIN_PER_EPOCH_CHURN_LIMIT: List[int] = &lt;factory&gt;, CHURN_LIMIT_QUOTIENT: List[int] = &lt;factory&gt;, BASE_FEE_MAX_CHANGE_DENOMINATOR: List[int] = &lt;factory&gt;, ELASTICITY_MULTIPLIER: List[int] = &lt;factory&gt;, validator_uptime_process: List[float] = &lt;factory&gt;, validator_percentage_distribution: List[numpy.ndarray] = &lt;factory&gt;, validator_hardware_costs_per_epoch: List[numpy.ndarray] = &lt;factory&gt;, validator_cloud_costs_per_epoch: List[numpy.ndarray] = &lt;factory&gt;, validator_third_party_costs_per_epoch: List[numpy.ndarray] = &lt;factory&gt;, slashing_events_per_1000_epochs: List[int] = &lt;factory&gt;, eip1559_basefee_process: List[Callable[[int, int], float]] = &lt;factory&gt;, eip1559_tip_process: List[Callable[[int, int], float]] = &lt;factory&gt;, gas_target: List[int] = &lt;factory&gt;, daily_transactions_process: List[int] = &lt;factory&gt;, transaction_average_gas: List[int] = &lt;factory&gt;)</span>
+<span>(</span><span>dt: List[int] = &lt;factory&gt;, stage: List[<a title="model.types.Stage" href="types.html#model.types.Stage">Stage</a>] = &lt;factory&gt;, date_start: List[datetime.datetime] = &lt;factory&gt;, date_eip1559: List[datetime.datetime] = &lt;factory&gt;, date_pos: List[datetime.datetime] = &lt;factory&gt;, eth_price_process: List[Callable[[int, int], float]] = &lt;factory&gt;, eth_staked_process: List[Callable[[int, int], float]] = &lt;factory&gt;, validator_process: List[Callable[[int, int], int]] = &lt;factory&gt;, daily_pow_issuance: List[float] = &lt;factory&gt;, BASE_REWARD_FACTOR: List[int] = &lt;factory&gt;, MAX_EFFECTIVE_BALANCE: List[float] = &lt;factory&gt;, EFFECTIVE_BALANCE_INCREMENT: List[float] = &lt;factory&gt;, PROPOSER_REWARD_QUOTIENT: List[int] = &lt;factory&gt;, WHISTLEBLOWER_REWARD_QUOTIENT: List[int] = &lt;factory&gt;, MIN_SLASHING_PENALTY_QUOTIENT: List[int] = &lt;factory&gt;, PROPORTIONAL_SLASHING_MULTIPLIER: List[int] = &lt;factory&gt;, TIMELY_HEAD_WEIGHT: List[int] = &lt;factory&gt;, TIMELY_SOURCE_WEIGHT: List[int] = &lt;factory&gt;, TIMELY_TARGET_WEIGHT: List[int] = &lt;factory&gt;, SYNC_REWARD_WEIGHT: List[int] = &lt;factory&gt;, PROPOSER_WEIGHT: List[int] = &lt;factory&gt;, WEIGHT_DENOMINATOR: List[int] = &lt;factory&gt;, MIN_PER_EPOCH_CHURN_LIMIT: List[int] = &lt;factory&gt;, CHURN_LIMIT_QUOTIENT: List[int] = &lt;factory&gt;, BASE_FEE_MAX_CHANGE_DENOMINATOR: List[int] = &lt;factory&gt;, ELASTICITY_MULTIPLIER: List[int] = &lt;factory&gt;, validator_uptime_process: List[float] = &lt;factory&gt;, validator_percentage_distribution: List[numpy.ndarray] = &lt;factory&gt;, validator_hardware_costs_per_epoch: List[numpy.ndarray] = &lt;factory&gt;, validator_cloud_costs_per_epoch: List[numpy.ndarray] = &lt;factory&gt;, validator_third_party_costs_per_epoch: List[numpy.ndarray] = &lt;factory&gt;, slashing_events_per_1000_epochs: List[int] = &lt;factory&gt;, eip1559_basefee_process: List[Callable[[int, int], float]] = &lt;factory&gt;, eip1559_tip_process: List[Callable[[int, int], float]] = &lt;factory&gt;, gas_target_process: List[Callable[[int, int], int]] = &lt;factory&gt;)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>System Parameters
@@ -534,7 +510,7 @@ system parameter key: system parameter type = default system parameter value</p>
     Used to scale calculations that depend on the number of epochs that have passed.
 
     For example, for dt = 100, each timestep equals 100 epochs.
-    
+
     By default set to constants.epochs_per_day (225)
     &#34;&#34;&#34;
 
@@ -554,13 +530,15 @@ system parameter key: system parameter type = default system parameter value</p>
         [datetime.strptime(&#34;2021/07/14&#34;, &#34;%Y/%m/%d&#34;)]
     )
     &#34;&#34;&#34;
-    EIP1559 activation date as Python datetime
+    EIP1559 activation date as Python datetime.
+
     Source: https://github.com/ethereum/pm/issues/245#issuecomment-825751460
     &#34;&#34;&#34;
 
-    date_merge: List[datetime] = default([datetime.strptime(&#34;2021/12/1&#34;, &#34;%Y/%m/%d&#34;)])
+    date_pos: List[datetime] = default([datetime.strptime(&#34;2021/12/1&#34;, &#34;%Y/%m/%d&#34;)])
     &#34;&#34;&#34;
-    Eth1/Eth2 merge date as Python datetime
+    Eth1/Eth2 merge date as Python datetime, after which POW is disabled and POS is enabled.
+
     Source: https://twitter.com/drakefjustin/status/1379052831982956547
     &#34;&#34;&#34;
 
@@ -577,7 +555,7 @@ system parameter key: system parameter type = default system parameter value</p>
     )
     &#34;&#34;&#34;
     A process that returns the ETH staked at each epoch.
-    
+
     If set to `none`, the model is driven by the validator process,
     where new validators enter the system and stake accordingly.
 
@@ -592,7 +570,7 @@ system parameter key: system parameter type = default system parameter value</p>
     )
     &#34;&#34;&#34;
     A process that returns the number of new validators per epoch.
-    
+
     Used if model not driven using `eth_staked_process`.
 
     By default set to a static value from https://beaconscan.com/statistics.
@@ -645,25 +623,25 @@ system parameter key: system parameter type = default system parameter value</p>
 
     i.e. the more slashing events there are, the greater the individual penalty
     &#34;&#34;&#34;
-    TIMELY_HEAD_WEIGHT: List[int] = default([12])
+    TIMELY_HEAD_WEIGHT: List[int] = default([14])
     &#34;&#34;&#34;
     Used to calculate the reward received for getting a head vote in time and correctly.
 
     `head_reward = (TIMELY_HEAD_WEIGHT / WEIGHT_DENOMINATOR) * base_reward`
     &#34;&#34;&#34;
-    TIMELY_SOURCE_WEIGHT: List[int] = default([12])
+    TIMELY_SOURCE_WEIGHT: List[int] = default([14])
     &#34;&#34;&#34;
     Used to calculate the reward received for getting a source vote in time and correctly.
 
     `source_reward = (TIMELY_SOURCE_WEIGHT / WEIGHT_DENOMINATOR) * base_reward`
     &#34;&#34;&#34;
-    TIMELY_TARGET_WEIGHT: List[int] = default([24])
+    TIMELY_TARGET_WEIGHT: List[int] = default([26])
     &#34;&#34;&#34;
     Used to calculate the reward received for getting a target vote in time and correctly.
 
     `target_reward = (TIMELY_TARGET_WEIGHT / WEIGHT_DENOMINATOR) * base_reward`
     &#34;&#34;&#34;
-    SYNC_REWARD_WEIGHT: List[int] = default([8])
+    SYNC_REWARD_WEIGHT: List[int] = default([2])
     &#34;&#34;&#34;
     Used to calculate the reward received for attesting as part of a sync committee.
     &#34;&#34;&#34;
@@ -679,7 +657,7 @@ system parameter key: system parameter type = default system parameter value</p>
     &#34;&#34;&#34;
     Used to calculate the churn limit for validator entry and exit. The maximum number of validators that can
     enter or exit the system per epoch.
-    
+
     In this system it is used for the validator activation queue process.
     &#34;&#34;&#34;
     CHURN_LIMIT_QUOTIENT: List[int] = default([2 ** 16])
@@ -697,7 +675,7 @@ system parameter key: system parameter type = default system parameter value</p>
 
     # Validator parameters
     validator_uptime_process: List[Percentage] = default(
-        [lambda _run, _timestep: max(0.98, 0.666)]
+        [lambda _run, _timestep: max(0.98, 2 / 3)]
     )
     &#34;&#34;&#34;
     The combination of validator internet, power, and technical uptime, as a percentage.
@@ -717,7 +695,7 @@ system parameter key: system parameter type = default system parameter value</p>
     )
     &#34;&#34;&#34;
     The validator hardware costs per epoch in dollars.
-    
+
     A vector with a value for each validator environment.
     &#34;&#34;&#34;
     validator_cloud_costs_per_epoch: List[np.ndarray] = default(
@@ -743,7 +721,7 @@ system parameter key: system parameter type = default system parameter value</p>
     slashing_events_per_1000_epochs: List[int] = default([1])  # 1 / 1000 epochs
     &#34;&#34;&#34;
     The number of slashing events per 1000 epochs.
-    
+
     Asssumption from Hoban/Borgers report.
     &#34;&#34;&#34;
 
@@ -753,14 +731,14 @@ system parameter key: system parameter type = default system parameter value</p>
     )
     &#34;&#34;&#34;
     The basefee burned, in Gwei per gas, for each transaction.
-    
+
     An average of 100 Gwei per gas expected to be set as transaction fee cap,
     split between the basefee and tips - the fee cap less the basefee is sent as a tip to miners/validators.
 
     Approximated using average gas price from https://etherscan.io/gastracker as of 20/04/21
 
     An extract from https://notes.ethereum.org/@vbuterin/eip-1559-faq
-    
+
     &gt; Each “full block” (ie. a block whose gas is 2x the TARGET) increases the BASEFEE by 1.125x,
     &gt; so a series of constant full blocks will increase the gas price by a factor of 10 every
     &gt; ~20 blocks (~4.3 min on average).
@@ -772,16 +750,18 @@ system parameter key: system parameter type = default system parameter value</p>
     )
     &#34;&#34;&#34;
     EIP1559 transaction pricing tip, in Gwei per gas.
-    
+
     Due to MEV, average tips expected to be higher than usual as bid for inclusion in blockscpace market.
-    
+
     The tip is the difference between the fee cap set per transaction, and the basefee.
 
     For PoW system without MEV influence, the tip level compensates for uncle risk:
     See https://notes.ethereum.org/@vbuterin/BkSQmQTS8#Why-would-miners-include-transactions-at-all
     &#34;&#34;&#34;
 
-    gas_target: List[Gas] = default([15e6])
+    gas_target_process: List[Callable[[Run, Timestep], Gas]] = default(
+        [lambda _run, _timestep: 15e6]  # Gas per block
+    )
     &#34;&#34;&#34;
     The long-term average gas target per block.
 
@@ -791,33 +771,6 @@ system parameter key: system parameter type = default system parameter value</p>
 
     EIP1559 gas limit = gas_target * ELASTICITY_MULTIPLIER
     See https://eips.ethereum.org/EIPS/eip-1559
-    &#34;&#34;&#34;
-
-    daily_transactions_process: List[int] = default(
-        [lambda _run=None, _timestep=None: 1_400_000]
-    )
-    &#34;&#34;&#34;
-    A process that returns the number of transactions per day.
-
-    fees_per_day = daily_transactions * transaction_average_gas * (basefee + tip) / 1e9 ~= 10k ETH
-    (see https://etherscan.io/chart/transactionfee)
-    
-    Where:
-    * daily_transactions ~= 1_400_000
-    * transaction_average_gas ~= 73_123
-    * (basefee + tip) ~= 100
-
-    Default static daily transactions from https://etherscan.io/chart/tx as of 20/04/21
-    &#34;&#34;&#34;
-
-    transaction_average_gas: List[Gas] = default([73_123])
-    &#34;&#34;&#34;
-    The average gas used per transaction.
-
-    A simple ETH transfer takes 21,000 gas,
-    but executing a trade on a decentralized exchange can cost 100,000 gas or more.
-
-    See https://coinmetrics.io/the-ethereum-gas-report/
     &#34;&#34;&#34;</code></pre>
 </details>
 <h3>Class variables</h3>
@@ -906,26 +859,15 @@ distributed between the whistleblower and the proposer.</p></div>
 <div class="desc"><p>The average daily Proof of Work issuance in ETH.</p>
 <p>See <a href="https://etherscan.io/chart/blockreward">https://etherscan.io/chart/blockreward</a></p></div>
 </dd>
-<dt id="model.system_parameters.Parameters.daily_transactions_process"><code class="name">var <span class="ident">daily_transactions_process</span> : List[int]</code></dt>
-<dd>
-<div class="desc"><p>A process that returns the number of transactions per day.</p>
-<p>fees_per_day = daily_transactions * transaction_average_gas * (basefee + tip) / 1e9 ~= 10k ETH
-(see <a href="https://etherscan.io/chart/transactionfee">https://etherscan.io/chart/transactionfee</a>)</p>
-<p>Where:
-* daily_transactions ~= 1_400_000
-* transaction_average_gas ~= 73_123
-* (basefee + tip) ~= 100</p>
-<p>Default static daily transactions from <a href="https://etherscan.io/chart/tx">https://etherscan.io/chart/tx</a> as of 20/04/21</p></div>
-</dd>
 <dt id="model.system_parameters.Parameters.date_eip1559"><code class="name">var <span class="ident">date_eip1559</span> : List[datetime.datetime]</code></dt>
 <dd>
-<div class="desc"><p>EIP1559 activation date as Python datetime
-Source: <a href="https://github.com/ethereum/pm/issues/245#issuecomment-825751460">https://github.com/ethereum/pm/issues/245#issuecomment-825751460</a></p></div>
+<div class="desc"><p>EIP1559 activation date as Python datetime.</p>
+<p>Source: <a href="https://github.com/ethereum/pm/issues/245#issuecomment-825751460">https://github.com/ethereum/pm/issues/245#issuecomment-825751460</a></p></div>
 </dd>
-<dt id="model.system_parameters.Parameters.date_merge"><code class="name">var <span class="ident">date_merge</span> : List[datetime.datetime]</code></dt>
+<dt id="model.system_parameters.Parameters.date_pos"><code class="name">var <span class="ident">date_pos</span> : List[datetime.datetime]</code></dt>
 <dd>
-<div class="desc"><p>Eth1/Eth2 merge date as Python datetime
-Source: <a href="https://twitter.com/drakefjustin/status/1379052831982956547">https://twitter.com/drakefjustin/status/1379052831982956547</a></p></div>
+<div class="desc"><p>Eth1/Eth2 merge date as Python datetime, after which POW is disabled and POS is enabled.</p>
+<p>Source: <a href="https://twitter.com/drakefjustin/status/1379052831982956547">https://twitter.com/drakefjustin/status/1379052831982956547</a></p></div>
 </dd>
 <dt id="model.system_parameters.Parameters.date_start"><code class="name">var <span class="ident">date_start</span> : List[datetime.datetime]</code></dt>
 <dd>
@@ -971,7 +913,7 @@ See <a href="https://notes.ethereum.org/@vbuterin/BkSQmQTS8#Why-would-miners-inc
 where new validators enter the system and stake accordingly.</p>
 <p>This process is used for simulating a series of ETH staked values directly.</p></div>
 </dd>
-<dt id="model.system_parameters.Parameters.gas_target"><code class="name">var <span class="ident">gas_target</span> : List[int]</code></dt>
+<dt id="model.system_parameters.Parameters.gas_target_process"><code class="name">var <span class="ident">gas_target_process</span> : List[Callable[[int, int], int]]</code></dt>
 <dd>
 <div class="desc"><p>The long-term average gas target per block.</p>
 <p>The current gas limit is replaced by two values:
@@ -990,13 +932,6 @@ See <a href="https://eips.ethereum.org/EIPS/eip-1559">https://eips.ethereum.org/
 <div class="desc"><p>Which stage or stages of the network upgrade process to simulate.</p>
 <p>By default set to PROOF_OF_STAKE stage, where EIP1559 is enabled and POW issuance is disabled.</p>
 <p>See model.types.Stage Enum for further documentation.</p></div>
-</dd>
-<dt id="model.system_parameters.Parameters.transaction_average_gas"><code class="name">var <span class="ident">transaction_average_gas</span> : List[int]</code></dt>
-<dd>
-<div class="desc"><p>The average gas used per transaction.</p>
-<p>A simple ETH transfer takes 21,000 gas,
-but executing a trade on a decentralized exchange can cost 100,000 gas or more.</p>
-<p>See <a href="https://coinmetrics.io/the-ethereum-gas-report/">https://coinmetrics.io/the-ethereum-gas-report/</a></p></div>
 </dd>
 <dt id="model.system_parameters.Parameters.validator_cloud_costs_per_epoch"><code class="name">var <span class="ident">validator_cloud_costs_per_epoch</span> : List[numpy.ndarray]</code></dt>
 <dd>
@@ -1074,19 +1009,17 @@ but executing a trade on a decentralized exchange can cost 100,000 gas or more.<
 <li><code><a title="model.system_parameters.Parameters.WEIGHT_DENOMINATOR" href="#model.system_parameters.Parameters.WEIGHT_DENOMINATOR">WEIGHT_DENOMINATOR</a></code></li>
 <li><code><a title="model.system_parameters.Parameters.WHISTLEBLOWER_REWARD_QUOTIENT" href="#model.system_parameters.Parameters.WHISTLEBLOWER_REWARD_QUOTIENT">WHISTLEBLOWER_REWARD_QUOTIENT</a></code></li>
 <li><code><a title="model.system_parameters.Parameters.daily_pow_issuance" href="#model.system_parameters.Parameters.daily_pow_issuance">daily_pow_issuance</a></code></li>
-<li><code><a title="model.system_parameters.Parameters.daily_transactions_process" href="#model.system_parameters.Parameters.daily_transactions_process">daily_transactions_process</a></code></li>
 <li><code><a title="model.system_parameters.Parameters.date_eip1559" href="#model.system_parameters.Parameters.date_eip1559">date_eip1559</a></code></li>
-<li><code><a title="model.system_parameters.Parameters.date_merge" href="#model.system_parameters.Parameters.date_merge">date_merge</a></code></li>
+<li><code><a title="model.system_parameters.Parameters.date_pos" href="#model.system_parameters.Parameters.date_pos">date_pos</a></code></li>
 <li><code><a title="model.system_parameters.Parameters.date_start" href="#model.system_parameters.Parameters.date_start">date_start</a></code></li>
 <li><code><a title="model.system_parameters.Parameters.dt" href="#model.system_parameters.Parameters.dt">dt</a></code></li>
 <li><code><a title="model.system_parameters.Parameters.eip1559_basefee_process" href="#model.system_parameters.Parameters.eip1559_basefee_process">eip1559_basefee_process</a></code></li>
 <li><code><a title="model.system_parameters.Parameters.eip1559_tip_process" href="#model.system_parameters.Parameters.eip1559_tip_process">eip1559_tip_process</a></code></li>
 <li><code><a title="model.system_parameters.Parameters.eth_price_process" href="#model.system_parameters.Parameters.eth_price_process">eth_price_process</a></code></li>
 <li><code><a title="model.system_parameters.Parameters.eth_staked_process" href="#model.system_parameters.Parameters.eth_staked_process">eth_staked_process</a></code></li>
-<li><code><a title="model.system_parameters.Parameters.gas_target" href="#model.system_parameters.Parameters.gas_target">gas_target</a></code></li>
+<li><code><a title="model.system_parameters.Parameters.gas_target_process" href="#model.system_parameters.Parameters.gas_target_process">gas_target_process</a></code></li>
 <li><code><a title="model.system_parameters.Parameters.slashing_events_per_1000_epochs" href="#model.system_parameters.Parameters.slashing_events_per_1000_epochs">slashing_events_per_1000_epochs</a></code></li>
 <li><code><a title="model.system_parameters.Parameters.stage" href="#model.system_parameters.Parameters.stage">stage</a></code></li>
-<li><code><a title="model.system_parameters.Parameters.transaction_average_gas" href="#model.system_parameters.Parameters.transaction_average_gas">transaction_average_gas</a></code></li>
 <li><code><a title="model.system_parameters.Parameters.validator_cloud_costs_per_epoch" href="#model.system_parameters.Parameters.validator_cloud_costs_per_epoch">validator_cloud_costs_per_epoch</a></code></li>
 <li><code><a title="model.system_parameters.Parameters.validator_hardware_costs_per_epoch" href="#model.system_parameters.Parameters.validator_hardware_costs_per_epoch">validator_hardware_costs_per_epoch</a></code></li>
 <li><code><a title="model.system_parameters.Parameters.validator_percentage_distribution" href="#model.system_parameters.Parameters.validator_percentage_distribution">validator_percentage_distribution</a></code></li>
