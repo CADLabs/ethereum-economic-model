@@ -749,12 +749,21 @@ def plot_eth_staked_over_all_stages(df):
 
 
 def plot_number_of_validators_over_time_foreach_subset(df):
-    fig = df.plot(x='timestamp', y='number_of_validators', color='subset')
-
+    df['subset_name']= df['subset'].map({0: 'Base Case', 1: 'Bear Case', 2: 'Bull Case'})
+    
+    fig = df.plot(x='timestamp', y='number_of_validators', color='subset_name')
+    
     fig.update_layout(
-        title="Number of Validators Over Time",
+        title="Validator Adoption Scenarplot_revenue_profit_yields_over_time_foreach_subsetios",
         xaxis_title="Date",
-        yaxis_title="Number of Validators",
+        yaxis_title="Active Validators",
+        legend_title="",
+        xaxis=dict(
+            rangeslider=dict(
+            visible=True
+            )
+        )
+        
     )
 
     return fig
@@ -801,22 +810,71 @@ def plot_number_of_validators_in_activation_queue_over_time(df):
 def plot_revenue_profit_yields_over_time_foreach_subset(df):
     fig = df.plot(
         x='timestamp', y=['total_revenue_yields_pct', 'total_profit_yields_pct'],
-        facet_col='subset',
+        facet_col='subset_name',
         facet_col_wrap=3,
     )
 
     fig.update_layout(
-        title="Revenue and Profit Yields Over Time",
+        title="Revenue and Profit Yields Over Time - At a Glance",
         yaxis_title="Revenue Yield (%/year)",
+        legend_title="",
         hovermode="x"
     )
 
     fig.for_each_xaxis(lambda x: x.update(dict(title=dict(text='Date'))))
+    
+    # Removes the 'substet=' from the facet_col title
+    fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 
     update_legend_names(fig)
 
     return fig
 
+
+def plot_expanding_mean_revenue_profit_yields_over_time_foreach_subset(df):
+    # Expanding mean revenue yields
+    df['avg_revenue_yields_pct'] = df.query('subset == 0')['total_revenue_yields_pct'].expanding().mean()
+    df['avg_revenue_yields_pct'] = df['avg_revenue_yields_pct'].fillna(df.query('subset == 1')['total_revenue_yields_pct'].expanding().mean())
+    df['avg_revenue_yields_pct'] = df['avg_revenue_yields_pct'].fillna(df.query('subset == 2')['total_revenue_yields_pct'].expanding().mean())
+
+    # Expanding mean profit yields
+    df['avg_profit_yields_pct'] = df.query('subset == 0')['total_profit_yields_pct'].expanding().mean()
+    df['avg_profit_yields_pct'] = df['avg_profit_yields_pct'].fillna(df.query('subset == 1')['total_profit_yields_pct'].expanding().mean())
+    df['avg_profit_yields_pct'] = df['avg_profit_yields_pct'].fillna(df.query('subset == 2')['total_profit_yields_pct'].expanding().mean())
+
+    fig = px.line(df, x="timestamp", y=["avg_revenue_yields_pct", "avg_profit_yields_pct"],  color='subset_name')
+
+    fig.update_layout(
+        title="Cumulative Average Revenue or Profit Yields Over Time",
+        xaxis_title="Date",
+        yaxis_title="Yields (%/year)",
+        legend_title=""
+    )
+
+    fig.update_layout(
+        updatemenus=[dict(
+            type="buttons",
+            buttons=[
+                dict(
+                    label = 'All',
+                    method = 'update',
+                    args = [{'visible': [True, True]}, {'showlegend':True}]
+                ),
+                dict(
+                    label = 'Revenue Yields',
+                    method = 'update',
+                    args = [{'visible': [True, 'legendonly']}, {'showlegend':True}]
+                ),
+                dict(
+                    label = 'Profit Yields',
+                    method = 'update',
+                    args = [{'visible': ['legendonly', True]}, {'showlegend':True}]
+                )
+            ]
+        )]
+    )
+
+    return fig
 
 def plot_figure_widget_revenue_yields_over_time_foreach_subset(df):
     subset = widgets.Dropdown(
@@ -925,6 +983,7 @@ def plot_profit_yields_by_environment_over_time(df):
         title="Profit Yields by Environment Over Time",
         xaxis_title="Date",
         yaxis_title="Profit Yield (%/year)",
+        legend_title='',
         xaxis=dict(
             rangeslider=dict(
                 visible=True
