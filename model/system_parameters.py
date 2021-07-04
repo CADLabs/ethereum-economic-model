@@ -15,7 +15,6 @@ from datetime import datetime
 
 import model.constants as constants
 import model.simulation_configuration as simulation
-from model.stochastic_processes import create_stochastic_process_realizations
 from model.types import (
     Run,
     Timestep,
@@ -33,10 +32,8 @@ from model.types import (
     Stage,
 )
 from model.utils import default
+from data.historical_values import eth_price_mean
 
-
-# Create stochastic (random) process realizations
-eth_price_samples = create_stochastic_process_realizations("eth_price_samples")
 
 # Configure validator environment distribution
 validator_environments = [
@@ -188,10 +185,12 @@ class Parameters:
 
     # Environmental processes
     eth_price_process: List[Callable[[Run, Timestep], ETH]] = default(
-        [lambda run, timestep: eth_price_samples[run - 1][timestep]]
+        [lambda run, timestep: eth_price_mean]
     )
     """
     A process that returns the ETH spot price at each epoch.
+    
+    By default set to average ETH price over the last 12 months from Etherscan.
     """
 
     eth_staked_process: List[Callable[[Run, Timestep], ETH]] = default(

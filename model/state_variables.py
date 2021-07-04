@@ -25,6 +25,8 @@ from model.types import (
     Percentage,
     Stage,
 )
+from data.historical_values import eth_price_mean, eth_price_min, eth_price_max
+
 
 # Get number of validator environments for initializing Numpy array size
 number_of_validator_environments = len(validator_environments)
@@ -61,7 +63,7 @@ class StateVariables:
     """
 
     # Ethereum state variables
-    eth_price: USD_per_ETH = 0
+    eth_price: USD_per_ETH = eth_price_mean
     """The ETH spot price"""
     eth_supply: ETH = eth_supply
     """The total ETH supply"""

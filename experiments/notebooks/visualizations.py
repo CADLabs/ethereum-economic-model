@@ -1,16 +1,30 @@
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import itertools
 from plotly.subplots import make_subplots
 from ipywidgets import widgets
 from datetime import datetime
 
 from model.system_parameters import parameters, validator_environments
-from experiments.notebooks.plotly_theme import cadlabs_colors
+from experiments.notebooks.plotly_theme import cadlabs_colors, cadlabs_colorway_sequence
+
 
 # Set plotly as the default plotting backend for pandas
 pd.options.plotting.backend = "plotly"
 
+
+
+validator_environment_name_mapping = {
+    'custom': 'Custom',
+    'diy_hardware': 'DIY Hardware',
+    'diy_cloud': 'DIY Cloud',
+    'pool_staas': 'Pool StaaS',
+    'pool_hardware': 'Pool Hardware',
+    'pool_cloud': 'Pool Cloud',
+    'staas_full': 'StaaS Full',
+    'staas_self_custodied': 'StaaS Self-custodied',
+}
 
 legend_state_variable_name_mapping = {
     'timestamp': 'Date',
@@ -27,8 +41,7 @@ legend_state_variable_name_mapping = {
     'total_revenue_yields_pct': 'Total Revenue Yields',
     'total_profit_yields_pct': 'Total Profit Yields',
     'revenue_profit_yield_spread_pct': 'Revenue-Profit Yield Spread',
-    **dict([(validator.type + '_profit_yields_pct', f'{validator.type} Profit Yields') for validator in
-            validator_environments])
+    **dict([(validator.type + '_profit_yields_pct', validator_environment_name_mapping[validator.type]) for validator in validator_environments])
 }
 
 axis_state_variable_name_mapping = {
@@ -172,17 +185,26 @@ def plot_revenue_profit_yields_over_eth_staked(df):
 
     # Add traces
     fig.add_trace(
-        go.Scatter(x=df_subset_0.eth_staked, y=df_subset_0.total_revenue_yields_pct, name='Revenue Yields'),
+        go.Scatter(
+            x=df_subset_0.eth_staked, y=df_subset_0.total_revenue_yields_pct, name='Revenue Yields',
+            line=dict(color=cadlabs_colorway_sequence[3])
+        ),
     )
 
     fig.add_trace(
-        go.Scatter(x=df_subset_0.eth_staked, y=df_subset_0.total_profit_yields_pct,
-                   name=f"Profit Yields @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH"),
+        go.Scatter(
+            x=df_subset_0.eth_staked, y=df_subset_0.total_profit_yields_pct,
+            name=f"Profit Yields @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
+            line=dict(color=cadlabs_colorway_sequence[4], dash='dash')
+        ),
     )
 
     fig.add_trace(
-        go.Scatter(x=df_subset_1.eth_staked, y=df_subset_1.total_profit_yields_pct,
-                   name=f"Profit Yields @ {df_subset_1.eth_price.iloc[0]:.0f} USD/ETH"),
+        go.Scatter(
+            x=df_subset_1.eth_staked, y=df_subset_1.total_profit_yields_pct,
+            name=f"Profit Yields @ {df_subset_1.eth_price.iloc[0]:.0f} USD/ETH",
+            line=dict(color=cadlabs_colorway_sequence[5], dash='dash')
+        ),
     )
 
     update_legend_names(fig)
@@ -203,22 +225,19 @@ def plot_revenue_profit_yields_over_eth_staked(df):
 def plot_revenue_profit_yields_over_eth_price(df):
     fig = go.Figure()
 
-    df_subset_0 = df.query("subset == 0")
-    df_subset_1 = df.query("subset == 1")
-
     # Add traces
     fig.add_trace(
-        go.Scatter(x=df_subset_0.eth_price, y=df_subset_0.total_revenue_yields_pct, name='Revenue Yields'),
+        go.Scatter(
+            x=df.eth_price, y=df.total_revenue_yields_pct, name=f"Revenue Yields @ {df.eth_staked.iloc[0]:.0f} ETH Staked",
+            line=dict(color=cadlabs_colorway_sequence[3])
+        )
     )
 
     fig.add_trace(
-        go.Scatter(x=df_subset_0.eth_price, y=df_subset_0.total_profit_yields_pct,
-                   name=f"Profit Yields @ {df_subset_0.eth_staked.iloc[0]:.0f} ETH"),
-    )
-
-    fig.add_trace(
-        go.Scatter(x=df_subset_1.eth_price, y=df_subset_1.total_profit_yields_pct,
-                   name=f"Profit Yields @ {df_subset_1.eth_staked.iloc[0]:.0f} ETH"),
+        go.Scatter(
+            x=df.eth_price, y=df.total_profit_yields_pct, name=f"Profit Yields @ {df.eth_staked.iloc[0]:.0f} ETH Staked",
+            line=dict(color=cadlabs_colorway_sequence[4], dash='dash')
+        ),
     )
 
     update_legend_names(fig)
@@ -628,14 +647,15 @@ def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated):
     for subset in df_simulated.subset.unique():
         df_subset = df_simulated.query(f"subset == {subset}")
         fig.add_trace(
-            go.Scatter(x=df_subset.timestamp, y=df_subset.supply_inflation_pct, name='Simulated Network Inflation Rate', line=dict(color='#FC1CBF', dash='dot'), fill=('tonexty' if subset > 0 else None)),
+            go.Scatter(x=df_subset.timestamp, y=df_subset.supply_inflation_pct, name='Simulated Network Inflation Rate', line=dict(color='#FC1CBF', dash='dot')),
             secondary_y=False,
         )
 
         fig.add_trace(
-            go.Scatter(x=df_subset.timestamp, y=df_subset.eth_supply, name='Simulated ETH Supply', line=dict(color='#3283FE', dash='dot'), fill=('tonexty' if subset > 0 else None)),
+            go.Scatter(x=df_subset.timestamp, y=df_subset.eth_supply, name='Simulated ETH Supply', line=dict(color='#3283FE', dash='dot')),
             secondary_y=True,
         )
+        #fill=('tonexty' if subset > 0 else None)
         
     df = df_historical.append(df_simulated)
 
@@ -749,21 +769,29 @@ def plot_eth_staked_over_all_stages(df):
 
 
 def plot_number_of_validators_over_time_foreach_subset(df):
-    df['subset_name']= df['subset'].map({0: 'Base Case', 1: 'Bear Case', 2: 'Bull Case'})
+    scenario_names = {0: 'Normal Adoption', 1: 'Low Adoption', 2: 'High Adoption'}
     
-    fig = df.plot(x='timestamp', y='number_of_validators', color='subset_name')
+    fig = go.Figure()
+    
+    for subset in df.subset.unique():
+        fig.add_trace(
+            go.Scatter(
+                x=df['timestamp'],
+                y=df[df.subset == subset]['number_of_validators'],
+                name=scenario_names[subset],
+            )
+        )
     
     fig.update_layout(
-        title="Validator Adoption Scenarplot_revenue_profit_yields_over_time_foreach_subsetios",
+        title="Validator Adoption Scenarios",
         xaxis_title="Date",
         yaxis_title="Active Validators",
         legend_title="",
         xaxis=dict(
             rangeslider=dict(
-            visible=True
+                visible=True
             )
         )
-        
     )
 
     return fig
@@ -808,17 +836,38 @@ def plot_number_of_validators_in_activation_queue_over_time(df):
 
 
 def plot_revenue_profit_yields_over_time_foreach_subset(df):
-    fig = df.plot(
-        x='timestamp', y=['total_revenue_yields_pct', 'total_profit_yields_pct'],
-        facet_col='subset_name',
-        facet_col_wrap=3,
-    )
-
+    scenario_names = {0: 'Normal Adoption', 1: 'Low Adoption', 2: 'High Adoption'}
+    color_cycle = itertools.cycle(cadlabs_colorway_sequence)
+    
+    fig = make_subplots(rows=1, cols=3, shared_yaxes=True)
+    
+    for subset in df.subset.unique():
+        color = next(color_cycle)
+        fig.add_trace(
+            go.Scatter(
+                x=df['timestamp'],
+                y=df[df.subset == subset]['total_revenue_yields_pct'],
+                name=f"{scenario_names[subset]} Revenue Yield",
+                line=dict(color=color),
+            ),
+            row=1, col=subset+1
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=df['timestamp'],
+                y=df[df.subset == subset]['total_profit_yields_pct'],
+                name=f"{scenario_names[subset]} Profit Yield",
+                line=dict(color=color, dash='dash'),
+            ),
+            row=1, col=subset+1
+        )
+    
     fig.update_layout(
         title="Revenue and Profit Yields Over Time - At a Glance",
+        xaxis_title="Date",
         yaxis_title="Revenue Yield (%/year)",
         legend_title="",
-        hovermode="x"
+        hovermode="x",
     )
 
     fig.for_each_xaxis(lambda x: x.update(dict(title=dict(text='Date'))))
@@ -832,17 +881,43 @@ def plot_revenue_profit_yields_over_time_foreach_subset(df):
 
 
 def plot_expanding_mean_revenue_profit_yields_over_time_foreach_subset(df):
+    df_0 = df.query('subset == 0')
+    df_1 = df.query('subset == 1')
+    df_2 = df.query('subset == 2')
+    
     # Expanding mean revenue yields
-    df['avg_revenue_yields_pct'] = df.query('subset == 0')['total_revenue_yields_pct'].expanding().mean()
-    df['avg_revenue_yields_pct'] = df['avg_revenue_yields_pct'].fillna(df.query('subset == 1')['total_revenue_yields_pct'].expanding().mean())
-    df['avg_revenue_yields_pct'] = df['avg_revenue_yields_pct'].fillna(df.query('subset == 2')['total_revenue_yields_pct'].expanding().mean())
+    df['avg_revenue_yields_pct'] = df_0['total_revenue_yields_pct'].expanding().mean()
+    df['avg_revenue_yields_pct'] = df['avg_revenue_yields_pct'].fillna(df_1['total_revenue_yields_pct'].expanding().mean())
+    df['avg_revenue_yields_pct'] = df['avg_revenue_yields_pct'].fillna(df_2['total_revenue_yields_pct'].expanding().mean())
 
     # Expanding mean profit yields
-    df['avg_profit_yields_pct'] = df.query('subset == 0')['total_profit_yields_pct'].expanding().mean()
-    df['avg_profit_yields_pct'] = df['avg_profit_yields_pct'].fillna(df.query('subset == 1')['total_profit_yields_pct'].expanding().mean())
-    df['avg_profit_yields_pct'] = df['avg_profit_yields_pct'].fillna(df.query('subset == 2')['total_profit_yields_pct'].expanding().mean())
-
-    fig = px.line(df, x="timestamp", y=["avg_revenue_yields_pct", "avg_profit_yields_pct"],  color='subset_name')
+    df['avg_profit_yields_pct'] = df_0['total_profit_yields_pct'].expanding().mean()
+    df['avg_profit_yields_pct'] = df['avg_profit_yields_pct'].fillna(df_1['total_profit_yields_pct'].expanding().mean())
+    df['avg_profit_yields_pct'] = df['avg_profit_yields_pct'].fillna(df_2['total_profit_yields_pct'].expanding().mean())
+    
+    scenario_names = {0: 'Normal Adoption', 1: 'Low Adoption', 2: 'High Adoption'}
+    color_cycle = itertools.cycle(cadlabs_colorway_sequence)
+    
+    fig = go.Figure()
+    
+    for subset in df.subset.unique():
+        color = next(color_cycle)
+        fig.add_trace(
+            go.Scatter(
+                x=df['timestamp'],
+                y=df[df.subset == subset]['avg_revenue_yields_pct'],
+                name=f"{scenario_names[subset]} Revenue Yield",
+                line=dict(color=color),
+            ),
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=df['timestamp'],
+                y=df[df.subset == subset]['avg_profit_yields_pct'],
+                name=f"{scenario_names[subset]} Profit Yield",
+                line=dict(color=color, dash='dash'),
+            ),
+        )
 
     fig.update_layout(
         title="Cumulative Average Revenue or Profit Yields Over Time",
@@ -852,6 +927,12 @@ def plot_expanding_mean_revenue_profit_yields_over_time_foreach_subset(df):
     )
 
     fig.update_layout(
+        xaxis=dict(
+            rangeslider=dict(
+                visible=True
+            ),
+            type="date"
+        ),
         updatemenus=[dict(
             type="buttons",
             buttons=[
@@ -977,7 +1058,16 @@ Experiment 2: Analysis 5
 def plot_profit_yields_by_environment_over_time(df):
     validator_profit_yields = [validator.type + '_profit_yields_pct' for validator in validator_environments]
 
-    fig = df.plot(x='timestamp', y=validator_profit_yields)
+    fig = go.Figure()
+    
+    for key in validator_profit_yields:
+        fig.add_trace(
+            go.Scatter(
+                x=df['timestamp'],
+                y=df[key],
+                name=legend_state_variable_name_mapping[key]
+            )
+        )
 
     fig.update_layout(
         title="Profit Yields by Environment Over Time",
@@ -991,7 +1081,5 @@ def plot_profit_yields_by_environment_over_time(df):
             type="date"
         )
     )
-
-    update_legend_names(fig)
 
     return fig

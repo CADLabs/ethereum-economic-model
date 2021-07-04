@@ -1,7 +1,7 @@
 import numpy as np
 import copy
 
-from model.state_variables import eth_staked, eth_supply
+from model.state_variables import eth_staked, eth_supply, eth_price_max
 from experiments.default_experiment import experiment, TIMESTEPS, DELTA_TIME
 from experiments.utils import generate_cartesian_product
 from model.types import Stage
@@ -11,8 +11,8 @@ from model.types import Stage
 experiment = copy.deepcopy(experiment)
 
 sweep = generate_cartesian_product({
-    # ETH price range from 100 USD/ETH to 3000 USD/ETH
-    "eth_price_samples": np.linspace(start=100, stop=3000, num=20),
+    # ETH price range from 100 USD/ETH to the maximum over the last 12 months
+    "eth_price_samples": np.linspace(start=100, stop=eth_price_max, num=20),
     # ETH staked range from current ETH staked to minimum of 2 x ETH staked and 30% of total ETH supply
     "eth_staked_samples": np.linspace(start=eth_staked, stop=min(eth_staked * 2, eth_supply * 0.3), num=20),
 })
