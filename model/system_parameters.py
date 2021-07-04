@@ -185,7 +185,7 @@ class Parameters:
 
     # Environmental processes
     eth_price_process: List[Callable[[Run, Timestep], ETH]] = default(
-        [lambda run, timestep: eth_price_mean]
+        [lambda _run, _timestep: eth_price_mean]
     )
     """
     A process that returns the ETH spot price at each epoch.
