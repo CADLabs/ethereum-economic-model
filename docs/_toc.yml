@@ -1,27 +1,19 @@
 format: jb-book
 root: docs/landing-page
 parts:
-  - caption: Introduction
-    chapters:
-    - file: README
-      title: README
-    - file: ASSUMPTIONS
-    - file: GLOSSARY
-    - file: CONTRIBUTORS
-    - file: CHANGELOG
   - caption: Model Specification
     chapters:
-    - file: docs/hackmd_mathematical_specification.md
+    - file: docs/model_specification/mathematical_specification
   - caption: Documentation
     chapters:
     - url: https://cadlabs.gitlab.io/cadlabs-ethereum-model-docs/docs/index.html
       title: Model Code Documentation
   - caption: Experiment Notebooks
     chapters:
-    - glob: notebooks/*_*
-  - caption: Example Model Outputs
-    chapters:
-    - glob: notebooks/examples/*
+    - file: experiments/notebooks/0_README
+    - file: experiments/notebooks/1_model_validation
+    - file: experiments/notebooks/2_validator_revenue_and_profit_yields
+    - file: experiments/notebooks/3_network_issuance_and_inflation_rate
   - caption: Simulation Profiling
     chapters:
-    - glob: notebooks/simulation_profiling/*
+    - glob: experiments/notebooks/simulation_profiling/*

@@ -16,3 +16,7 @@ See https://www.kaggle.com/prasoonkottarathil/ethereum-historical-dataset
 ## Historical Ethereum Supply
 
 Thanks to Etherscan. See https://etherscan.io/chart/ethersupplygrowth
+
+## Historical Ethereum Price
+
+Thanks to Etherscan. See https://etherscan.io/chart/etherprice

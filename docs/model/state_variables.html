@@ -46,6 +46,9 @@ from dataclasses import dataclass
 from datetime import datetime
 
 import model.constants as constants
+import data.api.beaconchain as beaconchain
+import data.api.etherscan as etherscan
+from model.system_parameters import validator_environments
 from model.types import (
     Gwei,
     Gwei_per_Gas,
@@ -55,19 +58,16 @@ from model.types import (
     Percentage,
     Stage,
 )
-from model.system_parameters import validator_environments
-
 
 # Get number of validator environments for initializing Numpy array size
 number_of_validator_environments = len(validator_environments)
 
 # Intial state from external live data source
-# Updated from https://beaconscan.com/ as of 20/04/21
-number_of_validators = 120_894
-number_of_validators_in_activation_queue = 230
-eth_staked = 3_868_555
-# Updated from https://etherscan.io/chart/ethersupplygrowth as of 20/04/21
-eth_supply = 115_538_828
+number_of_validators: int = beaconchain.get_validators_count(default=156_250)
+eth_staked: ETH = (
+    beaconchain.get_total_validator_balance(default=5_000_000e9) / constants.gwei
+)
+eth_supply: ETH = etherscan.get_eth_supply(default=116_250_000e18) / constants.wei
 
 
 @dataclass
@@ -108,9 +108,7 @@ class StateVariables:
     &#34;&#34;&#34;The total Proof of Work issuance in ETH&#34;&#34;&#34;
 
     # Validator state variables
-    number_of_validators_in_activation_queue: int = (
-        number_of_validators_in_activation_queue
-    )
+    number_of_validators_in_activation_queue: int = 0
     &#34;&#34;&#34;The number of validators in activation queue&#34;&#34;&#34;
     average_effective_balance: Gwei = 32 * constants.gwei
     &#34;&#34;&#34;The validator average effective balance&#34;&#34;&#34;
@@ -130,7 +128,7 @@ class StateVariables:
     validating_rewards: Gwei = 0
     &#34;&#34;&#34;The total rewards received for PoS validation (attestation, block proposal, sync vote)&#34;&#34;&#34;
     validating_penalties: Gwei = 0
-    &#34;&#34;&#34;The total penalties received for failing to perform PoS validation duties&#34;&#34;&#34;
+    &#34;&#34;&#34;The total penalties received for failing to perform PoS validation duties (attestation, sync vote)&#34;&#34;&#34;
     source_reward: Gwei = 0
     &#34;&#34;&#34;The total rewards received for getting a source vote in time and correctly&#34;&#34;&#34;
     target_reward: Gwei = 0
@@ -141,6 +139,10 @@ class StateVariables:
     &#34;&#34;&#34;The total rewards received for successfully proposing a block&#34;&#34;&#34;
     sync_reward: Gwei = 0
     &#34;&#34;&#34;The total rewards received for attesting as part of a sync committee&#34;&#34;&#34;
+    attestation_penalties: Gwei = 0
+    &#34;&#34;&#34;The total penalties received for failing to perform attestation duties&#34;&#34;&#34;
+    sync_committee_penalties: Gwei = 0
+    &#34;&#34;&#34;The total penalties received for failing to perform sync committee duties&#34;&#34;&#34;
 
     # Slashing state variables
     amount_slashed: Gwei = 0
@@ -232,7 +234,7 @@ initial_state = StateVariables().__dict__</code></pre>
 <dl>
 <dt id="model.state_variables.StateVariables"><code class="flex name class">
 <span>class <span class="ident">StateVariables</span></span>
-<span>(</span><span>stage: <a title="model.types.Stage" href="types.html#model.types.Stage">Stage</a> = None, timestamp: datetime.datetime = None, eth_price: float = 0, eth_supply: float = 115538828, eth_staked: float = 3868555, supply_inflation: float = 0, network_issuance: float = 0, pow_issuance: float = 0, number_of_validators_in_activation_queue: int = 230, average_effective_balance: float = 32000000000.0, number_of_validators: int = 120894, number_of_validators_online: int = 0, number_of_validators_offline: int = 0, base_reward: float = 0, validating_rewards: float = 0, validating_penalties: float = 0, source_reward: float = 0, target_reward: float = 0, head_reward: float = 0, block_proposer_reward: float = 0, sync_reward: float = 0, amount_slashed: float = 0, whistleblower_rewards: float = 0, basefee: float = 1, total_basefee: float = 0, total_tips_to_miners: float = 0, total_tips_to_validators: float = 0, validator_eth_staked: numpy.ndarray = array([[0],
+<span>(</span><span>stage: <a title="model.types.Stage" href="types.html#model.types.Stage">Stage</a> = None, timestamp: datetime.datetime = None, eth_price: float = 0, eth_supply: float = 116539892.499, eth_staked: float = 6005228.271326234, supply_inflation: float = 0, network_issuance: float = 0, pow_issuance: float = 0, number_of_validators_in_activation_queue: int = 0, average_effective_balance: float = 32000000000.0, number_of_validators: int = 182285, number_of_validators_online: int = 0, number_of_validators_offline: int = 0, base_reward: float = 0, validating_rewards: float = 0, validating_penalties: float = 0, source_reward: float = 0, target_reward: float = 0, head_reward: float = 0, block_proposer_reward: float = 0, sync_reward: float = 0, attestation_penalties: float = 0, sync_committee_penalties: float = 0, amount_slashed: float = 0, whistleblower_rewards: float = 0, basefee: float = 1, total_basefee: float = 0, total_tips_to_miners: float = 0, total_tips_to_validators: float = 0, validator_eth_staked: numpy.ndarray = array([[0],
 [0],
 [0],
 [0],
@@ -349,9 +351,7 @@ state variable key: state variable type = default state variable value</p></div>
     &#34;&#34;&#34;The total Proof of Work issuance in ETH&#34;&#34;&#34;
 
     # Validator state variables
-    number_of_validators_in_activation_queue: int = (
-        number_of_validators_in_activation_queue
-    )
+    number_of_validators_in_activation_queue: int = 0
     &#34;&#34;&#34;The number of validators in activation queue&#34;&#34;&#34;
     average_effective_balance: Gwei = 32 * constants.gwei
     &#34;&#34;&#34;The validator average effective balance&#34;&#34;&#34;
@@ -371,7 +371,7 @@ state variable key: state variable type = default state variable value</p></div>
     validating_rewards: Gwei = 0
     &#34;&#34;&#34;The total rewards received for PoS validation (attestation, block proposal, sync vote)&#34;&#34;&#34;
     validating_penalties: Gwei = 0
-    &#34;&#34;&#34;The total penalties received for failing to perform PoS validation duties&#34;&#34;&#34;
+    &#34;&#34;&#34;The total penalties received for failing to perform PoS validation duties (attestation, sync vote)&#34;&#34;&#34;
     source_reward: Gwei = 0
     &#34;&#34;&#34;The total rewards received for getting a source vote in time and correctly&#34;&#34;&#34;
     target_reward: Gwei = 0
@@ -382,6 +382,10 @@ state variable key: state variable type = default state variable value</p></div>
     &#34;&#34;&#34;The total rewards received for successfully proposing a block&#34;&#34;&#34;
     sync_reward: Gwei = 0
     &#34;&#34;&#34;The total rewards received for attesting as part of a sync committee&#34;&#34;&#34;
+    attestation_penalties: Gwei = 0
+    &#34;&#34;&#34;The total penalties received for failing to perform attestation duties&#34;&#34;&#34;
+    sync_committee_penalties: Gwei = 0
+    &#34;&#34;&#34;The total penalties received for failing to perform sync committee duties&#34;&#34;&#34;
 
     # Slashing state variables
     amount_slashed: Gwei = 0
@@ -463,6 +467,10 @@ state variable key: state variable type = default state variable value</p></div>
 <dd>
 <div class="desc"><p>The total penalties applied for slashable offences</p></div>
 </dd>
+<dt id="model.state_variables.StateVariables.attestation_penalties"><code class="name">var <span class="ident">attestation_penalties</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The total penalties received for failing to perform attestation duties</p></div>
+</dd>
 <dt id="model.state_variables.StateVariables.average_effective_balance"><code class="name">var <span class="ident">average_effective_balance</span> : float</code></dt>
 <dd>
 <div class="desc"><p>The validator average effective balance</p></div>
@@ -535,6 +543,10 @@ Under perfect network conditions, each validator should receive 1 base reward pe
 <dd>
 <div class="desc"><p>The annualized ETH supply inflation</p></div>
 </dd>
+<dt id="model.state_variables.StateVariables.sync_committee_penalties"><code class="name">var <span class="ident">sync_committee_penalties</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The total penalties received for failing to perform sync committee duties</p></div>
+</dd>
 <dt id="model.state_variables.StateVariables.sync_reward"><code class="name">var <span class="ident">sync_reward</span> : float</code></dt>
 <dd>
 <div class="desc"><p>The total rewards received for attesting as part of a sync committee</p></div>
@@ -585,7 +597,7 @@ Under perfect network conditions, each validator should receive 1 base reward pe
 </dd>
 <dt id="model.state_variables.StateVariables.validating_penalties"><code class="name">var <span class="ident">validating_penalties</span> : float</code></dt>
 <dd>
-<div class="desc"><p>The total penalties received for failing to perform PoS validation duties</p></div>
+<div class="desc"><p>The total penalties received for failing to perform PoS validation duties (attestation, sync vote)</p></div>
 </dd>
 <dt id="model.state_variables.StateVariables.validating_rewards"><code class="name">var <span class="ident">validating_rewards</span> : float</code></dt>
 <dd>
@@ -659,6 +671,7 @@ per validator environment</p></div>
 <h4><code><a title="model.state_variables.StateVariables" href="#model.state_variables.StateVariables">StateVariables</a></code></h4>
 <ul class="">
 <li><code><a title="model.state_variables.StateVariables.amount_slashed" href="#model.state_variables.StateVariables.amount_slashed">amount_slashed</a></code></li>
+<li><code><a title="model.state_variables.StateVariables.attestation_penalties" href="#model.state_variables.StateVariables.attestation_penalties">attestation_penalties</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.average_effective_balance" href="#model.state_variables.StateVariables.average_effective_balance">average_effective_balance</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.base_reward" href="#model.state_variables.StateVariables.base_reward">base_reward</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.basefee" href="#model.state_variables.StateVariables.basefee">basefee</a></code></li>
@@ -676,6 +689,7 @@ per validator environment</p></div>
 <li><code><a title="model.state_variables.StateVariables.source_reward" href="#model.state_variables.StateVariables.source_reward">source_reward</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.stage" href="#model.state_variables.StateVariables.stage">stage</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.supply_inflation" href="#model.state_variables.StateVariables.supply_inflation">supply_inflation</a></code></li>
+<li><code><a title="model.state_variables.StateVariables.sync_committee_penalties" href="#model.state_variables.StateVariables.sync_committee_penalties">sync_committee_penalties</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.sync_reward" href="#model.state_variables.StateVariables.sync_reward">sync_reward</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.target_reward" href="#model.state_variables.StateVariables.target_reward">target_reward</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.timestamp" href="#model.state_variables.StateVariables.timestamp">timestamp</a></code></li>

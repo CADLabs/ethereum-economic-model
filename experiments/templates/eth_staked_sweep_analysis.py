@@ -2,7 +2,7 @@ import numpy as np
 import copy
 
 from model.simulation_configuration import TIMESTEPS, DELTA_TIME
-from model.state_variables import eth_staked, eth_supply
+from model.state_variables import eth_staked, eth_supply, eth_price_max
 from experiments.default_experiment import experiment
 from model.types import Stage
 
@@ -24,7 +24,7 @@ parameter_overrides = {
     "eth_price_process": [
         # A sweep of two fixed ETH price points
         lambda _run, _timestep: 100,
-        lambda _run, _timestep: 3000,
+        lambda _run, _timestep: eth_price_max,
     ]
 }
 

@@ -27,9 +27,6 @@ docs-pdoc:
 	# sed -i 's/\"index.html/\"model\/index.html/g' ./docs/model/*.html
 
 docs-jupyter-book:
-	rm -rf docs/notebooks/*
-	cp -r experiments/notebooks/* docs/notebooks/
-	sed -i 's/media/_static/g' ./docs/notebooks/*.ipynb
 	jupyter-book clean docs
 	jupyter-book build --config docs/_config.yml --toc docs/_toc.yml --path-output docs .
 

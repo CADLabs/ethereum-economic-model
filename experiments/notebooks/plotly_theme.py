@@ -7,7 +7,7 @@ cadlabs_colors_r = [[0,'#F76746'],[0.33,'#D03DD2'],[0.66,'#30B4F1'],[1.0,'#1AD5A
 cadlabs_colorway_sequence = ['#FC1CBF','#3283FE','#1CBE4F','#AA0DFE','#FA0087','#FE00FA','#1C8356','#782AB6','#F6222E','#B10DA1']
 
 pio.templates["cadlabs"] = go.layout.Template(
-    layout_font={'color': '#2a3f5f'},   
+    layout_font={'color': '#2a3f5f'},
     layout_plot_bgcolor='white',
     layout_paper_bgcolor='white',
     layout_height=800,
@@ -211,15 +211,13 @@ pio.templates["cadlabs_frontend"] = go.layout.Template(
 pio.templates.default = "cadlabs"
 
 # Legend at bottom of chart
-# default_template.layout.legend = dict(
+# pio.templates["cadlabs"].layout.legend = dict(
 #     title=dict(
 #         text="",
 #     ),
 #     orientation="h",
 #     yanchor="bottom",
-#     y=-0.2,
+#     y=-0.7,
 #     xanchor="center",
 #     x=0.5,
 # )
-
-
