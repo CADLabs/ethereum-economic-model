@@ -12,8 +12,8 @@ A modular dynamical systems model of Ethereum's validator economics, implemented
   * [Directory Structure](#directory-structure)
   * [Model Architecture](#model-architecture)
   * [Model Assumptions](#model-assumptions)
-* [Environment Setup](#environment-setup)
 * [Simulation Experiments](#simulation-experiments)
+* [Environment Setup](#environment-setup)
 * [Model Extension Roadmap](#model-extension-roadmap)
 * [Tests](#tests)
 * [Change Log](#change-log)
@@ -105,10 +105,9 @@ The purpose of this notebook is to explore the returns validators can expect fro
 
 #### 3. Network Issuance and Inflation Rate (Network-level Analysis)
 
-The purpose of this notebook is to explore the ETH issuance and resulting annualized inflation rate across different time horizons and adoption scenarios. 
+The purpose of this notebook is to explore the ETH issuance and resulting annualized inflation rate across different time horizons and scenarios. 
 
-* Analysis 1: Inflation Rate and ETH Supply Over Time
-* Analysis 2: TODO - add remaining analyses
+* Analysis: Inflation Rate and ETH Supply Over Time
 
 ### Model Assumptions
 

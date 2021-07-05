@@ -2,6 +2,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import itertools
+import math
 from plotly.subplots import make_subplots
 from ipywidgets import widgets
 from datetime import datetime
@@ -50,6 +51,15 @@ axis_state_variable_name_mapping = {
     'eth_staked': 'ETH Staked (ETH)',
     'eth_supply': 'ETH Supply (ETH)',
 }
+
+millnames = ['',' Thousand',' Million',' Billion',' Trillion']
+
+def millify(n):
+    n = float(n)
+    millidx = max(0,min(len(millnames)-1,
+                        int(math.floor(0 if n == 0 else math.log10(abs(n))/3))))
+
+    return '{:.0f}{}'.format(n / 10**(3 * millidx), millnames[millidx])
 
 
 def update_legend_names(fig, name_mapping=legend_state_variable_name_mapping):
@@ -229,14 +239,14 @@ def plot_revenue_profit_yields_over_eth_price(df):
     # Add traces
     fig.add_trace(
         go.Scatter(
-            x=df.eth_price, y=df.total_revenue_yields_pct, name=f"Revenue Yields @ {df.eth_staked.iloc[0]:.0f} ETH Staked",
+            x=df.eth_price, y=df.total_revenue_yields_pct, name=f"Revenue Yields @ Current ETH Staked ({millify(df.eth_staked.iloc[0])} ETH)",
             line=dict(color=cadlabs_colorway_sequence[3])
         )
     )
 
     fig.add_trace(
         go.Scatter(
-            x=df.eth_price, y=df.total_profit_yields_pct, name=f"Profit Yields @ {df.eth_staked.iloc[0]:.0f} ETH Staked",
+            x=df.eth_price, y=df.total_profit_yields_pct, name=f"Profit Yields @ Current ETH Staked ({millify(df.eth_staked.iloc[0])} ETH)",
             line=dict(color=cadlabs_colorway_sequence[4], dash='dash')
         ),
     )
@@ -975,7 +985,7 @@ def plot_number_of_validators_in_activation_queue_over_time(df):
     return fig
 
 
-def plot_revenue_profit_yields_over_time_foreach_subset(df):
+def plot_revenue_profit_yields_over_time_foreach_subset_subplots(df):
     scenario_names = {0: 'Normal Adoption', 1: 'Low Adoption', 2: 'High Adoption'}
     color_cycle = itertools.cycle(cadlabs_colorway_sequence)
     
@@ -1020,32 +1030,20 @@ def plot_revenue_profit_yields_over_time_foreach_subset(df):
     return fig
 
 
-def plot_expanding_mean_revenue_profit_yields_over_time_foreach_subset(df):
-    df_0 = df.query('subset == 0')
-    df_1 = df.query('subset == 1')
-    df_2 = df.query('subset == 2')
-    
-    # Expanding mean revenue yields
-    df['avg_revenue_yields_pct'] = df_0['total_revenue_yields_pct'].expanding().mean()
-    df['avg_revenue_yields_pct'] = df['avg_revenue_yields_pct'].fillna(df_1['total_revenue_yields_pct'].expanding().mean())
-    df['avg_revenue_yields_pct'] = df['avg_revenue_yields_pct'].fillna(df_2['total_revenue_yields_pct'].expanding().mean())
-
-    # Expanding mean profit yields
-    df['avg_profit_yields_pct'] = df_0['total_profit_yields_pct'].expanding().mean()
-    df['avg_profit_yields_pct'] = df['avg_profit_yields_pct'].fillna(df_1['total_profit_yields_pct'].expanding().mean())
-    df['avg_profit_yields_pct'] = df['avg_profit_yields_pct'].fillna(df_2['total_profit_yields_pct'].expanding().mean())
-    
+def plot_revenue_profit_yields_over_time_foreach_subset(df):    
     scenario_names = {0: 'Normal Adoption', 1: 'Low Adoption', 2: 'High Adoption'}
     color_cycle = itertools.cycle(cadlabs_colorway_sequence)
     
     fig = go.Figure()
     
     for subset in df.subset.unique():
+        df_subset = df.query(f'subset == {subset}').copy()
+        
         color = next(color_cycle)
         fig.add_trace(
             go.Scatter(
                 x=df['timestamp'],
-                y=df[df.subset == subset]['avg_revenue_yields_pct'],
+                y=df_subset['total_revenue_yields_pct'],
                 name=f"{scenario_names[subset]} Revenue Yield",
                 line=dict(color=color),
             ),
@@ -1053,9 +1051,85 @@ def plot_expanding_mean_revenue_profit_yields_over_time_foreach_subset(df):
         fig.add_trace(
             go.Scatter(
                 x=df['timestamp'],
-                y=df[df.subset == subset]['avg_profit_yields_pct'],
+                y=df_subset['total_profit_yields_pct'],
                 name=f"{scenario_names[subset]} Profit Yield",
                 line=dict(color=color, dash='dash'),
+                visible=False
+            ),
+        )
+
+    fig.update_layout(
+        title="Revenue or Profit Yields Over Time",
+        xaxis_title="Date",
+        yaxis_title="Yields (%/year)",
+        legend_title=""
+    )
+
+    fig.update_layout(
+        xaxis=dict(
+            rangeslider=dict(
+                visible=True
+            ),
+            type="date"
+        )
+    )
+    
+    fig.update_layout(updatemenus=[dict(
+        type="buttons",
+        buttons=[
+            dict(
+                label = 'Revenue Yields',
+                method = 'update',
+                args = [{'visible': [True, 'legendonly']}, {'showlegend':True}]
+            ),
+            dict(
+                label = 'Profit Yields',
+                method = 'update',
+                args = [{'visible': ['legendonly', True]}, {'showlegend':True}]
+            )
+        ],
+        direction='right',
+        showactive=True,
+        pad={"t": 10},
+        x=0,
+        xanchor="left",
+        y=1.1,
+        yanchor="top"
+    )])
+    
+    fig.update_layout(hovermode='x unified')
+
+    return fig
+
+
+def plot_expanding_mean_revenue_profit_yields_over_time_foreach_subset(df):
+    scenario_names = {0: 'Normal Adoption', 1: 'Low Adoption', 2: 'High Adoption'}
+    color_cycle = itertools.cycle(cadlabs_colorway_sequence)
+    
+    fig = go.Figure()
+    
+    for subset in df.subset.unique():
+        df_subset = df.query(f'subset == {subset}').copy()
+        
+        df_subset['avg_revenue_yields_pct'] = df_subset['total_revenue_yields_pct'].expanding().mean()
+        df_subset['avg_profit_yields_pct'] = df_subset['total_profit_yields_pct'].expanding().mean()
+        
+        color = next(color_cycle)
+        fig.add_trace(
+            go.Scatter(
+                x=df['timestamp'],
+                y=df_subset['avg_revenue_yields_pct'],
+                name=f"{scenario_names[subset]} Revenue Yield",
+                line=dict(color=color),
+            ),
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=df['timestamp'],
+                y=df_subset['avg_profit_yields_pct'],
+                name=f"{scenario_names[subset]} Profit Yield",
+                line=dict(color=color, dash='dash'),
+                visible=False
             ),
         )
 
@@ -1079,11 +1153,6 @@ def plot_expanding_mean_revenue_profit_yields_over_time_foreach_subset(df):
         type="buttons",
         buttons=[
             dict(
-                label = 'All',
-                method = 'update',
-                args = [{'visible': [True, True]}, {'showlegend':True}]
-            ),
-            dict(
                 label = 'Revenue Yields',
                 method = 'update',
                 args = [{'visible': [True, 'legendonly']}, {'showlegend':True}]
@@ -1097,8 +1166,8 @@ def plot_expanding_mean_revenue_profit_yields_over_time_foreach_subset(df):
         direction='right',
         showactive=True,
         pad={"t": 10},
-        x=0.5,
-        xanchor="center",
+        x=0,
+        xanchor="left",
         y=1.1,
         yanchor="top"
     )])
@@ -1106,6 +1175,7 @@ def plot_expanding_mean_revenue_profit_yields_over_time_foreach_subset(df):
     fig.update_layout(hovermode='x unified')
 
     return fig
+
 
 def plot_figure_widget_revenue_yields_over_time_foreach_subset(df):
     subset = widgets.Dropdown(
