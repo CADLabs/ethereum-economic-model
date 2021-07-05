@@ -115,7 +115,7 @@ def apply_plotly_standards(
     return fig
 
 
-def plot_validating_rewards(df):
+def plot_validating_rewards(df, subplot_titles=[]):
     validating_rewards = [
         'source_reward_eth',
         'target_reward_eth',
@@ -123,22 +123,24 @@ def plot_validating_rewards(df):
         'block_proposer_reward_eth',
         'sync_reward_eth',
     ]
-
-    fig = px.area(
-        df,
-        x='timestamp',
-        y=list(validating_rewards),
-        title="Validating Rewards",
-    )
-
-    fig.update_layout(
-        xaxis=dict(
-            rangeslider=dict(
-                visible=True
-            ),
-            type="date"
-        ),
-    )
+    
+    fig = make_subplots(rows=1, cols=len(df.subset.unique()), shared_yaxes=True, subplot_titles=subplot_titles)
+    
+    for subset in df.subset.unique():
+        color_cycle = itertools.cycle(cadlabs_colorway_sequence)
+        df_subset = df.query(f'subset == {subset}')
+        for reward_index, reward_key in enumerate(validating_rewards):
+            color = next(color_cycle)
+            fig.add_trace(
+                go.Scatter(
+                    x=df_subset.timestamp, y=df_subset[reward_key],
+                    stackgroup='one',
+                    showlegend=(True if subset == 0 else False),
+                    line=dict(color=color),
+                    name=validating_rewards[reward_index]
+                ),
+                row=1, col=subset+1
+            )
 
     update_legend_names(fig)
 
@@ -599,6 +601,7 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None):
                 name=name,
                 textfont_size=18,
                 textposition="middle right",
+                legendgroup='markers',
             ),
             *(secondary_y, secondary_y) if secondary_y else ()
         )
@@ -647,12 +650,18 @@ def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated):
     fig = make_subplots(specs=[[{"secondary_y": True}]])
     
     fig.add_trace(
-        go.Scatter(x=df_historical.timestamp, y=df_historical.supply_inflation_pct, name='Historical Network Inflation Rate', line=dict(color='#FC1CBF')),
+        go.Scatter(
+            x=df_historical.timestamp, y=df_historical.supply_inflation_pct, name='Historical Network Inflation Rate', line=dict(color='#FC1CBF'),
+            legendgroup='historical'
+        ),
         secondary_y=False,
     )
     
     fig.add_trace(
-        go.Scatter(x=df_historical.timestamp, y=df_historical.eth_supply, name='Historical ETH Supply', line=dict(color='#3283FE')),
+        go.Scatter(
+            x=df_historical.timestamp, y=df_historical.eth_supply, name='Historical ETH Supply', line=dict(color='#3283FE'),
+            legendgroup='historical'
+        ),
         secondary_y=True,
     )
     
@@ -661,7 +670,8 @@ def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated):
         fig.add_trace(
             go.Scatter(
                 x=df_subset.timestamp, y=df_subset.supply_inflation_pct, name='Simulated Network Inflation Rate', line=dict(color='#FC1CBF', dash='dot'),
-                showlegend=(True if subset == 0 else False)
+                showlegend=(True if subset == 0 else False),
+                legendgroup='simulated'
             ),
             secondary_y=False,
         )
@@ -669,7 +679,8 @@ def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated):
         fig.add_trace(
             go.Scatter(
                 x=df_subset.timestamp, y=df_subset.eth_supply, name='Simulated ETH Supply', line=dict(color='#3283FE', dash='dot'),
-                showlegend=(True if subset == 0 else False)
+                showlegend=(True if subset == 0 else False),
+                legendgroup='simulated'
             ),
             secondary_y=True,
         )
@@ -704,9 +715,11 @@ def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated):
             ),
             orientation="h",
             yanchor="top",
-            y=-0.5,
+            y=-0.7,
             xanchor="center",
-            x=0.5
+            x=0.5,
+            traceorder='grouped',
+            itemclick=False,
         )
     )
     
@@ -985,11 +998,10 @@ def plot_number_of_validators_in_activation_queue_over_time(df):
     return fig
 
 
-def plot_revenue_profit_yields_over_time_foreach_subset_subplots(df):
-    scenario_names = {0: 'Normal Adoption', 1: 'Low Adoption', 2: 'High Adoption'}
+def plot_revenue_profit_yields_over_time_foreach_subset_subplots(df, subplot_titles=[]):
     color_cycle = itertools.cycle(cadlabs_colorway_sequence)
     
-    fig = make_subplots(rows=1, cols=3, shared_yaxes=True)
+    fig = make_subplots(rows=1, cols=3, shared_yaxes=True, subplot_titles=subplot_titles)
     
     for subset in df.subset.unique():
         color = next(color_cycle)
@@ -997,8 +1009,9 @@ def plot_revenue_profit_yields_over_time_foreach_subset_subplots(df):
             go.Scatter(
                 x=df['timestamp'],
                 y=df[df.subset == subset]['total_revenue_yields_pct'],
-                name=f"{scenario_names[subset]} Revenue Yield",
+                name="Revenue Yield",
                 line=dict(color=color),
+                showlegend=(True if subset == 0 else False)
             ),
             row=1, col=subset+1
         )
@@ -1006,8 +1019,9 @@ def plot_revenue_profit_yields_over_time_foreach_subset_subplots(df):
             go.Scatter(
                 x=df['timestamp'],
                 y=df[df.subset == subset]['total_profit_yields_pct'],
-                name=f"{scenario_names[subset]} Profit Yield",
+                name="Profit Yield",
                 line=dict(color=color, dash='dash'),
+                showlegend=(True if subset == 0 else False)
             ),
             row=1, col=subset+1
         )
@@ -1022,7 +1036,7 @@ def plot_revenue_profit_yields_over_time_foreach_subset_subplots(df):
 
     fig.for_each_xaxis(lambda x: x.update(dict(title=dict(text='Date'))))
     
-    # Removes the 'substet=' from the facet_col title
+    # Removes the 'subset=' from the facet_col title
     fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 
     update_legend_names(fig)
