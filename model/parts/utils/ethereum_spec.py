@@ -59,7 +59,7 @@ def get_base_reward_per_increment(params: Parameters, state: StateVariables) -> 
     return Gwei(
         EFFECTIVE_BALANCE_INCREMENT
         * BASE_REWARD_FACTOR
-        // math.sqrt(get_total_active_balance(params, state))
+        // math.isqrt(int(get_total_active_balance(params, state)))
     )
 
 
