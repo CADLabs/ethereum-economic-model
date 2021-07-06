@@ -999,12 +999,11 @@ def plot_number_of_validators_in_activation_queue_over_time(df):
 
 
 def plot_revenue_profit_yields_over_time_foreach_subset_subplots(df, subplot_titles=[]):
-    color_cycle = itertools.cycle(cadlabs_colorway_sequence)
+    color = cadlabs_colorway_sequence[0]
     
     fig = make_subplots(rows=1, cols=3, shared_yaxes=True, subplot_titles=subplot_titles)
     
     for subset in df.subset.unique():
-        color = next(color_cycle)
         fig.add_trace(
             go.Scatter(
                 x=df['timestamp'],
