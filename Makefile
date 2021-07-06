@@ -44,4 +44,4 @@ update-notebooks:
 	rm experiments/notebooks/*.nbconvert.* || true
 
 clear-notebook-outputs:
-	jupyter nbconvert --clear-output --inplace experiments/notebooks/*.ipynb
+	jupyter nbconvert --ClearOutputPreprocessor.enabled=True --inplace experiments/notebooks/*.ipynb
