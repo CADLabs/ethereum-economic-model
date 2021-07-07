@@ -20,7 +20,7 @@ The model supports the simulation of validator economics across different "valid
 ### Validator environment categories and cost structures
 
 By default, the model implements the 7 validators environment categories and associated cost structures as defined by 
-[Hoban/Borgers Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). Below is a short charaterization of each environment. For the associated cost assumptions please refer to the tab "Cost of Validating" in [Hoban/Borgers model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE/edit#gid=1220504079).
+[Hoban/Borgers Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). Below is a short characterisation of each environment. For the associated cost assumptions please refer to the tab "Cost of Validating" in [Hoban/Borgers model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE/edit#gid=1220504079).
 
 1. **Run own hardware validator ("DIY-Hardware")**
 - Setup: Validator running their own hardware
@@ -35,7 +35,7 @@ By default, the model implements the 7 validators environment categories and ass
 3. **Validate via a pool Staking-as-a-Service provider ("Pool-StaaS")** - TODO: Clearly describe 3 vs 4 vs. 5
 - Setup: Validator staking indirectly in a Pool of validators
 - Economics: Costs carried by StaaS provider who charge a fee (percentage of revenue) to the validators
-- Example: Rocket Pool - https://www.rocketpool.net/
+- Example: Rocket Pool (Pool) - https://www.rocketpool.net/
 
 4. **Validate via a pool hardware service provider ("Pool-Hardware")** - TODO: Clearly describe 3 vs 4 vs. 5
 - Setup: Validator staking directly 
@@ -43,7 +43,7 @@ By default, the model implements the 7 validators environment categories and ass
 - Example: TODO
 
 5. **Validate via a pool cloud provider ("Pool-Cloud")**- TODO: Clearly describe 3 vs 4
-- Setup: TODO 
+- Setup: Validators 
 - Economics: TODO
 - Example: TODO
 
@@ -57,7 +57,9 @@ By default, the model implements the 7 validators environment categories and ass
 - Economics: Costs carried by StaaS provider who charge a fee (percentage of revenue) to the validators (assumed lower cost than Staas-Full environment)
 - Example: Attestant "Managed Staking Service" - https://www.attestant.io/service/
 
-The model allows for the creation of a custom validator environment and/or cost-structures. (TODO: Validate how? Describe more?)
+The model also allows for the creation of a custom validator environment and/or cost-structures. These can be configured in the [model System Parameters](model/system_parameters.py) as part of the `validator_environments` variable. By default, there is a custom environment created with a 1% distribution for convenience - it is configured with the `diy_hardware` cost assumptions, but can be easily updated.
+
+For more information about active validator staking services, see https://beaconcha.in/stakingServices.
 
 ### Validator environment relative weights
 
@@ -66,11 +68,11 @@ By default, the model assumes the following relative weights for the calculation
 
 1. **Run own hardware validator ("DIY-Hardware")**: 37%
 2. **Run own cloud validator ("DIY-Cloud")**: 13%
-3. **Validate via a pool Staking-as-a-Service provider ("Pool-Staas")**: 27% - TODO: Clearly describe 3 vs 4 vs. 5
-4. **Validate via a pool hardware service provider ("Pool-Hardware")**: 5% - TODO: Clearly describe 3 vs 4 vs. 5
-5. **Validate via a pool Cloud providers ("Pool-Cloud")**: 2% TODO: Clearly describe 3 vs 4
-6. **Validate via a custodial Staking-as-a-Service provider**: 8% ("StaaS-Full")
-7. **Validate via a non-custodial Staking-as-a-Service provider**: 8% ("StaaS-Self-custoried")
+3. **Validate via a pool Staking-as-a-Service provider ("Pool-Staas")**: 27%
+4. **Validate via a pool hardware service provider ("Pool-Hardware")**: 5%
+5. **Validate via a pool Cloud providers ("Pool-Cloud")**: 2%
+6. **Validate via a custodial Staking-as-a-Service provider ("StaaS-Full")**: 8%
+7. **Validate via a non-custodial Staking-as-a-Service provider ("StaaS-Self-custodied")**: 8%
 
 ### Validator Environment Equal Slashing Assumption
 
@@ -83,7 +85,6 @@ See https://youtu.be/iaAEGs1DMgQ?t=574 for additional contexts.
 ### Validator Environment Equal Uptime Assumption
 
 Whereas we arguably expect better uptime for some validator environments than others (e.g. better for cloud environments than local hardware environments), we make the simplifying assumption that the same validator uptime is applied to all validator environments. Once respective data becomes available over time, this assumption could be dropped in future model iterations.
-
 
 ## Validator performance assumptions
 
@@ -111,4 +112,4 @@ In its initial version, the model does not model Ethereum's inactivity leak mech
 
 Unless specified otherwise, all State Variables, System Metrics, and System Parameters are time-dependent and calculated at epoch level granularity. For ease of notation, units of time will be assumed implicitly. In the model implementation, calculations can be aggregated across epochs where necessary - for example for performance reasons.
 
-By default calculations will be aggregated across 1 day in epochs (~= 225 epochs), using the delta-time or `dt` parameter - the simulation results will have the same aggregation i.e. State Variables will be per-day, assuming `dt = 225`.
+By default, calculations will be aggregated across 1 day in epochs (~= 225 epochs), using the delta-time or `dt` parameter - the simulation results will have the same aggregation i.e. State Variables will be per-day, assuming `dt = 225`.
