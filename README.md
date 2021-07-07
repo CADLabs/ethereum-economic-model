@@ -58,7 +58,7 @@ The model is composed of several structural modules in the [model/parts/](model/
 
 | Module | Description |
 | --- | --- |
-| [ethereum_system.py](model/parts/ethereum_system.py) | Genereal Ethereum mechanisms, such as managing the system upgrade process, the EIP1559 transaction pricing mechanism, and updating the ETH price and ETH supply |
+| [ethereum_system.py](model/parts/ethereum_system.py) | General Ethereum mechanisms, such as managing the system upgrade process, the EIP1559 transaction pricing mechanism, and updating the ETH price and ETH supply |
 | [pos_incentives.py](model/parts/pos_incentives.py) | Proof of Stake incentives |
 | [system_metrics.py](model/parts/system_metrics.py) | Calculation of validator costs, revenue, profit, and yield metrics |
 | [validators.py](model/parts/validators.py) | Validator processes such as validator activation, staking, uptime |
@@ -89,11 +89,11 @@ These notebooks and analyses don't aim to comprehensively illuminate the Ethereu
 The [experiments/templates/](experiments/templates/) directory contains different experiment templates which can be used to create custom experiment notebooks.
 See the [experiments/notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) notebook for a walk-through of how to execute existing experiment notebooks, or configure and execute a new experiment.
 
-#### 1. Model Validation
+#### Notebook 1. Model Validation
 
 The purpose of this notebook is to recreate selected simulations from the widely acknowledged Hoban/Borgers Ethereum 2.0 Economic Model using the CADLabs model, and to compare the results. We suggest that the CADLabs model has a high degree of validity.
 
-#### 2. Validator Revenue and Profit Yields (Validator-level Analysis)
+#### Notebook 2. Validator Revenue and Profit Yields (Validator-level Analysis)
 
 The purpose of this notebook is to explore the returns validators can expect from staking in the Ethereum protocol across different time horizons, adoption scenarios, ETH price scenarios and validator environments.
 
@@ -103,7 +103,7 @@ The purpose of this notebook is to explore the returns validators can expect fro
 * Analysis 4: Profit Yields Over ETH Staked vs. ETH Price (Yield Surface)
 * Analysis 5: Profit Yields By Validator Environment Over Time
 
-#### 3. Network Issuance and Inflation Rate (Network-level Analysis)
+#### Notebook 3. Network Issuance and Inflation Rate (Network-level Analysis)
 
 The purpose of this notebook is to explore the ETH issuance and resulting annualized inflation rate across different time horizons and scenarios. 
 
