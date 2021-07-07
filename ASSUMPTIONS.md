@@ -23,28 +23,35 @@ By default, the model implements the 7 validators environment categories and ass
 [Hoban/Borgers' Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). Below is a short charaterization of each environment. For the associated cost assumptions please refer to the tab "Cost of Validating" in [Hoban/Borger's model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE/edit#gid=1220504079).
 
 1. **Run own hardware validator ("DYI-Hardware")**
-- Setup: Validator running his own hardware
-- Economics: Validator receives full revenue yield and carries full hardware, electricity and bandwith cost
-2. **Run own cloud validator ("DYI-Cloud")**
-- Setup: Validator running his node on a cloud service
+- Setup: Validator running their own hardware
+- Economics: Validator receives full revenue yield and carries full hardware, electricity, and bandwidth cost
+- Example: Raspberry Pi
+
+2. **Run own cloud validator ("DIY-Cloud")**
+- Setup: Validator running their node on a cloud service
 - Economics: Validator receives full revenue yield and carries cost of cloud service
 - Example: AWS
+
 3. **Validate via a pool Staking-as-a-Service provider ("Pool-StaaS")** - TODO: Clearly describe 3 vs 4 vs. 5
-- Setup: TODO 
-- Economics: TODO
+- Setup: Validator staking indirectly in a Pool of validators
+- Economics: Costs carried by StaaS provider who charge a fee (percentage of revenue) to the validators
 - Example: TODO
+
 4. **Validate via a pool hardware service provider ("Pool-Hardware")** - TODO: Clearly describe 3 vs 4 vs. 5
-- Setup: TODO 
+- Setup: Validator staking directly 
 - Economics: TODO
 - Example: TODO
+
 5. **Validate via a pool Cloud provider ("Pool-Cloud")**- TODO: Clearly describe 3 vs 4
 - Setup: TODO 
 - Economics: TODO
 - Example: TODO
+
 6. **Validate via a custodial Staking-as-a-Service provider ("StaaS-Full")**
 - Setup: TODO 
-- Economics: TODO
+- Economics: Costs carried by StaaS provider who charge a fee (percentage of revenue) to the validators
 - Example: TODO
+
 7. **Validate via a non-custodial Staking-as-a-Service provider ("StaaS-Self-custodied")**
 - Setup: TODO 
 - Economics: TODO
