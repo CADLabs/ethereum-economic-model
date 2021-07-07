@@ -15,7 +15,7 @@ from model.types import ETH, Gwei
 
 def policy_staking(
     params, substep, state_history, previous_state
-) -> typing.Tuple[str, ETH]:
+) -> typing.Dict[str, ETH]:
     """Staking Policy
     A policy used when driving the model with the `eth_staked_process`,
     for generating phase space analyses, e.g. simulating a set of discrete `eth_staked` values.
@@ -35,7 +35,7 @@ def policy_staking(
     average_effective_balance = previous_state["average_effective_balance"]
 
     # If the eth_staked_process is defined
-    if eth_staked_process(0, 0) != None:
+    if eth_staked_process(0, 0) is not None:
         # Get the ETH staked sample for the current run and timestep
         eth_staked = eth_staked_process(run, timestep * dt)
     # Else, calculate from the number of validators
@@ -68,7 +68,7 @@ def policy_validators(params, substep, state_history, previous_state):
     average_effective_balance = previous_state["average_effective_balance"]
 
     # Calculate the number of validators using ETH staked
-    if eth_staked_process(0, 0) != None:
+    if eth_staked_process(0, 0) is not None:
         eth_staked = eth_staked_process(run, timestep * dt)
         number_of_validators = int(
             round(eth_staked / (average_effective_balance / constants.gwei))
@@ -110,7 +110,7 @@ def policy_validators(params, substep, state_history, previous_state):
 
 def policy_average_effective_balance(
     params, substep, state_history, previous_state
-) -> typing.Tuple[str, Gwei]:
+) -> typing.Dict[str, Gwei]:
     """Average Effective Balance Policy Function
     Calculate the validator average effective balance.
     """

@@ -5,8 +5,6 @@
 * Altair updates: https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md
 """
 
-import math
-
 import model.constants as constants
 from model.state_variables import StateVariables
 from model.system_parameters import Parameters
