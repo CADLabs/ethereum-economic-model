@@ -535,7 +535,7 @@ def fig_add_stage_vrects(df, fig):
     return fig
 
 
-def fig_add_stage_markers(df, column, fig, secondary_y=None):    
+def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=parameters):    
     # Frontier 📆 Jul-30-2015 03:26:13 PM +UTC
     # Frontier thawing Sep-07-2015 09:33:09 PM +UTC
     # Homestead Mar-14-2016 06:49:53 PM +UTC
@@ -643,7 +643,7 @@ def plot_eth_supply_over_all_stages(df):
     return fig
 
 
-def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated):
+def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated, parameters=parameters):
     df_historical = df_historical.set_index('timestamp', drop=False)
     df_simulated = df_simulated.set_index('timestamp', drop=False)
 
@@ -688,7 +688,7 @@ def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated):
         
     df = df_historical.append(df_simulated)
 
-    fig_add_stage_markers(df, 'supply_inflation_pct', fig, secondary_y=False)
+    fig_add_stage_markers(df, 'supply_inflation_pct', fig, secondary_y=False, parameters=parameters)
     fig_add_stage_vrects(df, fig)
 
     # Add range slider
@@ -724,7 +724,7 @@ def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated):
     )
     
     fig.add_hline(y=0,
-              annotation_text="Ultra-sound barrier",
+              annotation_text="\"Ultra-sound barrier\"",
               annotation_position="bottom right")
 
     # Set secondary y-axes titles
