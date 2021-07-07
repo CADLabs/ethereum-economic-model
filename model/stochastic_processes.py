@@ -16,7 +16,7 @@ def create_eth_price_process(
     minimum_eth_price=1500,
 ):
     """Configure environmental ETH price process
-    > A Brownian excursion is a Brownian bridge from (0, 0) to (t, 0) which is conditioned to be nonnegative on the interval [0, t].
+    > A Brownian excursion is a Brownian bridge from (0, 0) to (t, 0) which is conditioned to be non-negative on the interval [0, t].
 
     See https://stochastic.readthedocs.io/en/latest/continuous.html
     """

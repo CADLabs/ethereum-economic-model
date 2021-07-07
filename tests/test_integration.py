@@ -46,7 +46,7 @@ def check_validating_rewards(params, substep, state_history, previous_state):
     # Assert source reward is 3/4 of validating rewards
     assert math.isclose(source_reward + target_reward + head_reward, ((WEIGHT_DENOMINATOR - PROPOSER_REWARD_QUOTIENT - SYNC_REWARD_WEIGHT) / WEIGHT_DENOMINATOR) * validating_rewards)
 
-    return
+    return {}
 
 
 def test_validating_rewards():

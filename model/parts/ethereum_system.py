@@ -7,7 +7,6 @@ Policy Functions and State Update Functions shared between the Eth1 and Eth2 sys
 import typing
 import datetime
 
-import model.constants as constants
 from model import constants as constants
 from model.types import ETH, USD_per_ETH, Gwei, Stage
 
@@ -37,7 +36,7 @@ def policy_upgrade_stages(params, substep, state_history, previous_state):
     )
 
     # Initialize stage State Variable at start of simulation
-    if current_stage == None:
+    if current_stage is None:
         current_stage = stage
     else:
         # Convert Stage enum value (int) to Stage enum
@@ -131,7 +130,7 @@ def policy_eip1559_transaction_pricing(
     """
 
     stage = Stage(previous_state["stage"])
-    if not stage in [Stage.EIP1559, Stage.PROOF_OF_STAKE]:
+    if stage not in [Stage.EIP1559, Stage.PROOF_OF_STAKE]:
         return {
             "basefee": 0,
             "total_basefee": 0,

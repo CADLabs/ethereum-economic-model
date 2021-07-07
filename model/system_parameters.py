@@ -99,10 +99,10 @@ total_percentage_distribution = sum(
 )
 
 if total_percentage_distribution < 1:
-    logging.warn(
+    logging.warning(
         """
-    Parameter validator.percentage_distribution normalized due to sum not being equal to 100%
-    """
+        Parameter validator.percentage_distribution normalized due to sum not being equal to 100%
+        """
     )
     for validator in validator_environments:
         validator.percentage_distribution /= total_percentage_distribution

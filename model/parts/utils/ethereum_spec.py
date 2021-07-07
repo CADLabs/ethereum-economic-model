@@ -5,8 +5,6 @@
 * Altair updates: https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md
 """
 
-import math
-
 import model.constants as constants
 from model.state_variables import StateVariables
 from model.system_parameters import Parameters
@@ -50,6 +48,20 @@ def get_total_active_balance(params: Parameters, state: StateVariables) -> Gwei:
     return Gwei(max(EFFECTIVE_BALANCE_INCREMENT, total_active_balance))
 
 
+def integer_squareroot(n):
+    """
+    Return the largest integer ``x`` such that ``x**2 <= n``.
+
+    See https://benjaminion.xyz/eth2-annotated-spec/phase0/beacon-chain/
+    """
+    x = n
+    y = (x + 1) // 2
+    while y < x:
+        x = y
+        y = (x + n // x) // 2
+    return x
+
+
 def get_base_reward_per_increment(params: Parameters, state: StateVariables) -> Gwei:
     """Get the base reward per increment (single validator)"""
 
@@ -59,7 +71,7 @@ def get_base_reward_per_increment(params: Parameters, state: StateVariables) -> 
     return Gwei(
         EFFECTIVE_BALANCE_INCREMENT
         * BASE_REWARD_FACTOR
-        // math.sqrt(get_total_active_balance(params, state))
+        // integer_squareroot(int(get_total_active_balance(params, state)))
     )
 
 

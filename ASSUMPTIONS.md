@@ -1,6 +1,6 @@
 # Model Assumptions
 
-While the model implements the official Ethereum Specification wherever possible - see the [README](README.md) for release version - and allows for the computational simulation of many different assumption scenarios, the model does rest on several validator-level assumptions by default. These validator-level assumptions are mostly taken from the well-known [Hoban/Borgers Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). The underlying desk and survey research is very extensive. We adapted some of these assumptions to reflect the evolution of the Ethereum protocol (e.g., Altair updates), and added new ones due to the nature of our dynamcial systems modeling paradigm (e.g., time-dependent, dynamic variables). The [Experiment Notebook: Model Validation](experiments\notebooks\1_model_validation.ipynb) validates selected _outputs_ of the CADLabs model against the Hoban/Borger model to allow for efficienty sanity checks. 
+While the model implements the official Ethereum Specification wherever possible - see the [README](README.md) for release version - and allows for the computational simulation of many different assumption scenarios, the model does rest on several validator-level assumptions by default. These validator-level assumptions are mostly taken from the well-known [Hoban/Borgers Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). The underlying desk and survey research is very extensive. We adapted some of these assumptions to reflect the evolution of the Ethereum protocol (e.g., Altair updates), and added new ones due to the nature of our dynamcial systems modeling paradigm (e.g., time-dependent, dynamic variables). The [Experiment Notebook: Model Validation](experiments\notebooks\1_model_validation.ipynb) validates selected _outputs_ of the CADLabs model against the Hoban/Borgers model to allow for efficient sanity checks. 
 
 * [Validator environment assumptions](#validator-environment-assumptions)
     * [Validator environment categories and cost structures](#validator-environment-categories-and-cost-structures)
@@ -20,9 +20,9 @@ The model supports the simulation of validator economics across different "valid
 ### Validator environment categories and cost structures
 
 By default, the model implements the 7 validators environment categories and associated cost structures as defined by 
-[Hoban/Borgers' Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). Below is a short charaterization of each environment. For the associated cost assumptions please refer to the tab "Cost of Validating" in [Hoban/Borger's model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE/edit#gid=1220504079).
+[Hoban/Borgers Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). Below is a short charaterization of each environment. For the associated cost assumptions please refer to the tab "Cost of Validating" in [Hoban/Borgers model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE/edit#gid=1220504079).
 
-1. **Run own hardware validator ("DYI-Hardware")**
+1. **Run own hardware validator ("DIY-Hardware")**
 - Setup: Validator running their own hardware
 - Economics: Validator receives full revenue yield and carries full hardware, electricity, and bandwidth cost
 - Example: Raspberry Pi
@@ -64,8 +64,8 @@ The model allows for the creation of a custom validator environment and/or cost-
 By default, the model assumes the following relative weights for the calculation of average validator revenue and profit yields, as defined by 
 [Hoban/Borgers' Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). These values could change substantially and the user is encouraged to experiment with other assumptions. 
 
-1. **Run own hardware validator ("DYI-Hardware")**: 37%
-2. **Run own cloud validator ("DYI-Cloud")**: 13%
+1. **Run own hardware validator ("DIY-Hardware")**: 37%
+2. **Run own cloud validator ("DIY-Cloud")**: 13%
 3. **Validate via a pool Staking-as-a-Service provider ("Pool-Staas")**: 27% - TODO: Clearly describe 3 vs 4 vs. 5
 4. **Validate via a pool hardware service provider ("Pool-Hardware")**: 5% - TODO: Clearly describe 3 vs 4 vs. 5
 5. **Validate via a pool Cloud providers ("Pool-Cloud")**: 2% TODO: Clearly describe 3 vs 4
@@ -105,7 +105,7 @@ As more statistical data is collected about slashing in different validator envi
 
 The model assumes that validators are either online and operating perfectly, or offline and not fulfilling their duties. Offline validators are penalized for not attesting to the source, target, and head. We do not model validators that fullfil some of their duties, and not other duties. We capture this participation rate (percentage of online validators) using the `validator_uptime_process` System Parameter.
 
-In it's initial version, the model does not model Ethereum's inactivity leak mechanism. We assume a participation of more than 2/3 at all times. We assert this requirement in the `policy_validators(...)` Policy Function.
+In its initial version, the model does not model Ethereum's inactivity leak mechanism. We assume a participation of more than 2/3 at all times. We assert this requirement in the `policy_validators(...)` Policy Function.
 
 ## Epoch-level granularity
 
