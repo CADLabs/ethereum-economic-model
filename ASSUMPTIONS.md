@@ -35,29 +35,29 @@ By default, the model implements the 7 validators environment categories and ass
 3. **Validate via a pool Staking-as-a-Service provider ("Pool-StaaS")** - TODO: Clearly describe 3 vs 4 vs. 5
 - Setup: Validator staking indirectly in a Pool of validators
 - Economics: Costs carried by StaaS provider who charge a fee (percentage of revenue) to the validators
-- Example: TODO
+- Example: Rocket Pool - https://www.rocketpool.net/
 
 4. **Validate via a pool hardware service provider ("Pool-Hardware")** - TODO: Clearly describe 3 vs 4 vs. 5
 - Setup: Validator staking directly 
 - Economics: TODO
 - Example: TODO
 
-5. **Validate via a pool Cloud provider ("Pool-Cloud")**- TODO: Clearly describe 3 vs 4
+5. **Validate via a pool cloud provider ("Pool-Cloud")**- TODO: Clearly describe 3 vs 4
 - Setup: TODO 
 - Economics: TODO
 - Example: TODO
 
 6. **Validate via a custodial Staking-as-a-Service provider ("StaaS-Full")**
-- Setup: TODO 
+- Setup: Validator stakes full amount (32 ETH) on own node via a Staking-as-a-Service provider with infrastructure and keys managed by provider
 - Economics: Costs carried by StaaS provider who charge a fee (percentage of revenue) to the validators
 - Example: TODO
 
 7. **Validate via a non-custodial Staking-as-a-Service provider ("StaaS-Self-custodied")**
-- Setup: TODO 
-- Economics: TODO
-- Example: TODO
+- Setup: Validator stakes full amount (32 ETH) on own node via a Staking-as-a-Service provider with infrastructure managed by provider
+- Economics: Costs carried by StaaS provider who charge a fee (percentage of revenue) to the validators (assumed lower cost than Staas-Full environment)
+- Example: Attestant "Managed Staking Service" - https://www.attestant.io/service/
 
-The model allows for the creation of custom validator environment and/or cost-structures. (TODO: Validate how? Describe more?)
+The model allows for the creation of a custom validator environment and/or cost-structures. (TODO: Validate how? Describe more?)
 
 ### Validator environment relative weights
 
