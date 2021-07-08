@@ -7,16 +7,15 @@
 """
 
 import typing
-from pytest import approx
 
 import model.constants as constants
-import model.parts.spec as spec
+import model.parts.utils.ethereum_spec as spec
 from model.types import ETH, Gwei
 
 
 def policy_staking(
     params, substep, state_history, previous_state
-) -> typing.Tuple[str, ETH]:
+) -> typing.Dict[str, ETH]:
     """Staking Policy
     A policy used when driving the model with the `eth_staked_process`,
     for generating phase space analyses, e.g. simulating a set of discrete `eth_staked` values.
@@ -36,7 +35,7 @@ def policy_staking(
     average_effective_balance = previous_state["average_effective_balance"]
 
     # If the eth_staked_process is defined
-    if eth_staked_process(0, 0) != None:
+    if eth_staked_process(0, 0) is not None:
         # Get the ETH staked sample for the current run and timestep
         eth_staked = eth_staked_process(run, timestep * dt)
     # Else, calculate from the number of validators
@@ -50,6 +49,9 @@ def policy_staking(
 
 
 def policy_validators(params, substep, state_history, previous_state):
+    """Valdiator Policy Function
+    Calculate the number of validators driven by the ETH staked or validator processes.
+    """
     # Parameters
     dt = params["dt"]
     eth_staked_process = params["eth_staked_process"]
@@ -66,13 +68,8 @@ def policy_validators(params, substep, state_history, previous_state):
     average_effective_balance = previous_state["average_effective_balance"]
 
     # Calculate the number of validators using ETH staked
-    if eth_staked_process(0, 0) != None:
+    if eth_staked_process(0, 0) is not None:
         eth_staked = eth_staked_process(run, timestep * dt)
-        number_of_validators = int(
-            round(eth_staked / (average_effective_balance / constants.gwei))
-        )
-    elif number_of_validators == 0:
-        eth_staked = previous_state["eth_staked"]
         number_of_validators = int(
             round(eth_staked / (average_effective_balance / constants.gwei))
         )
@@ -96,6 +93,8 @@ def policy_validators(params, substep, state_history, previous_state):
     number_of_validators_offline = number_of_validators - number_of_validators_online
 
     # Assert expected conditions
+    # Assume a participation of more than 2/3 due to lack of inactivity leak mechanism
+    assert validator_uptime >= 2 / 3, "Validator uptime must be greater than 2/3"
     assert (
         number_of_validators
         == number_of_validators_online + number_of_validators_offline
@@ -111,7 +110,10 @@ def policy_validators(params, substep, state_history, previous_state):
 
 def policy_average_effective_balance(
     params, substep, state_history, previous_state
-) -> typing.Tuple[str, Gwei]:
+) -> typing.Dict[str, Gwei]:
+    """Average Effective Balance Policy Function
+    Calculate the validator average effective balance.
+    """
     # State Variables
     number_of_validators = previous_state["number_of_validators"]
 

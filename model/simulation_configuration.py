@@ -1,3 +1,7 @@
+"""
+Simulation configuration such as the number of timesteps and Monte Carlo runs
+"""
+
 from model.constants import epochs_per_month, epochs_per_day
 
 

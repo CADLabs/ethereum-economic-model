@@ -1,7 +1,10 @@
-import model.parts.ethereum as ethereum
-import model.parts.incentives as incentives
-import model.parts.metrics as metrics
-import model.parts.stages as stages
+"""
+cadCAD model state update block structure, composed of Policy and State Update Functions
+"""
+
+import model.parts.ethereum_system as ethereum
+import model.parts.pos_incentives as incentives
+import model.parts.system_metrics as metrics
 import model.parts.validators as validators
 from model.system_parameters import parameters
 from model.utils import update_from_signal
@@ -10,7 +13,7 @@ state_update_block_stages = {
     "description": """
     Transition between stages of network upgrade process
     """,
-    "policies": {"update_stages": stages.policy_stages},
+    "policies": {"upgrade_stages": ethereum.policy_upgrade_stages},
     "variables": {
         "stage": update_from_signal("stage"),
         "timestamp": update_from_signal("timestamp"),
@@ -223,7 +226,7 @@ _state_update_blocks = (
         state_update_block_validators,
     ]
     + _state_update_blocks
-    if parameters["eth_staked_process"][0](0, 0) != None
+    if parameters["eth_staked_process"][0](0, 0) is not None
     # If driving with validator process, switch first two blocks
     else [
         state_update_block_stages,
