@@ -1337,13 +1337,13 @@ def plot_network_issuance_scenarios(df, simulation_names):
     
     fig = go.Figure()
 
-    initial_simulation = 1
+    initial_simulation = 0
     for subset in df.query(f'simulation == {initial_simulation}').subset.unique():
         simulation_key = list(simulation_names.keys())[initial_simulation]
         fig.add_trace(
             go.Scatter(
                 x=df.index,
-                y=df.query(f'subset == {subset} and simulation == 1').eth_supply,
+                y=df.query(f'subset == {subset} and simulation == {initial_simulation}').eth_supply,
                 name=simulation_names[simulation_key][subset],
                 visible=True
             )
@@ -1354,11 +1354,15 @@ def plot_network_issuance_scenarios(df, simulation_names):
     for simulation_index in df.simulation.unique():
         simulation_key = list(simulation_names.keys())[simulation_index]
         simulation_df = df.query(f'simulation == {simulation_index}')
+        subset_len = len(simulation_df.subset.unique())
+        visible_traces = [False for i in range(4)]
+        visible_traces[:subset_len] = [True for i in range(subset_len)]
         buttons.append(dict(method='update',
                             label=str(simulation_key),
                             visible=True,
                             args=[
                                 {
+                                    "visible": visible_traces,
                                     'y': [
                                         simulation_df.query(f'subset == {subset}').eth_supply \
                                         for subset in simulation_df.subset.unique()
@@ -1368,7 +1372,7 @@ def plot_network_issuance_scenarios(df, simulation_names):
                                         simulation_names[simulation_key][subset] for subset in simulation_df.subset.unique()
                                     ]),
                                     'type':'scatter'
-                                }, [subset for subset in simulation_df.subset.unique()]
+                                }
                             ],
                         ))
 
@@ -1377,12 +1381,18 @@ def plot_network_issuance_scenarios(df, simulation_names):
         buttons=buttons,
         direction='right',
         showactive=True,
-        pad={"r": 10, "t": 10},
-        x=0.5,
-        xanchor="center",
+        pad={"t": 25},
+        x=0,
+        xanchor="left",
         y=1.1,
         yanchor="top"
     )])
-    fig.update_layout(hovermode='x unified')
+    
+    fig.update_layout(
+        yaxis_title='ETH Supply (ETH)',
+        xaxis_title='Date',
+        title='Inflation Rate and ETH Supply Analysis Scenarios',
+        hovermode="x unified"
+    )
     
     return fig
