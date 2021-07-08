@@ -75,7 +75,7 @@ The model is configured using several configuration modules in the [model/](mode
 | [state_update_blocks.py](model/state_update_blocks.py) | cadCAD model state update block structure, composed of Policy and State Update Functions |
 | [state_variables.py](model/state_variables.py) | Model State Variable definition, configuration, and defaults |
 | [stochastic_processes.py](model/stochastic_processes.py) | Helper functions to generate stochastic environmental processes |
-| [system_parameters.py](model/__init__.py) | Model System Parameter definition, configuration, and defaults |
+| [system_parameters.py](model/system_parameters.py) | Model System Parameter definition, configuration, and defaults |
 | [types.py](model/types.py) | Various Python types used in the model, such as the `Stage` Enum and calculation units |
 | [utils.py](model/utils.py) | Misc. utility and helper functions |
 
