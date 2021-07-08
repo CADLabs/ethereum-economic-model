@@ -155,7 +155,7 @@ def policy_eip1559_transaction_pricing(
     gas_target = gas_target_process(run, timestep * dt)  # Gas
 
     # Ensure basefee changes by no more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %
-    BASE_FEE_MAX_CHANGE_DENOMINATOR = params["BASE_FEE_MAX_CHANGE_DENOMINATOR"]
+    _BASE_FEE_MAX_CHANGE_DENOMINATOR = params["BASE_FEE_MAX_CHANGE_DENOMINATOR"]
     # assert (
     #     abs(basefee - previous_basefee) / previous_basefee
     #     <= constants.slots_per_epoch / BASE_FEE_MAX_CHANGE_DENOMINATOR
