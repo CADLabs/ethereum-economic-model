@@ -960,10 +960,6 @@ def plot_number_of_validators_over_time_foreach_subset(df):
     return fig
 
 
-'''
-Experiment 2: Analysis 1
-'''
-
 def plot_number_of_validators_in_activation_queue_over_time(df):
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
@@ -1305,10 +1301,6 @@ def plot_revenue_yields_rolling_mean(df_rolling):
     return fig
 
 
-'''
-Experiment 2: Analysis 5
-'''
-
 def plot_profit_yields_by_environment_over_time(df):
     validator_profit_yields = [validator.type + '_profit_yields_pct' for validator in validator_environments]
 
@@ -1337,4 +1329,60 @@ def plot_profit_yields_by_environment_over_time(df):
         hovermode='x unified'
     )
 
+    return fig
+
+
+def plot_network_issuance_scenarios(df, simulation_names):
+    df = df.set_index('timestamp', drop=False)
+    
+    fig = go.Figure()
+
+    initial_simulation = 1
+    for subset in df.query(f'simulation == {initial_simulation}').subset.unique():
+        simulation_key = list(simulation_names.keys())[initial_simulation]
+        fig.add_trace(
+            go.Scatter(
+                x=df.index,
+                y=df.query(f'subset == {subset} and simulation == 1').eth_supply,
+                name=simulation_names[simulation_key][subset],
+                visible=True
+            )
+        )
+
+    buttons = []
+
+    for simulation_index in df.simulation.unique():
+        simulation_key = list(simulation_names.keys())[simulation_index]
+        simulation_df = df.query(f'simulation == {simulation_index}')
+        buttons.append(dict(method='update',
+                            label=str(simulation_key),
+                            visible=True,
+                            args=[
+                                {
+                                    'y': [
+                                        simulation_df.query(f'subset == {subset}').eth_supply \
+                                        for subset in simulation_df.subset.unique()
+                                    ],
+                                    'x':[df.index],
+                                    'name': list([
+                                        simulation_names[simulation_key][subset] for subset in simulation_df.subset.unique()
+                                    ]),
+                                    'type':'scatter'
+                                }, [subset for subset in simulation_df.subset.unique()]
+                            ],
+                        ))
+
+    fig.update_layout(updatemenus=[dict(
+        type='buttons',
+        buttons=buttons,
+        direction='right',
+        showactive=True,
+        pad={"r": 10, "t": 10},
+        x=0.5,
+        xanchor="center",
+        y=1.1,
+        yanchor="top"
+    )])
+    fig.update_layout(hovermode='x unified')
+    
     return fig
