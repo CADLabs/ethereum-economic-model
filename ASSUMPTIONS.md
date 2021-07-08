@@ -22,38 +22,44 @@ The model supports the simulation of validator economics across different "valid
 By default, the model implements the 7 validators environment categories and associated cost structures as defined by 
 [Hoban/Borgers Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). Below is a short characterisation of each environment. For the associated cost assumptions please refer to the tab "Cost of Validating" in [Hoban/Borgers model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE/edit#gid=1220504079).
 
+For both hardware and cloud infrastructure Hoban/Borgers used Prysmatic Labs' Recommended Specifications for guidance:
+- Processor: Intel Core i7–4770 or AMD FX-8310 or better
+- Memory: 8GB RAM
+- Storage: 100GB available space SSD
+- Internet: Broadband connection
+
 1. **Run own hardware validator ("DIY-Hardware")**
 - Setup: Validator running their own hardware
 - Economics: Validator receives full revenue yield and carries full hardware, electricity, and bandwidth cost
-- Example: Raspberry Pi
+- Example: Self-managed hardware (see hardware/cloud specifications above)
 
 2. **Run own cloud validator ("DIY-Cloud")**
 - Setup: Validator running their node on a cloud service
 - Economics: Validator receives full revenue yield and carries cost of cloud service
-- Example: AWS
+- Example: AWS (see hardware/cloud specifications above)
 
-3. **Validate via a pool Staking-as-a-Service provider ("Pool-StaaS")** - TODO: Clearly describe 3 vs 4 vs. 5
-- Setup: Validator staking indirectly in a Pool of validators
-- Economics: Costs carried by StaaS provider who charge a fee (percentage of revenue) to the validators
+3. **Validate via a pool Staking-as-a-Service provider ("Pool-StaaS")**
+- Setup: Validator staking indirectly in a pool of validators via a Staking-as-a-service provider with infrastructure and keys managed by provider
+- Economics: Costs (hardware, electricity, and bandwidth) carried by StaaS provider who charge a fee (percentage of revenue) to the validators
 - Example: Rocket Pool (Pool) - https://www.rocketpool.net/
 
-4. **Validate via a pool hardware service provider ("Pool-Hardware")** - TODO: Clearly describe 3 vs 4 vs. 5
-- Setup: Validator staking directly 
-- Economics: TODO
-- Example: TODO
+4. **Validate via a pool hardware service provider ("Pool-Hardware")**
+- Setup: Validators pool ETH together on a node on own hardware and manage infrastructure and keys themselves
+- Economics: Costs (hardware, electricity, and bandwidth) and revenue yield shared amongst validators in pool
+- Example: Self-managed hardware (see hardware/cloud specifications above)
 
-5. **Validate via a pool cloud provider ("Pool-Cloud")**- TODO: Clearly describe 3 vs 4
-- Setup: Validators 
-- Economics: TODO
-- Example: TODO
+5. **Validate via a pool cloud provider ("Pool-Cloud")**
+- Setup: Validators pool ETH together on a node on a cloud service and manage infrastructure and keys themselves 
+- Economics: Costs (hardware, electricity, and bandwidth) and revenue yield shared amongst validators in pool
+- Example: AWS (see hardware/cloud specifications above)
 
 6. **Validate via a custodial Staking-as-a-Service provider ("StaaS-Full")**
-- Setup: Validator stakes full amount (32 ETH) on own node via a Staking-as-a-Service provider with infrastructure and keys managed by provider
-- Economics: Costs carried by StaaS provider who charge a fee (percentage of revenue) to the validators
-- Example: TODO
+- Setup: Validator stakes full amount (32 ETH) on own node via a custodial Staking-as-a-Service provider with infrastructure and keys managed by provider
+- Economics: Costs (hardware, electricity, and bandwidth) carried by StaaS provider who charge a fee (percentage of revenue) to the validators
+- Example: N/A
 
 7. **Validate via a non-custodial Staking-as-a-Service provider ("StaaS-Self-custodied")**
-- Setup: Validator stakes full amount (32 ETH) on own node via a Staking-as-a-Service provider with infrastructure managed by provider
+- Setup: Validator stakes full amount (32 ETH) on own node via a non-custodial Staking-as-a-Service provider with infrastructure managed by provider
 - Economics: Costs carried by StaaS provider who charge a fee (percentage of revenue) to the validators (assumed lower cost than Staas-Full environment)
 - Example: Attestant "Managed Staking Service" - https://www.attestant.io/service/
 
