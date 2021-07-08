@@ -999,18 +999,19 @@ def plot_number_of_validators_in_activation_queue_over_time(df):
 
 
 def plot_revenue_profit_yields_over_time_foreach_subset_subplots(df, subplot_titles=[]):
-    color = cadlabs_colorway_sequence[0]
+    color_cycle = itertools.cycle(cadlabs_colorway_sequence)
     
     fig = make_subplots(rows=1, cols=3, shared_yaxes=True, subplot_titles=subplot_titles)
     
     for subset in df.subset.unique():
+        color = next(color_cycle)
         fig.add_trace(
             go.Scatter(
                 x=df['timestamp'],
                 y=df[df.subset == subset]['total_revenue_yields_pct'],
                 name="Revenue Yield",
                 line=dict(color=color),
-                showlegend=(True if subset == 0 else False)
+                showlegend=False
             ),
             row=1, col=subset+1
         )
@@ -1020,10 +1021,30 @@ def plot_revenue_profit_yields_over_time_foreach_subset_subplots(df, subplot_tit
                 y=df[df.subset == subset]['total_profit_yields_pct'],
                 name="Profit Yield",
                 line=dict(color=color, dash='dash'),
-                showlegend=(True if subset == 0 else False)
+                showlegend=False
             ),
             row=1, col=subset+1
         )
+        
+    # Add uncoloured legend for traces
+    fig.add_trace(
+        go.Scatter(
+            x=df['timestamp'],
+            y=[None],
+            mode='lines',            
+            line=dict(color='black'),
+            name='Revenue Yield',
+        )
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=df['timestamp'],
+            y=[None],
+            mode='lines',
+            line=dict(color='black', dash='dash'),
+            name='Profit Yield',
+        )
+    )
     
     fig.update_layout(
         title="Revenue and Profit Yields Over Time - At a Glance",
