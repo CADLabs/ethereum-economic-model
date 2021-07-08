@@ -232,6 +232,11 @@ See [CONTRIBUTORS.md](CONTRIBUTORS.md) for contributions to this project repo.
 Special thanks goes to:
 * Ethereum 2.0 Economic Review. July 16, 2020. "An Analysis of Ethereum’s Proof of Stake Incentive Model". By Tanner Hoban and Thomas Borgers. For the extensive research that inspired the development of our model and the assumptions we adopted.
 
+Other notable Ethereum PoS Models:
+* Barnabé Monnot's **BeaconRunner** model: https://github.com/barnabemonnot/beaconrunner
+* Pintail's **Beacon Chain Validator Rewards** model: https://pintail.xyz/posts/beacon-chain-validator-rewards/
+* Flashbots **Eth2 Research** model - "Assessing the nature and impact of MEV in eth2.": https://github.com/flashbots/eth2-research
+
 ## License
 
 `cadCAD-edu/ethereum-model` is licensed under the GNU General Public License v3.0.
