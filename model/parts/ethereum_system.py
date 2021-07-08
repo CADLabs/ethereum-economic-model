@@ -142,14 +142,12 @@ def policy_eip1559_transaction_pricing(
     dt = params["dt"]
     gas_target_process = params["gas_target_process"]  # Gas
     ELASTICITY_MULTIPLIER = params["ELASTICITY_MULTIPLIER"]
-    BASE_FEE_MAX_CHANGE_DENOMINATOR = params["BASE_FEE_MAX_CHANGE_DENOMINATOR"]
     eip1559_basefee_process = params["eip1559_basefee_process"]
     eip1559_tip_process = params["eip1559_tip_process"]
 
     # State Variables
     run = previous_state["run"]
     timestep = previous_state["timestep"]
-    previous_basefee = previous_state["basefee"]
 
     # Get samples for current run and timestep from basefee, tip, and transaction processes
     basefee = eip1559_basefee_process(run, timestep * dt)  # Gwei per Gas
@@ -157,6 +155,7 @@ def policy_eip1559_transaction_pricing(
     gas_target = gas_target_process(run, timestep * dt)  # Gas
 
     # Ensure basefee changes by no more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %
+    # BASE_FEE_MAX_CHANGE_DENOMINATOR = params["BASE_FEE_MAX_CHANGE_DENOMINATOR"]
     # assert (
     #     abs(basefee - previous_basefee) / previous_basefee
     #     <= constants.slots_per_epoch / BASE_FEE_MAX_CHANGE_DENOMINATOR
