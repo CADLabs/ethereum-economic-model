@@ -523,7 +523,7 @@ def plot_validator_environment_yield_surface(df):
     return fig
 
 
-def fig_add_stage_vrects(df, fig):
+def fig_add_stage_vrects(df, fig, parameters=parameters):
     date_start = parameters["date_start"][0]
     date_eip1559 = parameters["date_eip1559"][0]
     date_pos = parameters["date_pos"][0]
@@ -564,7 +564,7 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
     ]
 
     system_dates = [
-        ("Beacon Chain genesis", datetime.strptime("Dec-01-2020", '%b-%d-%Y')),
+        ("Beacon Chain <br>Genesis", datetime.strptime("Dec-01-2020", '%b-%d-%Y')),
         ("Today", parameters["date_start"][0]),
         ("EIP1559", parameters["date_eip1559"][0]),
         ("Proof of Stake", parameters["date_pos"][0]),
@@ -592,22 +592,42 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
                            showarrow=True,
                            arrowhead=2,
                            arrowsize=1.5)
+    
 
     for (name, date) in system_dates:
         fig.add_trace(
             go.Scatter(
-                mode="markers", x=[date], y=[df.loc[date.strftime("%Y-%m-%d")][column][0]],
+                mode="markers+text",
+                x=[date], y=[df.loc[date.strftime("%Y-%m-%d")][column][0]],
                 marker_symbol=["diamond"],
                 # marker_line_color="darkgrey", marker_color="lightgrey",
                 marker_line_width=2, marker_size=10,
                 hovertemplate=name,
                 name=name,
-                textfont_size=18,
-                textposition="middle right",
+                textfont_size=11,
+                text=name,
+                textposition="top center",
                 legendgroup='markers',
+                showlegend=False,
             ),
             *(secondary_y, secondary_y) if secondary_y else ()
         )
+        fig.add_trace(
+            go.Scatter(
+                mode="markers",
+                x=[date], y=[df.loc[date.strftime("%Y-%m-%d")][column][0]],
+                marker_symbol=["diamond"],
+                # marker_line_color="darkgrey", marker_color="lightgrey",
+                marker_line_width=2, marker_size=10,
+                hovertemplate=name,
+                name=name,
+                textfont_size=11,
+                textposition="top center",
+                legendgroup='markers',
+                showlegend=True,
+            ),
+            *(secondary_y, secondary_y) if secondary_y else ()
+            )
 
     return fig
 
@@ -696,7 +716,7 @@ def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated, p
     df = df_historical.append(df_simulated)
 
     fig_add_stage_markers(df, 'supply_inflation_pct', fig, secondary_y=False, parameters=parameters)
-    fig_add_stage_vrects(df, fig)
+    fig_add_stage_vrects(df, fig, parameters=parameters)
 
     # Add range slider
     fig.update_layout(

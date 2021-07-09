@@ -1,0 +1,39 @@
+body{
+    margin: 40px;
+}
+.rc-slider-dot-active {  
+  border: solid 2px #d0d0f9;
+}
+.rc-slider-track {  
+  border: solid 2px #d0d0f9;
+}
+.rc-slider-handle {  
+  border: solid 2px #d0d0f9;
+}
+.validator-section{
+    float: left;
+    width: 350px;
+    padding-bottom:20px;
+    padding-left:15px;
+    padding-right:15px;
+}
+.pos-date-section{
+    float: left;
+    width: 350px;
+    padding-bottom:20px;
+    padding-left:15px;
+    padding-right:15px;
+}
+.eip1559-section{
+    float: left;
+    width: 350px;
+    padding-bottom:20px;
+    padding-left:15px;
+    padding-right:15px;
+}
+.input-row{
+    height: 200px;
+}
+.output-row{
+    height: 400px;
+}
