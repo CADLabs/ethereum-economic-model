@@ -82,7 +82,7 @@ The model is configured using several configuration modules in the [model/](mode
 
 ### Model Assumptions
 
-The model implements the official Ethereum Specification wherever possible but rest on a few default validator-level assumptions detailed in the [ASSUMPTIONS.md](ASSUMPTIONS.md) document.
+The model implements the official Ethereum Specification wherever possible, but rests on a few default validator-level assumptions detailed in the [ASSUMPTIONS.md](ASSUMPTIONS.md) document.
 
 ## Environment Setup
 
