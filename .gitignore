@@ -132,9 +132,13 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Assorted
 .vscode/
 scratchpad.*
 scratchpad/
 .DS_Store
 .idea/
 *.cache/
+*.nbconvert.ipynb
+*.dat
+drafts/

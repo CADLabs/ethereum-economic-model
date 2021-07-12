@@ -1,3 +1,7 @@
+"""
+Various Python types used in the model
+"""
+
 import numpy as np
 import sys
 
@@ -54,6 +58,7 @@ Epoch = int
 
 # Validator types
 ValidatorIndex = int
+
 
 # Validator environment class used for configuring distribution of validators as parameters
 @dataclass
