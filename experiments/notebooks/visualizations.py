@@ -732,7 +732,6 @@ def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated, p
     update_legend_names(fig)
 
     fig.update_layout(
-        title="Inflation Rate and ETH Supply Over Time",
         xaxis_title="Date",
         legend_title="",
         height=1000,

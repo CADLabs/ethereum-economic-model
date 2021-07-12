@@ -1,6 +1,12 @@
 body{
     margin: 40px;
 }
+h1 {
+    font-size: 24px;
+    margin-top: 0px;
+    margin-bottom: 20px;
+    text-align: center;
+}
 .rc-slider-dot-active {  
   border: solid 2px #d0d0f9;
 }
@@ -32,7 +38,7 @@ body{
     padding-right:15px;
 }
 .input-row{
-    height: 200px;
+    height: 170px;
 }
 .output-row{
     height: 400px;
