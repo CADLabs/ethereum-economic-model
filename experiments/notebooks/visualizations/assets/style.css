@@ -1,11 +1,14 @@
 body{
-    margin: 40px;
+    margin: 20px;
 }
 h1 {
     font-size: 24px;
     margin-top: 0px;
     margin-bottom: 20px;
     text-align: center;
+}
+label {
+  font-size: 14px;
 }
 .rc-slider-dot-active {  
   border: solid 2px #d0d0f9;
@@ -16,26 +19,12 @@ h1 {
 .rc-slider-handle {  
   border: solid 2px #d0d0f9;
 }
-.validator-section{
+.input-section{
     float: left;
-    width: 350px;
+    width: 30%;
     padding-bottom:20px;
-    padding-left:15px;
-    padding-right:15px;
-}
-.pos-date-section{
-    float: left;
-    width: 350px;
-    padding-bottom:20px;
-    padding-left:15px;
-    padding-right:15px;
-}
-.eip1559-section{
-    float: left;
-    width: 350px;
-    padding-bottom:20px;
-    padding-left:15px;
-    padding-right:15px;
+    padding-left:10px;
+    padding-right:10px;
 }
 .input-row{
     height: 170px;
