@@ -1,6 +1,6 @@
 # Model Assumptions
 
-While the model implements the official Ethereum Specification wherever possible - see the [README](README.md) for release version - and allows for the computational simulation of many different assumption scenarios, the model does rest on several validator-level assumptions by default. These validator-level assumptions are mostly taken from the well-known [Hoban/Borgers Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). The underlying desk and survey research is very extensive. We adapted some of these assumptions to reflect the evolution of the Ethereum protocol (e.g., Altair updates), and added new ones due to the nature of our dynamcial systems modeling paradigm (e.g., time-dependent, dynamic variables). The [Experiment Notebook: Model Validation](experiments\notebooks\1_model_validation.ipynb) validates selected _outputs_ of the CADLabs model against the Hoban/Borgers model to allow for efficient sanity checks. 
+While the model implements the official Ethereum Specification wherever possible - see [README](README.md) for latest implemented release version - and allows for the computational simulation of many different assumption scenarios, the model does rest on a few validator-level assumptions by default, described in this document and to a large degree sourced from the extensive research done in the context of the well-known [Hoban/Borgers Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). We adapted some of these assumptions to reflect the evolution of the Ethereum protocol (e.g., Altair updates), and added new ones due to the nature of our dynamcial systems modeling paradigm (e.g., time-dependent, dynamic variables). The [Experiment Notebook: Model Validation](experiments\notebooks\1_model_validation.ipynb) validates selected outputs of the CADLabs model against the Hoban/Borgers model to allow for efficient sanity checks. 
 
 * [Validator environment assumptions](#validator-environment-assumptions)
     * [Validator environment categories and cost structures](#validator-environment-categories-and-cost-structures)
@@ -11,7 +11,6 @@ While the model implements the official Ethereum Specification wherever possible
     * [Average uptime](#average-uptime)
     * [Frequency of slashing events](#frequency-of-slashing-events)
     * [Participation rate](#participation-rate)
-* [Epoch level granularity](#epoch-level-granularity)
 
 ## Validator environment assumptions
 
@@ -19,10 +18,10 @@ The model supports the simulation of validator economics across different "valid
 
 ### Validator environment categories and cost structures
 
-By default, the model implements the 7 validators environment categories and associated cost structures as defined by 
-[Hoban/Borgers Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). Below is a short characterisation of each environment. For the associated cost assumptions please refer to the tab "Cost of Validating" in [Hoban/Borgers model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE/edit#gid=1220504079).
+By default, the model implements the 7 validators environment categories as suggested by 
+[Hoban/Borgers Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). Below is a short characterization of each categoriy. For the respective cost assumption details, please refer to ["Cost of Validating"](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE/edit#gid=1220504079).
 
-For both hardware and cloud infrastructure Hoban/Borgers used Prysmatic Labs' Recommended Specifications for guidance:
+Across both hardware and cloud setups, the following required setup is assumed:
 - Processor: Intel Core i7–4770 or AMD FX-8310 or better
 - Memory: 8GB RAM
 - Storage: 100GB available space SSD
@@ -63,7 +62,7 @@ For both hardware and cloud infrastructure Hoban/Borgers used Prysmatic Labs' Re
 - Economics: Costs carried by StaaS provider who charge a fee (percentage of revenue) to the validators (assumed lower cost than Staas-Full environment)
 - Example: Attestant "Managed Staking Service" - https://www.attestant.io/service/
 
-The model also allows for the creation of a custom validator environment and/or cost-structures. These can be configured in the [model System Parameters](model/system_parameters.py) as part of the `validator_environments` variable. By default, there is a custom environment created with a 1% distribution for convenience - it is configured with the `diy_hardware` cost assumptions, but can be easily updated.
+The model allows for the creation of **custom validator environments and cost-structures**. These can be configured in the model's [System Parameters](model/system_parameters.py) as part of the `validator_environments` variable.
 
 For more information about active validator staking services, see https://beaconcha.in/stakingServices.
 
@@ -113,9 +112,3 @@ As more statistical data is collected about slashing in different validator envi
 The model assumes that validators are either online and operating perfectly, or offline and not fulfilling their duties. Offline validators are penalized for not attesting to the source, target, and head. We do not model validators that fullfil some of their duties, and not other duties. We capture this participation rate (percentage of online validators) using the `validator_uptime_process` System Parameter.
 
 In its initial version, the model does not model Ethereum's inactivity leak mechanism. We assume a participation of more than 2/3 at all times. We assert this requirement in the `policy_validators(...)` Policy Function.
-
-## Epoch-level granularity
-
-Unless specified otherwise, all State Variables, System Metrics, and System Parameters are time-dependent and calculated at epoch level granularity. For ease of notation, units of time will be assumed implicitly. In the model implementation, calculations can be aggregated across epochs where necessary - for example for performance reasons.
-
-By default, calculations will be aggregated across 1 day in epochs (~= 225 epochs), using the delta-time or `dt` parameter - the simulation results will have the same aggregation i.e. State Variables will be per-day, assuming `dt = 225`.
