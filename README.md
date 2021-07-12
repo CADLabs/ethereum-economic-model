@@ -12,8 +12,8 @@ A modular dynamical systems model of Ethereum's validator economics, implemented
   * [Directory Structure](#directory-structure)
   * [Model Architecture](#model-architecture)
   * [Model Assumptions](#model-assumptions)
-* [Simulation Experiments](#simulation-experiments)
 * [Environment Setup](#environment-setup)
+* [Simulation Experiments](#simulation-experiments)
 * [Model Extension Roadmap](#model-extension-roadmap)
 * [Tests](#tests)
 * [Change Log](#change-log)
@@ -26,7 +26,7 @@ A modular dynamical systems model of Ethereum's validator economics, implemented
 
 ### Model Context
 
-This open-source model has been developed in collaboration with the Ethereum Robust Incentives Group, funded by the Ethereum Foundation Eth2 Staking Community Grants program. While originally scoped with purely modeling-educational intent as part of the cadCAD Edu online course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum)", it has evolved to become a highly versatile, customizable and extensible research tool, and includes a list of [model extension ideas](#roadmap). The model is focused on epoch- and population-level Ethereum validator economics across different deployment types and - at least in its initial setup - abstracts from slot- and agent-level dynamics. Please see [model assumptions](ASSUMPTIONS.md) for further context.
+This open-source model has been developed in collaboration with the Ethereum Robust Incentives Group, and funded by an Ethereum ESP (Ecosystem Support Program) grant. While originally scoped with purely modeling-educational intent as part of the cadCAD Edu online course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum)", it has evolved to become a highly versatile, customizable and extensible research model, and includes a list of [model extension ideas](#roadmap). The model is focused on epoch- and population-level Ethereum validator economics across different deployment types and - at least in its initial setup - abstracts from slot- and agent-level dynamics. Please see [model assumptions](ASSUMPTIONS.md) for further context.
 
 ### Model Features
 
@@ -34,8 +34,9 @@ This open-source model has been developed in collaboration with the Ethereum Rob
   * post Beacon Chain launch, pre EIP1559, pre PoS (validators receive PoS incentives, EIP1559 disabled, and PoW still in operation)
   * post Beacon Chain launch, post EIP1559, pre PoS (validators receive PoS incentives, EIP1559 enabled with miners receiving tips, and PoW still in operation)
   * post Beacon Chain launch, post EIP1559, post PoS (validators receive PoS incentives, EIP1559 enabled with validators receiving tips, and PoW deprecated)
-* Supports [state-space analysis](https://en.wikipedia.org/wiki/State-space_representation) (i.e. simulation of system behavior over time) and [phase-space analysis](https://en.wikipedia.org/wiki/Phase_space) (i.e. generation of all unique system states in a given experimental setup)
-* Customizable processes to set important variables such as ETH price, ETH staked, EIP1559 transaction pricing, and transaction rates
+* Flexible calculation granularity: By default, State Variables, System Metrics, and System Parameters are calculated at epoch level and aggregated daily (~= 225 epochs). Users can easily change epoch aggregation using the delta-time (dt) parameter. The model can be extended for slot-level granularity and analysis if that is desired (see [Model Extension Roadmap](#model-extension-roadmap).
+* Supports [state-space analysis](https://en.wikipedia.org/wiki/State-space_representation) (i.e. simulation of system behavior over time) and [phase-space analysis](https://en.wikipedia.org/wiki/Phase_space) (i.e. generation of all unique system states in a given experimental setup).
+* Customizable processes to set important variables such as ETH price, ETH staked, EIP1559 transaction pricing, and transaction rates.
 * Modular model structure for convenient extension and modification. This allows different user groups to refactor the model for different purposes, rapidly test new incentive mechanisms, or to update the model as Ethereum implements new protocol improvements.
 * References to official [Eth2 specs](https://github.com/ethereum/eth2.0-specs) in Policy and State Update Function logic. This enables seamless onboarding of protocol developers or for the more advanced cadCAD user to dig into the underlying protocol design that inspired the logic.
 
@@ -79,39 +80,9 @@ The model is configured using several configuration modules in the [model/](mode
 | [types.py](model/types.py) | Various Python types used in the model, such as the `Stage` Enum and calculation units |
 | [utils.py](model/utils.py) | Misc. utility and helper functions |
 
-## Simulation Experiments
-
-The [experiments/](experiments/) directory contains modules for configuring and executing simulation experiments, as well as performing post-processing of the results.
-
-The [experiments/notebooks/](experiments/notebooks/) directory contains several initial experiment notebooks we have created as a basis for analyzing the economics Ethereum validators are confronted with under a variety of scenarios.
-These notebooks and analyses don't aim to comprehensively illuminate the Ethereum protocol, but rather to answer the most salient questions and serve as inspiration for building out more customized analyses and model extensions.
-
-The [experiments/templates/](experiments/templates/) directory contains different experiment templates which can be used to create custom experiment notebooks.
-See the [experiments/notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) notebook for a walk-through of how to execute existing experiment notebooks, or configure and execute a new experiment.
-
-#### Notebook 1. Model Validation
-
-The purpose of this notebook is to recreate selected simulations from the widely acknowledged Hoban/Borgers Ethereum 2.0 Economic Model using the CADLabs model, and to compare the results. We suggest that the CADLabs model has a high degree of validity.
-
-#### Notebook 2. Validator Revenue and Profit Yields (Validator-level Analysis)
-
-The purpose of this notebook is to explore the returns validators can expect from staking in the Ethereum protocol across different time horizons, adoption scenarios, ETH price scenarios and validator environments.
-
-* Analysis 1: Revenue and Profit Yields Over Time
-* Analysis 2: Revenue and Profit Yields Over ETH Staked
-* Analysis 3: Revenue and Profit Yields Over ETH Price
-* Analysis 4: Profit Yields Over ETH Staked vs. ETH Price (Yield Surface)
-* Analysis 5: Profit Yields By Validator Environment Over Time
-
-#### Notebook 3. Network Issuance and Inflation Rate (Network-level Analysis)
-
-The purpose of this notebook is to explore the ETH issuance and resulting annualized inflation rate across different time horizons and scenarios. 
-
-* Analysis: Inflation Rate and ETH Supply Over Time
-
 ### Model Assumptions
 
-We detail the model assumptions in the [ASSUMPTIONS.md](ASSUMPTIONS.md) document.
+The model implements the official Ethereum Specification wherever possible, but rests on a few default validator-level assumptions detailed in the [ASSUMPTIONS.md](ASSUMPTIONS.md) document.
 
 ## Environment Setup
 
@@ -207,9 +178,39 @@ python3 -m experiments.run
 Alternatively, open and run one of the pre-existing Jupyter experiment notebooks in Jupyter Lab or Notebook,
 following the [experiments/notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) notebook as a guide.
 
-## Model Extension Roadmap 
+## Simulation Experiments
 
-TODO: update from PR
+The [experiments/](experiments/) directory contains modules for configuring and executing simulation experiments, as well as performing post-processing of the results.
+
+The [experiments/notebooks/](experiments/notebooks/) directory contains several initial experiment notebooks we have created as a basis for analyzing the economics Ethereum validators are confronted with under a variety of scenarios.
+These notebooks and analyses don't aim to comprehensively illuminate the Ethereum protocol, but rather to answer the most salient questions and serve as inspiration for building out more customized analyses and model extensions.
+
+The [experiments/templates/](experiments/templates/) directory contains different experiment templates which can be used to create custom experiment notebooks.
+See the [experiments/notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) notebook for a walk-through of how to execute existing experiment notebooks, or configure and execute a new experiment.
+
+#### Notebook 1. Model Validation
+
+The purpose of this notebook is to recreate selected simulations from the widely acknowledged Hoban/Borgers Ethereum 2.0 Economic Model using the CADLabs model, and to compare the results. We suggest that the CADLabs model has a high degree of validity.
+
+#### Notebook 2. Validator Revenue and Profit Yields (Validator-level Analysis)
+
+The purpose of this notebook is to explore the returns validators can expect from staking in the Ethereum protocol across different time horizons, adoption scenarios, ETH price scenarios and validator environments.
+
+* Analysis 1: Revenue and Profit Yields Over Time
+* Analysis 2: Revenue and Profit Yields Over ETH Staked
+* Analysis 3: Revenue and Profit Yields Over ETH Price
+* Analysis 4: Profit Yields Over ETH Staked vs. ETH Price (Yield Surface)
+* Analysis 5: Profit Yields By Validator Environment Over Time
+
+#### Notebook 3. Network Issuance and Inflation Rate (Network-level Analysis)
+
+The purpose of this notebook is to explore the ETH issuance and resulting annualized inflation rate across different time horizons and scenarios. 
+
+* Analysis: Inflation Rate and ETH Supply Over Time
+
+## Model Extension Roadmap
+
+The modular nature of this model makes many exciting extensions and further analysis rather straightforward. The [Model Extension Roadmap](TODO: ADD LINK) provides some inspiration. 
 
 ## Tests
 
