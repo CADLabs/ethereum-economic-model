@@ -21,7 +21,7 @@ The model supports the simulation of validator economics across different "valid
 By default, the model implements the 7 validators environment categories as suggested by 
 [Hoban/Borgers Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). Below is a short characterization of each categoriy. For the respective cost assumption details, please refer to ["Cost of Validating"](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE/edit#gid=1220504079).
 
-Across both hardware and cloud setups, the following required setup is assumed:
+Across both hardware and cloud setups, the following requirements are assumed:
 - Processor: Intel Core i7–4770 or AMD FX-8310 or better
 - Memory: 8GB RAM
 - Storage: 100GB available space SSD
