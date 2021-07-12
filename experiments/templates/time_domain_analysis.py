@@ -21,7 +21,7 @@ parameter_overrides = {
     "eth_price_process": [lambda run, timestep: eth_price_samples[run - 1][timestep]],
 }
 
-# Override default experiment System Timing Parameters
+# Override default experiment Simulation and System Parameters related to timing
 experiment.simulations[0].timesteps = TIMESTEPS
 experiment.simulations[0].model.params.update({"dt": [DELTA_TIME]})
 
