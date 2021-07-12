@@ -14,7 +14,7 @@ A modular dynamical systems model of Ethereum's validator economics, implemented
   * [Model Assumptions](#model-assumptions)
 * [Environment Setup](#environment-setup)
 * [Simulation Experiments](#simulation-experiments)
-* [Model Extension Roadmap](#model-extension-roadmap) TODO: TO BE ADDED
+* [Model Extension Roadmap](#model-extension-roadmap)
 * [Tests](#tests)
 * [Change Log](#change-log)
 * [Acknowledgements](#contributors)
@@ -208,7 +208,7 @@ The purpose of this notebook is to explore the ETH issuance and resulting annual
 
 * Analysis: Inflation Rate and ETH Supply Over Time
 
-## Model Extension Roadmap (TODO: ADD LINK)
+## Model Extension Roadmap
 
 The modular nature of this model makes many exciting extensions and further analysis rather straightforward. The [Model Extension Roadmap](TODO: ADD LINK) provides some inspiration. 
 
