@@ -96,12 +96,12 @@ def test_eip1559_experiment():
 
     parameter_overrides = {
         # Sweep of EIP1559 disabled and enabled
-        "base_fee_per_gas_process": [
+        "base_fee_process": [
             lambda _run, _timestep: 0,
             lambda _run, _timestep: 100,
             lambda _run, _timestep: 70
         ],  # Gwei per gas
-        "priority_fee_per_gas_process": [
+        "priority_fee_process": [
             lambda _run, _timestep: 0,
             lambda _run, _timestep: 1,
             lambda _run, _timestep: 30
