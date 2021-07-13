@@ -6,10 +6,30 @@
   "commit": false,
   "contributors": [
     {
-      "login": "rogervs",
-      "name": "RogerVs",
-      "avatar_url": "https://avatars.githubusercontent.com/u/4959125?v=4",
-      "profile": "https://github.com/rogervs",
+      "login": "AntoineRondelet",
+      "name": "Antoine Rondelet",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17513145?v=4",
+      "profile": "https://github.com/AntoineRondelet",
+      "contributions": [
+        "review"
+      ]
+    },
+    {
+      "login": "barnabemonnot",
+      "name": "Barnabé Monnot",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4910325?v=4",
+      "profile": "http://barnabemonnot.com",
+      "contributions": [
+        "code",
+        "review",
+        "ideas"
+      ]
+    },
+    {
+      "login": "BenSchZA",
+      "name": "Benjamin Scholtz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13078998?v=4",
+      "profile": "http://bitsofether.com",
       "contributions": [
         "code",
         "infra",
@@ -20,17 +40,21 @@
       ]
     },
     {
-      "login": "marthendalnunes",
-      "name": "Vitor Marthendal Nunes",
-      "avatar_url": "https://avatars.githubusercontent.com/u/18421017?v=4",
-      "profile": "https://marthendalnunes.github.io/",
+      "login": "carlwafe",
+      "name": "carlwafe",
+      "avatar_url": "https://avatars.githubusercontent.com/u/87176407?v=4",
+      "profile": "https://github.com/carlwafe",
       "contributions": [
-        "code",
-        "infra",
-        "review",
-        "doc",
-        "bug",
-        "ideas"
+        "review"
+      ]
+    },
+    {
+      "login": "casparschwa",
+      "name": "casparschwa",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31305984?v=4",
+      "profile": "https://github.com/casparschwa",
+      "contributions": [
+        "review"
       ]
     },
     {
@@ -55,50 +79,40 @@
       ]
     },
     {
-      "login": "barnabemonnot",
-      "name": "Barnabé Monnot",
-      "avatar_url": "https://avatars.githubusercontent.com/u/4910325?v=4",
-      "profile": "http://barnabemonnot.com",
-      "contributions": [
-        "code",
-        "review",
-        "ideas"
-      ]
-    },
-    {
-      "login": "AntoineRondelet",
-      "name": "Antoine Rondelet",
-      "avatar_url": "https://avatars.githubusercontent.com/u/17513145?v=4",
-      "profile": "https://github.com/AntoineRondelet",
-      "contributions": [
-        "review"
-      ]
-    },
-    {
-      "login": "carlwafe",
-      "name": "carlwafe",
-      "avatar_url": "https://avatars.githubusercontent.com/u/87176407?v=4",
-      "profile": "https://github.com/carlwafe",
-      "contributions": [
-        "review"
-      ]
-    },
-    {
-      "login": "casparschwa",
-      "name": "casparschwa",
-      "avatar_url": "https://avatars.githubusercontent.com/u/31305984?v=4",
-      "profile": "https://github.com/casparschwa",
-      "contributions": [
-        "review"
-      ]
-    },
-    {
       "login": "JoranHonig",
       "name": "JoranHonig",
       "avatar_url": "https://avatars.githubusercontent.com/u/8710366?v=4",
       "profile": "https://joranhonig.nl",
       "contributions": [
         "review"
+      ]
+    },
+    {
+      "login": "marthendalnunes",
+      "name": "Vitor Marthendal Nunes",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18421017?v=4",
+      "profile": "https://marthendalnunes.github.io/",
+      "contributions": [
+        "code",
+        "infra",
+        "review",
+        "doc",
+        "bug",
+        "ideas"
+      ]
+    },
+    {
+      "login": "rogervs",
+      "name": "RogerVs",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4959125?v=4",
+      "profile": "https://github.com/rogervs",
+      "contributions": [
+        "code",
+        "infra",
+        "review",
+        "doc",
+        "bug",
+        "ideas"
       ]
     },
     {
@@ -109,23 +123,10 @@
       "contributions": [
         "review"
       ]
-    },
-    {
-      "login": "BenSchZA",
-      "name": "Benjamin Scholtz",
-      "avatar_url": "https://avatars.githubusercontent.com/u/13078998?v=4",
-      "profile": "http://bitsofether.com",
-      "contributions": [
-        "code",
-        "infra",
-        "review",
-        "doc",
-        "bug",
-        "ideas"
-      ]
     }
   ],
   "contributorsPerLine": 7,
+  "contributorsSortAlphabetically": true,
   "projectName": "ethereum-model",
   "projectOwner": "CADLabs",
   "repoType": "github",
