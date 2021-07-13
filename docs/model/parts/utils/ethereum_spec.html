@@ -23,6 +23,7 @@
 </header>
 <section id="section-intro">
 <h1 id="relevant-eth2-spec-methods">Relevant Eth2 Spec Methods</h1>
+<p>Relevant extracts from the official Eth2 spec.</p>
 <ul>
 <li>Phase 0: <a href="https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/beacon-chain.md">https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/beacon-chain.md</a></li>
 <li>Altair updates: <a href="https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md">https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md</a></li>
@@ -34,11 +35,11 @@
 <pre><code class="python">&#34;&#34;&#34;
 # Relevant Eth2 Spec Methods
 
+Relevant extracts from the official Eth2 spec.
+
 * Phase 0: https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/beacon-chain.md
 * Altair updates: https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md
 &#34;&#34;&#34;
-
-import math
 
 import model.constants as constants
 from model.state_variables import StateVariables
@@ -83,6 +84,20 @@ def get_total_active_balance(params: Parameters, state: StateVariables) -&gt; Gw
     return Gwei(max(EFFECTIVE_BALANCE_INCREMENT, total_active_balance))
 
 
+def integer_squareroot(n):
+    &#34;&#34;&#34;
+    Return the largest integer ``x`` such that ``x**2 &lt;= n``.
+
+    See https://benjaminion.xyz/eth2-annotated-spec/phase0/beacon-chain/
+    &#34;&#34;&#34;
+    x = n
+    y = (x + 1) // 2
+    while y &lt; x:
+        x = y
+        y = (x + n // x) // 2
+    return x
+
+
 def get_base_reward_per_increment(params: Parameters, state: StateVariables) -&gt; Gwei:
     &#34;&#34;&#34;Get the base reward per increment (single validator)&#34;&#34;&#34;
 
@@ -92,7 +107,7 @@ def get_base_reward_per_increment(params: Parameters, state: StateVariables) -&g
     return Gwei(
         EFFECTIVE_BALANCE_INCREMENT
         * BASE_REWARD_FACTOR
-        // math.sqrt(get_total_active_balance(params, state))
+        // integer_squareroot(int(get_total_active_balance(params, state)))
     )
 
 
@@ -192,7 +207,7 @@ def get_validator_churn_limit(params: Parameters, state: StateVariables) -&gt; i
     return Gwei(
         EFFECTIVE_BALANCE_INCREMENT
         * BASE_REWARD_FACTOR
-        // math.sqrt(get_total_active_balance(params, state))
+        // integer_squareroot(int(get_total_active_balance(params, state)))
     )</code></pre>
 </details>
 </dd>
@@ -294,6 +309,30 @@ return max(MIN_PER_EPOCH_CHURN_LIMIT, uint64(len(active_validator_indices)) // C
     return max(MIN_PER_EPOCH_CHURN_LIMIT, number_of_validators // CHURN_LIMIT_QUOTIENT)</code></pre>
 </details>
 </dd>
+<dt id="model.parts.utils.ethereum_spec.integer_squareroot"><code class="name flex">
+<span>def <span class="ident">integer_squareroot</span></span>(<span>n)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return the largest integer <code>x</code> such that <code>x**2 &lt;= n</code>.</p>
+<p>See <a href="https://benjaminion.xyz/eth2-annotated-spec/phase0/beacon-chain/">https://benjaminion.xyz/eth2-annotated-spec/phase0/beacon-chain/</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def integer_squareroot(n):
+    &#34;&#34;&#34;
+    Return the largest integer ``x`` such that ``x**2 &lt;= n``.
+
+    See https://benjaminion.xyz/eth2-annotated-spec/phase0/beacon-chain/
+    &#34;&#34;&#34;
+    x = n
+    y = (x + 1) // 2
+    while y &lt; x:
+        x = y
+        y = (x + n // x) // 2
+    return x</code></pre>
+</details>
+</dd>
 </dl>
 </section>
 <section>
@@ -319,6 +358,7 @@ return max(MIN_PER_EPOCH_CHURN_LIMIT, uint64(len(active_validator_indices)) // C
 <li><code><a title="model.parts.utils.ethereum_spec.get_proposer_reward" href="#model.parts.utils.ethereum_spec.get_proposer_reward">get_proposer_reward</a></code></li>
 <li><code><a title="model.parts.utils.ethereum_spec.get_total_active_balance" href="#model.parts.utils.ethereum_spec.get_total_active_balance">get_total_active_balance</a></code></li>
 <li><code><a title="model.parts.utils.ethereum_spec.get_validator_churn_limit" href="#model.parts.utils.ethereum_spec.get_validator_churn_limit">get_validator_churn_limit</a></code></li>
+<li><code><a title="model.parts.utils.ethereum_spec.integer_squareroot" href="#model.parts.utils.ethereum_spec.integer_squareroot">integer_squareroot</a></code></li>
 </ul>
 </li>
 </ul>

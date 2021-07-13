@@ -23,11 +23,7 @@
 </header>
 <section id="section-intro">
 <h1 id="validator-mechanisms">Validator Mechanisms</h1>
-<ul>
-<li>Implementation of the validator staking process</li>
-<li>Implementation of the new, online, and offline validator processes</li>
-<li>Calculation of the validator average effective balance</li>
-</ul>
+<p>Validator processes such as validator activation, staking, and uptime.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -35,9 +31,7 @@
 <pre><code class="python">&#34;&#34;&#34;
 # Validator Mechanisms
 
-* Implementation of the validator staking process
-* Implementation of the new, online, and offline validator processes
-* Calculation of the validator average effective balance
+Validator processes such as validator activation, staking, and uptime.
 &#34;&#34;&#34;
 
 import typing
@@ -49,13 +43,13 @@ from model.types import ETH, Gwei
 
 def policy_staking(
     params, substep, state_history, previous_state
-) -&gt; typing.Tuple[str, ETH]:
+) -&gt; typing.Dict[str, ETH]:
     &#34;&#34;&#34;Staking Policy
     A policy used when driving the model with the `eth_staked_process`,
-    for generating phase space analyses, e.g. simulating a set of discrete `eth_staked` values.
+    for generating phase-space analyses, e.g. simulating a set of discrete `eth_staked` values.
 
     When the `eth_staked_process` is disabled, the model is driven using the `validator_process`,
-    for generating state space (change in state over time) analyses.
+    for generating state-space analyses.
     &#34;&#34;&#34;
     # Parameters
     dt = params[&#34;dt&#34;]
@@ -69,7 +63,7 @@ def policy_staking(
     average_effective_balance = previous_state[&#34;average_effective_balance&#34;]
 
     # If the eth_staked_process is defined
-    if eth_staked_process(0, 0) != None:
+    if eth_staked_process(0, 0) is not None:
         # Get the ETH staked sample for the current run and timestep
         eth_staked = eth_staked_process(run, timestep * dt)
     # Else, calculate from the number of validators
@@ -102,7 +96,7 @@ def policy_validators(params, substep, state_history, previous_state):
     average_effective_balance = previous_state[&#34;average_effective_balance&#34;]
 
     # Calculate the number of validators using ETH staked
-    if eth_staked_process(0, 0) != None:
+    if eth_staked_process(0, 0) is not None:
         eth_staked = eth_staked_process(run, timestep * dt)
         number_of_validators = int(
             round(eth_staked / (average_effective_balance / constants.gwei))
@@ -144,7 +138,7 @@ def policy_validators(params, substep, state_history, previous_state):
 
 def policy_average_effective_balance(
     params, substep, state_history, previous_state
-) -&gt; typing.Tuple[str, Gwei]:
+) -&gt; typing.Dict[str, Gwei]:
     &#34;&#34;&#34;Average Effective Balance Policy Function
     Calculate the validator average effective balance.
     &#34;&#34;&#34;
@@ -167,7 +161,7 @@ def policy_average_effective_balance(
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="model.parts.validators.policy_average_effective_balance"><code class="name flex">
-<span>def <span class="ident">policy_average_effective_balance</span></span>(<span>params, substep, state_history, previous_state) ‑> Tuple[str, float]</span>
+<span>def <span class="ident">policy_average_effective_balance</span></span>(<span>params, substep, state_history, previous_state) ‑> Dict[str, float]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Average Effective Balance Policy Function
@@ -178,7 +172,7 @@ Calculate the validator average effective balance.</p></div>
 </summary>
 <pre><code class="python">def policy_average_effective_balance(
     params, substep, state_history, previous_state
-) -&gt; typing.Tuple[str, Gwei]:
+) -&gt; typing.Dict[str, Gwei]:
     &#34;&#34;&#34;Average Effective Balance Policy Function
     Calculate the validator average effective balance.
     &#34;&#34;&#34;
@@ -194,27 +188,27 @@ Calculate the validator average effective balance.</p></div>
 </details>
 </dd>
 <dt id="model.parts.validators.policy_staking"><code class="name flex">
-<span>def <span class="ident">policy_staking</span></span>(<span>params, substep, state_history, previous_state) ‑> Tuple[str, float]</span>
+<span>def <span class="ident">policy_staking</span></span>(<span>params, substep, state_history, previous_state) ‑> Dict[str, float]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Staking Policy
 A policy used when driving the model with the <code>eth_staked_process</code>,
-for generating phase space analyses, e.g. simulating a set of discrete <code>eth_staked</code> values.</p>
+for generating phase-space analyses, e.g. simulating a set of discrete <code>eth_staked</code> values.</p>
 <p>When the <code>eth_staked_process</code> is disabled, the model is driven using the <code>validator_process</code>,
-for generating state space (change in state over time) analyses.</p></div>
+for generating state-space analyses.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def policy_staking(
     params, substep, state_history, previous_state
-) -&gt; typing.Tuple[str, ETH]:
+) -&gt; typing.Dict[str, ETH]:
     &#34;&#34;&#34;Staking Policy
     A policy used when driving the model with the `eth_staked_process`,
-    for generating phase space analyses, e.g. simulating a set of discrete `eth_staked` values.
+    for generating phase-space analyses, e.g. simulating a set of discrete `eth_staked` values.
 
     When the `eth_staked_process` is disabled, the model is driven using the `validator_process`,
-    for generating state space (change in state over time) analyses.
+    for generating state-space analyses.
     &#34;&#34;&#34;
     # Parameters
     dt = params[&#34;dt&#34;]
@@ -228,7 +222,7 @@ for generating state space (change in state over time) analyses.</p></div>
     average_effective_balance = previous_state[&#34;average_effective_balance&#34;]
 
     # If the eth_staked_process is defined
-    if eth_staked_process(0, 0) != None:
+    if eth_staked_process(0, 0) is not None:
         # Get the ETH staked sample for the current run and timestep
         eth_staked = eth_staked_process(run, timestep * dt)
     # Else, calculate from the number of validators
@@ -271,7 +265,7 @@ Calculate the number of validators driven by the ETH staked or validator process
     average_effective_balance = previous_state[&#34;average_effective_balance&#34;]
 
     # Calculate the number of validators using ETH staked
-    if eth_staked_process(0, 0) != None:
+    if eth_staked_process(0, 0) is not None:
         eth_staked = eth_staked_process(run, timestep * dt)
         number_of_validators = int(
             round(eth_staked / (average_effective_balance / constants.gwei))

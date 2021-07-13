@@ -58,6 +58,8 @@ from model.types import (
     Percentage,
     Stage,
 )
+from data.historical_values import eth_price_mean, eth_price_min, eth_price_max
+
 
 # Get number of validator environments for initializing Numpy array size
 number_of_validator_environments = len(validator_environments)
@@ -94,7 +96,7 @@ class StateVariables:
     &#34;&#34;&#34;
 
     # Ethereum state variables
-    eth_price: USD_per_ETH = 0
+    eth_price: USD_per_ETH = eth_price_mean
     &#34;&#34;&#34;The ETH spot price&#34;&#34;&#34;
     eth_supply: ETH = eth_supply
     &#34;&#34;&#34;The total ETH supply&#34;&#34;&#34;
@@ -151,14 +153,14 @@ class StateVariables:
     &#34;&#34;&#34;The total rewards received as a proportion of the effective balance of the slashed validators&#34;&#34;&#34;
 
     # EIP1559 state variables
-    basefee: Gwei_per_Gas = 1
-    &#34;&#34;&#34;The basefee burned, in Gwei per gas, for each transaction, dynamically updated for each block&#34;&#34;&#34;
-    total_basefee: Gwei = 0
-    &#34;&#34;&#34;The total basefee burned&#34;&#34;&#34;
-    total_tips_to_miners: Gwei = 0
-    &#34;&#34;&#34;&#34;The total tips to miners pre-merge for transactions included in blockspace&#34;&#34;&#34;
+    base_fee_per_gas: Gwei_per_Gas = 1
+    &#34;&#34;&#34;The base fee burned, in Gwei per gas, dynamically updated for each block&#34;&#34;&#34;
+    total_base_fee: Gwei = 0
+    &#34;&#34;&#34;The total base fee burned for all transactions included in blockspace&#34;&#34;&#34;
+    total_priority_fee_to_miners: Gwei = 0
+    &#34;&#34;&#34;&#34;The total priority fee to miners pre-merge for all transactions included in blockspace&#34;&#34;&#34;
     total_priority_fee_to_validators: Gwei = 0
-    &#34;&#34;&#34;&#34;The total tips to validators post-merge for transactions included in blockspace&#34;&#34;&#34;
+    &#34;&#34;&#34;&#34;The total priority fee to validators post-merge for all transactions included in blockspace&#34;&#34;&#34;
 
     # System metric state variables
     validator_eth_staked: np.ndarray = np.zeros(
@@ -176,12 +178,12 @@ class StateVariables:
     validator_revenue_yields: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=int
     )
-    &#34;&#34;&#34;The total annualized revenue (income received) yield (percentage of investment amount)
+    &#34;&#34;&#34;The total annualized revenue (income received) yields (percentage of investment amount)
     per validator environment&#34;&#34;&#34;
     validator_profit_yields: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=int
     )
-    &#34;&#34;&#34;The total annualized profit (income received - costs) yield (percentage of investment amount)
+    &#34;&#34;&#34;The total annualized profit (income received - costs) yields (percentage of investment amount)
     per validator environment&#34;&#34;&#34;
 
     validator_count_distribution: np.ndarray = np.zeros(
@@ -234,8 +236,7 @@ initial_state = StateVariables().__dict__</code></pre>
 <dl>
 <dt id="model.state_variables.StateVariables"><code class="flex name class">
 <span>class <span class="ident">StateVariables</span></span>
-<span>(</span><span>stage: <a title="model.types.Stage" href="types.html#model.types.Stage">Stage</a> = None, timestamp: datetime.datetime = None, eth_price: float = 0, eth_supply: float = 116539892.499, eth_staked: float = 6005228.271326234, supply_inflation: float = 0, network_issuance: float = 0, pow_issuance: float = 0, number_of_validators_in_activation_queue: int = 0, average_effective_balance: float = 32000000000.0, number_of_validators: int = 182285, number_of_validators_online: int = 0, number_of_validators_offline: int = 0, base_reward: float = 0, validating_rewards: float = 0, validating_penalties: float = 0, source_reward: float = 0, target_reward: float = 0, head_reward: float = 0, block_proposer_reward: float = 0, sync_reward: float = 0, attestation_penalties: float = 0, sync_committee_penalties: float = 0, amount_slashed: float = 0, whistleblower_rewards: float = 0, basefee: float = 1, total_basefee: float = 0, total_tips_to_miners: float = 0, total_priority_fee_to_validators: float = 0, validator_eth_staked: numpy.ndarray = array([[0],
-[0],
+<span>(</span><span>stage: <a title="model.types.Stage" href="types.html#model.types.Stage">Stage</a> = None, timestamp: datetime.datetime = None, eth_price: float = 1251.477131147541, eth_supply: float = 116678363.1865, eth_staked: float = 6314465.175230042, supply_inflation: float = 0, network_issuance: float = 0, pow_issuance: float = 0, number_of_validators_in_activation_queue: int = 0, average_effective_balance: float = 32000000000.0, number_of_validators: int = 191596, number_of_validators_online: int = 0, number_of_validators_offline: int = 0, base_reward: float = 0, validating_rewards: float = 0, validating_penalties: float = 0, source_reward: float = 0, target_reward: float = 0, head_reward: float = 0, block_proposer_reward: float = 0, sync_reward: float = 0, attestation_penalties: float = 0, sync_committee_penalties: float = 0, amount_slashed: float = 0, whistleblower_rewards: float = 0, base_fee_per_gas: float = 1, total_base_fee: float = 0, total_priority_fee_to_miners: float = 0, total_priority_fee_to_validators: float = 0, validator_eth_staked: numpy.ndarray = array([[0],
 [0],
 [0],
 [0],
@@ -247,9 +248,7 @@ initial_state = StateVariables().__dict__</code></pre>
 [0],
 [0],
 [0],
-[0],
 [0]]), validator_profit: numpy.ndarray = array([[0],
-[0],
 [0],
 [0],
 [0],
@@ -261,9 +260,7 @@ initial_state = StateVariables().__dict__</code></pre>
 [0],
 [0],
 [0],
-[0],
 [0]]), validator_profit_yields: numpy.ndarray = array([[0],
-[0],
 [0],
 [0],
 [0],
@@ -275,9 +272,7 @@ initial_state = StateVariables().__dict__</code></pre>
 [0],
 [0],
 [0],
-[0],
 [0]]), validator_hardware_costs: numpy.ndarray = array([[0.],
-[0.],
 [0.],
 [0.],
 [0.],
@@ -289,16 +284,13 @@ initial_state = StateVariables().__dict__</code></pre>
 [0.],
 [0.],
 [0.],
-[0.],
 [0.]]), validator_third_party_costs: numpy.ndarray = array([[0.],
 [0.],
 [0.],
 [0.],
 [0.],
 [0.],
-[0.],
 [0.]]), validator_costs: numpy.ndarray = array([[0.],
-[0.],
 [0.],
 [0.],
 [0.],
@@ -337,7 +329,7 @@ state variable key: state variable type = default state variable value</p></div>
     &#34;&#34;&#34;
 
     # Ethereum state variables
-    eth_price: USD_per_ETH = 0
+    eth_price: USD_per_ETH = eth_price_mean
     &#34;&#34;&#34;The ETH spot price&#34;&#34;&#34;
     eth_supply: ETH = eth_supply
     &#34;&#34;&#34;The total ETH supply&#34;&#34;&#34;
@@ -394,14 +386,14 @@ state variable key: state variable type = default state variable value</p></div>
     &#34;&#34;&#34;The total rewards received as a proportion of the effective balance of the slashed validators&#34;&#34;&#34;
 
     # EIP1559 state variables
-    basefee: Gwei_per_Gas = 1
-    &#34;&#34;&#34;The basefee burned, in Gwei per gas, for each transaction, dynamically updated for each block&#34;&#34;&#34;
-    total_basefee: Gwei = 0
-    &#34;&#34;&#34;The total basefee burned&#34;&#34;&#34;
-    total_tips_to_miners: Gwei = 0
-    &#34;&#34;&#34;&#34;The total tips to miners pre-merge for transactions included in blockspace&#34;&#34;&#34;
+    base_fee_per_gas: Gwei_per_Gas = 1
+    &#34;&#34;&#34;The base fee burned, in Gwei per gas, dynamically updated for each block&#34;&#34;&#34;
+    total_base_fee: Gwei = 0
+    &#34;&#34;&#34;The total base fee burned for all transactions included in blockspace&#34;&#34;&#34;
+    total_priority_fee_to_miners: Gwei = 0
+    &#34;&#34;&#34;&#34;The total priority fee to miners pre-merge for all transactions included in blockspace&#34;&#34;&#34;
     total_priority_fee_to_validators: Gwei = 0
-    &#34;&#34;&#34;&#34;The total tips to validators post-merge for transactions included in blockspace&#34;&#34;&#34;
+    &#34;&#34;&#34;&#34;The total priority fee to validators post-merge for all transactions included in blockspace&#34;&#34;&#34;
 
     # System metric state variables
     validator_eth_staked: np.ndarray = np.zeros(
@@ -419,12 +411,12 @@ state variable key: state variable type = default state variable value</p></div>
     validator_revenue_yields: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=int
     )
-    &#34;&#34;&#34;The total annualized revenue (income received) yield (percentage of investment amount)
+    &#34;&#34;&#34;The total annualized revenue (income received) yields (percentage of investment amount)
     per validator environment&#34;&#34;&#34;
     validator_profit_yields: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=int
     )
-    &#34;&#34;&#34;The total annualized profit (income received - costs) yield (percentage of investment amount)
+    &#34;&#34;&#34;The total annualized profit (income received - costs) yields (percentage of investment amount)
     per validator environment&#34;&#34;&#34;
 
     validator_count_distribution: np.ndarray = np.zeros(
@@ -475,14 +467,14 @@ state variable key: state variable type = default state variable value</p></div>
 <dd>
 <div class="desc"><p>The validator average effective balance</p></div>
 </dd>
+<dt id="model.state_variables.StateVariables.base_fee_per_gas"><code class="name">var <span class="ident">base_fee_per_gas</span> : float</code></dt>
+<dd>
+<div class="desc"><p>The base fee burned, in Gwei per gas, dynamically updated for each block</p></div>
+</dd>
 <dt id="model.state_variables.StateVariables.base_reward"><code class="name">var <span class="ident">base_reward</span> : float</code></dt>
 <dd>
 <div class="desc"><p>Validator rewards and penalties are calculated in terms of the base reward.
 Under perfect network conditions, each validator should receive 1 base reward per epoch for performing their duties.</p></div>
-</dd>
-<dt id="model.state_variables.StateVariables.basefee"><code class="name">var <span class="ident">basefee</span> : float</code></dt>
-<dd>
-<div class="desc"><p>The basefee burned, in Gwei per gas, for each transaction, dynamically updated for each block</p></div>
 </dd>
 <dt id="model.state_variables.StateVariables.block_proposer_reward"><code class="name">var <span class="ident">block_proposer_reward</span> : float</code></dt>
 <dd>
@@ -559,9 +551,9 @@ Under perfect network conditions, each validator should receive 1 base reward pe
 <dd>
 <div class="desc"><p>The timestamp for each timestep as a Python <code>datetime</code> object, starting from <code>date_start</code> Parameter.</p></div>
 </dd>
-<dt id="model.state_variables.StateVariables.total_basefee"><code class="name">var <span class="ident">total_basefee</span> : float</code></dt>
+<dt id="model.state_variables.StateVariables.total_base_fee"><code class="name">var <span class="ident">total_base_fee</span> : float</code></dt>
 <dd>
-<div class="desc"><p>The total basefee burned</p></div>
+<div class="desc"><p>The total base fee burned for all transactions included in blockspace</p></div>
 </dd>
 <dt id="model.state_variables.StateVariables.total_network_costs"><code class="name">var <span class="ident">total_network_costs</span> : float</code></dt>
 <dd>
@@ -570,6 +562,14 @@ Under perfect network conditions, each validator should receive 1 base reward pe
 <dt id="model.state_variables.StateVariables.total_online_validator_rewards"><code class="name">var <span class="ident">total_online_validator_rewards</span> : float</code></dt>
 <dd>
 <div class="desc"><p>The total rewards received by online validators</p></div>
+</dd>
+<dt id="model.state_variables.StateVariables.total_priority_fee_to_miners"><code class="name">var <span class="ident">total_priority_fee_to_miners</span> : float</code></dt>
+<dd>
+<div class="desc"><p>"The total priority fee to miners pre-merge for all transactions included in blockspace</p></div>
+</dd>
+<dt id="model.state_variables.StateVariables.total_priority_fee_to_validators"><code class="name">var <span class="ident">total_priority_fee_to_validators</span> : float</code></dt>
+<dd>
+<div class="desc"><p>"The total priority fee to validators post-merge for all transactions included in blockspace</p></div>
 </dd>
 <dt id="model.state_variables.StateVariables.total_profit"><code class="name">var <span class="ident">total_profit</span> : float</code></dt>
 <dd>
@@ -586,14 +586,6 @@ Under perfect network conditions, each validator should receive 1 base reward pe
 <dt id="model.state_variables.StateVariables.total_revenue_yields"><code class="name">var <span class="ident">total_revenue_yields</span> : float</code></dt>
 <dd>
 <div class="desc"><p>Annualized revenue (income received) for all validators</p></div>
-</dd>
-<dt id="model.state_variables.StateVariables.total_tips_to_miners"><code class="name">var <span class="ident">total_tips_to_miners</span> : float</code></dt>
-<dd>
-<div class="desc"><p>"The total tips to miners pre-merge for transactions included in blockspace</p></div>
-</dd>
-<dt id="model.state_variables.StateVariables.total_priority_fee_to_validators"><code class="name">var <span class="ident">total_priority_fee_to_validators</span> : float</code></dt>
-<dd>
-<div class="desc"><p>"The total tips to validators post-merge for transactions included in blockspace</p></div>
 </dd>
 <dt id="model.state_variables.StateVariables.validating_penalties"><code class="name">var <span class="ident">validating_penalties</span> : float</code></dt>
 <dd>
@@ -629,7 +621,7 @@ Under perfect network conditions, each validator should receive 1 base reward pe
 </dd>
 <dt id="model.state_variables.StateVariables.validator_profit_yields"><code class="name">var <span class="ident">validator_profit_yields</span> : numpy.ndarray</code></dt>
 <dd>
-<div class="desc"><p>The total annualized profit (income received - costs) yield (percentage of investment amount)
+<div class="desc"><p>The total annualized profit (income received - costs) yields (percentage of investment amount)
 per validator environment</p></div>
 </dd>
 <dt id="model.state_variables.StateVariables.validator_revenue"><code class="name">var <span class="ident">validator_revenue</span> : numpy.ndarray</code></dt>
@@ -638,7 +630,7 @@ per validator environment</p></div>
 </dd>
 <dt id="model.state_variables.StateVariables.validator_revenue_yields"><code class="name">var <span class="ident">validator_revenue_yields</span> : numpy.ndarray</code></dt>
 <dd>
-<div class="desc"><p>The total annualized revenue (income received) yield (percentage of investment amount)
+<div class="desc"><p>The total annualized revenue (income received) yields (percentage of investment amount)
 per validator environment</p></div>
 </dd>
 <dt id="model.state_variables.StateVariables.validator_third_party_costs"><code class="name">var <span class="ident">validator_third_party_costs</span> : numpy.ndarray</code></dt>
@@ -673,8 +665,8 @@ per validator environment</p></div>
 <li><code><a title="model.state_variables.StateVariables.amount_slashed" href="#model.state_variables.StateVariables.amount_slashed">amount_slashed</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.attestation_penalties" href="#model.state_variables.StateVariables.attestation_penalties">attestation_penalties</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.average_effective_balance" href="#model.state_variables.StateVariables.average_effective_balance">average_effective_balance</a></code></li>
+<li><code><a title="model.state_variables.StateVariables.base_fee_per_gas" href="#model.state_variables.StateVariables.base_fee_per_gas">base_fee_per_gas</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.base_reward" href="#model.state_variables.StateVariables.base_reward">base_reward</a></code></li>
-<li><code><a title="model.state_variables.StateVariables.basefee" href="#model.state_variables.StateVariables.basefee">basefee</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.block_proposer_reward" href="#model.state_variables.StateVariables.block_proposer_reward">block_proposer_reward</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.eth_price" href="#model.state_variables.StateVariables.eth_price">eth_price</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.eth_staked" href="#model.state_variables.StateVariables.eth_staked">eth_staked</a></code></li>
@@ -693,15 +685,15 @@ per validator environment</p></div>
 <li><code><a title="model.state_variables.StateVariables.sync_reward" href="#model.state_variables.StateVariables.sync_reward">sync_reward</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.target_reward" href="#model.state_variables.StateVariables.target_reward">target_reward</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.timestamp" href="#model.state_variables.StateVariables.timestamp">timestamp</a></code></li>
-<li><code><a title="model.state_variables.StateVariables.total_basefee" href="#model.state_variables.StateVariables.total_basefee">total_basefee</a></code></li>
+<li><code><a title="model.state_variables.StateVariables.total_base_fee" href="#model.state_variables.StateVariables.total_base_fee">total_base_fee</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.total_network_costs" href="#model.state_variables.StateVariables.total_network_costs">total_network_costs</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.total_online_validator_rewards" href="#model.state_variables.StateVariables.total_online_validator_rewards">total_online_validator_rewards</a></code></li>
+<li><code><a title="model.state_variables.StateVariables.total_priority_fee_to_miners" href="#model.state_variables.StateVariables.total_priority_fee_to_miners">total_priority_fee_to_miners</a></code></li>
+<li><code><a title="model.state_variables.StateVariables.total_priority_fee_to_validators" href="#model.state_variables.StateVariables.total_priority_fee_to_validators">total_priority_fee_to_validators</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.total_profit" href="#model.state_variables.StateVariables.total_profit">total_profit</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.total_profit_yields" href="#model.state_variables.StateVariables.total_profit_yields">total_profit_yields</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.total_revenue" href="#model.state_variables.StateVariables.total_revenue">total_revenue</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.total_revenue_yields" href="#model.state_variables.StateVariables.total_revenue_yields">total_revenue_yields</a></code></li>
-<li><code><a title="model.state_variables.StateVariables.total_tips_to_miners" href="#model.state_variables.StateVariables.total_tips_to_miners">total_tips_to_miners</a></code></li>
-<li><code><a title="model.state_variables.StateVariables.total_priority_fee_to_validators" href="#model.state_variables.StateVariables.total_priority_fee_to_validators">total_priority_fee_to_validators</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.validating_penalties" href="#model.state_variables.StateVariables.validating_penalties">validating_penalties</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.validating_rewards" href="#model.state_variables.StateVariables.validating_rewards">validating_rewards</a></code></li>
 <li><code><a title="model.state_variables.StateVariables.validator_cloud_costs" href="#model.state_variables.StateVariables.validator_cloud_costs">validator_cloud_costs</a></code></li>

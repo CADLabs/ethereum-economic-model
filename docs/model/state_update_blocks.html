@@ -171,10 +171,14 @@ _state_update_blocks = [
             &#34;eip1559&#34;: ethereum.policy_eip1559_transaction_pricing,
         },
         &#34;variables&#34;: {
-            &#34;basefee&#34;: update_from_signal(&#34;basefee&#34;),
-            &#34;total_basefee&#34;: update_from_signal(&#34;total_basefee&#34;),
-            &#34;total_tips_to_miners&#34;: update_from_signal(&#34;total_tips_to_miners&#34;),
-            &#34;total_priority_fee_to_validators&#34;: update_from_signal(&#34;total_priority_fee_to_validators&#34;),
+            &#34;base_fee_per_gas&#34;: update_from_signal(&#34;base_fee_per_gas&#34;),
+            &#34;total_base_fee&#34;: update_from_signal(&#34;total_base_fee&#34;),
+            &#34;total_priority_fee_to_miners&#34;: update_from_signal(
+                &#34;total_priority_fee_to_miners&#34;
+            ),
+            &#34;total_priority_fee_to_validators&#34;: update_from_signal(
+                &#34;total_priority_fee_to_validators&#34;
+            ),
         },
     },
     {
@@ -247,7 +251,7 @@ _state_update_blocks = [
     },
 ]
 
-# Conditionally update the order of the State Update Blocks
+# Conditionally update the order of the State Update Blocks using a ternary operator
 _state_update_blocks = (
     [
         state_update_block_stages,
@@ -255,8 +259,8 @@ _state_update_blocks = (
         state_update_block_validators,
     ]
     + _state_update_blocks
-    if parameters[&#34;eth_staked_process&#34;][0](0, 0) != None
-    # If driving with validator process, switch first two blocks
+    if parameters[&#34;eth_staked_process&#34;][0](0, 0) is not None
+    # If driving with validator process, switch staking and validator blocks
     else [
         state_update_block_stages,
         state_update_block_validators,
