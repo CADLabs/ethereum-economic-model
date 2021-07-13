@@ -1,0 +1,29 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "rogervs",
+      "name": "RogerVs",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4959125?v=4",
+      "profile": "https://github.com/rogervs",
+      "contributions": [
+        "code",
+        "infra",
+        "review",
+        "doc",
+        "bug",
+        "ideas"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "ethereum-model",
+  "projectOwner": "cadCAD-edu",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
