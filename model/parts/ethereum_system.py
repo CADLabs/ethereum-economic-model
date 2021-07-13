@@ -92,7 +92,9 @@ def policy_network_issuance(
     stage = previous_state["stage"]
     amount_slashed = previous_state["amount_slashed"]
     total_base_fee = previous_state["total_base_fee"]
-    total_priority_fee_to_validators = previous_state["total_priority_fee_to_validators"]
+    total_priority_fee_to_validators = previous_state[
+        "total_priority_fee_to_validators"
+    ]
     total_online_validator_rewards = previous_state["total_online_validator_rewards"]
 
     # Calculate network issuance in ETH
