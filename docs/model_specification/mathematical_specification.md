@@ -83,7 +83,7 @@ We define the State Variables' domain, range, and units. The "variable" column v
 | Name | Symbol | Domain | Unit | Variable |
 | -------- | -------- | -------- | -------- | --------|
 | Total Basefee | $F$ | $\mathbb{R}^+$ | $\text{Gwei}$ | `total_basefee` |
-| Total Tips to Validators | $T$ | $\mathbb{R}^+$ | $\text{Gwei}$ | `total_tips_to_validators` |
+| Total Tips to Validators | $T$ | $\mathbb{R}^+$ | $\text{Gwei}$ | `total_priority_fee_to_validators` |
 
 ### System Metric State Variables
 

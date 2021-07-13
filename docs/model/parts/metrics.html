@@ -172,14 +172,14 @@ def policy_total_online_validator_rewards(
     validating_rewards = previous_state[&#34;validating_rewards&#34;]
     whistleblower_rewards = previous_state[&#34;whistleblower_rewards&#34;]
     validating_penalties = previous_state[&#34;validating_penalties&#34;]
-    total_tips_to_validators = previous_state[&#34;total_tips_to_validators&#34;]
+    total_priority_fee_to_validators = previous_state[&#34;total_priority_fee_to_validators&#34;]
 
     # Calculate total rewards for online validators
     total_online_validator_rewards = (
         validating_rewards
         + whistleblower_rewards
         - validating_penalties
-        + total_tips_to_validators
+        + total_priority_fee_to_validators
     )
 
     return {&#34;total_online_validator_rewards&#34;: total_online_validator_rewards}
@@ -227,14 +227,14 @@ def update_supply_inflation(
     validating_rewards = previous_state[&#34;validating_rewards&#34;]
     whistleblower_rewards = previous_state[&#34;whistleblower_rewards&#34;]
     validating_penalties = previous_state[&#34;validating_penalties&#34;]
-    total_tips_to_validators = previous_state[&#34;total_tips_to_validators&#34;]
+    total_priority_fee_to_validators = previous_state[&#34;total_priority_fee_to_validators&#34;]
 
     # Calculate total rewards for online validators
     total_online_validator_rewards = (
         validating_rewards
         + whistleblower_rewards
         - validating_penalties
-        + total_tips_to_validators
+        + total_priority_fee_to_validators
     )
 
     return {&#34;total_online_validator_rewards&#34;: total_online_validator_rewards}</code></pre>

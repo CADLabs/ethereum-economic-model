@@ -91,7 +91,7 @@ def policy_network_issuance(
     # State Variables
     stage = previous_state["stage"]
     amount_slashed = previous_state["amount_slashed"]
-    total_basefee = previous_state["total_basefee"]
+    total_base_fee = previous_state["total_base_fee"]
     total_priority_fee_to_validators = previous_state["total_priority_fee_to_validators"]
     total_online_validator_rewards = previous_state["total_online_validator_rewards"]
 
@@ -100,7 +100,7 @@ def policy_network_issuance(
         # Remove priority fee to validators which is not issuance (ETH transferred rather than minted)
         (total_online_validator_rewards - total_priority_fee_to_validators)
         - amount_slashed
-        - total_basefee
+        - total_base_fee
     ) / constants.gwei
 
     # Calculate Proof of Work issuance

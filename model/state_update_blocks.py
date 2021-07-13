@@ -145,7 +145,7 @@ _state_update_blocks = [
             "basefee": update_from_signal("basefee"),
             "total_basefee": update_from_signal("total_basefee"),
             "total_tips_to_miners": update_from_signal("total_tips_to_miners"),
-            "total_tips_to_validators": update_from_signal("total_tips_to_validators"),
+            "total_priority_fee_to_validators": update_from_signal("total_priority_fee_to_validators"),
         },
     },
     {

@@ -114,5 +114,5 @@ def test_eip1559_experiment():
     results = simulation.run()
     df = pd.DataFrame(results)
 
-    assert df.query("subset == 0")["total_tips_to_validators"].max() == 0
-    assert df.query("subset == 1")["total_tips_to_validators"].max() != 0
+    assert df.query("subset == 0")["total_priority_fee_to_validators"].max() == 0
+    assert df.query("subset == 1")["total_priority_fee_to_validators"].max() != 0

@@ -51,13 +51,13 @@ def policy_network_issuance(
     stage = previous_state[&#34;stage&#34;]
     amount_slashed = previous_state[&#34;amount_slashed&#34;]
     total_basefee = previous_state[&#34;total_basefee&#34;]
-    total_tips_to_validators = previous_state[&#34;total_tips_to_validators&#34;]
+    total_priority_fee_to_validators = previous_state[&#34;total_priority_fee_to_validators&#34;]
     total_online_validator_rewards = previous_state[&#34;total_online_validator_rewards&#34;]
 
     # Calculate network issuance in ETH
     network_issuance = (
         # Remove tips to validators which is not issuance (ETH transferred rather than minted)
-        (total_online_validator_rewards - total_tips_to_validators)
+        (total_online_validator_rewards - total_priority_fee_to_validators)
         - amount_slashed
         - total_basefee
     ) / constants.gwei
@@ -94,7 +94,7 @@ def policy_eip1559_transaction_pricing(
             &#34;basefee&#34;: 0,
             &#34;total_basefee&#34;: 0,
             &#34;total_tips_to_miners&#34;: 0,
-            &#34;total_tips_to_validators&#34;: 0,
+            &#34;total_priority_fee_to_validators&#34;: 0,
         }
 
     # Parameters
@@ -138,10 +138,10 @@ def policy_eip1559_transaction_pricing(
 
     if stage in [Stage.PROOF_OF_STAKE]:
         total_tips_to_miners = 0
-        total_tips_to_validators = total_tips
+        total_priority_fee_to_validators = total_tips
     else:
         total_tips_to_miners = total_tips
-        total_tips_to_validators = 0
+        total_priority_fee_to_validators = 0
 
     # Check if the block used too much gas
     assert (
@@ -152,7 +152,7 @@ def policy_eip1559_transaction_pricing(
         &#34;basefee&#34;: basefee,
         &#34;total_basefee&#34;: total_basefee * dt,
         &#34;total_tips_to_miners&#34;: total_tips_to_miners * dt,
-        &#34;total_tips_to_validators&#34;: total_tips_to_validators * dt,
+        &#34;total_priority_fee_to_validators&#34;: total_priority_fee_to_validators * dt,
     }
 
 
@@ -224,7 +224,7 @@ that is burned and dynamically expands/contracts block sizes to deal with transi
             &#34;basefee&#34;: 0,
             &#34;total_basefee&#34;: 0,
             &#34;total_tips_to_miners&#34;: 0,
-            &#34;total_tips_to_validators&#34;: 0,
+            &#34;total_priority_fee_to_validators&#34;: 0,
         }
 
     # Parameters
@@ -268,10 +268,10 @@ that is burned and dynamically expands/contracts block sizes to deal with transi
 
     if stage in [Stage.PROOF_OF_STAKE]:
         total_tips_to_miners = 0
-        total_tips_to_validators = total_tips
+        total_priority_fee_to_validators = total_tips
     else:
         total_tips_to_miners = total_tips
-        total_tips_to_validators = 0
+        total_priority_fee_to_validators = 0
 
     # Check if the block used too much gas
     assert (
@@ -282,7 +282,7 @@ that is burned and dynamically expands/contracts block sizes to deal with transi
         &#34;basefee&#34;: basefee,
         &#34;total_basefee&#34;: total_basefee * dt,
         &#34;total_tips_to_miners&#34;: total_tips_to_miners * dt,
-        &#34;total_tips_to_validators&#34;: total_tips_to_validators * dt,
+        &#34;total_priority_fee_to_validators&#34;: total_priority_fee_to_validators * dt,
     }</code></pre>
 </details>
 </dd>
@@ -306,13 +306,13 @@ that is burned and dynamically expands/contracts block sizes to deal with transi
     stage = previous_state[&#34;stage&#34;]
     amount_slashed = previous_state[&#34;amount_slashed&#34;]
     total_basefee = previous_state[&#34;total_basefee&#34;]
-    total_tips_to_validators = previous_state[&#34;total_tips_to_validators&#34;]
+    total_priority_fee_to_validators = previous_state[&#34;total_priority_fee_to_validators&#34;]
     total_online_validator_rewards = previous_state[&#34;total_online_validator_rewards&#34;]
 
     # Calculate network issuance in ETH
     network_issuance = (
         # Remove tips to validators which is not issuance (ETH transferred rather than minted)
-        (total_online_validator_rewards - total_tips_to_validators)
+        (total_online_validator_rewards - total_priority_fee_to_validators)
         - amount_slashed
         - total_basefee
     ) / constants.gwei
