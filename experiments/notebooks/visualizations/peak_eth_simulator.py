@@ -97,11 +97,11 @@ app.layout = html.Div([
                     ]
                 )
             ]),
-            # Basefee slider
+            # Base fee slider
             html.Div([
-                html.Label('Basefee (Gwei per gas)'),
+                html.Label('Base Fee (Gwei per gas)'),
                 dcc.Slider(
-                    id='eip1559-basefee-slider',
+                    id='eip1559-base-fee-slider',
                     min=0,
                     max=100,
                     step=1,
@@ -132,7 +132,7 @@ app.layout = html.Div([
 
 # Callbacks
 @app.callback(
-    Output('eip1559-basefee-slider', 'value'),
+    Output('eip1559-base-fee-slider', 'value'),
     [Input('eip1559-dropdown', 'value')]
 )
 def update_eip1559_sliders_by_scenarios(eip1559_dropdown):
@@ -164,10 +164,10 @@ def update_validator_adoption_sliders_by_scenarios(validator_dropdown):
     Output('graph', 'figure'),
     [Input('validator-adoption-slider', 'value'),
      Input('pos-launch-date-dropdown', 'value'),
-     Input('eip1559-basefee-slider', 'value')]
+     Input('eip1559-base-fee-slider', 'value')]
 )
-def update_output_graph(validator_adoption, pos_launch_date, eip1559_basefee):
-    df, parameters = run_simulation(validator_adoption, pos_launch_date, eip1559_basefee)
+def update_output_graph(validator_adoption, pos_launch_date, eip1559_base_fee):
+    df, parameters = run_simulation(validator_adoption, pos_launch_date, eip1559_base_fee)
 
     if validator_adoption == 3:
         validator_dropdown = 'Normal Adoption'
@@ -178,11 +178,11 @@ def update_output_graph(validator_adoption, pos_launch_date, eip1559_basefee):
     else:
         validator_dropdown = 'Custom'
 
-    if eip1559_basefee == 0:
+    if eip1559_base_fee == 0:
         eip1559_dropdown = 'Disabled'
-    elif eip1559_basefee == 100:
+    elif eip1559_base_fee == 100:
         eip1559_dropdown = 'Enabled: Steady State'
-    elif eip1559_basefee == 70:
+    elif eip1559_base_fee == 70:
         eip1559_dropdown = 'Enabled: MEV'
     else:
         eip1559_dropdown = 'Custom'
@@ -194,7 +194,7 @@ def update_output_graph(validator_adoption, pos_launch_date, eip1559_basefee):
     )
 
 
-def run_simulation(validators_per_epoch, pos_launch_date, eip1559_basefee):
+def run_simulation(validators_per_epoch, pos_launch_date, eip1559_base_fee):
     simulation.model.params.update({
         'validator_process': [
             lambda _run, _timestep: float(validators_per_epoch),
@@ -202,8 +202,8 @@ def run_simulation(validators_per_epoch, pos_launch_date, eip1559_basefee):
         'date_pos': [
             datetime.strptime(pos_launch_date, '%Y/%m/%d')
         ],
-        'eip1559_basefee_process': [
-            lambda _run, _timestep: float(eip1559_basefee),
+        'base_fee_process': [
+            lambda _run, _timestep: float(eip1559_base_fee),
         ],  # Gwei per gas
     })
 

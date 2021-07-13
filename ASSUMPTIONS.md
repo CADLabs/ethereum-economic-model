@@ -29,12 +29,12 @@ Across both hardware and cloud setups, the following requirements are assumed:
 
 1. **Run own hardware validator ("DIY-Hardware")**
 - Setup: Validator running their own hardware
-- Economics: Validator receives full revenue yield and carries full hardware, electricity, and bandwidth cost
+- Economics: Validator receives full revenue yields and carries full hardware, electricity, and bandwidth cost
 - Example: Self-managed hardware (see hardware/cloud specifications above)
 
 2. **Run own cloud validator ("DIY-Cloud")**
 - Setup: Validator running their node on a cloud service
-- Economics: Validator receives full revenue yield and carries cost of cloud service
+- Economics: Validator receives full revenue yields and carries cost of cloud service
 - Example: AWS (see hardware/cloud specifications above)
 
 3. **Validate via a pool Staking-as-a-Service provider ("Pool-StaaS")**
@@ -44,12 +44,12 @@ Across both hardware and cloud setups, the following requirements are assumed:
 
 4. **Validate via a pool hardware service provider ("Pool-Hardware")**
 - Setup: Validators pool ETH together on a node on own hardware and manage infrastructure and keys themselves
-- Economics: Costs (hardware, electricity, and bandwidth) and revenue yield shared amongst validators in pool
+- Economics: Costs (hardware, electricity, and bandwidth) and revenue yields shared amongst validators in pool
 - Example: Self-managed hardware (see hardware/cloud specifications above)
 
 5. **Validate via a pool cloud provider ("Pool-Cloud")**
 - Setup: Validators pool ETH together on a node on a cloud service and manage infrastructure and keys themselves 
-- Economics: Costs (hardware, electricity, and bandwidth) and revenue yield shared amongst validators in pool
+- Economics: Costs (hardware, electricity, and bandwidth) and revenue yields shared amongst validators in pool
 - Example: AWS (see hardware/cloud specifications above)
 
 6. **Validate via a custodial Staking-as-a-Service provider ("StaaS-Full")**

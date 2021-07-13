@@ -96,12 +96,12 @@ def test_eip1559_experiment():
 
     parameter_overrides = {
         # Sweep of EIP1559 disabled and enabled
-        "eip1559_basefee_process": [
+        "base_fee_per_gas_process": [
             lambda _run, _timestep: 0,
             lambda _run, _timestep: 100,
             lambda _run, _timestep: 70
         ],  # Gwei per gas
-        "eip1559_tip_process": [
+        "priority_fee_per_gas_process": [
             lambda _run, _timestep: 0,
             lambda _run, _timestep: 1,
             lambda _run, _timestep: 30
@@ -114,5 +114,5 @@ def test_eip1559_experiment():
     results = simulation.run()
     df = pd.DataFrame(results)
 
-    assert df.query("subset == 0")["total_tips_to_validators"].max() == 0
-    assert df.query("subset == 1")["total_tips_to_validators"].max() != 0
+    assert df.query("subset == 0")["total_priority_fee_to_validators"].max() == 0
+    assert df.query("subset == 1")["total_priority_fee_to_validators"].max() != 0

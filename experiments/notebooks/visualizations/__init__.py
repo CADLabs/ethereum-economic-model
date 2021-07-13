@@ -35,7 +35,7 @@ legend_state_variable_name_mapping = {
     'head_reward_eth': 'Head Reward',
     'block_proposer_reward_eth': 'Block Proposer Reward',
     'sync_reward_eth': 'Sync Reward',
-    'total_tips_to_validators_eth': 'Tips',
+    'total_priority_fee_to_validators_eth': 'Priority Fees',
     'supply_inflation_pct': 'ETH Supply inflation',
     'total_revenue_yields_pct': 'Total Revenue Yields',
     'total_profit_yields_pct': 'Total Profit Yields',
@@ -154,13 +154,13 @@ def plot_validating_rewards(df, subplot_titles=[]):
     return fig
 
 
-def plot_validating_rewards_pie_chart(df, with_tips=False):
-    if with_tips:
-        title = 'Validating Rewards with Tips'
+def plot_validating_rewards_pie_chart(df, with_priority_fee=False):
+    if with_priority_fee:
+        title = 'Validating Rewards with Priority Fees'
         validator_rewards = df.iloc[-1][
-            ['total_tips_to_validators_eth', 'source_reward_eth', 'target_reward_eth', 'head_reward_eth',
+            ['total_priority_fee_to_validators_eth', 'source_reward_eth', 'target_reward_eth', 'head_reward_eth',
              'block_proposer_reward_eth', 'sync_reward_eth']].to_dict()
-        names = ["Tips", "Source Reward", "Target Reward", "Head Reward", "Block Proposer Reward", "Sync Reward"]
+        names = ["Priority Fees}", "Source Reward", "Target Reward", "Head Reward", "Block Proposer Reward", "Sync Reward"]
     else:
         title = 'Validating Rewards'
         validator_rewards = df.iloc[-1][
@@ -229,7 +229,7 @@ def plot_revenue_profit_yields_over_eth_staked(df):
     )
 
     # Set secondary y-axes titles
-    fig.update_yaxes(title_text="Yield (%/year)")
+    fig.update_yaxes(title_text="Yields (%/year)")
     fig.update_layout(hovermode='x unified')
 
     return fig

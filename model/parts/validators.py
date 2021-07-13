@@ -1,9 +1,7 @@
 """
 # Validator Mechanisms
 
-* Implementation of the validator staking process
-* Implementation of the new, online, and offline validator processes
-* Calculation of the validator average effective balance
+Validator processes such as validator activation, staking, and uptime.
 """
 
 import typing
@@ -18,10 +16,10 @@ def policy_staking(
 ) -> typing.Dict[str, ETH]:
     """Staking Policy
     A policy used when driving the model with the `eth_staked_process`,
-    for generating phase space analyses, e.g. simulating a set of discrete `eth_staked` values.
+    for generating phase-space analyses, e.g. simulating a set of discrete `eth_staked` values.
 
     When the `eth_staked_process` is disabled, the model is driven using the `validator_process`,
-    for generating state space (change in state over time) analyses.
+    for generating state-space analyses.
     """
     # Parameters
     dt = params["dt"]

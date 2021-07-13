@@ -1,8 +1,7 @@
 """
 # Proof of Stake Incentives
 
-* Calculation of PoS attestation and block proposal rewards and penalties
-* Calculation of PoS slashing penalties
+Calculation of PoS incentives such as attestation and block proposal rewards and penalties.
 """
 
 import typing

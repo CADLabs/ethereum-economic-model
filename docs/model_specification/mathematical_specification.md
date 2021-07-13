@@ -38,7 +38,7 @@ The following domain notation is used in the Mathematical Specification:
 
 ## System States
 
-To create a state-space representation, we first describe the system's [state space](https://www.google.com/search?q=state+space+state+variables&oq=state+space+state+variables&aqs=chrome..69i57.4591j0j1&sourceid=chrome&ie=UTF-8) in the form of a set of State Variables. A state space is a data structure that consists of all possible values of State Variables. The state of the system can be represented as a state vector within the state space.
+To create a state-space representation, we first describe the system's [state-space](https://www.google.com/search?q=state+space+state+variables&oq=state+space+state+variables&aqs=chrome..69i57.4591j0j1&sourceid=chrome&ie=UTF-8) in the form of a set of State Variables. A state-space is a data structure that consists of all possible values of State Variables. The state of the system can be represented as a state vector within the state-space.
 
 For reasons of clarity and comprehensibility we categorize State Variables as follows: Constants State Variables, ETH State Variables, Validator State Variables, Reward and Penalty State Variables, EIP1559 State Variables, and System Metric State Variables.  
 
@@ -83,7 +83,7 @@ We define the State Variables' domain, range, and units. The "variable" column v
 | Name | Symbol | Domain | Unit | Variable |
 | -------- | -------- | -------- | -------- | --------|
 | Total Basefee | $F$ | $\mathbb{R}^+$ | $\text{Gwei}$ | `total_basefee` |
-| Total Tips to Validators | $T$ | $\mathbb{R}^+$ | $\text{Gwei}$ | `total_tips_to_validators` |
+| Total Tips to Validators | $T$ | $\mathbb{R}^+$ | $\text{Gwei}$ | `total_priority_fee_to_validators` |
 
 ### System Metric State Variables
 
@@ -136,7 +136,7 @@ The above validator environment level System Metrics are then aggregated into sc
 
 ## System Inputs
 
-By defining State Variables we have defined the system's state space and with it, system boundaries. System inputs are not dependent on the system's State Variables. Their logic is defined by Policy Functions in our cadCAD model, and they update the model's State Variables via State Update Functions.
+By defining State Variables we have defined the system's state-space and with it, system boundaries. System inputs are not dependent on the system's State Variables. Their logic is defined by Policy Functions in our cadCAD model, and they update the model's State Variables via State Update Functions.
 
 We describe two environmental processes as System Inputs, updating the ETH Price and ETH Staked State Variables.
 
@@ -206,7 +206,7 @@ All System Parameters in this category use uppercase snake-case variable naming 
 
 ## State Update Logic
 
-After defining the model's state space in the form of System States, we describe their state update logic, represented as cadCAD policy and State Update Functions (also called "mechanisms" sometimes)
+After defining the model's state-space in the form of System States, we describe their state update logic, represented as cadCAD policy and State Update Functions (also called "mechanisms" sometimes)
 
 To visualize the state update logic, we use a differential specification diagram (also known as a "cadCAD Canvas" at cadCAD Edu). This diagram will accompany the derivation of the Mathematical Specification of the model mechanisms.
 

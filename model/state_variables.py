@@ -120,14 +120,14 @@ class StateVariables:
     """The total rewards received as a proportion of the effective balance of the slashed validators"""
 
     # EIP1559 state variables
-    basefee: Gwei_per_Gas = 1
-    """The basefee burned, in Gwei per gas, for each transaction, dynamically updated for each block"""
-    total_basefee: Gwei = 0
-    """The total basefee burned"""
-    total_tips_to_miners: Gwei = 0
-    """"The total tips to miners pre-merge for transactions included in blockspace"""
-    total_tips_to_validators: Gwei = 0
-    """"The total tips to validators post-merge for transactions included in blockspace"""
+    base_fee_per_gas: Gwei_per_Gas = 1
+    """The base fee burned, in Gwei per gas, dynamically updated for each block"""
+    total_base_fee: Gwei = 0
+    """The total base fee burned for all transactions included in blockspace"""
+    total_priority_fee_to_miners: Gwei = 0
+    """"The total priority fee to miners pre-merge for all transactions included in blockspace"""
+    total_priority_fee_to_validators: Gwei = 0
+    """"The total priority fee to validators post-merge for all transactions included in blockspace"""
 
     # System metric state variables
     validator_eth_staked: np.ndarray = np.zeros(
@@ -145,12 +145,12 @@ class StateVariables:
     validator_revenue_yields: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=int
     )
-    """The total annualized revenue (income received) yield (percentage of investment amount)
+    """The total annualized revenue (income received) yields (percentage of investment amount)
     per validator environment"""
     validator_profit_yields: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=int
     )
-    """The total annualized profit (income received - costs) yield (percentage of investment amount)
+    """The total annualized profit (income received - costs) yields (percentage of investment amount)
     per validator environment"""
 
     validator_count_distribution: np.ndarray = np.zeros(

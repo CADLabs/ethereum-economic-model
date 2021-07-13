@@ -1,7 +1,8 @@
 """
 # Ethereum System
 
-Policy Functions and State Update Functions shared between the Eth1 and Eth2 systems.
+General Ethereum mechanisms, such as managing the system upgrade process,
+the EIP1559 transaction pricing mechanism, and updating the ETH price and ETH supply.
 """
 
 import typing
@@ -91,16 +92,18 @@ def policy_network_issuance(
     # State Variables
     stage = previous_state["stage"]
     amount_slashed = previous_state["amount_slashed"]
-    total_basefee = previous_state["total_basefee"]
-    total_tips_to_validators = previous_state["total_tips_to_validators"]
+    total_base_fee = previous_state["total_base_fee"]
+    total_priority_fee_to_validators = previous_state[
+        "total_priority_fee_to_validators"
+    ]
     total_online_validator_rewards = previous_state["total_online_validator_rewards"]
 
     # Calculate network issuance in ETH
     network_issuance = (
-        # Remove tips to validators which is not issuance (ETH transferred rather than minted)
-        (total_online_validator_rewards - total_tips_to_validators)
+        # Remove priority fee to validators which is not issuance (ETH transferred rather than minted)
+        (total_online_validator_rewards - total_priority_fee_to_validators)
         - amount_slashed
-        - total_basefee
+        - total_base_fee
     ) / constants.gwei
 
     # Calculate Proof of Work issuance
@@ -132,25 +135,25 @@ def policy_eip1559_transaction_pricing(
     stage = Stage(previous_state["stage"])
     if stage not in [Stage.EIP1559, Stage.PROOF_OF_STAKE]:
         return {
-            "basefee": 0,
-            "total_basefee": 0,
-            "total_tips_to_miners": 0,
-            "total_tips_to_validators": 0,
+            "base_fee_per_gas": 0,
+            "total_base_fee": 0,
+            "total_priority_fee_to_miners": 0,
+            "total_priority_fee_to_validators": 0,
         }
 
     # Parameters
     dt = params["dt"]
     gas_target_process = params["gas_target_process"]  # Gas
     ELASTICITY_MULTIPLIER = params["ELASTICITY_MULTIPLIER"]
-    eip1559_basefee_process = params["eip1559_basefee_process"]
-    eip1559_tip_process = params["eip1559_tip_process"]
+    base_fee_process = params["base_fee_process"]
+    priority_fee_process = params["priority_fee_process"]
 
     # State Variables
     run = previous_state["run"]
     timestep = previous_state["timestep"]
 
-    # Get samples for current run and timestep from basefee, tip, and transaction processes
-    basefee = eip1559_basefee_process(run, timestep * dt)  # Gwei per Gas
+    # Get samples for current run and timestep from base fee, priority fee, and transaction processes
+    base_fee_per_gas = base_fee_process(run, timestep * dt)  # Gwei per Gas
 
     gas_target = gas_target_process(run, timestep * dt)  # Gas
 
@@ -163,23 +166,23 @@ def policy_eip1559_transaction_pricing(
     #     else True
     # ), "basefee changed by more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %"
 
-    avg_tip_amount = eip1559_tip_process(run, timestep * dt)  # Gwei per Gas
+    avg_priority_fee_amount = priority_fee_process(run, timestep * dt)  # Gwei per Gas
 
     if stage in [Stage.EIP1559]:
         gas_used = constants.pow_blocks_per_epoch * gas_target  # Gas
     else:  # stage is Stage.PROOF_OF_STAKE
         gas_used = constants.slots_per_epoch * gas_target  # Gas
 
-    # Calculate total basefee and tips to validators
-    total_basefee = gas_used * basefee  # Gwei
-    total_tips = gas_used * avg_tip_amount  # Gwei
+    # Calculate total base fee, and priority fee to validators
+    total_base_fee = gas_used * base_fee_per_gas  # Gwei
+    total_priority_fee = gas_used * avg_priority_fee_amount  # Gwei
 
     if stage in [Stage.PROOF_OF_STAKE]:
-        total_tips_to_miners = 0
-        total_tips_to_validators = total_tips
+        total_priority_fee_to_miners = 0
+        total_priority_fee_to_validators = total_priority_fee
     else:
-        total_tips_to_miners = total_tips
-        total_tips_to_validators = 0
+        total_priority_fee_to_miners = total_priority_fee
+        total_priority_fee_to_validators = 0
 
     # Check if the block used too much gas
     assert (
@@ -187,10 +190,10 @@ def policy_eip1559_transaction_pricing(
     ), "invalid block: too much gas used"
 
     return {
-        "basefee": basefee,
-        "total_basefee": total_basefee * dt,
-        "total_tips_to_miners": total_tips_to_miners * dt,
-        "total_tips_to_validators": total_tips_to_validators * dt,
+        "base_fee_per_gas": base_fee_per_gas,
+        "total_base_fee": total_base_fee * dt,
+        "total_priority_fee_to_miners": total_priority_fee_to_miners * dt,
+        "total_priority_fee_to_validators": total_priority_fee_to_validators * dt,
     }
 
 

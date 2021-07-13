@@ -142,10 +142,14 @@ _state_update_blocks = [
             "eip1559": ethereum.policy_eip1559_transaction_pricing,
         },
         "variables": {
-            "basefee": update_from_signal("basefee"),
-            "total_basefee": update_from_signal("total_basefee"),
-            "total_tips_to_miners": update_from_signal("total_tips_to_miners"),
-            "total_tips_to_validators": update_from_signal("total_tips_to_validators"),
+            "base_fee_per_gas": update_from_signal("base_fee_per_gas"),
+            "total_base_fee": update_from_signal("total_base_fee"),
+            "total_priority_fee_to_miners": update_from_signal(
+                "total_priority_fee_to_miners"
+            ),
+            "total_priority_fee_to_validators": update_from_signal(
+                "total_priority_fee_to_validators"
+            ),
         },
     },
     {
@@ -218,7 +222,7 @@ _state_update_blocks = [
     },
 ]
 
-# Conditionally update the order of the State Update Blocks
+# Conditionally update the order of the State Update Blocks using a ternary operator
 _state_update_blocks = (
     [
         state_update_block_stages,
@@ -227,7 +231,7 @@ _state_update_blocks = (
     ]
     + _state_update_blocks
     if parameters["eth_staked_process"][0](0, 0) is not None
-    # If driving with validator process, switch first two blocks
+    # If driving with validator process, switch staking and validator blocks
     else [
         state_update_block_stages,
         state_update_block_validators,
