@@ -1,0 +1,26 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "barnabemonnot",
+      "name": "Barnabé Monnot",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4910325?v=4",
+      "profile": "http://barnabemonnot.com",
+      "contributions": [
+        "code",
+        "review",
+        "ideas"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "ethereum-model",
+  "projectOwner": "cadCAD-edu",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
