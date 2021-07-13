@@ -20,7 +20,8 @@ A modular dynamical systems model of Ethereum's validator economics, implemented
 * [Model Extension Roadmap](#model-extension-roadmap)
 * [Tests](#tests)
 * [Change Log](#change-log)
-* [Acknowledgements](#contributors)
+* [Acknowledgements](#acknowledgements)
+* [Contributors](#contributors)
 * [License](#license)
 
 ---
@@ -237,8 +238,6 @@ See [CHANGELOG.md](CHANGELOG.md) for notable changes and versions.
 
 ## Acknowledgements
 
-See [CONTRIBUTORS.md](CONTRIBUTORS.md) for contributions to this project repo.
-
 Special thanks goes to:
 * Ethereum 2.0 Economic Review. July 16, 2020. "An Analysis of Ethereum’s Proof of Stake Incentive Model". By Tanner Hoban and Thomas Borgers. For the extensive research that inspired the development of our model and the assumptions we adopted.
 
@@ -246,12 +245,6 @@ Other notable Ethereum PoS Models:
 * Barnabé Monnot's **BeaconRunner** model: https://github.com/barnabemonnot/beaconrunner
 * Pintail's **Beacon Chain Validator Rewards** model: https://pintail.xyz/posts/beacon-chain-validator-rewards/
 * Flashbots **Eth2 Research** model - "Assessing the nature and impact of MEV in eth2.": https://github.com/flashbots/eth2-research
-
-## License
-
-`cadCAD-edu/ethereum-model` is licensed under the GNU General Public License v3.0.
- 
-Permissions of this strong copyleft license are conditioned on making available complete source code of licensed works and modifications, which include larger works using a licensed work, under the same license. Copyright and license notices must be preserved. Contributors provide an express grant of patent rights.
 
 ## Contributors ✨
 
@@ -283,3 +276,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+## License
+
+`cadCAD-edu/ethereum-model` is licensed under the GNU General Public License v3.0.
+ 
+Permissions of this strong copyleft license are conditioned on making available complete source code of licensed works and modifications, which include larger works using a licensed work, under the same license. Copyright and license notices must be preserved. Contributors provide an express grant of patent rights.
