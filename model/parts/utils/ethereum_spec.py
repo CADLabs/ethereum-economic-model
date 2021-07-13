@@ -1,7 +1,5 @@
 """
-# Relevant Eth2 Spec Methods
-
-Relevant extracts from the official Eth2 spec.
+Relevant methods from the official [eth2.0-specs](https://github.com/ethereum/eth2.0-specs) specification repo.
 
 * Phase 0: https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/beacon-chain.md
 * Altair updates: https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md
