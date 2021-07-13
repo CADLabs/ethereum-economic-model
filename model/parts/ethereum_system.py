@@ -166,7 +166,7 @@ def policy_eip1559_transaction_pricing(
     #     else True
     # ), "basefee changed by more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %"
 
-    avg_priority_fee_amount = priority_fee_process(run, timestep * dt)  # Gwei per Gas
+    avg_priority_fee_per_gas = priority_fee_process(run, timestep * dt)  # Gwei per Gas
 
     if stage in [Stage.EIP1559]:
         gas_used = constants.pow_blocks_per_epoch * gas_target  # Gas
@@ -175,7 +175,7 @@ def policy_eip1559_transaction_pricing(
 
     # Calculate total base fee, and priority fee to validators
     total_base_fee = gas_used * base_fee_per_gas  # Gwei
-    total_priority_fee = gas_used * avg_priority_fee_amount  # Gwei
+    total_priority_fee = gas_used * avg_priority_fee_per_gas  # Gwei
 
     if stage in [Stage.PROOF_OF_STAKE]:
         total_priority_fee_to_miners = 0
