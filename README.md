@@ -102,7 +102,7 @@ To set up your Python development environment, we cover two options:
 
 The following are prerequisites you'll need before completing the setup steps:
 * Python: tested with versions 3.7, 3.8, 3.9
-* NodeJS might be needed if using Plotly with Jupyter Lab (works out the box when using Anaconda/Conda package manager with Jupyter Lab or Jupyter Notebook)
+* NodeJS might be needed if using Plotly with Jupyter Lab (Plotly works out the box when using Anaconda/Conda package manager with Jupyter Lab or Jupyter Notebook)
 
 First, set up a Python 3 [virtualenv](https://docs.python.org/3/library/venv.html) development environment (or use the equivalent Anaconda step):
 ```bash
@@ -122,10 +122,10 @@ pip install -r requirements.txt
 
 To create a new Jupyter Kernel specifically for this environment, execute the following command:
 ```bash
-python3 -m ipykernel install --user --name python-cadlabs-eth-model --display-name "Python (CADLabs Ethereum Model)"
+python3 -m ipykernel install --user --name python-cadlabs-eth-model --display-name "Python (CADLabs Ethereum Research Model)"
 ```
 
-You'll then be able to select the kernel with display name `Python (CADLabs Ethereum Model)` to use for your notebook from within Jupyter.
+You'll then be able to select the kernel with display name `Python (CADLabs Ethereum Research Model)` to use for your notebook from within Jupyter.
 
 To start Jupyter Notebook or Lab (see notes about issues with [using Plotly with Jupyter Lab](#known-issues)):
 ```bash
