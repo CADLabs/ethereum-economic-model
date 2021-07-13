@@ -48,7 +48,7 @@ def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameter
     df['total_revenue_yields_pct'] = df['total_revenue_yields'] * 100
     df['total_profit_yields_pct'] = df['total_profit_yields'] * 100
 
-    # Calculate revenue-net yield spread
+    # Calculate revenue-profit yield spread
     df['revenue_profit_yield_spread_pct'] = df['total_revenue_yields_pct'] - df['total_profit_yields_pct']
 
     # Convert validator rewards from Gwei to ETH

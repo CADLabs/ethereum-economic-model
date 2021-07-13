@@ -2,7 +2,7 @@
 
 [![Python package](https://github.com/cadCAD-edu/ethereum-model/actions/workflows/python.yml/badge.svg)](https://github.com/cadCAD-edu/ethereum-model/actions/workflows/python.yml)
 
-A modular dynamical systems model of Ethereum's validator economics, implemented using the open-source Python library [radCAD](https://github.com/cadCAD-edu/radCAD), a next-gen implementation of [cadCAD](https://cadcad.org). Implements the official Ethereum [Altair](https://github.com/ethereum/eth2.0-specs#altair) spec updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release.
+A modular dynamical systems model of Ethereum's validator economics, implemented using the open-source Python library [radCAD](https://github.com/CADLabs/radCAD), a next-gen implementation of [cadCAD](https://cadcad.org). Implements the official Ethereum [Altair](https://github.com/ethereum/eth2.0-specs#altair) spec updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release.
 
 ## Table of Contents
 
@@ -27,17 +27,17 @@ A modular dynamical systems model of Ethereum's validator economics, implemented
 
 ### Model Context
 
-This open-source model has been developed in collaboration with the Ethereum Robust Incentives Group, and funded by an Ethereum ESP (Ecosystem Support Program) grant. While originally scoped with purely modeling-educational intent as part of the cadCAD Edu online course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum)", it has evolved to become a highly versatile, customizable and extensible research model, and includes a list of [model extension ideas](#model-extension-roadmap). The model is focused on epoch- and population-level Ethereum validator economics across different deployment types and - at least in its initial setup - abstracts from slot- and agent-level dynamics. Please see [model assumptions](ASSUMPTIONS.md) for further context.
+This open-source model has been developed in collaboration with the Ethereum Robust Incentives Group, and funded by an Ethereum ESP (Ecosystem Support Program) grant. While originally scoped with purely modelling-educational intent as part of the cadCAD Edu online course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum)", it has evolved to become a highly versatile, customizable and extensible research model, and includes a list of [model extension ideas](#model-extension-roadmap). The model is focused on epoch- and population-level Ethereum validator economics across different deployment types and - at least in its initial setup - abstracts from slot- and agent-level dynamics. Please see [model assumptions](ASSUMPTIONS.md) for further context.
 
 ### Model Features
 
 * Configurable to reflect protocol behavior at different points in time of the development roadmap (referred to as "upgrade stages"):
   * post Beacon Chain launch, pre EIP1559, pre PoS (validators receive PoS incentives, EIP1559 disabled, and PoW still in operation)
-  * post Beacon Chain launch, post EIP1559, pre PoS (validators receive PoS incentives, EIP1559 enabled with miners receiving tips, and PoW still in operation)
-  * post Beacon Chain launch, post EIP1559, post PoS (validators receive PoS incentives, EIP1559 enabled with validators receiving tips, and PoW deprecated)
-* Flexible calculation granularity: By default, State Variables, System Metrics, and System Parameters are calculated at epoch level and aggregated daily (~= 225 epochs). Users can easily change epoch aggregation using the delta-time (dt) parameter. The model can be extended for slot-level granularity and analysis if that is desired (see [Model Extension Roadmap](#model-extension-roadmap)).
-* Supports [state-space analysis](https://en.wikipedia.org/wiki/State-space_representation) (i.e. simulation of system behavior over time) and [phase-space analysis](https://en.wikipedia.org/wiki/Phase_space) (i.e. generation of all unique system states in a given experimental setup).
-* Customizable processes to set important variables such as ETH price, ETH staked, EIP1559 transaction pricing, and transaction rates.
+  * post Beacon Chain launch, post EIP1559, pre PoS (validators receive PoS incentives, EIP1559 enabled with miners receiving priority fees, and PoW still in operation)
+  * post Beacon Chain launch, post EIP1559, post PoS (validators receive PoS incentives, EIP1559 enabled with validators receiving priority fees, and PoW deprecated)
+* Flexible calculation granularity: By default, State Variables, System Metrics, and System Parameters are calculated at epoch level and aggregated daily (~= 225 epochs). Users can easily change epoch aggregation using the delta-time (`dt`) parameter. The model can be extended for slot-level granularity and analysis if that is desired (see [Model Extension Roadmap](#model-extension-roadmap)).
+* Supports [state-space analysis](https://en.wikipedia.org/wiki/State-space_representation) (i.e. simulation of system state over time) and [phase-space analysis](https://en.wikipedia.org/wiki/Phase_space) (i.e. generation of all unique system states in a given experimental setup).
+* Customizable processes to set important variables such as ETH price, ETH staked, and EIP1559 transaction pricing.
 * Modular model structure for convenient extension and modification. This allows different user groups to refactor the model for different purposes, rapidly test new incentive mechanisms, or to update the model as Ethereum implements new protocol improvements.
 * References to official [Eth2 specs](https://github.com/ethereum/eth2.0-specs) in Policy and State Update Function logic. This enables seamless onboarding of protocol developers or for the more advanced cadCAD user to dig into the underlying protocol design that inspired the logic.
 
@@ -62,7 +62,7 @@ The model is composed of several structural modules in the [model/parts/](model/
 | --- | --- |
 | [ethereum_system.py](model/parts/ethereum_system.py) | General Ethereum mechanisms, such as managing the system upgrade process, the EIP1559 transaction pricing mechanism, and updating the ETH price and ETH supply |
 | [pos_incentives.py](model/parts/pos_incentives.py) | Proof of Stake incentives |
-| [system_metrics.py](model/parts/system_metrics.py) | Calculation of validator costs, revenue, profit, and yield metrics |
+| [system_metrics.py](model/parts/system_metrics.py) | Calculation of metrics such as validator costs and yields |
 | [validators.py](model/parts/validators.py) | Validator processes such as validator activation, staking, uptime |
 | [utils/ethereum_spec.py](model/parts/utils/ethereum_spec.py) | Relevant extracts from the official Eth2 spec |
 

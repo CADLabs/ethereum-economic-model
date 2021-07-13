@@ -218,7 +218,7 @@ _state_update_blocks = [
     },
 ]
 
-# Conditionally update the order of the State Update Blocks
+# Conditionally update the order of the State Update Blocks using a ternary operator
 _state_update_blocks = (
     [
         state_update_block_stages,
@@ -227,7 +227,7 @@ _state_update_blocks = (
     ]
     + _state_update_blocks
     if parameters["eth_staked_process"][0](0, 0) is not None
-    # If driving with validator process, switch first two blocks
+    # If driving with validator process, switch staking and validator blocks
     else [
         state_update_block_stages,
         state_update_block_validators,
