@@ -1,3 +1,10 @@
+"""
+# Genesis ETH Price / ETH Staked Grid Analysis
+
+Creates a cartesian product grid of ETH price and ETH staked processes, for phase-space analyses,
+starting from the ETH staked genesis requirement of 524,288 ETH staked.
+"""
+
 import numpy as np
 import copy
 

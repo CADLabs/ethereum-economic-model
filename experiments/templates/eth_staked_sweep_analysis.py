@@ -1,3 +1,10 @@
+"""
+# ETH Staked Sweep Analysis
+
+Creates a parameter sweep of the ETH staked process, with a static value for ETH price set to
+the current maximum ETH price value over the last 6 months from Etherscan.io.
+"""
+
 import numpy as np
 import copy
 

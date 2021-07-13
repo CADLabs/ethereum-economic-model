@@ -1,3 +1,9 @@
+"""
+# ETH Price / ETH Staked Grid Analysis
+
+Creates a cartesian product grid of ETH price and ETH staked processes, for phase-space analyses.
+"""
+
 import numpy as np
 import copy
 
