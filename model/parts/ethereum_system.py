@@ -1,7 +1,8 @@
 """
 # Ethereum System
 
-Policy Functions and State Update Functions shared between the Eth1 and Eth2 systems.
+General Ethereum mechanisms, such as managing the system upgrade process,
+the EIP1559 transaction pricing mechanism, and updating the ETH price and ETH supply.
 """
 
 import typing

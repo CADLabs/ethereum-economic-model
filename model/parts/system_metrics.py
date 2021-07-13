@@ -1,8 +1,7 @@
 """
 # System Metrics
 
-* Calculation of validator operational costs
-* Calculation of validator revenue, profit, and yield metrics
+Calculation of metrics such as validator operational costs and yields.
 """
 
 import typing

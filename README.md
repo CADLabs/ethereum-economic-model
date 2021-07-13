@@ -43,10 +43,10 @@ This open-source model has been developed in collaboration with the Ethereum Rob
 
 ### Directory Structure
 
-* [data/](data/): datasets used in model
-* [docs/](docs/): various documentation including documentation of model software architecture using Python docstrings
-* [experiments/](experiments/): analysis notebooks, experiment workflow configuration and execution
-* [logs/](logs/): experiment log files
+* [data/](data/): datasets and API data-sources (such as Etherscan.io and Beaconcha.in) used in the model
+* [docs/](docs/): misc. documentation such as auto-generated docs from Python docstrings and Markdown docs
+* [experiments/](experiments/): analysis notebooks and experiment workflow (such as configuration and execution)
+* [logs/](logs/): experiment runtime log files
 * [model/](model/): model software architecture (structural and configuration modules)
 * [tests/](tests/): unit and integration tests for model and notebooks
 
@@ -61,9 +61,9 @@ The model is composed of several structural modules in the [model/parts/](model/
 | Module | Description |
 | --- | --- |
 | [ethereum_system.py](model/parts/ethereum_system.py) | General Ethereum mechanisms, such as managing the system upgrade process, the EIP1559 transaction pricing mechanism, and updating the ETH price and ETH supply |
-| [pos_incentives.py](model/parts/pos_incentives.py) | Proof of Stake incentives |
-| [system_metrics.py](model/parts/system_metrics.py) | Calculation of metrics such as validator costs and yields |
-| [validators.py](model/parts/validators.py) | Validator processes such as validator activation, staking, uptime |
+| [pos_incentives.py](model/parts/pos_incentives.py) | Calculation of PoS incentives such as attestation and block proposal rewards and penalties |
+| [system_metrics.py](model/parts/system_metrics.py) | Calculation of metrics such as validator operational costs and yields |
+| [validators.py](model/parts/validators.py) | Validator processes such as validator activation, staking, and uptime |
 | [utils/ethereum_spec.py](model/parts/utils/ethereum_spec.py) | Relevant extracts from the official Eth2 spec |
 
 #### Configuration Modules
@@ -74,7 +74,7 @@ The model is configured using several configuration modules in the [model/](mode
 | --- | --- |
 | [constants.py](model/constants.py) | Constants used in the model e.g. number of epochs in a year, Gwei in 1 Ether |
 | [simulation_configuration.py](model/simulation_configuration.py) | Simulation configuration such as the number of timesteps and Monte Carlo runs |
-| [state_update_blocks.py](model/state_update_blocks.py) | cadCAD model state update block structure, composed of Policy and State Update Functions |
+| [state_update_blocks.py](model/state_update_blocks.py) | cadCAD model State Update Block structure, composed of Policy and State Update Functions |
 | [state_variables.py](model/state_variables.py) | Model State Variable definition, configuration, and defaults |
 | [stochastic_processes.py](model/stochastic_processes.py) | Helper functions to generate stochastic environmental processes |
 | [system_parameters.py](model/system_parameters.py) | Model System Parameter definition, configuration, and defaults |
@@ -102,9 +102,9 @@ To set up your Python development environment, we cover two options:
 
 The following are prerequisites you'll need before completing the setup steps:
 * Python: tested with versions 3.7, 3.8, 3.9
-* NodeJS might be needed if using Plotly with Jupyter Lab (works out the box when using Anaconda/Conda package manager)
+* NodeJS might be needed if using Plotly with Jupyter Lab (works out the box when using Anaconda/Conda package manager with Jupyter Lab or Jupyter Notebook)
 
-First, set up a Python 3 [virtualenv](https://docs.python.org/3/library/venv.html) development environment:
+First, set up a Python 3 [virtualenv](https://docs.python.org/3/library/venv.html) development environment (or use the equivalent Anaconda step):
 ```bash
 # Create a virtual environment using Python 3 venv module
 python3 -m venv venv
@@ -205,7 +205,7 @@ The purpose of this notebook is to explore the returns validators can expect fro
 
 #### Notebook 3. Network Issuance and Inflation Rate (Network-level Analysis)
 
-The purpose of this notebook is to explore the ETH issuance and resulting annualized inflation rate across different time horizons and scenarios. 
+The purpose of this notebook is to explore the ETH issuance and resulting annualized inflation rate across different time horizons and scenarios.
 
 * Analysis: Inflation Rate and ETH Supply Over Time
 
@@ -245,7 +245,7 @@ Other notable Ethereum PoS Models:
 
 ## Contributors ✨
 
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+Thanks goes to these wonderful contributors (see [emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->

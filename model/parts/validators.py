@@ -1,9 +1,7 @@
 """
 # Validator Mechanisms
 
-* Implementation of the validator staking process
-* Implementation of the new, online, and offline validator processes
-* Calculation of the validator average effective balance
+Validator processes such as validator activation, staking, and uptime.
 """
 
 import typing
