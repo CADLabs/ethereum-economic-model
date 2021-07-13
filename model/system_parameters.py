@@ -369,7 +369,7 @@ class Parameters:
     """
 
     # EIP1559 transaction pricing parameters
-    base_fee_per_gas_process: List[Callable[[Run, Timestep], Gwei_per_Gas]] = default(
+    base_fee_process: List[Callable[[Run, Timestep], Gwei_per_Gas]] = default(
         [lambda _run, _timestep: 70]  # Gwei per gas
     )
     """
@@ -388,7 +388,7 @@ class Parameters:
     > Hence, periods of heavy on-chain load will not realistically last longer than ~5 minutes.
     """
 
-    priority_fee_per_gas_process: List[
+    priority_fee_process: List[
         Callable[[Run, Timestep], Gwei_per_Gas]
     ] = default(
         [lambda _run, _timestep: 30]  # Gwei per gas

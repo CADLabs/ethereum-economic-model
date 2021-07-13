@@ -142,9 +142,9 @@ _state_update_blocks = [
             "eip1559": ethereum.policy_eip1559_transaction_pricing,
         },
         "variables": {
-            "basefee": update_from_signal("basefee"),
-            "total_basefee": update_from_signal("total_basefee"),
-            "total_tips_to_miners": update_from_signal("total_tips_to_miners"),
+            "base_fee_per_gas": update_from_signal("base_fee_per_gas"),
+            "total_base_fee": update_from_signal("total_base_fee"),
+            "total_priority_fee_to_miners": update_from_signal("total_priority_fee_to_miners"),
             "total_priority_fee_to_validators": update_from_signal(
                 "total_priority_fee_to_validators"
             ),
