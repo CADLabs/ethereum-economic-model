@@ -1,4 +1,6 @@
-"""Experiment template example
+"""
+# Experiment template example
+
 An example of overriding and customizing the default experiment to create a new template.
 """
 

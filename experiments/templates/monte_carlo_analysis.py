@@ -1,3 +1,11 @@
+"""
+# Monte Carlo Analysis
+
+Creates stochastic processes for ETH price, validator adoption, and validator uptime processes,
+sampled by run (for new seed) and timestep (for new sample),
+and runs a Monte Carlo analysis of 5 runs.
+"""
+
 import copy
 
 from model.types import Stage

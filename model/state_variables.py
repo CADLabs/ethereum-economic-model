@@ -31,7 +31,7 @@ from data.historical_values import eth_price_mean, eth_price_min, eth_price_max
 # Get number of validator environments for initializing Numpy array size
 number_of_validator_environments = len(validator_environments)
 
-# Intial state from external live data source
+# Intial state from external live data source, setting a default in case API call fails
 number_of_validators: int = beaconchain.get_validators_count(default=156_250)
 eth_staked: ETH = (
     beaconchain.get_total_validator_balance(default=5_000_000e9) / constants.gwei
@@ -70,7 +70,7 @@ class StateVariables:
     eth_staked: ETH = eth_staked
     """The total ETH staked as part of the Proof of Stake system"""
     supply_inflation: Percentage = 0
-    """The annualized ETH supply inflation"""
+    """The annualized ETH supply inflation rate"""
     network_issuance: ETH = 0
     """The total network issuance in ETH"""
     pow_issuance: ETH = 0

@@ -14,7 +14,8 @@ from model.types import ETH, Gwei
 def policy_staking(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, ETH]:
-    """Staking Policy
+    """
+    ## Staking Policy
     A policy used when driving the model with the `eth_staked_process`,
     for generating phase-space analyses, e.g. simulating a set of discrete `eth_staked` values.
 
@@ -47,7 +48,8 @@ def policy_staking(
 
 
 def policy_validators(params, substep, state_history, previous_state):
-    """Valdiator Policy Function
+    """
+    ## Validator Policy Function
     Calculate the number of validators driven by the ETH staked or validator processes.
     """
     # Parameters
@@ -109,7 +111,8 @@ def policy_validators(params, substep, state_history, previous_state):
 def policy_average_effective_balance(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
-    """Average Effective Balance Policy Function
+    """
+    ## Average Effective Balance Policy Function
     Calculate the validator average effective balance.
     """
     # State Variables

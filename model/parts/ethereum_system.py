@@ -13,7 +13,9 @@ from model.types import ETH, USD_per_ETH, Gwei, Stage
 
 
 def policy_upgrade_stages(params, substep, state_history, previous_state):
-    """Upgrade Stages Policy
+    """
+    ## Upgrade Stages Policy
+
     Transitions the model from one stage in the Ethereum network
     upgrade process to the next at different milestones.
 
@@ -81,7 +83,9 @@ def policy_upgrade_stages(params, substep, state_history, previous_state):
 def policy_network_issuance(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, ETH]:
-    """Network Issuance Policy Function
+    """
+    ## Network Issuance Policy Function
+
     Calculate the total network issuance and issuance from Proof of Work block rewards.
     """
 
@@ -123,7 +127,9 @@ def policy_network_issuance(
 def policy_eip1559_transaction_pricing(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
-    """EIP1559 Transaction Pricing Mechanism
+    """
+    ## EIP1559 Transaction Pricing Mechanism
+
     A transaction pricing mechanism that includes fixed-per-block network fee
     that is burned and dynamically expands/contracts block sizes to deal with transient congestion.
 
@@ -166,7 +172,7 @@ def policy_eip1559_transaction_pricing(
     #     else True
     # ), "basefee changed by more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %"
 
-    avg_priority_fee_amount = priority_fee_process(run, timestep * dt)  # Gwei per Gas
+    avg_priority_fee_per_gas = priority_fee_process(run, timestep * dt)  # Gwei per Gas
 
     if stage in [Stage.EIP1559]:
         gas_used = constants.pow_blocks_per_epoch * gas_target  # Gas
@@ -175,7 +181,7 @@ def policy_eip1559_transaction_pricing(
 
     # Calculate total base fee, and priority fee to validators
     total_base_fee = gas_used * base_fee_per_gas  # Gwei
-    total_priority_fee = gas_used * avg_priority_fee_amount  # Gwei
+    total_priority_fee = gas_used * avg_priority_fee_per_gas  # Gwei
 
     if stage in [Stage.PROOF_OF_STAKE]:
         total_priority_fee_to_miners = 0
@@ -200,7 +206,9 @@ def policy_eip1559_transaction_pricing(
 def update_eth_price(
     params, substep, state_history, previous_state, policy_input
 ) -> typing.Tuple[str, USD_per_ETH]:
-    """ETH Price State Update Function
+    """
+    ## ETH Price State Update Function
+
     Update the ETH price from the `eth_price_process`.
     """
 
@@ -221,7 +229,9 @@ def update_eth_price(
 def update_eth_supply(
     params, substep, state_history, previous_state, policy_input
 ) -> typing.Tuple[str, ETH]:
-    """ETH Supply State Update Function
+    """
+    ## ETH Supply State Update Function
+
     Update the ETH supply from the Network Issuance Policy Function.
     """
 

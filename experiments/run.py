@@ -1,7 +1,6 @@
 import pandas as pd
 import logging
 import sys
-from datetime import datetime
 import time
 
 from experiments.default_experiment import experiment

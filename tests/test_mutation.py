@@ -16,6 +16,7 @@ def test_deepcopy():
     simulation_1.engine.deepcopy = True
     df_1 = pd.DataFrame(simulation_1.run())
     exec_time_1 = time.time() - exec_time_1
+
     exec_time_2 = time.time()
     simulation_2.engine.deepcopy = False
     df_2 = pd.DataFrame(simulation_2.run())

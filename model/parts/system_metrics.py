@@ -13,7 +13,8 @@ from model.types import Percentage, Gwei
 def policy_validator_costs(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, any]:
-    """Validator Costs Policy Function
+    """
+    ## Validator Costs Policy Function
     Calculate the aggregate validator costs.
     """
     # Parameters
@@ -70,7 +71,8 @@ def policy_validator_costs(
 def policy_validator_yields(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, any]:
-    """Validator Yields Policy Function
+    """
+    ## Validator Yields Policy Function
     Calculate the aggregate validator revenue and profit yields.
     """
     # Parameters
@@ -140,7 +142,8 @@ def policy_validator_yields(
 def policy_total_online_validator_rewards(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
-    """Total Online Validator Rewards Policy Function
+    """
+    ## Total Online Validator Rewards Policy Function
     Calculate the aggregate total online validator rewards.
     """
     # State Variables
@@ -165,7 +168,8 @@ def policy_total_online_validator_rewards(
 def update_supply_inflation(
     params, substep, state_history, previous_state, policy_input
 ) -> typing.Tuple[str, Percentage]:
-    """Supply Inflation State Update Function
+    """
+    ## Supply Inflation State Update Function
     Update the annualized ETH supply inflation.
     """
     # Policy Inputs

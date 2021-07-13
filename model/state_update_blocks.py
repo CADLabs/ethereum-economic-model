@@ -1,5 +1,5 @@
 """
-cadCAD model state update block structure, composed of Policy and State Update Functions
+cadCAD model State Update Block structure, composed of Policy and State Update Functions
 """
 
 import model.parts.ethereum_system as ethereum
@@ -11,7 +11,7 @@ from model.utils import update_from_signal
 
 state_update_block_stages = {
     "description": """
-    Transition between stages of network upgrade process
+        Transition between stages of network upgrade process
     """,
     "policies": {"upgrade_stages": ethereum.policy_upgrade_stages},
     "variables": {

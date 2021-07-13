@@ -1,7 +1,5 @@
 """
-# Relevant Eth2 Spec Methods
-
-Relevant extracts from the official Eth2 spec.
+Relevant methods from the official [eth2.0-specs](https://github.com/ethereum/eth2.0-specs) specification repo.
 
 * Phase 0: https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/beacon-chain.md
 * Altair updates: https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md
@@ -103,7 +101,9 @@ def get_proposer_reward(params: Parameters, state: StateVariables) -> Gwei:
 
 
 def get_validator_churn_limit(params: Parameters, state: StateVariables) -> int:
-    """Return the validator churn limit for the current epoch
+    """
+    Return the validator churn limit for the current epoch.
+
     See https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/beacon-chain.md#get_validator_churn_limit
 
     ```python

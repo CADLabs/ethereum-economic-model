@@ -1,6 +1,6 @@
 # CADLabs Ethereum Research Model
 
-[![Python package](https://github.com/cadCAD-edu/ethereum-model/actions/workflows/python.yml/badge.svg)](https://github.com/cadCAD-edu/ethereum-model/actions/workflows/python.yml)
+[![Python package](https://github.com/CADLabs/ethereum-model/actions/workflows/python.yml/badge.svg)](https://github.com/CADLabs/ethereum-model/actions/workflows/python.yml)
 
 A modular dynamical systems model of Ethereum's validator economics, implemented using the open-source Python library [radCAD](https://github.com/CADLabs/radCAD), a next-gen implementation of [cadCAD](https://cadcad.org). Implements the official Ethereum [Altair](https://github.com/ethereum/eth2.0-specs#altair) spec updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release.
 
@@ -87,7 +87,7 @@ The model implements the official Ethereum Specification wherever possible, but 
 
 ## Environment Setup
 
-1. Clone or download the Git repository: `git clone https://github.com/cadCAD-edu/ethereum-model` or using GitHub Desktop
+1. Clone or download the Git repository: `git clone https://github.com/CADLabs/ethereum-model` or using GitHub Desktop
 2. If completing the cadCAD Edu Masterclass MOOC, check out the version `v1.0.0` tag: `git checkout tags/v1.0.0`
 3. Set up your development environment using the [Setup](#setup) section
 4. Follow the [Experiment Workflow](#experiment-workflow) section to execute your first experiment notebook!
@@ -102,7 +102,7 @@ To set up your Python development environment, we cover two options:
 
 The following are prerequisites you'll need before completing the setup steps:
 * Python: tested with versions 3.7, 3.8, 3.9
-* NodeJS might be needed if using Plotly with Jupyter Lab (works out the box when using Anaconda/Conda package manager with Jupyter Lab or Jupyter Notebook)
+* NodeJS might be needed if using Plotly with Jupyter Lab (Plotly works out the box when using Anaconda/Conda package manager with Jupyter Lab or Jupyter Notebook)
 
 First, set up a Python 3 [virtualenv](https://docs.python.org/3/library/venv.html) development environment (or use the equivalent Anaconda step):
 ```bash
@@ -122,10 +122,10 @@ pip install -r requirements.txt
 
 To create a new Jupyter Kernel specifically for this environment, execute the following command:
 ```bash
-python3 -m ipykernel install --user --name python-cadlabs-eth-model --display-name "Python (CADLabs Ethereum Model)"
+python3 -m ipykernel install --user --name python-cadlabs-eth-model --display-name "Python (CADLabs Ethereum Research Model)"
 ```
 
-You'll then be able to select the kernel with display name `Python (CADLabs Ethereum Model)` to use for your notebook from within Jupyter.
+You'll then be able to select the kernel with display name `Python (CADLabs Ethereum Research Model)` to use for your notebook from within Jupyter.
 
 To start Jupyter Notebook or Lab (see notes about issues with [using Plotly with Jupyter Lab](#known-issues)):
 ```bash
@@ -146,7 +146,7 @@ make start-lab
 
 If you'd rather use Docker, there is a prebuilt Docker image you can use to set up a Jupyter Lab development environment with all the dependencies you need.
 
-See [CADLabs Jupyter Lab Environment](https://github.com/cadCAD-edu/jupyter-lab-environment)
+See [CADLabs Jupyter Lab Environment](https://github.com/CADLabs/jupyter-lab-environment)
 
 #### Known Issues
 
@@ -252,18 +252,18 @@ Thanks goes to these wonderful contributors (see [emoji key](https://allcontribu
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/rogervs"><img src="https://avatars.githubusercontent.com/u/4959125?v=4?s=100" width="100px;" alt=""/><br /><sub><b>RogerVs</b></sub></a><br /><a href="https://github.com/cadCAD-edu/ethereum-model/commits?author=rogervs" title="Code">💻</a> <a href="#infra-rogervs" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/cadCAD-edu/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Arogervs" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/cadCAD-edu/ethereum-model/commits?author=rogervs" title="Documentation">📖</a> <a href="https://github.com/cadCAD-edu/ethereum-model/issues?q=author%3Arogervs" title="Bug reports">🐛</a> <a href="#ideas-rogervs" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="https://marthendalnunes.github.io/"><img src="https://avatars.githubusercontent.com/u/18421017?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Vitor Marthendal Nunes</b></sub></a><br /><a href="https://github.com/cadCAD-edu/ethereum-model/commits?author=marthendalnunes" title="Code">💻</a> <a href="#infra-marthendalnunes" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/cadCAD-edu/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Amarthendalnunes" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/cadCAD-edu/ethereum-model/commits?author=marthendalnunes" title="Documentation">📖</a> <a href="https://github.com/cadCAD-edu/ethereum-model/issues?q=author%3Amarthendalnunes" title="Bug reports">🐛</a> <a href="#ideas-marthendalnunes" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="http://danlessa.github.io/"><img src="https://avatars.githubusercontent.com/u/15021144?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Danillo Lessa Bernardineli</b></sub></a><br /><a href="https://github.com/cadCAD-edu/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Adanlessa" title="Reviewed Pull Requests">👀</a> <a href="#ideas-danlessa" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="https://github.com/JGBSci"><img src="https://avatars.githubusercontent.com/u/35999312?v=4?s=100" width="100px;" alt=""/><br /><sub><b>JGBSci</b></sub></a><br /><a href="https://github.com/cadCAD-edu/ethereum-model/pulls?q=is%3Apr+reviewed-by%3AJGBSci" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/cadCAD-edu/ethereum-model/commits?author=JGBSci" title="Documentation">📖</a> <a href="#ideas-JGBSci" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="http://barnabemonnot.com"><img src="https://avatars.githubusercontent.com/u/4910325?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Barnabé Monnot</b></sub></a><br /><a href="https://github.com/cadCAD-edu/ethereum-model/commits?author=barnabemonnot" title="Code">💻</a> <a href="https://github.com/cadCAD-edu/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Abarnabemonnot" title="Reviewed Pull Requests">👀</a> <a href="#ideas-barnabemonnot" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="https://github.com/AntoineRondelet"><img src="https://avatars.githubusercontent.com/u/17513145?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Antoine Rondelet</b></sub></a><br /><a href="https://github.com/cadCAD-edu/ethereum-model/pulls?q=is%3Apr+reviewed-by%3AAntoineRondelet" title="Reviewed Pull Requests">👀</a></td>
-    <td align="center"><a href="https://github.com/carlwafe"><img src="https://avatars.githubusercontent.com/u/87176407?v=4?s=100" width="100px;" alt=""/><br /><sub><b>carlwafe</b></sub></a><br /><a href="https://github.com/cadCAD-edu/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Acarlwafe" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://github.com/rogervs"><img src="https://avatars.githubusercontent.com/u/4959125?v=4?s=100" width="100px;" alt=""/><br /><sub><b>RogerVs</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-model/commits?author=rogervs" title="Code">💻</a> <a href="#infra-rogervs" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/CADLabs/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Arogervs" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/CADLabs/ethereum-model/commits?author=rogervs" title="Documentation">📖</a> <a href="https://github.com/CADLabs/ethereum-model/issues?q=author%3Arogervs" title="Bug reports">🐛</a> <a href="#ideas-rogervs" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://marthendalnunes.github.io/"><img src="https://avatars.githubusercontent.com/u/18421017?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Vitor Marthendal Nunes</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-model/commits?author=marthendalnunes" title="Code">💻</a> <a href="#infra-marthendalnunes" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/CADLabs/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Amarthendalnunes" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/CADLabs/ethereum-model/commits?author=marthendalnunes" title="Documentation">📖</a> <a href="https://github.com/CADLabs/ethereum-model/issues?q=author%3Amarthendalnunes" title="Bug reports">🐛</a> <a href="#ideas-marthendalnunes" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="http://danlessa.github.io/"><img src="https://avatars.githubusercontent.com/u/15021144?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Danillo Lessa Bernardineli</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Adanlessa" title="Reviewed Pull Requests">👀</a> <a href="#ideas-danlessa" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/JGBSci"><img src="https://avatars.githubusercontent.com/u/35999312?v=4?s=100" width="100px;" alt=""/><br /><sub><b>JGBSci</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-model/pulls?q=is%3Apr+reviewed-by%3AJGBSci" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/CADLabs/ethereum-model/commits?author=JGBSci" title="Documentation">📖</a> <a href="#ideas-JGBSci" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="http://barnabemonnot.com"><img src="https://avatars.githubusercontent.com/u/4910325?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Barnabé Monnot</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-model/commits?author=barnabemonnot" title="Code">💻</a> <a href="https://github.com/CADLabs/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Abarnabemonnot" title="Reviewed Pull Requests">👀</a> <a href="#ideas-barnabemonnot" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/AntoineRondelet"><img src="https://avatars.githubusercontent.com/u/17513145?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Antoine Rondelet</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-model/pulls?q=is%3Apr+reviewed-by%3AAntoineRondelet" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://github.com/carlwafe"><img src="https://avatars.githubusercontent.com/u/87176407?v=4?s=100" width="100px;" alt=""/><br /><sub><b>carlwafe</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Acarlwafe" title="Reviewed Pull Requests">👀</a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/casparschwa"><img src="https://avatars.githubusercontent.com/u/31305984?v=4?s=100" width="100px;" alt=""/><br /><sub><b>casparschwa</b></sub></a><br /><a href="https://github.com/cadCAD-edu/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Acasparschwa" title="Reviewed Pull Requests">👀</a></td>
-    <td align="center"><a href="https://joranhonig.nl"><img src="https://avatars.githubusercontent.com/u/8710366?v=4?s=100" width="100px;" alt=""/><br /><sub><b>JoranHonig</b></sub></a><br /><a href="https://github.com/cadCAD-edu/ethereum-model/pulls?q=is%3Apr+reviewed-by%3AJoranHonig" title="Reviewed Pull Requests">👀</a></td>
-    <td align="center"><a href="http://clayming.space"><img src="https://avatars.githubusercontent.com/u/3201174?v=4?s=100" width="100px;" alt=""/><br /><sub><b>witwiki</b></sub></a><br /><a href="https://github.com/cadCAD-edu/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Awitwiki" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://github.com/casparschwa"><img src="https://avatars.githubusercontent.com/u/31305984?v=4?s=100" width="100px;" alt=""/><br /><sub><b>casparschwa</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Acasparschwa" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://joranhonig.nl"><img src="https://avatars.githubusercontent.com/u/8710366?v=4?s=100" width="100px;" alt=""/><br /><sub><b>JoranHonig</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-model/pulls?q=is%3Apr+reviewed-by%3AJoranHonig" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="http://clayming.space"><img src="https://avatars.githubusercontent.com/u/3201174?v=4?s=100" width="100px;" alt=""/><br /><sub><b>witwiki</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Awitwiki" title="Reviewed Pull Requests">👀</a></td>
   </tr>
 </table>
 

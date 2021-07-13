@@ -23,10 +23,7 @@
 </header>
 <section id="section-intro">
 <h1 id="system-metrics">System Metrics</h1>
-<ul>
-<li>Calculation of validator operational costs</li>
-<li>Calculation of validator revenue, profit, and yield metrics</li>
-</ul>
+<p>Calculation of metrics such as validator operational costs and yields.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -34,8 +31,7 @@
 <pre><code class="python">&#34;&#34;&#34;
 # System Metrics
 
-* Calculation of validator operational costs
-* Calculation of validator revenue, profit, and yield metrics
+Calculation of metrics such as validator operational costs and yields.
 &#34;&#34;&#34;
 
 import typing
@@ -47,7 +43,8 @@ from model.types import Percentage, Gwei
 def policy_validator_costs(
     params, substep, state_history, previous_state
 ) -&gt; typing.Dict[str, any]:
-    &#34;&#34;&#34;Validator Costs Policy Function
+    &#34;&#34;&#34;
+    ## Validator Costs Policy Function
     Calculate the aggregate validator costs.
     &#34;&#34;&#34;
     # Parameters
@@ -104,7 +101,8 @@ def policy_validator_costs(
 def policy_validator_yields(
     params, substep, state_history, previous_state
 ) -&gt; typing.Dict[str, any]:
-    &#34;&#34;&#34;Validator Yields Policy Function
+    &#34;&#34;&#34;
+    ## Validator Yields Policy Function
     Calculate the aggregate validator revenue and profit yields.
     &#34;&#34;&#34;
     # Parameters
@@ -174,14 +172,17 @@ def policy_validator_yields(
 def policy_total_online_validator_rewards(
     params, substep, state_history, previous_state
 ) -&gt; typing.Dict[str, Gwei]:
-    &#34;&#34;&#34;Total Online Validator Rewards Policy Function
+    &#34;&#34;&#34;
+    ## Total Online Validator Rewards Policy Function
     Calculate the aggregate total online validator rewards.
     &#34;&#34;&#34;
     # State Variables
     validating_rewards = previous_state[&#34;validating_rewards&#34;]
     validating_penalties = previous_state[&#34;validating_penalties&#34;]
     whistleblower_rewards = previous_state[&#34;whistleblower_rewards&#34;]
-    total_priority_fee_to_validators = previous_state[&#34;total_priority_fee_to_validators&#34;]
+    total_priority_fee_to_validators = previous_state[
+        &#34;total_priority_fee_to_validators&#34;
+    ]
 
     # Calculate total rewards for online validators
     total_online_validator_rewards = (
@@ -197,7 +198,8 @@ def policy_total_online_validator_rewards(
 def update_supply_inflation(
     params, substep, state_history, previous_state, policy_input
 ) -&gt; typing.Tuple[str, Percentage]:
-    &#34;&#34;&#34;Supply Inflation State Update Function
+    &#34;&#34;&#34;
+    ## Supply Inflation State Update Function
     Update the annualized ETH supply inflation.
     &#34;&#34;&#34;
     # Policy Inputs
@@ -227,8 +229,8 @@ def update_supply_inflation(
 <span>def <span class="ident">policy_total_online_validator_rewards</span></span>(<span>params, substep, state_history, previous_state) ‑> Dict[str, float]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Total Online Validator Rewards Policy Function
-Calculate the aggregate total online validator rewards.</p></div>
+<div class="desc"><h2 id="total-online-validator-rewards-policy-function">Total Online Validator Rewards Policy Function</h2>
+<p>Calculate the aggregate total online validator rewards.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -236,14 +238,17 @@ Calculate the aggregate total online validator rewards.</p></div>
 <pre><code class="python">def policy_total_online_validator_rewards(
     params, substep, state_history, previous_state
 ) -&gt; typing.Dict[str, Gwei]:
-    &#34;&#34;&#34;Total Online Validator Rewards Policy Function
+    &#34;&#34;&#34;
+    ## Total Online Validator Rewards Policy Function
     Calculate the aggregate total online validator rewards.
     &#34;&#34;&#34;
     # State Variables
     validating_rewards = previous_state[&#34;validating_rewards&#34;]
     validating_penalties = previous_state[&#34;validating_penalties&#34;]
     whistleblower_rewards = previous_state[&#34;whistleblower_rewards&#34;]
-    total_priority_fee_to_validators = previous_state[&#34;total_priority_fee_to_validators&#34;]
+    total_priority_fee_to_validators = previous_state[
+        &#34;total_priority_fee_to_validators&#34;
+    ]
 
     # Calculate total rewards for online validators
     total_online_validator_rewards = (
@@ -260,8 +265,8 @@ Calculate the aggregate total online validator rewards.</p></div>
 <span>def <span class="ident">policy_validator_costs</span></span>(<span>params, substep, state_history, previous_state) ‑> Dict[str, <built-in function any>]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Validator Costs Policy Function
-Calculate the aggregate validator costs.</p></div>
+<div class="desc"><h2 id="validator-costs-policy-function">Validator Costs Policy Function</h2>
+<p>Calculate the aggregate validator costs.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -269,7 +274,8 @@ Calculate the aggregate validator costs.</p></div>
 <pre><code class="python">def policy_validator_costs(
     params, substep, state_history, previous_state
 ) -&gt; typing.Dict[str, any]:
-    &#34;&#34;&#34;Validator Costs Policy Function
+    &#34;&#34;&#34;
+    ## Validator Costs Policy Function
     Calculate the aggregate validator costs.
     &#34;&#34;&#34;
     # Parameters
@@ -327,8 +333,8 @@ Calculate the aggregate validator costs.</p></div>
 <span>def <span class="ident">policy_validator_yields</span></span>(<span>params, substep, state_history, previous_state) ‑> Dict[str, <built-in function any>]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Validator Yields Policy Function
-Calculate the aggregate validator revenue and profit yields.</p></div>
+<div class="desc"><h2 id="validator-yields-policy-function">Validator Yields Policy Function</h2>
+<p>Calculate the aggregate validator revenue and profit yields.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -336,7 +342,8 @@ Calculate the aggregate validator revenue and profit yields.</p></div>
 <pre><code class="python">def policy_validator_yields(
     params, substep, state_history, previous_state
 ) -&gt; typing.Dict[str, any]:
-    &#34;&#34;&#34;Validator Yields Policy Function
+    &#34;&#34;&#34;
+    ## Validator Yields Policy Function
     Calculate the aggregate validator revenue and profit yields.
     &#34;&#34;&#34;
     # Parameters
@@ -407,8 +414,8 @@ Calculate the aggregate validator revenue and profit yields.</p></div>
 <span>def <span class="ident">update_supply_inflation</span></span>(<span>params, substep, state_history, previous_state, policy_input) ‑> Tuple[str, float]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Supply Inflation State Update Function
-Update the annualized ETH supply inflation.</p></div>
+<div class="desc"><h2 id="supply-inflation-state-update-function">Supply Inflation State Update Function</h2>
+<p>Update the annualized ETH supply inflation.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -416,7 +423,8 @@ Update the annualized ETH supply inflation.</p></div>
 <pre><code class="python">def update_supply_inflation(
     params, substep, state_history, previous_state, policy_input
 ) -&gt; typing.Tuple[str, Percentage]:
-    &#34;&#34;&#34;Supply Inflation State Update Function
+    &#34;&#34;&#34;
+    ## Supply Inflation State Update Function
     Update the annualized ETH supply inflation.
     &#34;&#34;&#34;
     # Policy Inputs

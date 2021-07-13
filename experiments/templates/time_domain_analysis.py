@@ -1,3 +1,10 @@
+"""
+# Time Domain Analysis
+
+Executes a time-domain simulation over a long time period of 5 years,
+over all Ethereum network upgrade stages.
+"""
+
 import copy
 
 import model.constants as constants

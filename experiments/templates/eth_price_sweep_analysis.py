@@ -1,3 +1,10 @@
+"""
+# ETH Price Sweep Analysis
+
+Creates a parameter sweep of the ETH price process,
+with a static value for ETH staked set to the current ETH staked value from Beaconcha.in.
+"""
+
 import numpy as np
 import copy
 

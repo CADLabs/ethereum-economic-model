@@ -83,13 +83,7 @@ validator_environments = [
 ]
 """Validator environment configuration
 
-From the Hoban/Borgers report (Ethereum 2.0 Economic Review):
-> assume validators will consider different validator models according to their preferences, requirements, and the scale of their stake
-> The breakdown of validator environments reflects the results of user surveys and stakeholder interviews
-
-Cost analysis:
-> See "Ethereum 2.0 Ecosystem Staking Report" by ConsenSys Insights: https://cdn2.hubspot.net/hubfs/4795067/Codefi/Ethereum%202.0%20Staking%20Ecosystem%20Report.pdf?__hstc=148571112.51d5567256d6f4167c1422d5c083e93e.1574348924308.1588770700176.1588788083651.18&__hssc=148571112.1.1588788083651
-> See "Ethereum Lighthouse: Chasing Serenity" survey report by Empire Ventures: https://medium.com/empireventures/eth2uxreport-858c73ca1f53
+See ASSUMPTIONS.md document for details of validator environment configuration and assumptions.
 """
 
 # Normalise percentage distribution to a total of 100%
@@ -151,7 +145,7 @@ class Parameters:
 
     For example, for dt = 100, each timestep equals 100 epochs.
 
-    By default set to constants.epochs_per_day (225)
+    By default set to constants.epochs_per_day (~= 225)
     """
 
     stage: List[Stage] = default([Stage.PROOF_OF_STAKE])
@@ -363,8 +357,6 @@ class Parameters:
     slashing_events_per_1000_epochs: List[int] = default([1])  # 1 / 1000 epochs
     """
     The number of slashing events per 1000 epochs.
-
-    Asssumption from Hoban/Borgers report.
     """
 
     # EIP1559 transaction pricing parameters
