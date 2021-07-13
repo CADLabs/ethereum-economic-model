@@ -35,7 +35,7 @@ legend_state_variable_name_mapping = {
     'head_reward_eth': 'Head Reward',
     'block_proposer_reward_eth': 'Block Proposer Reward',
     'sync_reward_eth': 'Sync Reward',
-    'total_priority_fee_to_validators_eth': 'Tips',
+    'total_priority_fee_to_validators_eth': 'Priority Fees',
     'supply_inflation_pct': 'ETH Supply inflation',
     'total_revenue_yields_pct': 'Total Revenue Yields',
     'total_profit_yields_pct': 'Total Profit Yields',
@@ -156,11 +156,11 @@ def plot_validating_rewards(df, subplot_titles=[]):
 
 def plot_validating_rewards_pie_chart(df, with_priority_fee=False):
     if with_priority_fee:
-        title = 'Validating Rewards with Tips'
+        title = 'Validating Rewards with Priority Fees'
         validator_rewards = df.iloc[-1][
             ['total_priority_fee_to_validators_eth', 'source_reward_eth', 'target_reward_eth', 'head_reward_eth',
              'block_proposer_reward_eth', 'sync_reward_eth']].to_dict()
-        names = ["Tips", "Source Reward", "Target Reward", "Head Reward", "Block Proposer Reward", "Sync Reward"]
+        names = ["Priority Fees}", "Source Reward", "Target Reward", "Head Reward", "Block Proposer Reward", "Sync Reward"]
     else:
         title = 'Validating Rewards'
         validator_rewards = df.iloc[-1][

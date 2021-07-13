@@ -309,7 +309,7 @@ class Parameters:
     """
     BASE_FEE_MAX_CHANGE_DENOMINATOR: List[int] = default([8])
     """
-    Used to set the maximum rate at which the EIP1559 basefee can change per block, approx. 12.5%.
+    Used to set the maximum rate at which the EIP1559 base fee can change per block, approx. 12.5%.
     """
     ELASTICITY_MULTIPLIER: List[int] = default([2])
     """
@@ -373,10 +373,10 @@ class Parameters:
         [lambda _run, _timestep: 70]  # Gwei per gas
     )
     """
-    The basefee burned, in Gwei per gas, for each transaction.
+    The base fee burned, in Gwei per gas, for each transaction.
 
     An average of 100 Gwei per gas expected to be set as transaction fee cap,
-    split between the basefee and tips - the fee cap less the basefee is sent as a tip to miners/validators.
+    split between the base fee and priority fee - the fee cap less the base fee is sent as a priority fee to miners/validators.
 
     Approximated using average gas price from https://etherscan.io/gastracker as of 20/04/21
 
@@ -392,13 +392,13 @@ class Parameters:
         [lambda _run, _timestep: 30]  # Gwei per gas
     )
     """
-    EIP1559 transaction pricing tip, in Gwei per gas.
+    EIP1559 transaction pricing priority fee, in Gwei per gas.
 
-    Due to MEV, average tips expected to be higher than usual as bid for inclusion in blockscpace market.
+    Due to MEV, average priority fee expected to be higher than usual as bid for inclusion in blockscpace market.
 
-    The tip is the difference between the fee cap set per transaction, and the basefee.
+    The priority fee is the difference between the fee cap set per transaction, and the base fee.
 
-    For PoW system without MEV influence, the tip level compensates for uncle risk:
+    For PoW system without MEV influence, the priority fee level compensates for uncle risk:
     See https://notes.ethereum.org/@vbuterin/BkSQmQTS8#Why-would-miners-include-transactions-at-all
     """
 
