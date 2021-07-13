@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "AntoineRondelet",
+      "name": "Antoine Rondelet",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17513145?v=4",
+      "profile": "https://github.com/AntoineRondelet",
+      "contributions": [
+        "review"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "ethereum-model",
+  "projectOwner": "cadCAD-edu",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
