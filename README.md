@@ -210,7 +210,7 @@ The purpose of this notebook is to explore the ETH issuance and resulting annual
 
 ## Model Extension Roadmap
 
-The modular nature of this model makes many exciting extensions and further analysis rather straightforward. The [Model Extension Roadmap](TODO: ADD LINK) provides some inspiration. 
+The modular nature of this model makes many exciting extensions and further analysis rather straightforward. The [Model Extension Roadmap](ROADMAP.md) provides some inspiration.
 
 ## Tests
 
@@ -220,6 +220,12 @@ To execute the Pytest tests:
 ```bash
 source venv/bin/activate
 python3 -m pytest tests
+```
+
+To run the full GitHub Actions CI Workflow (see [.github/workflows](.github/workflows)):
+```bash
+source venv/bin/activate
+make test
 ```
 
 ## Change Log
