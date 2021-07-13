@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "casparschwa",
+      "name": "casparschwa",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31305984?v=4",
+      "profile": "https://github.com/casparschwa",
+      "contributions": [
+        "review"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "ethereum-model",
+  "projectOwner": "cadCAD-edu",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
