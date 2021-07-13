@@ -37,15 +37,14 @@ from data.historical_values import eth_price_mean
 
 # Configure validator environment distribution
 validator_environments = [
-    ValidatorEnvironment(
-        # Configure a custom environment
-        # Used for disaggregation of single validator performance
-        type="custom",
-        percentage_distribution=0.01,  # Set to 1% by default
-        hardware_costs_per_epoch=0.0014,
-        cloud_costs_per_epoch=0,
-        third_party_costs_per_epoch=0,
-    ),
+    # Configure a custom validator environment using the following as a template:
+    # ValidatorEnvironment(
+    #     type="custom",
+    #     percentage_distribution=0.01,  # 1%
+    #     hardware_costs_per_epoch=0.0014,
+    #     cloud_costs_per_epoch=0,
+    #     third_party_costs_per_epoch=0,
+    # ),
     ValidatorEnvironment(
         type="diy_hardware",
         percentage_distribution=0.37,
