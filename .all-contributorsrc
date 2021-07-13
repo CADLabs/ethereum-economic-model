@@ -109,11 +109,25 @@
       "contributions": [
         "review"
       ]
+    },
+    {
+      "login": "BenSchZA",
+      "name": "Benjamin Scholtz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13078998?v=4",
+      "profile": "http://bitsofether.com",
+      "contributions": [
+        "code",
+        "infra",
+        "review",
+        "doc",
+        "bug",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
   "projectName": "ethereum-model",
-  "projectOwner": "cadCAD-edu",
+  "projectOwner": "CADLabs",
   "repoType": "github",
   "repoHost": "https://github.com",
   "skipCi": true
