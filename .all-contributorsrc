@@ -112,8 +112,9 @@
     }
   ],
   "contributorsPerLine": 7,
+  "contributorsSortAlphabetically": true,
   "projectName": "ethereum-model",
-  "projectOwner": "cadCAD-edu",
+  "projectOwner": "CADLabs",
   "repoType": "github",
   "repoHost": "https://github.com",
   "skipCi": true
