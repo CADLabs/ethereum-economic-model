@@ -17,7 +17,8 @@ A modular dynamical systems model of Ethereum's validator economics, implemented
 * [Model Extension Roadmap](#model-extension-roadmap)
 * [Tests](#tests)
 * [Change Log](#change-log)
-* [Acknowledgements](#contributors)
+* [Acknowledgements](#acknowledgements)
+* [Contributors](##contributors-)
 * [License](#license)
 
 ---
@@ -26,7 +27,7 @@ A modular dynamical systems model of Ethereum's validator economics, implemented
 
 ### Model Context
 
-This open-source model has been developed in collaboration with the Ethereum Robust Incentives Group, and funded by an Ethereum ESP (Ecosystem Support Program) grant. While originally scoped with purely modeling-educational intent as part of the cadCAD Edu online course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum)", it has evolved to become a highly versatile, customizable and extensible research model, and includes a list of [model extension ideas](#roadmap). The model is focused on epoch- and population-level Ethereum validator economics across different deployment types and - at least in its initial setup - abstracts from slot- and agent-level dynamics. Please see [model assumptions](ASSUMPTIONS.md) for further context.
+This open-source model has been developed in collaboration with the Ethereum Robust Incentives Group, and funded by an Ethereum ESP (Ecosystem Support Program) grant. While originally scoped with purely modeling-educational intent as part of the cadCAD Edu online course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum)", it has evolved to become a highly versatile, customizable and extensible research model, and includes a list of [model extension ideas](#model-extension-roadmap). The model is focused on epoch- and population-level Ethereum validator economics across different deployment types and - at least in its initial setup - abstracts from slot- and agent-level dynamics. Please see [model assumptions](ASSUMPTIONS.md) for further context.
 
 ### Model Features
 
@@ -34,7 +35,7 @@ This open-source model has been developed in collaboration with the Ethereum Rob
   * post Beacon Chain launch, pre EIP1559, pre PoS (validators receive PoS incentives, EIP1559 disabled, and PoW still in operation)
   * post Beacon Chain launch, post EIP1559, pre PoS (validators receive PoS incentives, EIP1559 enabled with miners receiving tips, and PoW still in operation)
   * post Beacon Chain launch, post EIP1559, post PoS (validators receive PoS incentives, EIP1559 enabled with validators receiving tips, and PoW deprecated)
-* Flexible calculation granularity: By default, State Variables, System Metrics, and System Parameters are calculated at epoch level and aggregated daily (~= 225 epochs). Users can easily change epoch aggregation using the delta-time (dt) parameter. The model can be extended for slot-level granularity and analysis if that is desired (see [Model Extension Roadmap](#model-extension-roadmap).
+* Flexible calculation granularity: By default, State Variables, System Metrics, and System Parameters are calculated at epoch level and aggregated daily (~= 225 epochs). Users can easily change epoch aggregation using the delta-time (dt) parameter. The model can be extended for slot-level granularity and analysis if that is desired (see [Model Extension Roadmap](#model-extension-roadmap)).
 * Supports [state-space analysis](https://en.wikipedia.org/wiki/State-space_representation) (i.e. simulation of system behavior over time) and [phase-space analysis](https://en.wikipedia.org/wiki/Phase_space) (i.e. generation of all unique system states in a given experimental setup).
 * Customizable processes to set important variables such as ETH price, ETH staked, EIP1559 transaction pricing, and transaction rates.
 * Modular model structure for convenient extension and modification. This allows different user groups to refactor the model for different purposes, rapidly test new incentive mechanisms, or to update the model as Ethereum implements new protocol improvements.
@@ -210,7 +211,7 @@ The purpose of this notebook is to explore the ETH issuance and resulting annual
 
 ## Model Extension Roadmap
 
-The modular nature of this model makes many exciting extensions and further analysis rather straightforward. The [Model Extension Roadmap](TODO: ADD LINK) provides some inspiration. 
+The modular nature of this model makes many exciting extensions and further analysis rather straightforward. The [Model Extension Roadmap](ROADMAP.md) provides some inspiration.
 
 ## Tests
 
@@ -222,13 +223,17 @@ source venv/bin/activate
 python3 -m pytest tests
 ```
 
+To run the full GitHub Actions CI Workflow (see [.github/workflows](.github/workflows)):
+```bash
+source venv/bin/activate
+make test
+```
+
 ## Change Log
 
 See [CHANGELOG.md](CHANGELOG.md) for notable changes and versions.
 
 ## Acknowledgements
-
-See [CONTRIBUTORS.md](CONTRIBUTORS.md) for contributions to this project repo.
 
 Special thanks goes to:
 * Ethereum 2.0 Economic Review. July 16, 2020. "An Analysis of Ethereum’s Proof of Stake Incentive Model". By Tanner Hoban and Thomas Borgers. For the extensive research that inspired the development of our model and the assumptions we adopted.
@@ -238,8 +243,39 @@ Other notable Ethereum PoS Models:
 * Pintail's **Beacon Chain Validator Rewards** model: https://pintail.xyz/posts/beacon-chain-validator-rewards/
 * Flashbots **Eth2 Research** model - "Assessing the nature and impact of MEV in eth2.": https://github.com/flashbots/eth2-research
 
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/rogervs"><img src="https://avatars.githubusercontent.com/u/4959125?v=4?s=100" width="100px;" alt=""/><br /><sub><b>RogerVs</b></sub></a><br /><a href="https://github.com/cadCAD-edu/ethereum-model/commits?author=rogervs" title="Code">💻</a> <a href="#infra-rogervs" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/cadCAD-edu/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Arogervs" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/cadCAD-edu/ethereum-model/commits?author=rogervs" title="Documentation">📖</a> <a href="https://github.com/cadCAD-edu/ethereum-model/issues?q=author%3Arogervs" title="Bug reports">🐛</a> <a href="#ideas-rogervs" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://marthendalnunes.github.io/"><img src="https://avatars.githubusercontent.com/u/18421017?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Vitor Marthendal Nunes</b></sub></a><br /><a href="https://github.com/cadCAD-edu/ethereum-model/commits?author=marthendalnunes" title="Code">💻</a> <a href="#infra-marthendalnunes" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/cadCAD-edu/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Amarthendalnunes" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/cadCAD-edu/ethereum-model/commits?author=marthendalnunes" title="Documentation">📖</a> <a href="https://github.com/cadCAD-edu/ethereum-model/issues?q=author%3Amarthendalnunes" title="Bug reports">🐛</a> <a href="#ideas-marthendalnunes" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="http://danlessa.github.io/"><img src="https://avatars.githubusercontent.com/u/15021144?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Danillo Lessa Bernardineli</b></sub></a><br /><a href="https://github.com/cadCAD-edu/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Adanlessa" title="Reviewed Pull Requests">👀</a> <a href="#ideas-danlessa" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/JGBSci"><img src="https://avatars.githubusercontent.com/u/35999312?v=4?s=100" width="100px;" alt=""/><br /><sub><b>JGBSci</b></sub></a><br /><a href="https://github.com/cadCAD-edu/ethereum-model/pulls?q=is%3Apr+reviewed-by%3AJGBSci" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/cadCAD-edu/ethereum-model/commits?author=JGBSci" title="Documentation">📖</a> <a href="#ideas-JGBSci" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="http://barnabemonnot.com"><img src="https://avatars.githubusercontent.com/u/4910325?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Barnabé Monnot</b></sub></a><br /><a href="https://github.com/cadCAD-edu/ethereum-model/commits?author=barnabemonnot" title="Code">💻</a> <a href="https://github.com/cadCAD-edu/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Abarnabemonnot" title="Reviewed Pull Requests">👀</a> <a href="#ideas-barnabemonnot" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/AntoineRondelet"><img src="https://avatars.githubusercontent.com/u/17513145?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Antoine Rondelet</b></sub></a><br /><a href="https://github.com/cadCAD-edu/ethereum-model/pulls?q=is%3Apr+reviewed-by%3AAntoineRondelet" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://github.com/carlwafe"><img src="https://avatars.githubusercontent.com/u/87176407?v=4?s=100" width="100px;" alt=""/><br /><sub><b>carlwafe</b></sub></a><br /><a href="https://github.com/cadCAD-edu/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Acarlwafe" title="Reviewed Pull Requests">👀</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/casparschwa"><img src="https://avatars.githubusercontent.com/u/31305984?v=4?s=100" width="100px;" alt=""/><br /><sub><b>casparschwa</b></sub></a><br /><a href="https://github.com/cadCAD-edu/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Acasparschwa" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://joranhonig.nl"><img src="https://avatars.githubusercontent.com/u/8710366?v=4?s=100" width="100px;" alt=""/><br /><sub><b>JoranHonig</b></sub></a><br /><a href="https://github.com/cadCAD-edu/ethereum-model/pulls?q=is%3Apr+reviewed-by%3AJoranHonig" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="http://clayming.space"><img src="https://avatars.githubusercontent.com/u/3201174?v=4?s=100" width="100px;" alt=""/><br /><sub><b>witwiki</b></sub></a><br /><a href="https://github.com/cadCAD-edu/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Awitwiki" title="Reviewed Pull Requests">👀</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
 ## License
 
-`cadCAD-edu/ethereum-model` is licensed under the GNU General Public License v3.0.
+`CADLabs/ethereum-model` is licensed under the GNU General Public License v3.0.
  
 Permissions of this strong copyleft license are conditioned on making available complete source code of licensed works and modifications, which include larger works using a licensed work, under the same license. Copyright and license notices must be preserved. Contributors provide an express grant of patent rights.

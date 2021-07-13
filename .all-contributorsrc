@@ -1,0 +1,120 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "rogervs",
+      "name": "RogerVs",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4959125?v=4",
+      "profile": "https://github.com/rogervs",
+      "contributions": [
+        "code",
+        "infra",
+        "review",
+        "doc",
+        "bug",
+        "ideas"
+      ]
+    },
+    {
+      "login": "marthendalnunes",
+      "name": "Vitor Marthendal Nunes",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18421017?v=4",
+      "profile": "https://marthendalnunes.github.io/",
+      "contributions": [
+        "code",
+        "infra",
+        "review",
+        "doc",
+        "bug",
+        "ideas"
+      ]
+    },
+    {
+      "login": "danlessa",
+      "name": "Danillo Lessa Bernardineli",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15021144?v=4",
+      "profile": "http://danlessa.github.io/",
+      "contributions": [
+        "review",
+        "ideas"
+      ]
+    },
+    {
+      "login": "JGBSci",
+      "name": "JGBSci",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35999312?v=4",
+      "profile": "https://github.com/JGBSci",
+      "contributions": [
+        "review",
+        "doc",
+        "ideas"
+      ]
+    },
+    {
+      "login": "barnabemonnot",
+      "name": "Barnabé Monnot",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4910325?v=4",
+      "profile": "http://barnabemonnot.com",
+      "contributions": [
+        "code",
+        "review",
+        "ideas"
+      ]
+    },
+    {
+      "login": "AntoineRondelet",
+      "name": "Antoine Rondelet",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17513145?v=4",
+      "profile": "https://github.com/AntoineRondelet",
+      "contributions": [
+        "review"
+      ]
+    },
+    {
+      "login": "carlwafe",
+      "name": "carlwafe",
+      "avatar_url": "https://avatars.githubusercontent.com/u/87176407?v=4",
+      "profile": "https://github.com/carlwafe",
+      "contributions": [
+        "review"
+      ]
+    },
+    {
+      "login": "casparschwa",
+      "name": "casparschwa",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31305984?v=4",
+      "profile": "https://github.com/casparschwa",
+      "contributions": [
+        "review"
+      ]
+    },
+    {
+      "login": "JoranHonig",
+      "name": "JoranHonig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8710366?v=4",
+      "profile": "https://joranhonig.nl",
+      "contributions": [
+        "review"
+      ]
+    },
+    {
+      "login": "witwiki",
+      "name": "witwiki",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3201174?v=4",
+      "profile": "http://clayming.space",
+      "contributions": [
+        "review"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "ethereum-model",
+  "projectOwner": "cadCAD-edu",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
