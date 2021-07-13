@@ -116,13 +116,7 @@ validator_environments = [
 ]
 &#34;&#34;&#34;Validator environment configuration
 
-From the Hoban/Borgers report (Ethereum 2.0 Economic Review):
-&gt; assume validators will consider different validator models according to their preferences, requirements, and the scale of their stake
-&gt; The breakdown of validator environments reflects the results of user surveys and stakeholder interviews
-
-Cost analysis:
-&gt; See &#34;Ethereum 2.0 Ecosystem Staking Report&#34; by ConsenSys Insights: https://cdn2.hubspot.net/hubfs/4795067/Codefi/Ethereum%202.0%20Staking%20Ecosystem%20Report.pdf?__hstc=148571112.51d5567256d6f4167c1422d5c083e93e.1574348924308.1588770700176.1588788083651.18&amp;__hssc=148571112.1.1588788083651
-&gt; See &#34;Ethereum Lighthouse: Chasing Serenity&#34; survey report by Empire Ventures: https://medium.com/empireventures/eth2uxreport-858c73ca1f53
+See ASSUMPTIONS.md document for details of validator environment configuration and assumptions.
 &#34;&#34;&#34;
 
 # Normalise percentage distribution to a total of 100%
@@ -184,7 +178,7 @@ class Parameters:
 
     For example, for dt = 100, each timestep equals 100 epochs.
 
-    By default set to constants.epochs_per_day (225)
+    By default set to constants.epochs_per_day (~= 225)
     &#34;&#34;&#34;
 
     stage: List[Stage] = default([Stage.PROOF_OF_STAKE])
@@ -396,8 +390,6 @@ class Parameters:
     slashing_events_per_1000_epochs: List[int] = default([1])  # 1 / 1000 epochs
     &#34;&#34;&#34;
     The number of slashing events per 1000 epochs.
-
-    Asssumption from Hoban/Borgers report.
     &#34;&#34;&#34;
 
     # EIP1559 transaction pricing parameters
@@ -461,16 +453,7 @@ parameters = Parameters().__dict__</code></pre>
 <dt id="model.system_parameters.validator_environments"><code class="name">var <span class="ident">validator_environments</span></code></dt>
 <dd>
 <div class="desc"><p>Validator environment configuration</p>
-<p>From the Hoban/Borgers report (Ethereum 2.0 Economic Review):</p>
-<blockquote>
-<p>assume validators will consider different validator models according to their preferences, requirements, and the scale of their stake
-The breakdown of validator environments reflects the results of user surveys and stakeholder interviews</p>
-</blockquote>
-<p>Cost analysis:</p>
-<blockquote>
-<p>See "Ethereum 2.0 Ecosystem Staking Report" by ConsenSys Insights: <a href="https://cdn2.hubspot.net/hubfs/4795067/Codefi/Ethereum%202.0%20Staking%20Ecosystem%20Report.pdf?__hstc=148571112.51d5567256d6f4167c1422d5c083e93e.1574348924308.1588770700176.1588788083651.18&amp;__hssc=148571112.1.1588788083651">https://cdn2.hubspot.net/hubfs/4795067/Codefi/Ethereum%202.0%20Staking%20Ecosystem%20Report.pdf?__hstc=148571112.51d5567256d6f4167c1422d5c083e93e.1574348924308.1588770700176.1588788083651.18&amp;__hssc=148571112.1.1588788083651</a>
-See "Ethereum Lighthouse: Chasing Serenity" survey report by Empire Ventures: <a href="https://medium.com/empireventures/eth2uxreport-858c73ca1f53">https://medium.com/empireventures/eth2uxreport-858c73ca1f53</a></p>
-</blockquote></div>
+<p>See ASSUMPTIONS.md document for details of validator environment configuration and assumptions.</p></div>
 </dd>
 </dl>
 </section>
@@ -509,7 +492,7 @@ system parameter key: system parameter type = default system parameter value</p>
 
     For example, for dt = 100, each timestep equals 100 epochs.
 
-    By default set to constants.epochs_per_day (225)
+    By default set to constants.epochs_per_day (~= 225)
     &#34;&#34;&#34;
 
     stage: List[Stage] = default([Stage.PROOF_OF_STAKE])
@@ -721,8 +704,6 @@ system parameter key: system parameter type = default system parameter value</p>
     slashing_events_per_1000_epochs: List[int] = default([1])  # 1 / 1000 epochs
     &#34;&#34;&#34;
     The number of slashing events per 1000 epochs.
-
-    Asssumption from Hoban/Borgers report.
     &#34;&#34;&#34;
 
     # EIP1559 transaction pricing parameters
@@ -892,7 +873,7 @@ Hence, periods of heavy on-chain load will not realistically last longer than ~5
 <div class="desc"><p>Simulation timescale / timestep unit of time, in epochs.</p>
 <p>Used to scale calculations that depend on the number of epochs that have passed.</p>
 <p>For example, for dt = 100, each timestep equals 100 epochs.</p>
-<p>By default set to constants.epochs_per_day (225)</p></div>
+<p>By default set to constants.epochs_per_day (~= 225)</p></div>
 </dd>
 <dt id="model.system_parameters.Parameters.eth_price_process"><code class="name">var <span class="ident">eth_price_process</span> : List[Callable[[int, int], float]]</code></dt>
 <dd>
@@ -925,8 +906,7 @@ See <a href="https://notes.ethereum.org/@vbuterin/BkSQmQTS8#Why-would-miners-inc
 </dd>
 <dt id="model.system_parameters.Parameters.slashing_events_per_1000_epochs"><code class="name">var <span class="ident">slashing_events_per_1000_epochs</span> : List[int]</code></dt>
 <dd>
-<div class="desc"><p>The number of slashing events per 1000 epochs.</p>
-<p>Asssumption from Hoban/Borgers report.</p></div>
+<div class="desc"><p>The number of slashing events per 1000 epochs.</p></div>
 </dd>
 <dt id="model.system_parameters.Parameters.stage"><code class="name">var <span class="ident">stage</span> : List[<a title="model.types.Stage" href="types.html#model.types.Stage">Stage</a>]</code></dt>
 <dd>

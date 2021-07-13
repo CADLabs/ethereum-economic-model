@@ -44,7 +44,8 @@ from model.types import ETH, Gwei
 def policy_staking(
     params, substep, state_history, previous_state
 ) -&gt; typing.Dict[str, ETH]:
-    &#34;&#34;&#34;Staking Policy
+    &#34;&#34;&#34;
+    ## Staking Policy
     A policy used when driving the model with the `eth_staked_process`,
     for generating phase-space analyses, e.g. simulating a set of discrete `eth_staked` values.
 
@@ -77,7 +78,8 @@ def policy_staking(
 
 
 def policy_validators(params, substep, state_history, previous_state):
-    &#34;&#34;&#34;Valdiator Policy Function
+    &#34;&#34;&#34;
+    ## Validator Policy Function
     Calculate the number of validators driven by the ETH staked or validator processes.
     &#34;&#34;&#34;
     # Parameters
@@ -139,7 +141,8 @@ def policy_validators(params, substep, state_history, previous_state):
 def policy_average_effective_balance(
     params, substep, state_history, previous_state
 ) -&gt; typing.Dict[str, Gwei]:
-    &#34;&#34;&#34;Average Effective Balance Policy Function
+    &#34;&#34;&#34;
+    ## Average Effective Balance Policy Function
     Calculate the validator average effective balance.
     &#34;&#34;&#34;
     # State Variables
@@ -164,8 +167,8 @@ def policy_average_effective_balance(
 <span>def <span class="ident">policy_average_effective_balance</span></span>(<span>params, substep, state_history, previous_state) ‑> Dict[str, float]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Average Effective Balance Policy Function
-Calculate the validator average effective balance.</p></div>
+<div class="desc"><h2 id="average-effective-balance-policy-function">Average Effective Balance Policy Function</h2>
+<p>Calculate the validator average effective balance.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -173,7 +176,8 @@ Calculate the validator average effective balance.</p></div>
 <pre><code class="python">def policy_average_effective_balance(
     params, substep, state_history, previous_state
 ) -&gt; typing.Dict[str, Gwei]:
-    &#34;&#34;&#34;Average Effective Balance Policy Function
+    &#34;&#34;&#34;
+    ## Average Effective Balance Policy Function
     Calculate the validator average effective balance.
     &#34;&#34;&#34;
     # State Variables
@@ -191,8 +195,8 @@ Calculate the validator average effective balance.</p></div>
 <span>def <span class="ident">policy_staking</span></span>(<span>params, substep, state_history, previous_state) ‑> Dict[str, float]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Staking Policy
-A policy used when driving the model with the <code>eth_staked_process</code>,
+<div class="desc"><h2 id="staking-policy">Staking Policy</h2>
+<p>A policy used when driving the model with the <code>eth_staked_process</code>,
 for generating phase-space analyses, e.g. simulating a set of discrete <code>eth_staked</code> values.</p>
 <p>When the <code>eth_staked_process</code> is disabled, the model is driven using the <code>validator_process</code>,
 for generating state-space analyses.</p></div>
@@ -203,7 +207,8 @@ for generating state-space analyses.</p></div>
 <pre><code class="python">def policy_staking(
     params, substep, state_history, previous_state
 ) -&gt; typing.Dict[str, ETH]:
-    &#34;&#34;&#34;Staking Policy
+    &#34;&#34;&#34;
+    ## Staking Policy
     A policy used when driving the model with the `eth_staked_process`,
     for generating phase-space analyses, e.g. simulating a set of discrete `eth_staked` values.
 
@@ -239,14 +244,15 @@ for generating state-space analyses.</p></div>
 <span>def <span class="ident">policy_validators</span></span>(<span>params, substep, state_history, previous_state)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Valdiator Policy Function
-Calculate the number of validators driven by the ETH staked or validator processes.</p></div>
+<div class="desc"><h2 id="validator-policy-function">Validator Policy Function</h2>
+<p>Calculate the number of validators driven by the ETH staked or validator processes.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def policy_validators(params, substep, state_history, previous_state):
-    &#34;&#34;&#34;Valdiator Policy Function
+    &#34;&#34;&#34;
+    ## Validator Policy Function
     Calculate the number of validators driven by the ETH staked or validator processes.
     &#34;&#34;&#34;
     # Parameters

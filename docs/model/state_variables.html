@@ -64,7 +64,7 @@ from data.historical_values import eth_price_mean, eth_price_min, eth_price_max
 # Get number of validator environments for initializing Numpy array size
 number_of_validator_environments = len(validator_environments)
 
-# Intial state from external live data source
+# Intial state from external live data source, setting a default in case API call fails
 number_of_validators: int = beaconchain.get_validators_count(default=156_250)
 eth_staked: ETH = (
     beaconchain.get_total_validator_balance(default=5_000_000e9) / constants.gwei
@@ -103,7 +103,7 @@ class StateVariables:
     eth_staked: ETH = eth_staked
     &#34;&#34;&#34;The total ETH staked as part of the Proof of Stake system&#34;&#34;&#34;
     supply_inflation: Percentage = 0
-    &#34;&#34;&#34;The annualized ETH supply inflation&#34;&#34;&#34;
+    &#34;&#34;&#34;The annualized ETH supply inflation rate&#34;&#34;&#34;
     network_issuance: ETH = 0
     &#34;&#34;&#34;The total network issuance in ETH&#34;&#34;&#34;
     pow_issuance: ETH = 0
@@ -336,7 +336,7 @@ state variable key: state variable type = default state variable value</p></div>
     eth_staked: ETH = eth_staked
     &#34;&#34;&#34;The total ETH staked as part of the Proof of Stake system&#34;&#34;&#34;
     supply_inflation: Percentage = 0
-    &#34;&#34;&#34;The annualized ETH supply inflation&#34;&#34;&#34;
+    &#34;&#34;&#34;The annualized ETH supply inflation rate&#34;&#34;&#34;
     network_issuance: ETH = 0
     &#34;&#34;&#34;The total network issuance in ETH&#34;&#34;&#34;
     pow_issuance: ETH = 0
@@ -533,7 +533,7 @@ Under perfect network conditions, each validator should receive 1 base reward pe
 </dd>
 <dt id="model.state_variables.StateVariables.supply_inflation"><code class="name">var <span class="ident">supply_inflation</span> : float</code></dt>
 <dd>
-<div class="desc"><p>The annualized ETH supply inflation</p></div>
+<div class="desc"><p>The annualized ETH supply inflation rate</p></div>
 </dd>
 <dt id="model.state_variables.StateVariables.sync_committee_penalties"><code class="name">var <span class="ident">sync_committee_penalties</span> : float</code></dt>
 <dd>

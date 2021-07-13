@@ -44,7 +44,9 @@ from model.types import ETH, USD_per_ETH, Gwei, Stage
 
 
 def policy_upgrade_stages(params, substep, state_history, previous_state):
-    &#34;&#34;&#34;Upgrade Stages Policy
+    &#34;&#34;&#34;
+    ## Upgrade Stages Policy
+
     Transitions the model from one stage in the Ethereum network
     upgrade process to the next at different milestones.
 
@@ -112,7 +114,9 @@ def policy_upgrade_stages(params, substep, state_history, previous_state):
 def policy_network_issuance(
     params, substep, state_history, previous_state
 ) -&gt; typing.Dict[str, ETH]:
-    &#34;&#34;&#34;Network Issuance Policy Function
+    &#34;&#34;&#34;
+    ## Network Issuance Policy Function
+
     Calculate the total network issuance and issuance from Proof of Work block rewards.
     &#34;&#34;&#34;
 
@@ -154,7 +158,9 @@ def policy_network_issuance(
 def policy_eip1559_transaction_pricing(
     params, substep, state_history, previous_state
 ) -&gt; typing.Dict[str, Gwei]:
-    &#34;&#34;&#34;EIP1559 Transaction Pricing Mechanism
+    &#34;&#34;&#34;
+    ## EIP1559 Transaction Pricing Mechanism
+
     A transaction pricing mechanism that includes fixed-per-block network fee
     that is burned and dynamically expands/contracts block sizes to deal with transient congestion.
 
@@ -231,7 +237,9 @@ def policy_eip1559_transaction_pricing(
 def update_eth_price(
     params, substep, state_history, previous_state, policy_input
 ) -&gt; typing.Tuple[str, USD_per_ETH]:
-    &#34;&#34;&#34;ETH Price State Update Function
+    &#34;&#34;&#34;
+    ## ETH Price State Update Function
+
     Update the ETH price from the `eth_price_process`.
     &#34;&#34;&#34;
 
@@ -252,7 +260,9 @@ def update_eth_price(
 def update_eth_supply(
     params, substep, state_history, previous_state, policy_input
 ) -&gt; typing.Tuple[str, ETH]:
-    &#34;&#34;&#34;ETH Supply State Update Function
+    &#34;&#34;&#34;
+    ## ETH Supply State Update Function
+
     Update the ETH supply from the Network Issuance Policy Function.
     &#34;&#34;&#34;
 
@@ -276,8 +286,8 @@ def update_eth_supply(
 <span>def <span class="ident">policy_eip1559_transaction_pricing</span></span>(<span>params, substep, state_history, previous_state) ‑> Dict[str, float]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>EIP1559 Transaction Pricing Mechanism
-A transaction pricing mechanism that includes fixed-per-block network fee
+<div class="desc"><h2 id="eip1559-transaction-pricing-mechanism">EIP1559 Transaction Pricing Mechanism</h2>
+<p>A transaction pricing mechanism that includes fixed-per-block network fee
 that is burned and dynamically expands/contracts block sizes to deal with transient congestion.</p>
 <p>See:
 * <a href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md">https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md</a>
@@ -289,7 +299,9 @@ that is burned and dynamically expands/contracts block sizes to deal with transi
 <pre><code class="python">def policy_eip1559_transaction_pricing(
     params, substep, state_history, previous_state
 ) -&gt; typing.Dict[str, Gwei]:
-    &#34;&#34;&#34;EIP1559 Transaction Pricing Mechanism
+    &#34;&#34;&#34;
+    ## EIP1559 Transaction Pricing Mechanism
+
     A transaction pricing mechanism that includes fixed-per-block network fee
     that is burned and dynamically expands/contracts block sizes to deal with transient congestion.
 
@@ -367,8 +379,8 @@ that is burned and dynamically expands/contracts block sizes to deal with transi
 <span>def <span class="ident">policy_network_issuance</span></span>(<span>params, substep, state_history, previous_state) ‑> Dict[str, float]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Network Issuance Policy Function
-Calculate the total network issuance and issuance from Proof of Work block rewards.</p></div>
+<div class="desc"><h2 id="network-issuance-policy-function">Network Issuance Policy Function</h2>
+<p>Calculate the total network issuance and issuance from Proof of Work block rewards.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -376,7 +388,9 @@ Calculate the total network issuance and issuance from Proof of Work block rewar
 <pre><code class="python">def policy_network_issuance(
     params, substep, state_history, previous_state
 ) -&gt; typing.Dict[str, ETH]:
-    &#34;&#34;&#34;Network Issuance Policy Function
+    &#34;&#34;&#34;
+    ## Network Issuance Policy Function
+
     Calculate the total network issuance and issuance from Proof of Work block rewards.
     &#34;&#34;&#34;
 
@@ -419,8 +433,8 @@ Calculate the total network issuance and issuance from Proof of Work block rewar
 <span>def <span class="ident">policy_upgrade_stages</span></span>(<span>params, substep, state_history, previous_state)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Upgrade Stages Policy
-Transitions the model from one stage in the Ethereum network
+<div class="desc"><h2 id="upgrade-stages-policy">Upgrade Stages Policy</h2>
+<p>Transitions the model from one stage in the Ethereum network
 upgrade process to the next at different milestones.</p>
 <p>This is essentially a finite-state machine: <a href="https://en.wikipedia.org/wiki/Finite-state_machine">https://en.wikipedia.org/wiki/Finite-state_machine</a></p></div>
 <details class="source">
@@ -428,7 +442,9 @@ upgrade process to the next at different milestones.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def policy_upgrade_stages(params, substep, state_history, previous_state):
-    &#34;&#34;&#34;Upgrade Stages Policy
+    &#34;&#34;&#34;
+    ## Upgrade Stages Policy
+
     Transitions the model from one stage in the Ethereum network
     upgrade process to the next at different milestones.
 
@@ -497,8 +513,8 @@ upgrade process to the next at different milestones.</p>
 <span>def <span class="ident">update_eth_price</span></span>(<span>params, substep, state_history, previous_state, policy_input) ‑> Tuple[str, float]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>ETH Price State Update Function
-Update the ETH price from the <code>eth_price_process</code>.</p></div>
+<div class="desc"><h2 id="eth-price-state-update-function">ETH Price State Update Function</h2>
+<p>Update the ETH price from the <code>eth_price_process</code>.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -506,7 +522,9 @@ Update the ETH price from the <code>eth_price_process</code>.</p></div>
 <pre><code class="python">def update_eth_price(
     params, substep, state_history, previous_state, policy_input
 ) -&gt; typing.Tuple[str, USD_per_ETH]:
-    &#34;&#34;&#34;ETH Price State Update Function
+    &#34;&#34;&#34;
+    ## ETH Price State Update Function
+
     Update the ETH price from the `eth_price_process`.
     &#34;&#34;&#34;
 
@@ -528,8 +546,8 @@ Update the ETH price from the <code>eth_price_process</code>.</p></div>
 <span>def <span class="ident">update_eth_supply</span></span>(<span>params, substep, state_history, previous_state, policy_input) ‑> Tuple[str, float]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>ETH Supply State Update Function
-Update the ETH supply from the Network Issuance Policy Function.</p></div>
+<div class="desc"><h2 id="eth-supply-state-update-function">ETH Supply State Update Function</h2>
+<p>Update the ETH supply from the Network Issuance Policy Function.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -537,7 +555,9 @@ Update the ETH supply from the Network Issuance Policy Function.</p></div>
 <pre><code class="python">def update_eth_supply(
     params, substep, state_history, previous_state, policy_input
 ) -&gt; typing.Tuple[str, ETH]:
-    &#34;&#34;&#34;ETH Supply State Update Function
+    &#34;&#34;&#34;
+    ## ETH Supply State Update Function
+
     Update the ETH supply from the Network Issuance Policy Function.
     &#34;&#34;&#34;
 

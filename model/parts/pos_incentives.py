@@ -13,7 +13,8 @@ from model.types import Gwei
 def policy_attestation_rewards(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
-    """Attestation Rewards Policy Function
+    """
+    ## Attestation Rewards Policy Function
     Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#get_flag_index_deltas
 
     Extract from spec:
@@ -66,7 +67,8 @@ def policy_attestation_rewards(
 def policy_attestation_penalties(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
-    """Attestation Penalties Policy Function
+    """
+    ## Attestation Penalties Policy Function
     Validators are penalized for not attesting to the source, target, and head.
 
     Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#get_flag_index_deltas
@@ -102,7 +104,8 @@ def policy_attestation_penalties(
 def policy_sync_committee_reward(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
-    """Sync Committee Reward Policy Function
+    """
+    ## Sync Committee Reward Policy Function
     Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#sync-aggregate-processing
 
     Extract from spec:
@@ -138,7 +141,8 @@ def policy_sync_committee_reward(
 def policy_sync_committee_penalties(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
-    """Sync Committee Penalty Policy Function
+    """
+    ## Sync Committee Penalty Policy Function
     Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#sync-aggregate-processing
 
     Extract from spec:
@@ -174,7 +178,8 @@ def policy_sync_committee_penalties(
 def policy_block_proposal_reward(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
-    """Block Proposal Reward Policy Function
+    """
+    ## Block Proposal Reward Policy Function
     Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#modified-process_attestation
 
     Extract from spec:
@@ -242,7 +247,8 @@ def policy_block_proposal_reward(
 def policy_slashing(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
-    """Slashing Policy Function
+    """
+    ## Slashing Policy Function
     Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#modified-slash_validator
 
     Extract from spec:
@@ -331,7 +337,8 @@ def policy_slashing(
 def update_base_reward(
     params, substep, state_history, previous_state, policy_input
 ) -> typing.Tuple[str, Gwei]:
-    """Base Reward State Update Function
+    """
+    ## Base Reward State Update Function
     Calculate and update base reward per validator
     """
     # Parameters
@@ -348,8 +355,10 @@ def update_base_reward(
 def update_validating_rewards(
     params, substep, state_history, previous_state, policy_input
 ) -> typing.Tuple[str, Gwei]:
-    """Validating Rewards State Update Function
+    """
+    ## Validating Rewards State Update Function
     Calculate and update total validating rewards
+
     i.e. rewards received for block proposal, attesting, and being a member of sync committee
     """
     # State Variables
@@ -382,8 +391,10 @@ def update_validating_rewards(
 def update_validating_penalties(
     params, substep, state_history, previous_state, policy_input
 ) -> typing.Tuple[str, Gwei]:
-    """Validating Penalties State Update Function
+    """
+    ## Validating Penalties State Update Function
     Calculate and update total validating penalties
+
     i.e. penalties received for failing to attest, or failing to perform sync committee duties
     """
     # State Variables

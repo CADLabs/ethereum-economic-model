@@ -16,6 +16,7 @@ def create_eth_price_process(
     minimum_eth_price=1500,
 ):
     """Configure environmental ETH price process
+
     > A Brownian excursion is a Brownian bridge from (0, 0) to (t, 0) which is conditioned to be non-negative on the interval [0, t].
 
     See https://stochastic.readthedocs.io/en/latest/continuous.html
@@ -37,6 +38,7 @@ def create_validator_process(
     validator_adoption_rate=4,
 ):
     """Configure environmental validator staking process
+
     > A Poisson process with rate lambda is a count of occurrences of i.i.d. exponential random variables with mean 1/lambda. This class generates samples of times for which cumulative exponential random variables occur.
 
     See https://stochastic.readthedocs.io/en/latest/continuous.html
@@ -57,6 +59,7 @@ def create_stochastic_process_realizations(
     runs=5,
 ):
     """Create stochastic process realizations
+
     Using the stochastic processes defined in `processes` module, create random number generator (RNG) seeds,
     and use RNG to pre-generate samples for number of simulation timesteps.
     """

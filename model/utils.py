@@ -1,5 +1,5 @@
 """
-Various model utility and helper functions
+Misc. utility and helper functions
 """
 
 import copy
