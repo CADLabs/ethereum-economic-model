@@ -18,6 +18,20 @@
         "bug",
         "ideas"
       ]
+    },
+    {
+      "login": "marthendalnunes",
+      "name": "Vitor Marthendal Nunes",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18421017?v=4",
+      "profile": "https://marthendalnunes.github.io/",
+      "contributions": [
+        "code",
+        "infra",
+        "review",
+        "doc",
+        "bug",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,

@@ -1,6 +1,6 @@
 # CADLabs Ethereum Research Model
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![Python package](https://github.com/cadCAD-edu/ethereum-model/actions/workflows/python.yml/badge.svg)](https://github.com/cadCAD-edu/ethereum-model/actions/workflows/python.yml)
@@ -263,6 +263,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://github.com/rogervs"><img src="https://avatars.githubusercontent.com/u/4959125?v=4?s=100" width="100px;" alt=""/><br /><sub><b>RogerVs</b></sub></a><br /><a href="https://github.com/cadCAD-edu/ethereum-model/commits?author=rogervs" title="Code">💻</a> <a href="#infra-rogervs" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/cadCAD-edu/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Arogervs" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/cadCAD-edu/ethereum-model/commits?author=rogervs" title="Documentation">📖</a> <a href="https://github.com/cadCAD-edu/ethereum-model/issues?q=author%3Arogervs" title="Bug reports">🐛</a> <a href="#ideas-rogervs" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://marthendalnunes.github.io/"><img src="https://avatars.githubusercontent.com/u/18421017?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Vitor Marthendal Nunes</b></sub></a><br /><a href="https://github.com/cadCAD-edu/ethereum-model/commits?author=marthendalnunes" title="Code">💻</a> <a href="#infra-marthendalnunes" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/cadCAD-edu/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Amarthendalnunes" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/cadCAD-edu/ethereum-model/commits?author=marthendalnunes" title="Documentation">📖</a> <a href="https://github.com/cadCAD-edu/ethereum-model/issues?q=author%3Amarthendalnunes" title="Bug reports">🐛</a> <a href="#ideas-marthendalnunes" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 
