@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "JoranHonig",
+      "name": "JoranHonig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8710366?v=4",
+      "profile": "https://joranhonig.nl",
+      "contributions": [
+        "review"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "ethereum-model",
+  "projectOwner": "cadCAD-edu",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
