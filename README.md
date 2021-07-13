@@ -21,7 +21,7 @@ A modular dynamical systems model of Ethereum's validator economics, implemented
 * [Tests](#tests)
 * [Change Log](#change-log)
 * [Acknowledgements](#acknowledgements)
-* [Contributors](#contributors)
+* [Contributors](##contributors-)
 * [License](#license)
 
 ---
