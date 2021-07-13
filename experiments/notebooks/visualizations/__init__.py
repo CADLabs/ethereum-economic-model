@@ -331,7 +331,7 @@ def plot_three_region_yield_analysis(fig_df):
     update_legend_names(fig)
 
     fig.update_layout(
-        title=f"Three Region Yield Analysis @ {fig_df.eth_staked.iloc[0]} ETH Staked",
+        title=f"Three Region Yield Analysis @ {millify(fig_df.eth_staked.iloc[0])} ETH Staked",
         xaxis_title="ETH Price (USD/ETH)",
         yaxis_title="Revenue Yields (%/year)",
         legend_title="",
@@ -571,22 +571,6 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
     ]
 
     for (name, date) in historical_dates:
-        #         fig.add_trace(
-        #             go.Scatter(
-        #                 mode="markers+text", x=[date], y=[df.loc[date.strftime("%Y-%m-%d")][column][0]],
-        #                 marker_symbol=["diamond"],
-        #                 marker_line_color="darkgrey", marker_color="lightgrey",
-        #                 marker_line_width=2, marker_size=10,
-        #                 hovertemplate=name,
-        #                 name=name,
-        #                 #text=name,
-        #                 textfont_size=14,
-        #                 showlegend=False,
-        #                 textposition="middle right",
-        #             ),
-        #             *(secondary_y, secondary_y) if secondary_y else ()
-        #         )
-
         fig.add_annotation(x=date, y=df.loc[date.strftime("%Y-%m-%d")][column][0],
                            text=name,
                            showarrow=True,
@@ -752,141 +736,6 @@ def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated, p
 
     fig.add_hline(y=0,
                   annotation_text="\"Ultra-sound barrier\"",
-                  annotation_position="bottom right")
-
-    # Set secondary y-axes titles
-    fig.update_yaxes(title_text="Network Inflation Rate (%/year)", secondary_y=False)
-    fig.update_yaxes(title_text="ETH Supply (ETH)", secondary_y=True)
-
-    return fig
-
-
-def plot_eth_supply_and_inflation_over_all_stages_wip(df_historical, df_simulated, simulation_names):
-    # TODO: finalise WIP or remove
-    df_historical = df_historical.set_index('timestamp', drop=False)
-    df_simulated = df_simulated.set_index('timestamp', drop=False)
-
-    fig = make_subplots(specs=[[{"secondary_y": True}]])
-
-    fig.add_trace(
-        go.Scatter(x=df_historical.timestamp, y=df_historical.supply_inflation_pct,
-                   name='Historical Network Inflation Rate', line=dict(color='#FC1CBF')),
-        secondary_y=False,
-    )
-
-    fig.add_trace(
-        go.Scatter(x=df_historical.timestamp, y=df_historical.eth_supply, name='Historical ETH Supply',
-                   line=dict(color='#3283FE')),
-        secondary_y=True,
-    )
-
-    for simulation in df_simulated.simulation.unique():
-        df_simulation = df_simulated.query(f'simulation == {simulation}')
-        for subset in df_simulation.subset.unique():
-            df_subset = df_simulation.query(f'subset == {subset}')
-            simulation_key = list(simulation_names.keys())[simulation]
-
-            fig.add_trace(
-                go.Scatter(
-                    x=df_simulated.index, y=df_subset.supply_inflation_pct, name='Simulated Network Inflation Rate',
-                    line=dict(color='#FC1CBF', dash='dot')
-                ),
-                secondary_y=False,
-            )
-
-    #         fig.add_trace(
-    #             go.Scatter(
-    #                 x=df_subset.index, y=df_subset.eth_supply, name='Simulated ETH Supply', line=dict(color='#3283FE', dash='dot')
-    #             ),
-    #             secondary_y=True,
-    #         )
-
-    buttons = []
-
-    for simulation in df_simulated.simulation.unique():
-        simulation_key = list(simulation_names.keys())[simulation]
-        simulation_df = df_simulated.query(f'simulation == {simulation}')
-
-        simulation_names_values = list(simulation_names.values())
-
-        simulation_traces = [
-            (2, 5),
-            (5, 9),
-            (9, 12)
-        ]
-
-        traces = list(range(simulation_traces[simulation][0], simulation_traces[simulation][1]))
-
-        buttons.append(dict(method='update',
-                            label=str(simulation_key),
-                            visible=True,
-                            args=[
-                                {
-                                    'x': [df_simulated.index],
-                                    'y': [
-                                        simulation_df.query(f'subset == {subset}').supply_inflation_pct \
-                                        for subset in simulation_df.subset.unique()
-                                    ],
-                                    'name': list([
-                                        simulation_names[simulation_key][subset] for subset in
-                                        simulation_df.subset.unique()
-                                    ]),
-                                    'type': 'scatter',
-                                    'secondary_y': False,
-                                }, traces
-                            ],
-                            ))
-
-    fig.update_layout(updatemenus=[dict(
-        type='buttons',
-        buttons=buttons,
-        direction='right',
-        showactive=True,
-        pad={"r": 10, "t": 10},
-        x=0.5,
-        xanchor="center",
-        y=1.1,
-        yanchor="top"
-    )])
-    fig.update_layout(hovermode='x unified')
-
-    df = df_historical.append(df_simulated)
-
-    fig_add_stage_markers(df, 'supply_inflation_pct', fig, secondary_y=False)
-    fig_add_stage_vrects(df, fig)
-
-    # Add range slider
-    fig.update_layout(
-        height=800,
-        xaxis=dict(
-            rangeslider=dict(
-                visible=True
-            ),
-            type="date"
-        )
-    )
-
-    update_legend_names(fig)
-
-    fig.update_layout(
-        title="Inflation Rate and ETH Supply Over Time",
-        xaxis_title="Date",
-        legend_title="",
-        height=1000,
-        legend=dict(
-            title=dict(
-                text="",
-            ),
-            orientation="h",
-            yanchor="top",
-            y=-0.5,
-            xanchor="center",
-            x=0.5
-        )
-    )
-
-    fig.add_hline(y=0,
-                  annotation_text="Ultra-sound barrier",
                   annotation_position="bottom right")
 
     # Set secondary y-axes titles
