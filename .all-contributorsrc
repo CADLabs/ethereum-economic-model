@@ -42,6 +42,17 @@
         "review",
         "ideas"
       ]
+    },
+    {
+      "login": "JGBSci",
+      "name": "JGBSci",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35999312?v=4",
+      "profile": "https://github.com/JGBSci",
+      "contributions": [
+        "review",
+        "doc",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
