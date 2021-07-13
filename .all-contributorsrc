@@ -53,6 +53,17 @@
         "doc",
         "ideas"
       ]
+    },
+    {
+      "login": "barnabemonnot",
+      "name": "Barnabé Monnot",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4910325?v=4",
+      "profile": "http://barnabemonnot.com",
+      "contributions": [
+        "code",
+        "review",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
