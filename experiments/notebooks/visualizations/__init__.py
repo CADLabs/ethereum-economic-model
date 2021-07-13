@@ -265,7 +265,7 @@ def plot_revenue_profit_yields_over_eth_price(df):
     )
 
     # Set secondary y-axes titles
-    fig.update_yaxes(title_text="Yield (%/year)")
+    fig.update_yaxes(title_text="Yields (%/year)")
     fig.update_layout(hovermode='x unified')
 
     return fig
@@ -406,7 +406,7 @@ def plot_validator_environment_yield_contour(df):
             line_smoothing=0.85,
             colorscale=cadlabs_colors,
             colorbar=dict(
-                title='Profit Yield (%/year)',
+                title='Profit Yields (%/year)',
                 titleside='right',
                 titlefont=dict(size=14)
             )
@@ -416,7 +416,7 @@ def plot_validator_environment_yield_contour(df):
     update_legend_names(fig)
 
     fig.update_layout(
-        title="Profit Yield Over ETH Price vs. ETH Staked",
+        title="Profit Yields Over ETH Price vs. ETH Staked",
         xaxis_title="ETH Price (USD/ETH)",
         yaxis_title="ETH Staked (ETH)",
         width=1000,
@@ -492,7 +492,7 @@ def plot_validator_environment_yield_surface(df):
     fig = go.Figure(data=[go.Surface(
         x=x, y=y, z=z,
         colorbar=dict(
-            title='Profit Yield (%/year)',
+            title='Profit Yields (%/year)',
             titleside='right',
             titlefont=dict(size=14)
         ),
@@ -516,7 +516,7 @@ def plot_validator_environment_yield_surface(df):
         scene={
             "xaxis": {"title": {"text": "ETH Price (USD/ETH)"}, "type": "log", },
             "yaxis": {"title": {"text": "ETH Staked (ETH; Logarithmic axis)"}},
-            "zaxis": {"title": {"text": "Profit Yield (%/year)"}},
+            "zaxis": {"title": {"text": "Profit Yields (%/year)"}},
         }
     )
 
@@ -885,7 +885,7 @@ def plot_revenue_profit_yields_over_time_foreach_subset_subplots(df, subplot_tit
             go.Scatter(
                 x=df['timestamp'],
                 y=df[df.subset == subset]['total_revenue_yields_pct'],
-                name="Revenue Yield",
+                name="Revenue Yields",
                 line=dict(color=color),
                 showlegend=False
             ),
@@ -895,7 +895,7 @@ def plot_revenue_profit_yields_over_time_foreach_subset_subplots(df, subplot_tit
             go.Scatter(
                 x=df['timestamp'],
                 y=df[df.subset == subset]['total_profit_yields_pct'],
-                name="Profit Yield",
+                name="Profit Yields",
                 line=dict(color=color, dash='dash'),
                 showlegend=False
             ),
@@ -909,7 +909,7 @@ def plot_revenue_profit_yields_over_time_foreach_subset_subplots(df, subplot_tit
             y=[None],
             mode='lines',
             line=dict(color='black'),
-            name='Revenue Yield',
+            name='Revenue Yields',
         )
     )
     fig.add_trace(
@@ -918,14 +918,14 @@ def plot_revenue_profit_yields_over_time_foreach_subset_subplots(df, subplot_tit
             y=[None],
             mode='lines',
             line=dict(color='black', dash='dash'),
-            name='Profit Yield',
+            name='Profit Yields',
         )
     )
 
     fig.update_layout(
         title="Revenue and Profit Yields Over Time - At a Glance",
         xaxis_title="Date",
-        yaxis_title="Revenue Yield (%/year)",
+        yaxis_title="Revenue Yields (%/year)",
         legend_title="",
         hovermode="x",
     )
@@ -954,7 +954,7 @@ def plot_revenue_profit_yields_over_time_foreach_subset(df):
             go.Scatter(
                 x=df['timestamp'],
                 y=df_subset['total_revenue_yields_pct'],
-                name=f"{scenario_names[subset]} Revenue Yield",
+                name=f"{scenario_names[subset]} Revenue Yields",
                 line=dict(color=color),
             ),
         )
@@ -962,7 +962,7 @@ def plot_revenue_profit_yields_over_time_foreach_subset(df):
             go.Scatter(
                 x=df['timestamp'],
                 y=df_subset['total_profit_yields_pct'],
-                name=f"{scenario_names[subset]} Profit Yield",
+                name=f"{scenario_names[subset]} Profit Yields",
                 line=dict(color=color, dash='dash'),
                 visible=False
             ),
@@ -1105,7 +1105,7 @@ def plot_figure_widget_revenue_yields_over_time_foreach_subset(df):
     fig.update_layout(
         title="Revenue Yields Over Time",
         xaxis_title="Date",
-        yaxis_title="Revenue Yield (%/year)",
+        yaxis_title="Revenue Yields (%/year)",
         yaxis=dict(
             tickmode='linear',
             dtick=0.5
@@ -1170,7 +1170,7 @@ def plot_revenue_yields_rolling_mean(df_rolling):
         )
     ])
     fig.update_layout(
-        yaxis_title='Revenue Yield (%/year)',
+        yaxis_title='Revenue Yields (%/year)',
         xaxis_title='Date',
         title='Revenue Yields Rolling Mean Over Time',
         hovermode="x"
@@ -1198,7 +1198,7 @@ def plot_profit_yields_by_environment_over_time(df):
     fig.update_layout(
         title="Profit Yields by Environment Over Time",
         xaxis_title="Date",
-        yaxis_title="Profit Yield (%/year)",
+        yaxis_title="Profit Yields (%/year)",
         legend_title='',
         xaxis=dict(
             rangeslider=dict(
