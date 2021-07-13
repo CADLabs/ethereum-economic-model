@@ -1,0 +1,25 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "danlessa",
+      "name": "Danillo Lessa Bernardineli",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15021144?v=4",
+      "profile": "http://danlessa.github.io/",
+      "contributions": [
+        "review",
+        "ideas"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "ethereum-model",
+  "projectOwner": "cadCAD-edu",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
