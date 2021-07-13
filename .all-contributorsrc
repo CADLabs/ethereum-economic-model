@@ -1,0 +1,26 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "JGBSci",
+      "name": "JGBSci",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35999312?v=4",
+      "profile": "https://github.com/JGBSci",
+      "contributions": [
+        "review",
+        "doc",
+        "ideas"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "ethereum-model",
+  "projectOwner": "cadCAD-edu",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
