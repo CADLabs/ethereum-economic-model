@@ -26,6 +26,20 @@
       ]
     },
     {
+      "login": "BenSchZA",
+      "name": "Benjamin Scholtz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13078998?v=4",
+      "profile": "http://bitsofether.com",
+      "contributions": [
+        "code",
+        "infra",
+        "review",
+        "doc",
+        "bug",
+        "ideas"
+      ]
+    },
+    {
       "login": "carlwafe",
       "name": "carlwafe",
       "avatar_url": "https://avatars.githubusercontent.com/u/87176407?v=4",
