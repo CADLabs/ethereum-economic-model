@@ -1,8 +1,11 @@
-# CADLabs Ethereum Research Model
+# CADLabs Ethereum Economic Model
 
 [![Python package](https://github.com/CADLabs/ethereum-model/actions/workflows/python.yml/badge.svg)](https://github.com/CADLabs/ethereum-model/actions/workflows/python.yml)
 
-A modular dynamical-systems model of Ethereum's validator economics, implemented using the open-source Python library [radCAD](https://github.com/CADLabs/radCAD), a next-gen implementation of [cadCAD](https://cadcad.org). Implements the official Ethereum [Altair](https://github.com/ethereum/eth2.0-specs#altair) spec updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release.
+A modular dynamical-systems model of Ethereum's validator economics, based on the open-source Python library [radCAD](https://github.com/CADLabs/radCAD), an extension to [cadCAD](https://cadcad.org).
+
+* Current model version: `v1.0.0`
+* Implements the official Ethereum [Altair](https://github.com/ethereum/eth2.0-specs#altair) spec updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release.
 
 ## Table of Contents
 
@@ -12,6 +15,8 @@ A modular dynamical-systems model of Ethereum's validator economics, implemented
   * [Directory Structure](#Directory-Structure)
   * [Model Architecture](#Model-Architecture)
   * [Model Assumptions](#Model-Assumptions)
+  * [Mathematical Model Specification](#Mathematical-Model-Specification)
+  * [Differential Model Specification](#Differential-Model-Specification)
 * [Environment Setup](#Environment-Setup)
 * [Simulation Experiments](#Simulation-Experiments)
 * [Model-Extension Roadmap](#Model-Extension-Roadmap)
@@ -84,6 +89,14 @@ The model is configured using several configuration modules in the [model/](mode
 ### Model Assumptions
 
 The model implements the official Ethereum Specification wherever possible, but rests on a few default validator-level assumptions detailed in the [ASSUMPTIONS.md](ASSUMPTIONS.md) document.
+
+### Mathematical Model Specification
+
+The [Mathematical Model Specification](TODO: ADD LINK) document articulates the relevant system dynamics as a state-space representation, the mathematical modelling paradigm underlying the cadCAD simulation library. It can be understood as a minimum viable formalism necessary to enable solid cadCAD modeling. 
+
+### Differential Model Specification
+
+The [Differential Model Specification](TODO: ADD LINK) document contains the model's differential specification and a link to the respective LucidChart cadCAD Canvas. It visualizes the model's overall structure across System States, System Inputs, System Parameters, State Update Logic and System Metrics.
 
 ## Environment Setup
 
