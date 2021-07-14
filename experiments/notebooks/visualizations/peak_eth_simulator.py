@@ -15,6 +15,7 @@ import experiments.templates.time_domain_analysis as time_domain_analysis
 from experiments.run import run
 from data.historical_values import df_ether_supply
 
+
 # Do some pre-processing on historic data
 df_ether_supply['supply_inflation_pct'] = df_ether_supply['supply_inflation_pct'].rolling(14).mean()
 
@@ -211,7 +212,6 @@ def run_simulation(validators_per_epoch, pos_launch_date, eip1559_base_fee):
     })
 
     df, _exceptions = run(simulation)
-    print(df)
 
     return df, simulation.model.params
 
