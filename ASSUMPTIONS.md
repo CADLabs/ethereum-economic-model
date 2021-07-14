@@ -1,6 +1,6 @@
 # Model Assumptions
 
-While the model implements the official Ethereum Specification wherever possible - see [README](README.md) for latest implemented release version - and allows for the computational simulation of many different assumption scenarios, the model does rest on a few validator-level assumptions by default, described in this document and to a large degree sourced from the extensive research done in the context of the well-known [Hoban/Borgers Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). We adapted some of these assumptions to reflect the evolution of the Ethereum protocol (e.g., Altair updates), and added new ones due to the nature of our dynamcial systems modelling paradigm (e.g., time-dependent, dynamic variables). The [Experiment Notebook: Model Validation](experiments\notebooks\1_model_validation.ipynb) validates selected outputs of the CADLabs model against the Hoban/Borgers model to allow for efficient sanity checks. 
+While the model implements the official Ethereum specification wherever possible - see [README](README.md) for latest implemented release version - and allows for the computational simulation of many different assumption scenarios, the model does rest on a few validator-level assumptions by default, described in this document and to a large degree sourced from the extensive research done in the context of the well-known [Hoban/Borgers Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). We adapted some of these assumptions to reflect the evolution of the Ethereum protocol (e.g., Altair updates), and added new ones due to the nature of our dynamcial systems modelling paradigm (e.g., time-dependent, dynamic variables). The [Experiment Notebook: Model Validation](experiments\notebooks\1_model_validation.ipynb) validates selected outputs of the CADLabs model against the Hoban/Borgers model to allow for efficient sanity checks. 
 
 * [Validator environment assumptions](#validator-environment-assumptions)
     * [Validator environment categories and cost structures](#validator-environment-categories-and-cost-structures)
@@ -19,50 +19,37 @@ The model supports the simulation of validator economics across different "valid
 ### Validator environment categories and cost structures
 
 By default, the model implements the 7 validator environment categories as suggested by 
-[Hoban/Borgers Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). Below is a short characterization of each category. For the respective cost assumption details, please refer to ["Cost of Validating"](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE).
-
-Across both hardware and cloud setups, the following recommended specifications were used for guidance. See report for a more detailed breakdown.
-- Processor: Intel Core i7–4770 or AMD FX-8310 or better
-- Memory: 8GB RAM
-- Storage: 100GB available space SSD
-- Internet: Broadband connection
+[Hoban/Borgers Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). Below is a short characterization of each category. For the associated hardware setup and cost assumption details, please refer to ["Cost of Validating"](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). 
 
 1. **Run own hardware validator ("DIY-Hardware")**
-- Setup: Individual running a Beacon Node and Validator Client with multiple Validators on their own hardware
+- Setup: Individual running a Beacon Node and Validator Client with one or more Validators on their own hardware
 - Economics: Individual receives full revenue yields and carries full hardware, electricity, and bandwidth cost
-- Example: Self-managed hardware (see hardware/cloud specifications above)
 
 2. **Run own cloud validator ("DIY-Cloud")**
-- Setup: Individual running a Beacon Node and Validator Client with multiple Validators on a cloud service
+- Setup: Individual running a Beacon Node and Validator Client with one or more Validators on a cloud service
 - Economics: Individual receives full revenue yields and carries cost of cloud service, with costs shared amongst multiple Validators for a lower cost per Validator compared to DIY-Hardware
-- Example: AWS (see hardware/cloud specifications above)
 
 3. **Validate via a pool Staking-as-a-Service provider ("Pool-StaaS")**
-- Setup: Individual staking less than 32 ETH indirectly in a pool of Validators via a Staking-as-a-service provider with infrastructure (Beacon Node and Validator Client) and keys managed by provider
+- Setup: Individual staking indirectly in a pool of Validators via a Staking-as-a-service provider with infrastructure (Beacon Node and Validator Client) and keys managed by provider.
 - Economics: Costs (hardware, electricity, and bandwidth) carried by StaaS provider who charge a fee (percentage of revenue) to the Validators in pool
-- Example: Rocket Pool (Pool) - https://www.rocketpool.net/
 
 4. **Validate via a pool hardware service provider ("Pool-Hardware")**
-- Setup: A node operator hosts both a Beacon Node and Validator Client on their own hardware infrastructure, and pools ETH together from Stakers to create multiple Validators
+- Setup: A node operator hosts both a Beacon Node and Validator Client on their own hardware infrastructure, and pools ETH together from Stakers to create multiple Validators.
 - Economics: Costs (hardware, electricity, and bandwidth) and revenue yields shared amongst Validators in pool
-- Example: Self-managed hardware (see hardware/cloud specifications above)
 
 5. **Validate via a pool cloud provider ("Pool-Cloud")**
-- Setup: A node operator hosts both a Beacon Node and Validator Client on their own cloud infrastructure, and pools ETH together from Stakers to create multiple Validators
+- Setup: A node operator hosts both a Beacon Node and Validator Client on their own cloud infrastructure, and pools ETH together from Stakers to create multiple Validators.
 - Economics: Costs (hardware, electricity, and bandwidth) and revenue yields shared amongst Validators in pool
-- Example: AWS (see hardware/cloud specifications above)
 
 6. **Validate via a custodial Staking-as-a-Service provider ("StaaS-Full")**
-- Setup: Validator stakes full amounts of 32 ETH via a custodial Staking-as-a-Service provider, that manages both the Validator Client and Beacon Node
+- Setup: Validator via a custodial Staking-as-a-Service provider, that manages both the Validator Client and Beacon Node.
 - Economics: Operational costs (hardware, electricity, and bandwidth) carried by StaaS provider who charge a fee (percentage of revenue) to the Validators
-- Example: Attestant "Managed Staking Service" - https://www.attestant.io/service/
 
 7. **Validate via a non-custodial Staking-as-a-Service provider ("StaaS-Self-custodied")**
-- Setup: Validator stakes full amounts of 32 ETH using own Validator Client, but instead of running a Beacon Node themselves they opt to use a StaaS Beacon Node provider via an API
+- Setup: Validator stakes using own Validator Client, but instead of running a Beacon Node themselves they opt to use a StaaS Beacon Node provider via an API.
 - Economics: Beacon Node operational costs (hardware, electricity, and bandwidth) carried by StaaS provider who charge a fee (percentage of revenue) to the Validators (assumed lower cost than Staas-Full environment)
-- Example: Attestant "Managed Staking Service" - https://www.attestant.io/service/
 
-The model allows for the creation of **custom validator environments and cost-structures**. These can be configured in the model's [System Parameters](model/system_parameters.py) as part of the `validator_environments` variable.
+This model allows for the creation of **custom validator environments and cost-structures**. These can be configured in the model's [System Parameters](model/system_parameters.py) as part of the `validator_environments` variable.
 
 For more information about currently active validator staking services, see https://beaconcha.in/stakingServices.
 
@@ -71,13 +58,13 @@ For more information about currently active validator staking services, see http
 By default, the model assumes the following relative weights for the calculation of average validator revenue and profit yields, as defined by 
 [Hoban/Borgers' Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). These values could change substantially and the user is encouraged to experiment with other assumptions. 
 
-1. **Run own hardware validator ("DIY-Hardware")**: 37%
-2. **Run own cloud validator ("DIY-Cloud")**: 13%
-3. **Validate via a pool Staking-as-a-Service provider ("Pool-Staas")**: 27%
-4. **Validate via a pool hardware service provider ("Pool-Hardware")**: 5%
-5. **Validate via a pool Cloud providers ("Pool-Cloud")**: 2%
-6. **Validate via a custodial Staking-as-a-Service provider ("StaaS-Full")**: 8%
-7. **Validate via a non-custodial Staking-as-a-Service provider ("StaaS-Self-custodied")**: 8%
+1. Run own hardware validator ("DIY-Hardware"): **37%**
+2. Run own cloud validator ("DIY-Cloud"): **13%**
+3. Validate via a pool Staking-as-a-Service provider ("Pool-Staas"): **27%**
+4. Validate via a pool hardware service provider ("Pool-Hardware"): **5%**
+5. Validate via a pool Cloud providers ("Pool-Cloud"): **2%**
+6. Validate via a custodial Staking-as-a-Service provider ("StaaS-Full"): **8%**
+7. Validate via a non-custodial Staking-as-a-Service provider ("StaaS-Self-custodied"): **8%**
 
 ### Validator Environment Equal Slashing Assumption
 
@@ -95,7 +82,7 @@ Whereas we arguably expect better uptime for some validator environments than ot
 
 ### Average Uptime
 
-By default, the model assumes an average of 98% uptime.
+By default, the model assumes an average of **98%** uptime.
 
 In reality this value has varied between lows of 95% and highs of 99.7% with an average of approximately 98%.
 
@@ -103,12 +90,12 @@ We capture the average uptime using the `validator_uptime_process` System Parame
 
 ### Frequency of Slashing Events
 
-By default, the model assumes 1 slashing event every 1000 epochs (~= 3 hours).
+By default, the model assumes **1 slashing event every 1000 epochs**.
 
-As more statistical data is collected about slashing in different validator environments, this assumption could be updated.
+As more statistical data is collected about slashing in different validator environments, this assumption could be easily updated.
 
 ### Participation rate
 
 The model assumes that validators are either online and operating perfectly, or offline and not fulfilling their duties. Offline validators are penalized for not attesting to the source, target, and head. We do not model validators that fullfil some of their duties, and not other duties. We capture this participation rate (percentage of online validators) using the `validator_uptime_process` System Parameter.
 
-In its initial version, the model does not model Ethereum's inactivity leak mechanism. We assume a participation of more than 2/3 at all times. We assert this requirement in the `policy_validators(...)` Policy Function.
+In its initial version, the model does not model Ethereum's inactivity leak mechanism. We assume a **participation of more than 2/3 at all times**. We assert this requirement in the `policy_validators(...)` Policy Function.
