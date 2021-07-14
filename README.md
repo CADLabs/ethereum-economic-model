@@ -2,7 +2,7 @@
 
 [![Python package](https://github.com/CADLabs/ethereum-model/actions/workflows/python.yml/badge.svg)](https://github.com/CADLabs/ethereum-model/actions/workflows/python.yml)
 
-A modular dynamical systems model of Ethereum's validator economics, based on the open-source Python library [radCAD](https://github.com/CADLabs/radCAD), a next-gen implementation of [cadCAD](https://cadcad.org). 
+A modular dynamical systems model of Ethereum's validator economics, based on the open-source Python library [radCAD](https://github.com/CADLabs/radCAD), an extension to [cadCAD](https://cadcad.org). 
 
 * Current model version: `v1.0.0`
 * Implements the official Ethereum [Altair](https://github.com/ethereum/eth2.0-specs#altair) spec updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release.
@@ -251,7 +251,7 @@ See [CHANGELOG.md](CHANGELOG.md) for notable changes and versions.
 * Tanner Hoban and Thomas Borgers for their extensive work on [Ethereum 2.0 Economic Review. July 16, 2020. "An Analysis of Ethereum’s Proof of Stake Incentive Model](https://drive.google.com/file/d/1pwt-EdnjhDLc_Mi2ydHus0_Cm14rs1Aq/view), which inspired many design decisions and assumptions we adopted, and the generous time spent on the phone with us. 
 * Other notable Ethereum Models (list not comprehensive):
   * Barnabé Monnot's **BeaconRunner** model: https://github.com/barnabemonnot/beaconrunner
-  * Justin Drake's **Modelling Ulrasound Money**: https://www.pscp.tv/w/1LyxBdyOdMbGN?s=09, https://docs.google.com/spreadsheets/d/1ZN444__qkPWPjMJQ_t6FfqbhllkWNhHF-06ivRF73nQ/edit#gid=0, https://docs.google.com/spreadsheets/d/1TsrdbdusUop4NJbvjGBbOWTUwYH-Jgg1QBkQ5CtY_-k/edit#gid=0, https://docs.google.com/spreadsheets/d/1FslqTnECKvi7_l4x6lbyRhNtzW9f6CVEzwDf04zprfA/edit#gid=0  
+  * Justin Drake's **Modelling Ultrasound Money**: https://www.pscp.tv/w/1LyxBdyOdMbGN?s=09, https://docs.google.com/spreadsheets/d/1ZN444__qkPWPjMJQ_t6FfqbhllkWNhHF-06ivRF73nQ/edit#gid=0, https://docs.google.com/spreadsheets/d/1TsrdbdusUop4NJbvjGBbOWTUwYH-Jgg1QBkQ5CtY_-k/edit#gid=0, https://docs.google.com/spreadsheets/d/1FslqTnECKvi7_l4x6lbyRhNtzW9f6CVEzwDf04zprfA/edit#gid=0  
   * Pintail's **Beacon Chain Validator Rewards** model: https://pintail.xyz/posts/beacon-chain-validator-rewards/
   * Flashbots **Eth2 Research** model - "Assessing the nature and impact of MEV in eth2.": https://github.com/flashbots/eth2-research
 
