@@ -18,7 +18,7 @@ A modular dynamical-systems model of Ethereum's validator economics, based on th
   * [Differential Model Specification](#Differential-Model-Specification)
 * [Environment Setup](#Environment-Setup)
 * [Simulation Experiments](#Simulation-Experiments)
-* [Model-Extension Roadmap](#Model-Extension-Roadmap)
+* [Model Extension Roadmap](#Model-Extension-Roadmap)
 * [Tests](#Tests)
 * [Change Log](#Change-Log)
 * [Acknowledgements](#Acknowledgements)
@@ -220,7 +220,7 @@ The purpose of this notebook is to explore ETH issuance and the resulting annual
 
 ## Model Extension Roadmap
 
-The modular nature of this model makes many exciting extensions and further analysis rather straightforward. The [Model Extension Roadmap](ROADMAP.md) provides some inspiration.
+The modular nature of the model makes structural and experiment-level extensions straightforward. The [Model Extension Roadmap](ROADMAP.md) provides some initial inspiration.
 
 ## Tests
 
