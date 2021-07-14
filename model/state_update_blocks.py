@@ -20,7 +20,7 @@ state_update_block_stages = {
     },
 }
 
-state_update_block_staking = {
+state_update_block_ethereum = {
     "description": """
         Environmental Ethereum processes:
         * ETH price update
@@ -224,18 +224,19 @@ _state_update_blocks = [
 
 # Conditionally update the order of the State Update Blocks using a ternary operator
 _state_update_blocks = (
+    # If driving with environmental ETH staked process, structure as follows:
     [
         state_update_block_stages,
-        state_update_block_staking,
+        state_update_block_ethereum,
         state_update_block_validators,
     ]
     + _state_update_blocks
     if parameters["eth_staked_process"][0](0, 0) is not None
-    # If driving with validator process, switch staking and validator blocks
+    # Otherwise, if driving with validator adoption (implied ETH staked) process, switch Ethereum and validator blocks:
     else [
         state_update_block_stages,
         state_update_block_validators,
-        state_update_block_staking,
+        state_update_block_ethereum,
     ]
     + _state_update_blocks
 )
