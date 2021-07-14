@@ -10,7 +10,6 @@ A modular dynamical-systems model of Ethereum's validator economics, based on th
 ## Table of Contents
 
 * [Introduction](#Introduction)
-  * [Model Context](#Model-Context)
   * [Model Features](#Model-Features)
   * [Directory Structure](#Directory-Structure)
   * [Model Architecture](#Model-Architecture)
@@ -23,14 +22,12 @@ A modular dynamical-systems model of Ethereum's validator economics, based on th
 * [Tests](#Tests)
 * [Change Log](#Change-Log)
 * [Acknowledgements](#Acknowledgements)
-* [Contributors](#Contributors)
+* [Contributors](#-Contributors)
 * [License](#License)
 
 ---
 
 ## Introduction
-
-### Model Context
 
 This open-source model was developed in collaboration with the Ethereum Robust Incentives Group and funded by an Ethereum ESP (Ecosystem Support Program) grant. While originally scoped with purely modelling-educational intent as part of the cadCAD Edu online course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum)", it has evolved to become a highly versatile, customizable and extensible research model that includes a list of [model extension ideas](#Model-Extension-Roadmap). The model is focused on epoch- and population-level Ethereum validator economics across different deployment types and – at least in its initial setup – abstracts from slot- and agent-level dynamics. Please see [Model Assumptions](ASSUMPTIONS.md) for further context.
 
