@@ -7,11 +7,11 @@ This documented was formatted using Markdown and LaTeX to be rendered in HackMD,
 
 ## Overview
 
-This Mathematical Specification articulates the relevant Eth2 validator economics system dynamics as a [state-space representation](https://en.wikipedia.org/wiki/State-space_representation). Given the iterative nature of dynamical systems modeling work, we expect to make adjustments to this Mathematical Specification as we build and validate the cadCAD model.
+This Mathematical Specification articulates the relevant Ethereum validator economics system dynamics as a [state-space representation](https://en.wikipedia.org/wiki/State-space_representation). Given the iterative nature of dynamical systems modelling work, we expect to make adjustments to this Mathematical Specification as we build and validate the cadCAD model.
 
 ### Level of Aggregation
 
-Although cadCAD technically supports several computational modeling paradigms (e.g. agent-based modeling, population-level modeling, system dynamics modeling, hybrid modeling, etc.) we adopt an aggregate system dynamics lense in our MVP educational model. Rather than modelling the behaviour of individual agents, we consider what is often called a "representative agent" in economics literature. This allows us to apply aggregation and approximation for groups of agents or in our case, validator environments.
+Although cadCAD technically supports several computational modelling paradigms (e.g. agent-based modelling, population-level modelling, system dynamics modelling, hybrid modelling, etc.) we adopt an aggregate system dynamics lense in our MVP educational model. Rather than modelling the behaviour of individual agents, we consider what is often called a "representative agent" in economics literature. This allows us to apply aggregation and approximation for groups of agents or in our case, validator environments.
 
 ### Statistical Approximations
 
