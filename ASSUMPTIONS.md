@@ -26,11 +26,11 @@ By default, the model implements the 7 validator environment categories as sugge
 - Economics: Individual receives full revenue yields and carries full hardware, electricity, and bandwidth cost
 
 2. **Run own cloud validator ("DIY-Cloud")**
-- Setup: Individual running a Beacon Node and Validator Client with multiple Validators on a cloud service
+- Setup: Individual running a Beacon Node and Validator Client with one or more Validators on a cloud service
 - Economics: Individual receives full revenue yields and carries cost of cloud service, with costs shared amongst multiple Validators for a lower cost per Validator compared to DIY hardware
 
 3. **Validate via a pool Staking-as-a-Service provider ("Pool-StaaS")**
-- Setup: Individual staking less than 32 ETH indirectly in a pool of Validators via a Staking-as-a-Service provider with infrastructure (Beacon Node and Validator Client) and keys managed by provider
+- Setup: Individual staking indirectly in a pool of Validators via a Staking-as-a-Service provider with infrastructure (Beacon Node and Validator Client) and keys managed by provider
 - Economics: Costs (hardware, electricity, and bandwidth) carried by StaaS provider who charges a fee (percentage of revenue) to the Validators in pool
 
 4. **Validate via a pool hardware service provider ("Pool-Hardware")**
@@ -42,14 +42,14 @@ By default, the model implements the 7 validator environment categories as sugge
 - Economics: Costs (hardware, electricity, and bandwidth) and revenue yields shared amongst Validators in pool
 
 6. **Validate via a custodial Staking-as-a-Service provider ("StaaS-Full")**
-- Setup: Validator stakes full amounts of 32 ETH via a custodial Staking-as-a-Service provider, that manages both the Validator Client and Beacon Node
+- Setup: Validator stakes via a custodial Staking-as-a-Service provider, that manages both the Validator Client and Beacon Node
 - Economics: Operational costs (hardware, electricity, and bandwidth) carried by StaaS provider who charges a fee (percentage of revenue) to the Validators
 
 7. **Validate via a non-custodial Staking-as-a-Service provider ("StaaS-Self-custodied")**
-- Setup: Validator stakes full amounts of 32 ETH using own Validator Client, but instead of running a Beacon Node themselves they opt to use a StaaS Beacon Node provider via an API
+- Setup: Validator stakes using own Validator Client, but instead of running a Beacon Node themselves they opt to use a StaaS Beacon Node provider via an API
 - Economics: Beacon Node operational costs (hardware, electricity, and bandwidth) carried by StaaS provider who charges a fee (percentage of revenue) to the Validators (assumes lower cost than Staas-Full environment)
 
-The model allows for the creation of **custom validator environments and cost-structures**. These can be configured in the model's [System Parameters](model/system_parameters.py) as part of the `validator_environments` variable.
+This model allows for the creation of **custom validator environments and cost-structures**. These can be configured in the model's [System Parameters](model/system_parameters.py) as part of the `validator_environments` variable.
 
 For more information about currently active validator staking services, see https://beaconcha.in/stakingServices.
 
