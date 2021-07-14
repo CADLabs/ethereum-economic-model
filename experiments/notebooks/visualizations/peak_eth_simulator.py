@@ -208,6 +208,7 @@ def run_simulation(validators_per_epoch, pos_launch_date, eip1559_base_fee):
     })
 
     df, _exceptions = run(simulation)
+    print(df)
 
     return df, simulation.model.params
 

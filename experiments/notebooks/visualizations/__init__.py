@@ -565,7 +565,7 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
 
     system_dates = [
         ("Beacon Chain", datetime.strptime("Dec-01-2020", '%b-%d-%Y')),
-        ("Today", parameters["date_start"][0]),
+        # ("Today", parameters["date_start"][0]),
         ("EIP1559", parameters["date_eip1559"][0]),
         ("Proof of Stake", parameters["date_pos"][0]),
     ]
@@ -584,7 +584,6 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
                 mode="markers+text",
                 x=[date], y=[df.loc[date.strftime("%Y-%m-%d")][column][0]],
                 marker_symbol=["diamond"],
-                # marker_line_color="darkgrey", marker_color="lightgrey",
                 marker_line_width=2, marker_size=10,
                 hovertemplate=name,
                 name=name,
