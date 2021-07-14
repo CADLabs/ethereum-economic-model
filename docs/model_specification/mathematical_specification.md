@@ -2,6 +2,8 @@
 
 :warning: The Mathematical Specification needs to be updated to cover the latest Ethereum Altair updates
 
+:warning: This documented was formatted using Markdown and LaTeX to be rendered in HackMD, for the best viewing experience see https://hackmd.io/@CADLabs/ryLrPm2T_
+
 ## Overview
 
 This Mathematical Specification articulates the relevant Eth2 validator economics system dynamics as a [state-space representation](https://en.wikipedia.org/wiki/State-space_representation). Given the iterative nature of dynamical systems modeling work, we expect to make adjustments to this Mathematical Specification as we build and validate the cadCAD model.
