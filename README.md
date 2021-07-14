@@ -22,7 +22,7 @@ A modular dynamical-systems model of Ethereum's validator economics, based on th
 * [Tests](#Tests)
 * [Change Log](#Change-Log)
 * [Acknowledgements](#Acknowledgements)
-* [Contributors](#-Contributors)
+* [Contributors](#Contributors-)
 * [License](#License)
 
 ---
