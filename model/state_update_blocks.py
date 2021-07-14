@@ -61,7 +61,7 @@ state_update_block_validators = {
 _state_update_blocks = [
     {
         "description": """
-            Calculation and update of validator average effective balance & base reward
+            Average effective balance & base reward
         """,
         "policies": {
             "average_effective_balance": validators.policy_average_effective_balance,
@@ -75,7 +75,7 @@ _state_update_blocks = [
     },
     {
         "description": """
-            Sync committee and attestation rewards
+            Attestation & sync committee rewards
         """,
         "policies": {
             "attestation": incentives.policy_attestation_rewards,
@@ -90,7 +90,18 @@ _state_update_blocks = [
     },
     {
         "description": """
-            Sync committee and attestation penalties
+            Block proposal reward
+        """,
+        "policies": {
+            "block_proposal": incentives.policy_block_proposal_reward,
+        },
+        "variables": {
+            "block_proposer_reward": update_from_signal("block_proposer_reward"),
+        },
+    },
+    {
+        "description": """
+            Attestation & sync committee penalties
         """,
         "policies": {
             "attestation": incentives.policy_attestation_penalties,
@@ -103,18 +114,7 @@ _state_update_blocks = [
     },
     {
         "description": """
-            Block proposal rewards
-        """,
-        "policies": {
-            "block_proposal": incentives.policy_block_proposal_reward,
-        },
-        "variables": {
-            "block_proposer_reward": update_from_signal("block_proposer_reward"),
-        },
-    },
-    {
-        "description": """
-            Total validating rewards and penalties
+            Validating reward & penalty aggregation
         """,
         "policies": {},
         "variables": {
@@ -124,7 +124,7 @@ _state_update_blocks = [
     },
     {
         "description": """
-            Validator slashing process, rewards, and penalties
+            Slashing rewards & penalties
         """,
         "policies": {
             "slashing": incentives.policy_slashing,
@@ -136,7 +136,7 @@ _state_update_blocks = [
     },
     {
         "description": """
-            Ethereum EIP1559 process
+            EIP-1559 transaction pricing
         """,
         "policies": {
             "eip1559": ethereum.policy_eip1559_transaction_pricing,
