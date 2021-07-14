@@ -89,11 +89,11 @@ The model implements the official Ethereum Specification wherever possible, but 
 
 ### Mathematical Model Specification
 
-The [Mathematical Model Specification](TODO: ADD LINK) document articulates the relevant system dynamics as a state-space representation, the mathematical modelling paradigm underlying the cadCAD simulation library. It can be understood as a minimum viable formalism necessary to enable solid cadCAD modeling. 
+The [Mathematical Model Specification](https://hackmd.io/@CADLabs/ryLrPm2T_) document articulates the relevant system dynamics as a state-space representation, the mathematical modelling paradigm underlying the cadCAD simulation library. It can be understood as a minimum viable formalism necessary to enable solid cadCAD modeling. 
 
 ### Differential Model Specification
 
-The [Differential Model Specification](TODO: ADD LINK) document contains the model's differential specification and a link to the respective LucidChart cadCAD Canvas. It visualizes the model's overall structure across System States, System Inputs, System Parameters, State Update Logic and System Metrics.
+The [Differential Model Specification](https://hackmd.io/@CADLabs/HyENPQ36u) document contains the model's differential specification and a link to the respective LucidChart cadCAD Canvas. It visualizes the model's overall structure across System States, System Inputs, System Parameters, State Update Logic and System Metrics.
 
 ## Environment Setup
 
