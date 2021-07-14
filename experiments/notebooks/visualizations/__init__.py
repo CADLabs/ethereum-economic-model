@@ -735,7 +735,9 @@ def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated, p
     )
 
     fig.add_hline(y=0,
-                  annotation_text="\"Ultra-sound barrier\"",
+                  line_color="#808080",
+                  line_width=0.75,
+                  annotation_text="",
                   annotation_position="bottom right")
 
     # Set secondary y-axes titles
