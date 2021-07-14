@@ -90,7 +90,7 @@ We capture the average uptime using the `validator_uptime_process` System Parame
 
 ### Frequency of Slashing Events
 
-By default, the model assumes 1 slashing event every 1000 epochs (~= 3 hours).
+By default, the model assumes 1 slashing event every 1000 epochs.
 
 As more statistical data is collected about slashing in different validator environments, this assumption could be updated.
 
@@ -98,4 +98,4 @@ As more statistical data is collected about slashing in different validator envi
 
 The model assumes that validators are either online and operating perfectly, or offline and not fulfilling their duties. Offline validators are penalized for not attesting to the source, target, and head. We do not model validators that fulfil some of their duties, and not other duties. We capture this participation rate (percentage of online validators) using the `validator_uptime_process` System Parameter.
 
-In its initial version, the model does not model Ethereum's inactivity mechanism. We assume a participation of more than 2/3 at all times. We assert this requirement in the `policy_validators(...)` Policy Function.
+In its initial version, the model does not model Ethereum's inactivity leak mechanism. We assume a **participation of more than 2/3 at all times**. We assert this requirement in the `policy_validators(...)` Policy Function.
