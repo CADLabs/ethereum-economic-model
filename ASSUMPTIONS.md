@@ -58,13 +58,13 @@ For more information about currently active validator staking services, see http
 By default, the model assumes the following relative weights for the calculation of average validator revenue and profit yields, as defined by 
 [Hoban/Borgers' Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). These values could change substantially and the user is encouraged to experiment with other assumptions. 
 
-1. **Run own hardware validator ("DIY-Hardware")**: 37%
-2. **Run own cloud validator ("DIY-Cloud")**: 13%
-3. **Validate via a pool Staking-as-a-Service provider ("Pool-Staas")**: 27%
-4. **Validate via a pool hardware service provider ("Pool-Hardware")**: 5%
-5. **Validate via a pool Cloud provider ("Pool-Cloud")**: 2%
-6. **Validate via a custodial Staking-as-a-Service provider ("StaaS-Full")**: 8%
-7. **Validate via a non-custodial Staking-as-a-Service provider ("StaaS-Self-custodied")**: 8%
+1. Run own hardware validator ("DIY-Hardware"): **37%**
+2. Run own cloud validator ("DIY-Cloud"): **13%**
+3. Validate via a pool Staking-as-a-Service provider ("Pool-Staas"): **27%**
+4. Validate via a pool hardware service provider ("Pool-Hardware"): **5%**
+5. Validate via a pool Cloud provider ("Pool-Cloud"): **2%**
+6. Validate via a custodial Staking-as-a-Service provider ("StaaS-Full"): **8%**
+7. Validate via a non-custodial Staking-as-a-Service provider ("StaaS-Self-custodied"): **8%**
 
 ### Validator Environment Equal-slashing Assumption
 
