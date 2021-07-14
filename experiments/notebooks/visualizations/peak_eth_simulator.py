@@ -19,7 +19,6 @@ from data.historical_values import df_ether_supply
 # Do some pre-processing on historic data
 df_ether_supply['supply_inflation_pct'] = df_ether_supply['supply_inflation_pct'].rolling(14).mean()
 
-
 # Fetch the time-domain analysis experiment
 experiment = time_domain_analysis.experiment
 # Create a copy of the experiment simulation
