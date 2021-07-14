@@ -55,7 +55,7 @@ def policy_upgrade_stages(params, substep, state_history, previous_state):
         ):
             current_stage = Stage.BEACON_CHAIN
         elif (
-            current_stage in [Stage.BEACON_CHAIN, Stage.EIP1559]
+            current_stage in [Stage.ALL, Stage.BEACON_CHAIN, Stage.EIP1559]
             and timestamp < date_pos
         ):
             current_stage = Stage.EIP1559
