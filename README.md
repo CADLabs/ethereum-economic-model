@@ -211,7 +211,7 @@ The purpose of this notebook is to explore the ETH issuance and resulting annual
 
 ## Model Extension Roadmap
 
-The modular nature of this model makes many exciting extensions and further analysis rather straightforward. The [Model Extension Roadmap](ROADMAP.md) provides some inspiration.
+The modular nature of the model makes structural and experiment-level extensions straightforward. The [Model Extension Roadmap](ROADMAP.md) provides some initial inspiration. 
 
 ## Tests
 
@@ -235,13 +235,14 @@ See [CHANGELOG.md](CHANGELOG.md) for notable changes and versions.
 
 ## Acknowledgements
 
-Special thanks goes to:
-* Ethereum 2.0 Economic Review. July 16, 2020. "An Analysis of Ethereum’s Proof of Stake Incentive Model". By Tanner Hoban and Thomas Borgers. For the extensive research that inspired the development of our model and the assumptions we adopted.
-
-Other notable Ethereum PoS Models:
-* Barnabé Monnot's **BeaconRunner** model: https://github.com/barnabemonnot/beaconrunner
-* Pintail's **Beacon Chain Validator Rewards** model: https://pintail.xyz/posts/beacon-chain-validator-rewards/
-* Flashbots **Eth2 Research** model - "Assessing the nature and impact of MEV in eth2.": https://github.com/flashbots/eth2-research
+* [Ethereum Ecosystem Support Program](https://esp.ethereum.foundation/en/) for sponsoring this work.
+* Barnabé Monnot and the Ethereum Robust Incentives Group for the invaluable guidance.
+* Tanner Hoban and Thomas Borgers for their extensive work on [Ethereum 2.0 Economic Review. July 16, 2020. "An Analysis of Ethereum’s Proof of Stake Incentive Model](https://drive.google.com/file/d/1pwt-EdnjhDLc_Mi2ydHus0_Cm14rs1Aq/view), which inspired many design desicions and assumptions we adopted, and the generous time spent on the phone with us. 
+* Other notable Ethereum Models (list not comprehensive):
+  * Barnabé Monnot's **BeaconRunner** model: https://github.com/barnabemonnot/beaconrunner
+  * Justin Drake's **Modeling Ulrasound Money**: https://www.pscp.tv/w/1LyxBdyOdMbGN?s=09, https://docs.google.com/spreadsheets/d/1ZN444__qkPWPjMJQ_t6FfqbhllkWNhHF-06ivRF73nQ/edit#gid=0, https://docs.google.com/spreadsheets/d/1TsrdbdusUop4NJbvjGBbOWTUwYH-Jgg1QBkQ5CtY_-k/edit#gid=0, https://docs.google.com/spreadsheets/d/1FslqTnECKvi7_l4x6lbyRhNtzW9f6CVEzwDf04zprfA/edit#gid=0  
+  * Pintail's **Beacon Chain Validator Rewards** model: https://pintail.xyz/posts/beacon-chain-validator-rewards/
+  * Flashbots **Eth2 Research** model - "Assessing the nature and impact of MEV in eth2.": https://github.com/flashbots/eth2-research
 
 ## Contributors ✨
 
