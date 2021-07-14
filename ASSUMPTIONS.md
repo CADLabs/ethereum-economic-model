@@ -85,7 +85,7 @@ Whereas in reality slashing events have occurred more often in some validator en
 
 This assumption is adequate for calculations of validator economics under steady-state conditions but might fail if slashing events increase significantly for a specific validator-environment type, or if the network is under attack by a specific validator-environment type.
 
-See https://youtu.be/iaAEGs1DMgQ?t=574 for additional contexts. 
+See https://youtu.be/iaAEGs1DMgQ?t=574 for additional context. 
 
 ### Validator Environment Equal-uptime Assumption
 
