@@ -564,8 +564,8 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
     ]
 
     system_dates = [
-        ("Beacon Chain <br>Genesis", datetime.strptime("Dec-01-2020", '%b-%d-%Y')),
-        ("Today", parameters["date_start"][0]),
+        ("Beacon Chain", datetime.strptime("Dec-01-2020", '%b-%d-%Y')),
+        # ("Today", parameters["date_start"][0]),
         ("EIP1559", parameters["date_eip1559"][0]),
         ("Proof of Stake", parameters["date_pos"][0]),
     ]
@@ -584,7 +584,6 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
                 mode="markers+text",
                 x=[date], y=[df.loc[date.strftime("%Y-%m-%d")][column][0]],
                 marker_symbol=["diamond"],
-                # marker_line_color="darkgrey", marker_color="lightgrey",
                 marker_line_width=2, marker_size=10,
                 hovertemplate=name,
                 name=name,
@@ -735,7 +734,9 @@ def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated, p
     )
 
     fig.add_hline(y=0,
-                  annotation_text="\"Ultra-sound barrier\"",
+                  line_color="#808080",
+                  line_width=0.75,
+                  annotation_text="",
                   annotation_position="bottom right")
 
     # Set secondary y-axes titles

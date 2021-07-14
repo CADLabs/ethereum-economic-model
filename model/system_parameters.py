@@ -161,12 +161,10 @@ class Parameters:
     """Start date for simulation as Python datetime"""
 
     date_eip1559: List[datetime] = default(
-        [datetime.strptime("2021/07/14", "%Y/%m/%d")]
+        [datetime.strptime("2021/08/04", "%Y/%m/%d")]
     )
     """
-    EIP1559 activation date as Python datetime.
-
-    Source: https://github.com/ethereum/pm/issues/245#issuecomment-825751460
+    Expected EIP1559 activation date as Python datetime.
     """
 
     date_pos: List[datetime] = default([datetime.strptime("2021/12/1", "%Y/%m/%d")])

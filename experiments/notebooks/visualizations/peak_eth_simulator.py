@@ -123,7 +123,7 @@ app.layout = html.Div([
     html.Div([
         dcc.Loading(
             id='loading-1',
-            children=[dcc.Graph(id='graph', style={'height': '700px'})],
+            children=[dcc.Graph(id='graph')],
             type='default'
         )
     ], className='output-row')
@@ -208,16 +208,28 @@ def run_simulation(validators_per_epoch, pos_launch_date, eip1559_base_fee):
     })
 
     df, _exceptions = run(simulation)
+    print(df)
 
     return df, simulation.model.params
 
 
-def run_peak_eth_simulator():
-    # Run app and display result inline in the notebook
+def run_peak_eth_simulator(execution_mode=None):
+    '''
+    Run app and display result in the notebook:
+    
+    To display in new browser tab at http://127.0.0.1:8050/:
+    `run_peak_eth_simulator(execution_mode='external')`
+
+    To display either in "inline" mode when using Jupyter Notebook,
+    or "jupyterlab" mode when using Jupyter Lab:
+    `run_peak_eth_simulator()`
+    '''
     processes = psutil.Process().parent().cmdline()
     is_jupyter_lab = any('lab' in p for p in processes)
-    if is_jupyter_lab:
+    if execution_mode:
+        pass
+    elif is_jupyter_lab:
         execution_mode = 'jupyterlab'
     else:
         execution_mode = 'inline'
-    app.run_server(mode=execution_mode, debug=False)
+    app.run_server(mode=execution_mode, height=1200, debug=False)
