@@ -89,7 +89,7 @@ The model implements the official Ethereum Specification wherever possible, but 
 
 ### Mathematical Model Specification
 
-The [Mathematical Model Specification](https://hackmd.io/@CADLabs/ryLrPm2T_) document articulates the relevant system dynamics as a state-space representation, the mathematical modelling paradigm underlying the cadCAD simulation library. It can be understood as a minimum viable formalism necessary to enable solid cadCAD modeling. 
+The [Mathematical Model Specification](https://hackmd.io/@CADLabs/ryLrPm2T_) document articulates the relevant system dynamics as a state-space representation, the mathematical modelling paradigm underlying the cadCAD simulation library. It can be understood as a minimum viable formalism necessary to enable solid cadCAD modelling. 
 
 ### Differential Model Specification
 
