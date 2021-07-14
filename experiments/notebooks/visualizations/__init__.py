@@ -554,13 +554,13 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
     # Beacon Chain genesis Dec-01-2020 12:00:35 PM +UTC
 
     historical_dates = [
-        ("Frontier", datetime.strptime("Jul-30-2015", '%b-%d-%Y')),
-        ("Frontier thawing", datetime.strptime("Sep-07-2015", '%b-%d-%Y')),
-        ("Homestead", datetime.strptime("Mar-14-2016", '%b-%d-%Y')),
-        ("Byzantium", datetime.strptime("Oct-16-2017", '%b-%d-%Y')),
-        ("Constantinople", datetime.strptime("Feb-28-2019", '%b-%d-%Y')),
-        ("Istanbul", datetime.strptime("Dec-08-2019", '%b-%d-%Y')),
-        ("Muir Glacier", datetime.strptime("Jan-02-2020", '%b-%d-%Y')),
+        ("Frontier", datetime.strptime("Jul-30-2015", '%b-%d-%Y'), (-25, 25)),
+        ("Frontier thawing", datetime.strptime("Sep-07-2015", '%b-%d-%Y'), (35, 50)),
+        ("Homestead", datetime.strptime("Mar-14-2016", '%b-%d-%Y'), (-30, 0)),
+        ("Byzantium", datetime.strptime("Oct-16-2017", '%b-%d-%Y'), (30, 40)),
+        ("Constantinople", datetime.strptime("Feb-28-2019", '%b-%d-%Y'), (30, -15)),
+        ("Istanbul", datetime.strptime("Dec-08-2019", '%b-%d-%Y'), (30, -10)),
+        ("Muir Glacier", datetime.strptime("Jan-02-2020", '%b-%d-%Y'), (-30, 0)),
     ]
 
     system_dates = [
@@ -570,9 +570,11 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
         ("Proof of Stake", parameters["date_pos"][0]),
     ]
 
-    for (name, date) in historical_dates:
+    for (name, date, (ay, ax)) in historical_dates:
         fig.add_annotation(x=date, y=df.loc[date.strftime("%Y-%m-%d")][column][0],
                            text=name,
+                           ay=ay,
+                           ax=ax,
                            showarrow=True,
                            arrowhead=2,
                            arrowsize=1.5)
