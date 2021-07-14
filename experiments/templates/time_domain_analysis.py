@@ -28,7 +28,6 @@ parameter_overrides = {
     "stage": [Stage.ALL],
     "eth_price_process": [lambda run, timestep: eth_price_samples[run - 1][timestep]],
     "daily_pow_issuance": [12_300]
-
 }
 
 initial_state_overrides = {
