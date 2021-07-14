@@ -5,7 +5,7 @@
 A modular dynamical-systems model of Ethereum's validator economics, based on the open-source Python library [radCAD](https://github.com/CADLabs/radCAD), an extension to [cadCAD](https://cadcad.org).
 
 * Current model version: `v1.0.0`
-* Implements the official Ethereum [Altair](https://github.com/ethereum/eth2.0-specs#altair) spec updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release.
+* Implements the official Ethereum [Altair](https://github.com/ethereum/eth2.0-specs#altair) spec updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release
 
 ## Table of Contents
 
@@ -22,7 +22,7 @@ A modular dynamical-systems model of Ethereum's validator economics, based on th
 * [Tests](#Tests)
 * [Change Log](#Change-Log)
 * [Acknowledgements](#Acknowledgements)
-* [Contributors](#-Contributors)
+* [Contributors](#Contributors-)
 * [License](#License)
 
 ---
