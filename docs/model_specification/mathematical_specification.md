@@ -1,8 +1,9 @@
 # Mathematical Specification
+[![hackmd-github-sync-badge](https://hackmd.io/wHM-t557Tp2BH1gItdRvFA/badge)](https://hackmd.io/wHM-t557Tp2BH1gItdRvFA)
+
+This documented was formatted using Markdown and LaTeX to be rendered in HackMD, for the best viewing experience see https://hackmd.io/@CADLabs/ryLrPm2T_
 
 :warning: The Mathematical Specification needs to be updated to cover the latest Ethereum Altair updates
-
-:warning: This documented was formatted using Markdown and LaTeX to be rendered in HackMD, for the best viewing experience see https://hackmd.io/@CADLabs/ryLrPm2T_
 
 ## Overview
 
