@@ -132,7 +132,7 @@ pip install -r requirements.txt
 
 To create a new Jupyter Kernel specifically for this environment, execute the following command:
 ```bash
-python3 -m ipykernel install --user --name python-cadlabs-eth-model --display-name "Python (CADLabs Ethereum Research Model)"
+python3 -m ipykernel install --user --name python-cadlabs-eth-model --display-name "Python (CADLabs Ethereum Economic Model)"
 ```
 
 You'll then be able to select the kernel with display name `Python (CADLabs Ethereum Research Model)` to use for your notebook from within Jupyter.
