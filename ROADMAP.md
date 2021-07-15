@@ -18,7 +18,7 @@ Analyse the performance of EIP-1559, the effect of the base fee on network issua
 
 ### Outcomes
 
-The resulting model could be used to study how the base fee changes under various network loads, trends and volatility, and under what scenarios the priority fee facility come into play.
+The resulting model could be used to study how the base fee changes under various network loads, trends and volatility, and under what scenarios the priority-fee facility comes into play.
 
 ### Follow-on extensions / analysis
 
@@ -33,7 +33,7 @@ EIP-1559 introduces a base fee that is a function of the current base fee and ho
 
 For this scenario to be artificially introduced, mining pools would need to collude by limiting their block sizes to be below 15 million gas.
 
-Investigate what percentage of miners would need to collude to limit the block size, and to what value, to ensure the base fee is pushed to zero - assuming behaviours for the remainder of the mining pools.
+Investigate what percentage of miners would need to collude to limit the block size, and to what value, to ensure the base fee is pushed to zero – assuming behaviours for the remainder of the mining pools.
 
 ### What’s required to make it happen
 
@@ -45,14 +45,14 @@ Investigate what percentage of miners would need to collude to limit the block s
 
 ### Outcomes
 
-The product of this investigation would be a surface plot with the x- and y-axis being percentage miner participation and artificial block size limit respectfully, with the z-axis being the resulting base fee. Multiple plots of this kind would be produced for various network load assumptions.
+The product of this investigation would be a surface plot with the x- and y-axis being percentage miner participation and artificial block size limit respectfully, with the z-axis being the resulting base fee. Multiple plots of this kind would be produced for various network-load assumptions.
 
 ### Follow-on extensions / analysis
 
 * What would the financial benefit be for miners participating in such collusion?
 * How would the non-participating miners react to such an event?
 * What would the network inflation rate of Ethereum be if such a scenario were to come about?
-* What would the cost/benefit to the participants in the collusion be?
+* What would the cost/benefit be to the participants in the collusion?
 
 ## 3. Investigate the effect of the introduction of layer 2 solutions on layer 1 transaction costs
 
@@ -64,28 +64,28 @@ Extend the model to simulate various scenarios of users moving their transaction
 
 ### What’s required to make it happen
 
-* For an initial investigation, assume a fixed price for layer 2 transactions
-* Perform a parameter sweep for the percentage of transactions that move over to layer 2 solutions
-* Adjust the layer 1 base fee according to transaction load as developed in extension 1
+* For an initial investigation, assume a fixed price for layer-2 transactions
+* Perform a parameter sweep for the percentage of transactions that move over to layer-2 solutions
+* Adjust the layer-1 base fee according to transaction load as developed in extension 1
 
 ### Outcomes
 
-Determine whether the layer 1 transaction load reaches a steady state, and if so, what is the steady state.
+Determine whether the layer-1 transaction load reaches a steady state, and if so, determine the steady state.
 
 ### Follow-on extensions / analysis
 
-* Introduce multiple agent types that exhibit varying behaviour and optimisation vectors, which in turn dictates which layer they transact on.
-* If transactions on layer 1 significantly decrease below the gas target and the base fee drops to near zero, what does the return on investment for validators look like if they have to rely entirely on Beacon Chain rewards, and what does the network inflation rate look like under those conditions? 
+* Introduce multiple agent types that exhibit varying behaviour and optimization vectors, which in turn dictates which layer they transact on.
+* If transactions on layer 1 significantly decrease below the gas target and the base fee drops to near zero, what does the return on investment for validators look like if they have to rely entirely on Beacon Chain rewards? What does the network inflation rate look like under those conditions? 
 
 ## 4. Introduce compounding returns for validators participating in pools
 
 ### Description
 
-Each discrete validator requires a 32 ETH deposit when initialized. A validator's effective balance, the value used to calculate validator rewards, is a maximum of 32 ETH. Any rewards a validator earns above and beyond the 32 ETH requirement don't contribute to their yields until they accrue an additional 32 ETH and create another validator instance - this prevents a solo validator from reinvesting their yields to receive compound interest.
+Each discrete validator requires a 32 ETH deposit when initialized. A validator's effective balance – the value used to calculate validator rewards – is a maximum of 32 ETH. Any rewards a validator earns above and beyond the 32 ETH requirement do not contribute to their yields until they accrue an additional 32 ETH and create another validator instance. This prevents a solo validator from reinvesting their yields to receive compound interest.
 
-On the other hand, stakers that utilise validator pools on exchanges for example, can compound their returns by pooling the returns of multiple validators to initialize another validator with 32 ETH. The pooling of returns and initialization of a shared validator effectively results in compound interest for those utilising staking pools, resulting in much higher yields, especially over longer periods of time, than that of solo / distributed validators.
+On the other hand, stakers that utilise validator pools, on exchanges for example, can compound their returns by pooling the returns of multiple validators to initialize another validator with 32 ETH. The pooling of returns and initialization of a shared validator effectively results in compound interest for those utilising staking pools, resulting in much higher yields, especially over longer periods of time, than that of solo / distributed validators.
 
-Investigate the difference in annualized profit yields for a validator as a function of pool size - starting at 1 (solo validator) and performing a sweep of pool size, using the current holdings of exchanges such as Binance as a reference.
+Investigate the difference in annualized profit yields for a validator as a function of pool size – starting at 1 (solo validator) – and perform a sweep of pool size, using the current holdings of exchanges such as Binance as a reference.
 
 ### What’s required to make it happen
 
@@ -98,4 +98,4 @@ A plot showing annualized profit yields as a function of pool size.
 
 ### Follow-on extensions / analysis
 
-* Use the differing annualized profit yields as an input for an agent based model to study the possible centralisation of validators in staking pools over time.
+* Use the differing annualized profit yields as an input for an agent-based model to study the possible centralisation of validators in staking pools over time.
