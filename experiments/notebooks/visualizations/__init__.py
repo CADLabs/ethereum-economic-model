@@ -571,7 +571,12 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
     ]
 
     for (name, date) in historical_dates:
-        fig.add_annotation(x=date, y=df.loc[date.strftime("%Y-%m-%d")][column][0],
+        nearest_row = df.iloc[
+            df.index.get_loc(date.strftime("%Y-%m-%d"), method='nearest')
+        ]
+        x_datetime = nearest_row['timestamp'][0]
+        y_value = nearest_row[column][0]
+        fig.add_annotation(x=x_datetime, y=y_value,
                            text=name,
                            showarrow=True,
                            arrowhead=2,
@@ -653,12 +658,11 @@ def plot_eth_supply_over_all_stages(df):
 def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated, parameters=parameters):
     df_historical = df_historical.set_index('timestamp', drop=False)
     df_simulated = df_simulated.set_index('timestamp', drop=False)
-    df_historical.drop(df_historical.tail(1).index,inplace=True)  
     
-    columns = ['timestamp', 'eth_supply', 'supply_inflation', 'supply_inflation_pct']
-    series_first = df_historical.iloc[-1][columns]
+    df_historical['supply_inflation_pct'] = df_historical['supply_inflation_pct_rolling']
+    df_historical = df_historical.drop(df_historical.tail(1).index)  
     df_historical.loc[df_simulated.index[0]] = df_simulated.iloc[0]
-   
+    
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
     fig.add_trace(
