@@ -43,8 +43,8 @@ parameter_overrides = {
         lambda run, timestep: eth_price_samples[run - 1][timestep]
     ],
     "daily_pow_issuance": [
-        average_daily_pow_issuance
-    ]  # 12_300
+        12_300
+    ]  
 }
 
 initial_state_overrides = {
