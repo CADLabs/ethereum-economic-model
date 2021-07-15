@@ -277,7 +277,7 @@ If you'd like to cite this code and/or research, we suggest the following format
 > CADLabs, Ethereum Economic Model, (2021), GitHub repository, https://github.com/CADLabs/ethereum-economic-model
 
 ```latex
-@misc{Charles2013,
+@misc{CADLabs2021,
   author = {CADLabs},
   title = {Ethereum Economic Model},
   year = {2021},
