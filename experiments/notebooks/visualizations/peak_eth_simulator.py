@@ -29,7 +29,6 @@ app = JupyterDash(__name__, external_stylesheets=external_stylesheets)
 app.layout = html.Div([
     # Inputs
     html.Div([
-        html.H1('Peak ETH Simulator'),
         # Validator Adoption
         html.Div([
             # Validator Adoption Dropdown

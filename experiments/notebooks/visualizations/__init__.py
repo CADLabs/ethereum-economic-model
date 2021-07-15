@@ -585,8 +585,6 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
         fig.add_annotation(x=date_pos, y=df.loc[date_pos.strftime("%Y-%m-%d")]['eth_supply'][0],
                             text='Peak ETH Supply',
                             yref='y2',
-                            ay=30,
-                            ax=5,
                             showarrow=True,
                             arrowhead=2,
                             arrowsize=1.5)
@@ -731,6 +729,7 @@ def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated, p
 
     fig.update_layout(
         xaxis_title="Date",
+        title="Peak ETH Simulator",
         legend_title="",
         height=1000,
         legend=dict(
