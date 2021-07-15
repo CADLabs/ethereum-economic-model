@@ -123,11 +123,20 @@
       "contributions": [
         "review"
       ]
+    },
+    {
+      "login": "nardleram",
+      "name": "Toby Russell",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18208637?v=4",
+      "profile": "https://github.com/nardleram",
+      "contributions": [
+        "content"
+      ]
     }
   ],
   "contributorsPerLine": 7,
   "contributorsSortAlphabetically": true,
-  "projectName": "ethereum-model",
+  "projectName": "ethereum-economic-model",
   "projectOwner": "CADLabs",
   "repoType": "github",
   "repoHost": "https://github.com",
