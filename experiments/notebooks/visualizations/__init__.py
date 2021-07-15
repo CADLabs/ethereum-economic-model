@@ -39,7 +39,7 @@ legend_state_variable_name_mapping = {
     'supply_inflation_pct': 'ETH Supply inflation',
     'total_revenue_yields_pct': 'Total Revenue Yields',
     'total_profit_yields_pct': 'Total Profit Yields',
-    'revenue_profit_yield_spread_pct': 'Revenue-Profit Yield Spread',
+    'revenue_profit_yield_spread_pct': 'Revenue/Profit Yield Spread',
     **dict([(validator.type + '_profit_yields_pct', validator_environment_name_mapping[validator.type]) for validator in
             validator_environments])
 }
@@ -51,7 +51,7 @@ axis_state_variable_name_mapping = {
     'eth_supply': 'ETH Supply (ETH)',
 }
 
-millnames = ['', ' Thousand', ' Million', ' Billion', ' Trillion']
+millnames = ['', ' k', ' m', ' bn', ' tn']
 
 
 def millify(n):
@@ -242,7 +242,7 @@ def plot_revenue_profit_yields_over_eth_price(df):
     fig.add_trace(
         go.Scatter(
             x=df.eth_price, y=df.total_revenue_yields_pct,
-            name=f"Revenue Yields @ Current ETH Staked ({millify(df.eth_staked.iloc[0])} ETH)",
+            name=f"Revenue Yields @ ({millify(df.eth_staked.iloc[0])} ETH Staked)",
             line=dict(color=cadlabs_colorway_sequence[3])
         )
     )
@@ -250,7 +250,7 @@ def plot_revenue_profit_yields_over_eth_price(df):
     fig.add_trace(
         go.Scatter(
             x=df.eth_price, y=df.total_profit_yields_pct,
-            name=f"Profit Yields @ Current ETH Staked ({millify(df.eth_staked.iloc[0])} ETH)",
+            name=f"Profit Yields @ ({millify(df.eth_staked.iloc[0])} ETH Staked)",
             line=dict(color=cadlabs_colorway_sequence[4], dash='dash')
         ),
     )
@@ -464,7 +464,7 @@ def plot_revenue_profit_yield_spread(df):
     update_legend_names(fig)
 
     fig.update_layout(
-        title="Revenue-Profit Yield Spread Over ETH Price vs. ETH Staked",
+        title="Revenue/Profit Yield Spread Over ETH Price vs. ETH Staked",
         xaxis_title="ETH Price (USD/ETH)",
         yaxis_title="ETH Staked (ETH)",
         width=1000,
@@ -1032,7 +1032,7 @@ def plot_expanding_mean_revenue_profit_yields_over_time_foreach_subset(df):
             go.Scatter(
                 x=df['timestamp'],
                 y=df_subset['avg_revenue_yields_pct'],
-                name=f"{scenario_names[subset]} Revenue Yield",
+                name=f"{scenario_names[subset]} Revenue Yields",
                 line=dict(color=color),
             ),
         )
@@ -1040,7 +1040,7 @@ def plot_expanding_mean_revenue_profit_yields_over_time_foreach_subset(df):
             go.Scatter(
                 x=df['timestamp'],
                 y=df_subset['avg_profit_yields_pct'],
-                name=f"{scenario_names[subset]} Profit Yield",
+                name=f"{scenario_names[subset]} Profit Yields",
                 line=dict(color=color, dash='dash'),
                 visible=False
             ),

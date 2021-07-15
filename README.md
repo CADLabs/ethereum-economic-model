@@ -2,55 +2,55 @@
 
 [![Python package](https://github.com/CADLabs/ethereum-model/actions/workflows/python.yml/badge.svg)](https://github.com/CADLabs/ethereum-model/actions/workflows/python.yml)
 
-A modular dynamical systems model of Ethereum's validator economics, based on the open-source Python library [radCAD](https://github.com/CADLabs/radCAD), an extension to [cadCAD](https://cadcad.org). 
+A modular dynamical-systems model of Ethereum's validator economics, based on the open-source Python library [radCAD](https://github.com/CADLabs/radCAD), an extension to [cadCAD](https://cadcad.org).
 
 * Current model version: `v1.0.0`
-* Implements the official Ethereum [Altair](https://github.com/ethereum/eth2.0-specs#altair) spec updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release.
+* Implements the official Ethereum [Altair](https://github.com/ethereum/eth2.0-specs#altair) spec updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release
 
 ## Table of Contents
 
-* [Introduction](#introduction)
-  * [Model Features](#model-features)
-  * [Directory Structure](#directory-structure)
-  * [Model Architecture](#model-architecture)
-  * [Model Assumptions](#model-assumptions)
-  * [Mathematical Model Specification](#mathematical-model-specification)
-  * [Differential Model Specification](#differential-model-specification)
-* [Environment Setup](#environment-setup)
-* [Simulation Experiments](#simulation-experiments)
-* [Model Extension Roadmap](#model-extension-roadmap)
-* [Tests](#tests)
-* [Change Log](#change-log)
-* [Acknowledgements](#acknowledgements)
-* [Contributors](#contributors-)
-* [License](#license)
+* [Introduction](#Introduction)
+  * [Model Features](#Model-Features)
+  * [Directory Structure](#Directory-Structure)
+  * [Model Architecture](#Model-Architecture)
+  * [Model Assumptions](#Model-Assumptions)
+  * [Mathematical Model Specification](#Mathematical-Model-Specification)
+  * [Differential Model Specification](#Differential-Model-Specification)
+* [Environment Setup](#Environment-Setup)
+* [Simulation Experiments](#Simulation-Experiments)
+* [Model Extension Roadmap](#Model-Extension-Roadmap)
+* [Tests](#Tests)
+* [Change Log](#Change-Log)
+* [Acknowledgements](#Acknowledgements)
+* [Contributors](#Contributors-)
+* [License](#License)
 
 ---
 
 ## Introduction
 
-This open-source model has been developed in collaboration with the Ethereum Robust Incentives Group, and funded by an Ethereum ESP (Ecosystem Support Program) grant. While originally scoped with purely modelling-educational intent as part of the cadCAD Edu online course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum)", it has evolved to become a highly versatile, customizable and extensible research model, and includes a list of [model extension ideas](#model-extension-roadmap). The model is focused on epoch- and population-level Ethereum validator economics across different deployment types and - at least in its initial setup - abstracts from slot- and agent-level dynamics. Please see [model assumptions](ASSUMPTIONS.md) for further context.
+This open-source model was developed in collaboration with the Ethereum Robust Incentives Group and funded by an Ethereum ESP (Ecosystem Support Program) grant. While originally scoped with purely modelling-educational intent as part of the cadCAD Edu online course "[cadCAD Masterclass: Ethereum Validator Economics](https://www.cadcad.education/course/masterclass-ethereum)", it has evolved to become a highly versatile, customizable and extensible research model that includes a list of [model extension ideas](#Model-Extension-Roadmap). The model is focused on epoch- and population-level Ethereum validator economics across different deployment types and – at least in its initial setup – abstracts from slot- and agent-level dynamics. Please see [Model Assumptions](ASSUMPTIONS.md) for further context.
 
 ### Model Features
 
-* Configurable to reflect protocol behavior at different points in time of the development roadmap (referred to as "upgrade stages"):
-  * post Beacon Chain launch, pre EIP1559, pre PoS (validators receive PoS incentives, EIP1559 disabled, and PoW still in operation)
-  * post Beacon Chain launch, post EIP1559, pre PoS (validators receive PoS incentives, EIP1559 enabled with miners receiving priority fees, and PoW still in operation)
-  * post Beacon Chain launch, post EIP1559, post PoS (validators receive PoS incentives, EIP1559 enabled with validators receiving priority fees, and PoW deprecated)
-* Flexible calculation granularity: By default, State Variables, System Metrics, and System Parameters are calculated at epoch level and aggregated daily (~= 225 epochs). Users can easily change epoch aggregation using the delta-time (`dt`) parameter. The model can be extended for slot-level granularity and analysis if that is desired (see [Model Extension Roadmap](#model-extension-roadmap)).
+* Configurable to reflect protocol behaviour at different points in time of the development roadmap (referred to as "upgrade stages"):
+  * Post Beacon Chain launch, pre EIP1559, pre PoS (validators receive PoS incentives, EIP1559 disabled, and PoW still in operation)
+  * Post Beacon Chain launch, post EIP1559, pre PoS (validators receive PoS incentives, EIP1559 enabled with miners receiving priority fees, and PoW still in operation)
+  * Post Beacon Chain launch, post EIP1559, post PoS (validators receive PoS incentives, EIP1559 enabled with validators receiving priority fees, and PoW deprecated)
+* Flexible calculation granularity: By default, State Variables, System Metrics, and System Parameters are calculated at epoch level and aggregated daily (~= 225 epochs). Users can easily change epoch aggregation using the delta-time (`dt`) parameter. The model can be extended for slot-level granularity and analysis if that is desired (see [Model Extension Roadmap](#Model-Extension-Roadmap)).
 * Supports [state-space analysis](https://en.wikipedia.org/wiki/State-space_representation) (i.e. simulation of system state over time) and [phase-space analysis](https://en.wikipedia.org/wiki/Phase_space) (i.e. generation of all unique system states in a given experimental setup).
 * Customizable processes to set important variables such as ETH price, ETH staked, and EIP1559 transaction pricing.
-* Modular model structure for convenient extension and modification. This allows different user groups to refactor the model for different purposes, rapidly test new incentive mechanisms, or to update the model as Ethereum implements new protocol improvements.
-* References to official [Eth2 specs](https://github.com/ethereum/eth2.0-specs) in Policy and State Update Function logic. This enables seamless onboarding of protocol developers or for the more advanced cadCAD user to dig into the underlying protocol design that inspired the logic.
+* Modular model structure for convenient extension and modification. This allows different user groups to refactor the model for different purposes, rapidly test new incentive mechanisms, or update the model as Ethereum implements new protocol improvements.
+* References to official [Eth2 specs](https://github.com/ethereum/eth2.0-specs) in Policy and State Update Function logic. This enables seamless onboarding of protocol developers and allows the more advanced cadCAD user to dig into the underlying protocol design that inspired the logic.
 
 ### Directory Structure
 
-* [data/](data/): datasets and API data-sources (such as Etherscan.io and Beaconcha.in) used in the model
-* [docs/](docs/): misc. documentation such as auto-generated docs from Python docstrings and Markdown docs
-* [experiments/](experiments/): analysis notebooks and experiment workflow (such as configuration and execution)
-* [logs/](logs/): experiment runtime log files
-* [model/](model/): model software architecture (structural and configuration modules)
-* [tests/](tests/): unit and integration tests for model and notebooks
+* [data/](data/): Datasets and API data sources (such as Etherscan.io and Beaconcha.in) used in the model
+* [docs/](docs/): Misc. documentation such as auto-generated docs from Python docstrings and Markdown docs
+* [experiments/](experiments/): Analysis notebooks and experiment workflow (such as configuration and execution)
+* [logs/](logs/): Experiment runtime log files
+* [model/](model/): Model software architecture (structural and configuration modules)
+* [tests/](tests/): Unit and integration tests for model and notebooks
 
 ### Model Architecture
 
@@ -74,7 +74,7 @@ The model is configured using several configuration modules in the [model/](mode
 
 | Module | Description |
 | --- | --- |
-| [constants.py](model/constants.py) | Constants used in the model e.g. number of epochs in a year, Gwei in 1 Ether |
+| [constants.py](model/constants.py) | Constants used in the model, e.g. number of epochs in a year, Gwei in 1 Ether |
 | [simulation_configuration.py](model/simulation_configuration.py) | Simulation configuration such as the number of timesteps and Monte Carlo runs |
 | [state_update_blocks.py](model/state_update_blocks.py) | cadCAD model State Update Block structure, composed of Policy and State Update Functions |
 | [state_variables.py](model/state_variables.py) | Model State Variable definition, configuration, and defaults |
@@ -89,30 +89,30 @@ The model implements the official Ethereum Specification wherever possible, but 
 
 ### Mathematical Model Specification
 
-The [Mathematical Model Specification](TODO: ADD LINK) document articulates the relevant system dynamics as a state-space representation, the mathematical modelling paradigm underlying the cadCAD simulation library. It can be understood as a minimum viable formalism necessary to enable solid cadCAD modeling. 
+The [Mathematical Model Specification](https://hackmd.io/@CADLabs/ryLrPm2T_) document articulates the relevant system dynamics as a state-space representation, the mathematical modelling paradigm underlying the cadCAD simulation library. It can be understood as a minimum viable formalism necessary to enable solid cadCAD modelling. 
 
 ### Differential Model Specification
 
-The [Differential Model Specification](TODO: ADD LINK) document contains the model's differential specification and a link to the respective LucidChart cadCAD Canvas. It visualizes the model's overall structure across System States, System Inputs, System Parameters, State Update Logic and System Metrics.
+The [Differential Model Specification](https://hackmd.io/@CADLabs/HyENPQ36u) document contains the model's differential specification and a link to the respective LucidChart cadCAD Canvas. It visualizes the model's overall structure across System States, System Inputs, System Parameters, State Update Logic and System Metrics.
 
 ## Environment Setup
 
 1. Clone or download the Git repository: `git clone https://github.com/CADLabs/ethereum-model` or using GitHub Desktop
 2. If completing the cadCAD Edu Masterclass MOOC, check out the version `v1.0.0` tag: `git checkout tags/v1.0.0`
-3. Set up your development environment using the [Setup](#setup) section
-4. Follow the [Experiment Workflow](#experiment-workflow) section to execute your first experiment notebook!
+3. Set up your development environment using the [Setup](#Setup) section
+4. Follow the [Experiment Workflow](#Experiment-Workflow) section to execute your first experiment notebook!
 
 ### Setup
 
 To set up your Python development environment, we cover two options:
-* [Python Development Environment](#python-development-environment): Set up a custom development environment using Python 3 and Jupyter
-* [Docker Development Environment](#docker-development-environment): Use the prebuilt Docker image
+* [Python Development Environment](#Python-Development-Environment): Set up a custom development environment using Python 3 and Jupyter
+* [Docker Development Environment](#Docker-Development-Environment): Use the prebuilt Docker image
 
 #### Python Development Environment
 
 The following are prerequisites you'll need before completing the setup steps:
 * Python: tested with versions 3.7, 3.8, 3.9
-* NodeJS might be needed if using Plotly with Jupyter Lab (Plotly works out the box when using Anaconda/Conda package manager with Jupyter Lab or Jupyter Notebook)
+* NodeJS might be needed if using Plotly with Jupyter Lab (Plotly works out the box when using the Anaconda/Conda package manager with Jupyter Lab or Jupyter Notebook)
 
 First, set up a Python 3 [virtualenv](https://docs.python.org/3/library/venv.html) development environment (or use the equivalent Anaconda step):
 ```bash
@@ -124,7 +124,7 @@ source venv/bin/activate
 
 Make sure to activate the virtual environment before each of the following steps.
 
-Secondly, install the Python 3 dependencies using [Pip](https://packaging.python.org/tutorials/installing-packages/), from the [requirements.txt](requirements.txt) file, within your new virtual environment:
+Secondly, install the Python 3 dependencies using [Pip](https://packaging.python.org/tutorials/installing-packages/), from the [requirements.txt](requirements.txt) file within your new virtual environment:
 ```bash
 # Install Python 3 dependencies inside virtual environment
 pip install -r requirements.txt
@@ -137,14 +137,14 @@ python3 -m ipykernel install --user --name python-cadlabs-eth-model --display-na
 
 You'll then be able to select the kernel with display name `Python (CADLabs Ethereum Economic Model)` to use for your notebook from within Jupyter.
 
-To start Jupyter Notebook or Lab (see notes about issues with [using Plotly with Jupyter Lab](#known-issues)):
+To start Jupyter Notebook or Lab (see notes about issues with [using Plotly with Jupyter Lab](#Known-Issues)):
 ```bash
 jupyter notebook
 # Or:
 jupyter lab
 ```
 
-For more advanced Unix/macOS users, a [Makefile](Makefile) is also included for convenience and simply executes all the setup steps. For example to setup your environment and start Jupyter Lab:
+For more advanced Unix/macOS users, a [Makefile](Makefile) is also included for convenience that simply executes all the setup steps. For example, to setup your environment and start Jupyter Lab:
 ```bash
 # Setup environment
 make setup
@@ -162,7 +162,7 @@ See [CADLabs Jupyter Lab Environment](https://github.com/CADLabs/jupyter-lab-env
 
 ###### Plotly doesn't display in Jupyter Lab
 
-To install and use Plotly with Jupyter Lab, you might need NodeJS installed to build Node dependencies, unless you're using Anaconda/Conda package manager to manage your environment. Alternatively, use Jupyter Notebook which works out the box with Plotly.
+To install and use Plotly with Jupyter Lab, you might need NodeJS installed to build Node dependencies, unless you're using the Anaconda/Conda package manager to manage your environment. Alternatively, use Jupyter Notebook which works out the box with Plotly.
 
 See https://plotly.com/python/getting-started/
 
@@ -171,7 +171,7 @@ You might need to install the following "lab extension":
 jupyter labextension install jupyterlab-plotly@4.14.3
 ```
 
-###### Windows issues
+###### Windows Issues
 
 If you receive the following error and you use Anaconda, try: `conda install -c anaconda pywin32`
 > DLL load failed while importing win32api: The specified procedure could not be found.
@@ -186,17 +186,16 @@ To run the default experiment from the terminal, execute the `experiments.run` m
 python3 -m experiments.run
 ```
 
-Alternatively, open and run one of the pre-existing Jupyter experiment notebooks in Jupyter Lab or Notebook,
-following the [experiments/notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) notebook as a guide.
+Alternatively, open and run one of the pre-existing Jupyter experiment notebooks in Jupyter Lab or Notebook, following the [experiments/notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) notebook as a guide.
 
 ## Simulation Experiments
 
 The [experiments/](experiments/) directory contains modules for configuring and executing simulation experiments, as well as performing post-processing of the results.
 
-The [experiments/notebooks/](experiments/notebooks/) directory contains several initial experiment notebooks we have created as a basis for analyzing the economics Ethereum validators are confronted with under a variety of scenarios.
-These notebooks and analyses don't aim to comprehensively illuminate the Ethereum protocol, but rather to answer the most salient questions and serve as inspiration for building out more customized analyses and model extensions.
+The [experiments/notebooks/](experiments/notebooks/) directory contains several initial experiment notebooks we created as a basis for analyzing the economics Ethereum validators are confronted with under a variety of scenarios.
+These notebooks and analyses do not aim to comprehensively illuminate the Ethereum protocol, rather they seek to answer the most salient questions and serve as inspiration for building out more customized analyses and model extensions.
 
-The [experiments/templates/](experiments/templates/) directory contains different experiment templates which can be used to create custom experiment notebooks.
+The [experiments/templates/](experiments/templates/) directory contains different experiment templates that can be used to create custom experiment notebooks.
 See the [experiments/notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) notebook for a walk-through of how to execute existing experiment notebooks, or configure and execute a new experiment.
 
 #### Notebook 1. Model Validation
@@ -215,13 +214,13 @@ The purpose of this notebook is to explore the returns validators can expect fro
 
 #### Notebook 3. Network Issuance and Inflation Rate (Network-level Analysis)
 
-The purpose of this notebook is to explore the ETH issuance and resulting annualized inflation rate across different time horizons and scenarios.
+The purpose of this notebook is to explore ETH issuance and the resulting annualized inflation rate across different time horizons and scenarios.
 
 * Analysis: Inflation Rate and ETH Supply Over Time
 
 ## Model Extension Roadmap
 
-The modular nature of the model makes structural and experiment-level extensions straightforward. The [Model Extension Roadmap](ROADMAP.md) provides some initial inspiration. 
+The modular nature of the model makes structural and experiment-level extensions straightforward. The [Model Extension Roadmap](ROADMAP.md) provides some initial inspiration.
 
 ## Tests
 
@@ -264,19 +263,20 @@ Thanks goes to these wonderful contributors (see [emoji key](https://allcontribu
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/AntoineRondelet"><img src="https://avatars.githubusercontent.com/u/17513145?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Antoine Rondelet</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-model/pulls?q=is%3Apr+reviewed-by%3AAntoineRondelet" title="Reviewed Pull Requests">👀</a></td>
-    <td align="center"><a href="http://barnabemonnot.com"><img src="https://avatars.githubusercontent.com/u/4910325?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Barnabé Monnot</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-model/commits?author=barnabemonnot" title="Code">💻</a> <a href="https://github.com/CADLabs/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Abarnabemonnot" title="Reviewed Pull Requests">👀</a> <a href="#ideas-barnabemonnot" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="http://bitsofether.com"><img src="https://avatars.githubusercontent.com/u/13078998?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Benjamin Scholtz</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-model/commits?author=BenSchZA" title="Code">💻</a> <a href="#infra-BenSchZA" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/CADLabs/ethereum-model/pulls?q=is%3Apr+reviewed-by%3ABenSchZA" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/CADLabs/ethereum-model/commits?author=BenSchZA" title="Documentation">📖</a> <a href="https://github.com/CADLabs/ethereum-model/issues?q=author%3ABenSchZA" title="Bug reports">🐛</a> <a href="#ideas-BenSchZA" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="http://danlessa.github.io/"><img src="https://avatars.githubusercontent.com/u/15021144?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Danillo Lessa Bernardineli</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Adanlessa" title="Reviewed Pull Requests">👀</a> <a href="#ideas-danlessa" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="https://github.com/JGBSci"><img src="https://avatars.githubusercontent.com/u/35999312?v=4?s=100" width="100px;" alt=""/><br /><sub><b>JGBSci</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-model/pulls?q=is%3Apr+reviewed-by%3AJGBSci" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/CADLabs/ethereum-model/commits?author=JGBSci" title="Documentation">📖</a> <a href="#ideas-JGBSci" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="https://joranhonig.nl"><img src="https://avatars.githubusercontent.com/u/8710366?v=4?s=100" width="100px;" alt=""/><br /><sub><b>JoranHonig</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-model/pulls?q=is%3Apr+reviewed-by%3AJoranHonig" title="Reviewed Pull Requests">👀</a></td>
-    <td align="center"><a href="https://github.com/rogervs"><img src="https://avatars.githubusercontent.com/u/4959125?v=4?s=100" width="100px;" alt=""/><br /><sub><b>RogerVs</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-model/commits?author=rogervs" title="Code">💻</a> <a href="#infra-rogervs" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/CADLabs/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Arogervs" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/CADLabs/ethereum-model/commits?author=rogervs" title="Documentation">📖</a> <a href="https://github.com/CADLabs/ethereum-model/issues?q=author%3Arogervs" title="Bug reports">🐛</a> <a href="#ideas-rogervs" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/AntoineRondelet"><img src="https://avatars.githubusercontent.com/u/17513145?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Antoine Rondelet</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-economic-model/pulls?q=is%3Apr+reviewed-by%3AAntoineRondelet" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="http://barnabemonnot.com"><img src="https://avatars.githubusercontent.com/u/4910325?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Barnabé Monnot</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-economic-model/commits?author=barnabemonnot" title="Code">💻</a> <a href="https://github.com/CADLabs/ethereum-economic-model/pulls?q=is%3Apr+reviewed-by%3Abarnabemonnot" title="Reviewed Pull Requests">👀</a> <a href="#ideas-barnabemonnot" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="http://bitsofether.com"><img src="https://avatars.githubusercontent.com/u/13078998?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Benjamin Scholtz</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-economic-model/commits?author=BenSchZA" title="Code">💻</a> <a href="#infra-BenSchZA" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/CADLabs/ethereum-economic-model/pulls?q=is%3Apr+reviewed-by%3ABenSchZA" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/CADLabs/ethereum-economic-model/commits?author=BenSchZA" title="Documentation">📖</a> <a href="https://github.com/CADLabs/ethereum-economic-model/issues?q=author%3ABenSchZA" title="Bug reports">🐛</a> <a href="#ideas-BenSchZA" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="http://danlessa.github.io/"><img src="https://avatars.githubusercontent.com/u/15021144?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Danillo Lessa Bernardineli</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-economic-model/pulls?q=is%3Apr+reviewed-by%3Adanlessa" title="Reviewed Pull Requests">👀</a> <a href="#ideas-danlessa" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/JGBSci"><img src="https://avatars.githubusercontent.com/u/35999312?v=4?s=100" width="100px;" alt=""/><br /><sub><b>JGBSci</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-economic-model/pulls?q=is%3Apr+reviewed-by%3AJGBSci" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/CADLabs/ethereum-economic-model/commits?author=JGBSci" title="Documentation">📖</a> <a href="#ideas-JGBSci" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://joranhonig.nl"><img src="https://avatars.githubusercontent.com/u/8710366?v=4?s=100" width="100px;" alt=""/><br /><sub><b>JoranHonig</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-economic-model/pulls?q=is%3Apr+reviewed-by%3AJoranHonig" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://github.com/rogervs"><img src="https://avatars.githubusercontent.com/u/4959125?v=4?s=100" width="100px;" alt=""/><br /><sub><b>RogerVs</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-economic-model/commits?author=rogervs" title="Code">💻</a> <a href="#infra-rogervs" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/CADLabs/ethereum-economic-model/pulls?q=is%3Apr+reviewed-by%3Arogervs" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/CADLabs/ethereum-economic-model/commits?author=rogervs" title="Documentation">📖</a> <a href="https://github.com/CADLabs/ethereum-economic-model/issues?q=author%3Arogervs" title="Bug reports">🐛</a> <a href="#ideas-rogervs" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://marthendalnunes.github.io/"><img src="https://avatars.githubusercontent.com/u/18421017?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Vitor Marthendal Nunes</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-model/commits?author=marthendalnunes" title="Code">💻</a> <a href="#infra-marthendalnunes" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/CADLabs/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Amarthendalnunes" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/CADLabs/ethereum-model/commits?author=marthendalnunes" title="Documentation">📖</a> <a href="https://github.com/CADLabs/ethereum-model/issues?q=author%3Amarthendalnunes" title="Bug reports">🐛</a> <a href="#ideas-marthendalnunes" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="https://github.com/carlwafe"><img src="https://avatars.githubusercontent.com/u/87176407?v=4?s=100" width="100px;" alt=""/><br /><sub><b>carlwafe</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Acarlwafe" title="Reviewed Pull Requests">👀</a></td>
-    <td align="center"><a href="https://github.com/casparschwa"><img src="https://avatars.githubusercontent.com/u/31305984?v=4?s=100" width="100px;" alt=""/><br /><sub><b>casparschwa</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Acasparschwa" title="Reviewed Pull Requests">👀</a></td>
-    <td align="center"><a href="http://clayming.space"><img src="https://avatars.githubusercontent.com/u/3201174?v=4?s=100" width="100px;" alt=""/><br /><sub><b>witwiki</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-model/pulls?q=is%3Apr+reviewed-by%3Awitwiki" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://github.com/nardleram"><img src="https://avatars.githubusercontent.com/u/18208637?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Toby Russell</b></sub></a><br /><a href="#content-nardleram" title="Content">🖋</a></td>
+    <td align="center"><a href="https://marthendalnunes.github.io/"><img src="https://avatars.githubusercontent.com/u/18421017?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Vitor Marthendal Nunes</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-economic-model/commits?author=marthendalnunes" title="Code">💻</a> <a href="#infra-marthendalnunes" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/CADLabs/ethereum-economic-model/pulls?q=is%3Apr+reviewed-by%3Amarthendalnunes" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/CADLabs/ethereum-economic-model/commits?author=marthendalnunes" title="Documentation">📖</a> <a href="https://github.com/CADLabs/ethereum-economic-model/issues?q=author%3Amarthendalnunes" title="Bug reports">🐛</a> <a href="#ideas-marthendalnunes" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/carlwafe"><img src="https://avatars.githubusercontent.com/u/87176407?v=4?s=100" width="100px;" alt=""/><br /><sub><b>carlwafe</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-economic-model/pulls?q=is%3Apr+reviewed-by%3Acarlwafe" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="https://github.com/casparschwa"><img src="https://avatars.githubusercontent.com/u/31305984?v=4?s=100" width="100px;" alt=""/><br /><sub><b>casparschwa</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-economic-model/pulls?q=is%3Apr+reviewed-by%3Acasparschwa" title="Reviewed Pull Requests">👀</a></td>
+    <td align="center"><a href="http://clayming.space"><img src="https://avatars.githubusercontent.com/u/3201174?v=4?s=100" width="100px;" alt=""/><br /><sub><b>witwiki</b></sub></a><br /><a href="https://github.com/CADLabs/ethereum-economic-model/pulls?q=is%3Apr+reviewed-by%3Awitwiki" title="Reviewed Pull Requests">👀</a></td>
   </tr>
 </table>
 
@@ -289,6 +289,24 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 ## License
 
-`CADLabs/ethereum-model` is licensed under the GNU General Public License v3.0.
- 
-Permissions of this strong copyleft license are conditioned on making available complete source code of licensed works and modifications, which include larger works using a licensed work, under the same license. Copyright and license notices must be preserved. Contributors provide an express grant of patent rights.
+MIT License
+
+Copyright (c) 2021 CADLabs
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
