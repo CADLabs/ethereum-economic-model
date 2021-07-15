@@ -7,6 +7,7 @@ over all Ethereum network upgrade stages.
 
 import copy
 import pandas as pd
+from datetime import datetime
 
 import model.constants as constants
 from model.stochastic_processes import create_stochastic_process_realizations
@@ -25,15 +26,14 @@ TIMESTEPS = constants.epochs_per_month * SIMULATION_TIME_MONTHS // DELTA_TIME
 # Generate stochastic process realizations
 eth_price_samples = create_stochastic_process_realizations("eth_price_samples", timesteps=TIMESTEPS, dt=DELTA_TIME)
 
-# Get mean daily PoW issuance over the 6 months pre-EIP1559
-params = experiment.simulations[0].model.params
-date_eip1559 = params['date_eip1559'][0]
+# Get mean daily PoW issuance over the 6 months pre-Beacon Chain
+date_beacon_chain = datetime.strptime("2020/12/01", "%Y/%m/%d")
 df_ether_supply = df_ether_supply.resample('D').pad()
 df_ether_supply['eth_supply_daily_issuance'] = (
         df_ether_supply['eth_supply'] - df_ether_supply['eth_supply'].shift(1)
 )
 average_daily_pow_issuance = df_ether_supply['eth_supply_daily_issuance'].loc[
-    (date_eip1559 - pd.DateOffset(months=6)):date_eip1559
+    (date_beacon_chain - pd.DateOffset(months=6)):date_beacon_chain
 ].mean()
 
 # Create parameter override dictionary
