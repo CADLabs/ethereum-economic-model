@@ -89,28 +89,23 @@ The model implements the official Ethereum Specification wherever possible, but 
 
 ### Mathematical Model Specification
 
-The [Mathematical Model Specification](https://hackmd.io/@CADLabs/ryLrPm2T_) document articulates the relevant system dynamics as a state-space representation, the mathematical modelling paradigm underlying the cadCAD simulation library. It can be understood as a minimum viable formalism necessary to enable solid cadCAD modelling. 
+The [Mathematical Model Specification](https://hackmd.io/@CADLabs/ryLrPm2T_) articulates the relevant system dynamics as a state-space representation, the mathematical modelling paradigm underlying the cadCAD simulation library. It can be understood as a minimum viable formalism necessary to enable solid cadCAD modelling. 
 
 ### Differential Model Specification
 
-The [Differential Model Specification](https://hackmd.io/@CADLabs/HyENPQ36u) document contains the model's differential specification and a link to the respective LucidChart cadCAD Canvas. It visualizes the model's overall structure across System States, System Inputs, System Parameters, State Update Logic and System Metrics.
+The [Differential Model Specification](https://hackmd.io/@CADLabs/HyENPQ36u) depicts the model's overall structure across System States, System Inputs, System Parameters, State Update Logic and System Metrics.
 
 ## Environment Setup
 
 1. Clone or download the Git repository: `git clone https://github.com/CADLabs/ethereum-model` or using GitHub Desktop
 2. If completing the cadCAD Edu Masterclass MOOC, check out the version `v1.0.0` tag: `git checkout tags/v1.0.0`
-3. Set up your development environment using the [Setup](#Setup) section
-4. Follow the [Experiment Workflow](#Experiment-Workflow) section to execute your first experiment notebook!
+3. Set up your development environment using of the following two options:
 
-### Setup
+### Option 1: Local Development Environment
 
-To set up your Python development environment, we cover two options:
-* [Python Development Environment](#Python-Development-Environment): Set up a custom development environment using Python 3 and Jupyter
-* [Docker Development Environment](#Docker-Development-Environment): Use the prebuilt Docker image
+This section describes how to set up a custom development environment using Python 3 and Jupyter.
 
-#### Python Development Environment
-
-The following are prerequisites you'll need before completing the setup steps:
+Please note the following prerequisites before getting started:
 * Python: tested with versions 3.7, 3.8, 3.9
 * NodeJS might be needed if using Plotly with Jupyter Lab (Plotly works out the box when using the Anaconda/Conda package manager with Jupyter Lab or Jupyter Notebook)
 
@@ -152,15 +147,13 @@ make setup
 make start-lab
 ```
 
-#### Docker Development Environment
+### Option 2: Docker Development Environment
 
-If you'd rather use Docker, there is a prebuilt Docker image you can use to set up a Jupyter Lab development environment with all the dependencies you need.
+Alternatively, you can set up your development environment using the pre-built Docker image with all the dependencies you need: [CADLabs Jupyter Lab Environment](https://github.com/CADLabs/jupyter-lab-environment)
 
-See [CADLabs Jupyter Lab Environment](https://github.com/CADLabs/jupyter-lab-environment)
+### Known Issues
 
-#### Known Issues
-
-###### Plotly doesn't display in Jupyter Lab
+#### Plotly doesn't display in Jupyter Lab
 
 To install and use Plotly with Jupyter Lab, you might need NodeJS installed to build Node dependencies, unless you're using the Anaconda/Conda package manager to manage your environment. Alternatively, use Jupyter Notebook which works out the box with Plotly.
 
@@ -171,32 +164,18 @@ You might need to install the following "lab extension":
 jupyter labextension install jupyterlab-plotly@4.14.3
 ```
 
-###### Windows Issues
+#### Windows Issues
 
 If you receive the following error and you use Anaconda, try: `conda install -c anaconda pywin32`
 > DLL load failed while importing win32api: The specified procedure could not be found.
-
-### Experiment Workflow
-
-The default experiment, [experiments/default_experiment.py](experiments/default_experiment.py),
-is an experiment that uses the default cadCAD System Parameters, Initial State, and State Update Blocks defined in the [models/](models/) directory.
-
-To run the default experiment from the terminal, execute the `experiments.run` module:
-```bash
-python3 -m experiments.run
-```
-
-Alternatively, open and run one of the pre-existing Jupyter experiment notebooks in Jupyter Lab or Notebook, following the [experiments/notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) notebook as a guide.
 
 ## Simulation Experiments
 
 The [experiments/](experiments/) directory contains modules for configuring and executing simulation experiments, as well as performing post-processing of the results.
 
-The [experiments/notebooks/](experiments/notebooks/) directory contains several initial experiment notebooks we created as a basis for analyzing the economics Ethereum validators are confronted with under a variety of scenarios.
-These notebooks and analyses do not aim to comprehensively illuminate the Ethereum protocol, rather they seek to answer the most salient questions and serve as inspiration for building out more customized analyses and model extensions.
+The [experiments/notebooks/](experiments/notebooks/) directory contains initial validator-level and network-level experiment notebooks and analyses. These notebooks and analyses do not aim to comprehensively illuminate the Ethereum protocol, but rather to suggest insights into a few salient questions the Ethereum community has been discussing, and to serve as inspiration for researchers building out their own, customized analyses and structural model extensions. 
 
-The [experiments/templates/](experiments/templates/) directory contains different experiment templates that can be used to create custom experiment notebooks.
-See the [experiments/notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) notebook for a walk-through of how to execute existing experiment notebooks, or configure and execute a new experiment.
+The [experiments/notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) contains an overview of how to execute existing experiment notebooks, and how to configure and execute new ones.
 
 #### Notebook 1. Model Validation
 
@@ -220,7 +199,7 @@ The purpose of this notebook is to explore ETH issuance and the resulting annual
 
 ## Model Extension Roadmap
 
-The modular nature of the model makes structural and experiment-level extensions straightforward. The [Model Extension Roadmap](ROADMAP.md) provides some initial inspiration.
+The modular nature of the model makes structural and experiment-level extensions straightforward. The [Model Extension Roadmap](ROADMAP.md) provides some inspiration.
 
 ## Tests
 
