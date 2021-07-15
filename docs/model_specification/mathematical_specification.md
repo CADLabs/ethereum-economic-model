@@ -1,9 +1,11 @@
 # Mathematical Model Specification
 [![hackmd-github-sync-badge](https://hackmd.io/wHM-t557Tp2BH1gItdRvFA/badge)](https://hackmd.io/wHM-t557Tp2BH1gItdRvFA)
 
-This document was formatted using Markdown and LaTeX to be rendered in HackMD, for the best viewing experience see https://hackmd.io/@CADLabs/ryLrPm2T_
+Mathematical Model Specification for the [CADLabs Ethereum Economic Model](https://github.com/CADLabs/ethereum-economic-model/releases/tag/v1.0.0) version v1.0.0.
 
 :warning: While the implemented model reflects the official Ethereum [Altair](https://github.com/ethereum/eth2.0-specs#altair) spec updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release, this Mathematical Model Specification is still being updated.
+
+:warning: If you are not viewing this document in HackMD, it was formatted using Markdown and LaTeX to be rendered in HackMD. For the best viewing experience see https://hackmd.io/@CADLabs/ryLrPm2T_
 
 ## Overview
 
@@ -219,9 +221,9 @@ After defining the model's state-space in the form of System States, we describe
 
 To visualize the state update logic, we use a differential specification diagram (also known as a "cadCAD Canvas" at cadCAD Edu). This diagram will accompany the derivation of the Mathematical Model Specification of the model mechanisms.
 
-The [model's cadCAD Canvas / Differential Specification](https://lucid.app/lucidchart/invitations/accept/07b715e4-80c9-4901-8ba7-f3309e52a38d?viewport_loc=41%2C-239%2C5380%2C3206%2CQe-m-rCpJ8RS) is accessible via LucidChart. Below is an illustrative screenshot. 
+The [model's cadCAD Canvas / Differential Model Specification](https://lucid.app/lucidchart/c7656072-e601-4ec4-a44b-0a15c9a5700d/view) is accessible via LucidChart. Below is an illustrative screenshot. 
 
-![](https://i.imgur.com/vGaNGf3.png)
+![](https://i.imgur.com/DQWxj7W.png)
 
 We describe the state update logic along the columns of the model's cadCAD Canvas' columns, also known as "Partial State Update Blocks" (PSUB). One round of execution of these Partial State Update Blocks would represent the state transition from one epoch to the next.
 
@@ -352,9 +354,9 @@ $$
 
 ## System Metrics
 
-System Metrics are computed from State Variables in order to assess the performance of the system. The calculation of our System Metrics is also represented in the [model's cadCAD Canvas / Differential Specification](https://lucid.app/lucidchart/invitations/accept/07b715e4-80c9-4901-8ba7-f3309e52a38d?viewport_loc=41%2C-239%2C5380%2C3206%2CQe-m-rCpJ8RS) and accessible via LucidChart. Below is an illustrative screenshot.
+System Metrics are computed from State Variables in order to assess the performance of the system. The calculation of our System Metrics is also represented in the [model's cadCAD Canvas / Differential Model Specification](https://lucid.app/lucidchart/c7656072-e601-4ec4-a44b-0a15c9a5700d/view) and accessible via LucidChart. Below is an illustrative screenshot.
 
-![](https://i.imgur.com/VTiLNne.png)
+![](https://i.imgur.com/5xAaCCm.png)
 
 The following state-update logic for system metric State Variables can also be performed in post-processing, to improve run-time performance.
 
