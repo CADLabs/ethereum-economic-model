@@ -554,7 +554,7 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
     # Beacon Chain genesis Dec-01-2020 12:00:35 PM +UTC
 
     historical_dates = [
-        ("Frontier", datetime.strptime("Jul-30-2015", '%b-%d-%Y'), (-25, 25)),
+        ("Frontier", datetime.strptime("Jul-30-2015", '%b-%d-%Y'), (5, 45)),
         ("Frontier thawing", datetime.strptime("Sep-07-2015", '%b-%d-%Y'), (35, 50)),
         ("Homestead", datetime.strptime("Mar-14-2016", '%b-%d-%Y'), (-30, 0)),
         ("Byzantium", datetime.strptime("Oct-16-2017", '%b-%d-%Y'), (30, 40)),
@@ -578,7 +578,19 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
                            showarrow=True,
                            arrowhead=2,
                            arrowsize=1.5)
-    
+
+    date_pos = parameters['date_pos'][0] 
+    peak_eth_supply =  df.loc[date_pos.strftime("%Y-%m-%d")]['eth_supply'][0]
+    if peak_eth_supply > df['eth_supply'].iloc[-1]:
+        fig.add_annotation(x=date_pos, y=df.loc[date_pos.strftime("%Y-%m-%d")]['eth_supply'][0],
+                            text='Peak ETH Supply',
+                            yref='y2',
+                            ay=30,
+                            ax=5,
+                            showarrow=True,
+                            arrowhead=2,
+                            arrowsize=1.5)
+
 
     for idx, (name, date) in enumerate(system_dates):
         fig.add_trace(
@@ -589,7 +601,7 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
                 marker_line_width=2, marker_size=10,
                 hovertemplate=name,
                 name=name,
-                textfont_size=11,
+                #textfont_size=11,
                 text=name,
                 textposition="top center",
                 legendgroup='markers',
