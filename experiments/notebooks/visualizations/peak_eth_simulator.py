@@ -1,5 +1,3 @@
-import plotly.express as px
-from datetime import date
 from jupyter_dash import JupyterDash
 import dash_core_components as dcc
 import dash_html_components as html
@@ -11,13 +9,13 @@ import psutil
 
 import experiments.notebooks.visualizations as visualizations
 import experiments.notebooks.visualizations.plotly_theme
-import experiments.templates.time_domain_analysis as time_domain_analysis
+import experiments.templates.peak_eth_simulation as peak_eth_simulation
 from experiments.run import run
 from data.historical_values import df_ether_supply
 
 
-# Fetch the time-domain analysis experiment
-experiment = time_domain_analysis.experiment
+# Fetch the Peak ETH Simulation experiment
+experiment = peak_eth_simulation.experiment
 # Create a copy of the experiment simulation
 simulation = copy.deepcopy(experiment.simulations[0])
 
@@ -207,7 +205,6 @@ def run_simulation(validators_per_epoch, pos_launch_date, eip1559_base_fee):
     })
 
     df, _exceptions = run(simulation)
-    print(df)
 
     return df, simulation.model.params
 

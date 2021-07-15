@@ -1,35 +1,44 @@
-# Mathematical Specification
+# Mathematical Model Specification
+[![hackmd-github-sync-badge](https://hackmd.io/wHM-t557Tp2BH1gItdRvFA/badge)](https://hackmd.io/wHM-t557Tp2BH1gItdRvFA)
 
-:warning: The Mathematical Specification needs to be updated to cover the latest Ethereum Altair updates
+Mathematical Model Specification for the [CADLabs Ethereum Economic Model](https://github.com/CADLabs/ethereum-economic-model/releases/tag/v1.0.0) version v1.0.0.
+
+:::warning
+While the implemented model reflects the official Ethereum [Altair](https://github.com/ethereum/eth2.0-specs#altair) spec updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release, this Mathematical Model Specification is still being updated.
+:::
+
+:::info
+If you are not viewing this document in HackMD, it was formatted using Markdown and LaTeX to be rendered in HackMD. For the best viewing experience see https://hackmd.io/@CADLabs/ryLrPm2T_
+:::
 
 ## Overview
 
-This Mathematical Specification articulates the relevant Eth2 validator economics system dynamics as a [state-space representation](https://en.wikipedia.org/wiki/State-space_representation). Given the iterative nature of dynamical systems modeling work, we expect to make adjustments to this Mathematical Specification as we build and validate the cadCAD model.
+This Mathematical Model Specification articulates the relevant Ethereum validator economics system dynamics as a [state-space representation](https://en.wikipedia.org/wiki/State-space_representation). Given the iterative nature of dynamical systems modelling workflows, we expect to make adjustments to this Mathematical Model Specification as we build and validate the cadCAD model.
 
 ### Level of Aggregation
 
-Although cadCAD technically supports several computational modeling paradigms (e.g. agent-based modeling, population-level modeling, system dynamics modeling, hybrid modeling, etc.) we adopt an aggregate system dynamics lense in our MVP educational model. Rather than modelling the behaviour of individual agents, we consider what is often called a "representative agent" in economics literature. This allows us to apply aggregation and approximation for groups of agents or in our case, validator environments.
+Although cadCAD technically supports several computational modelling paradigms (e.g. agent-based modelling, population-level modelling, system dynamics modelling, hybrid modelling, etc.) we adopt an aggregate system dynamics lense in our MVP educational model. Rather than modelling the behaviour of individual agents, we consider what is often called a "representative agent" in economics literature. This allows us to apply aggregation and approximation for groups of agents or in our case, validators aggregated as validator environments.
 
 ### Statistical Approximations
 
 The aggregate system dynamics point of view led us to make several statistical approximations, e.g.:
 
-* Expected uptime metrics: We use aggregate expected uptime metric assumptions as per survey data by [Hoban/Borgers' Economic Model](https://drive.google.com/file/d/1pwt-EdnjhDLc_Mi2ydHus0_Cm14rs1Aq/view).
-* Per-epoch inclusion distance: We approximate per-epoch inclusion distance as per [Hoban/Borgers' Economic Model](https://drive.google.com/file/d/1pwt-EdnjhDLc_Mi2ydHus0_Cm14rs1Aq/view), using a formula derived by [@hermanjunge](https://github.com/hermanjunge/eth2-reward-simulation/blob/master/assumptions.md#attester-incentives).
+* Expected uptime metrics: we use aggregate expected uptime metric assumptions as per survey data by [Hoban/Borgers' Economic Model](https://drive.google.com/file/d/1pwt-EdnjhDLc_Mi2ydHus0_Cm14rs1Aq)
+* Using an average priority fee for transactions, and assuming the long-term average gas used per block is equal to the gas target
 
 ### Epoch-level Granularity
 
-Unless specified otherwise, all State Variables, System Metrics, and System Parameters are time-dependent and calculated at per-epoch granularity. For ease of notation, units of time will be assumed implicitly. In the model implementation, calculations can be aggregated across epochs where necessary - for example for performance reasons.
+Unless specified otherwise in the Mathematical Model Specification, all State Variables, System Metrics, and System Parameters are time-dependent and calculated at per-epoch granularity. For ease of notation, units of time will be assumed implicitly. In the model implementation, calculations can be aggregated across epochs where necessary - for example for performance reasons.
 
 ## Notation
 
-The Mathematical Specification uses the following notation:
+The Mathematical Model Specification uses the following notation:
 * A list / vector of units or in calculations is represented using the matrix symbol: $\begin{bmatrix} x \end{bmatrix}$
 * A list or vector variable is represented using the vector symbol: $\vec{x}$
 * A $\Rightarrow$ symbol represents a function that returns a value, ignoring the arguments. For example a Python lambda function `lambda x: 1` would be represented as: $\Rightarrow 1$
 * The superscript $S^+$ is used to define a state transition from state $S$ at the current epoch $e$, to the state at the next epoch $e + 1$
 
-The following domain notation is used in the Mathematical Specification:
+The following domain notation is used in the Mathematical Model Specification:
 * $\mathbb{Z}$ - positive and negative integers
 * $\mathbb{R}$ - positive and negative real numbers 
 * $\mathbb{Z}^+$ - positive integers
@@ -160,9 +169,19 @@ System Parameters are used as configurable variables as part of the model's Syst
 
 In a cadCAD model, parameters are lists of Python types that can be swept, or in the case of a stochastic process used to perform a Monte Carlo simulation. For the purpose of experimentation we've set defaults, and will sweep parameters within reasonable ranges around these defaults.
 
-For reasons of clarity and comprehensibility we categorize parameters as: Eth2 Official Specification Parameters,
+Any parameter with the suffix `_process` can be assumed to be a Python lambda function used to generate a series of values for said parameter, indexed by the run and/or timestep. An illustrative example:
 
-### Eth2 Official Specification System Parameters
+```python
+import random
+
+TIMESTEPS = 100
+samples = random.sample(range(95, 99), TIMESTEPS + 1)
+validator_uptime_process = lambda _run, timestep: samples[timestep] / 100
+```
+
+For reasons of clarity and comprehensibility we categorize parameters as either Ethereum Official Specification, Validator Environment, Validator Performance, or Transaction Pricing System Parameters.
+
+### Ethereum Official Specification System Parameters
 
 All System Parameters in this category use uppercase snake-case variable naming for easy recognition, such as `BASE_REWARD_FACTOR`.
 
@@ -180,39 +199,35 @@ All System Parameters in this category use uppercase snake-case variable naming 
 
 | Variable | Unit | Description |
 | -------- | -------- | -------- |
-| `validator_percentage_distribution` | $\begin{bmatrix} \% \end{bmatrix}$ | The distribution of the total number of validators per validator type |
-| `validator_hardware_costs_per_epoch` | $$\begin{bmatrix} \$ \end{bmatrix}$$ | The per-epoch costs for DIY hardware infrastructure per validator type |
-| `validator_cloud_costs_per_epoch` | $$\begin{bmatrix} \$ \end{bmatrix}$$ | The per-epoch costs for cloud computing resources per validator type |
+| `validator_percentage_distribution` | $\begin{bmatrix} \% \end{bmatrix}$ | The distribution of the total number of validators per validator type. Vector sum is a total of 100%. |
+| `validator_hardware_costs_per_epoch` | $$\begin{bmatrix} USD \end{bmatrix}$$ | The per-epoch costs for DIY hardware infrastructure per validator type |
+| `validator_cloud_costs_per_epoch` | $$\begin{bmatrix} USD \end{bmatrix}$$ | The per-epoch costs for cloud computing resources per validator type |
 | `validator_third_party_costs_per_epoch` | $\begin{bmatrix} \% \end{bmatrix}$ | A percentage value of the total validator rewards that goes to third-party service providers as a fee per validator type |
 
 ### Validator Performance System Parameters
 
 | Variable | Default Value | Unit | Description |
 | -------- | -------- | -------- | -------- |
-| `validator_internet_uptime` |99.9| $\%$ | The expected average uptime due to internet issues |
-| `validator_power_uptime` |99.9| $\%$ | The expected average uptime due to power issues |
-| `validator_technical_uptime` |98.2| $\%$ | The expected average uptime due to technical constraints |
+| `validator_uptime_process` | `max(0.98, 2 / 3)` | $\%$ | The expected average validator uptime. A combination of validator internet, power, and technical uptime: 99.9 * 99.9 * 98.2. Minimum uptime is inactivity leak threshold of `2/3`, as this model doesn't model the inactivity leak process. |
 | `slashing_events_per_1000_epochs` | `1` | $\frac{1}{1000}\text{epochs}$ | The expected number of validator actions that result in slashing per 1000 epochs |
-| `number_of_validating_penalties` | `3` | None | The total number of validation penalty types |
 
-### EIP1559 System Parameters
+### Transaction Pricing System Parameters
 
 | Variable | Default Value | Unit | Description |
 | -------- | -------- | -------- | -------- |
-| `eip1559_basefee` | `1` | $\text{Gwei}$ | Assuming a fixed 1 Gwei basefee, for the purpose of the MVP model. To be validated during model implementation. |
-| `eip1559_avg_tip_amount` | `0.01` | $\%$ | Assuming a fixed 1% tip amount, for the purpose of the MPV model. To be validated during model implementation. |
-| `eip1559_avg_transactions_per_day` | `688078` | None | Average transactions per day over past 6 months. To be validated during model implementation. |
-| `eip1559_avg_gas_per_transaction` | `73123` | $\text{Gas}$ | Average transaction gas over past 6 months. To be validated during model implementation. |
+| `base_fee_process` | `70` | $\text{Gwei/gas}$ | EIP1559 transaction pricing base fee burned, in Gwei per gas, for each transaction. Default value approximated using average gas price, assuming influence of MEV. |
+| `priority_fee_process` | `30` | $\text{Gwei/gas}$ | EIP1559 transaction pricing priority fee, in Gwei per gas. Default value approximated using average gas price, assuming influence of MEV. |
+| `gas_target_process` | `15e6` | $\text{Gas}$ | The long-term average gas target per block. Simplifying assumption that gas used per block will equal gas target on average over long-term. |
 
 ## State Update Logic
 
 After defining the model's state-space in the form of System States, we describe their state update logic, represented as cadCAD policy and State Update Functions (also called "mechanisms" sometimes)
 
-To visualize the state update logic, we use a differential specification diagram (also known as a "cadCAD Canvas" at cadCAD Edu). This diagram will accompany the derivation of the Mathematical Specification of the model mechanisms.
+To visualize the state update logic, we use a differential specification diagram (also known as a "cadCAD Canvas" at cadCAD Edu). This diagram will accompany the derivation of the Mathematical Model Specification of the model mechanisms.
 
-The [model's cadCAD Canvas / Differential Specification](https://lucid.app/lucidchart/invitations/accept/07b715e4-80c9-4901-8ba7-f3309e52a38d?viewport_loc=41%2C-239%2C5380%2C3206%2CQe-m-rCpJ8RS) is accessible via LucidChart. Below is an illustrative screenshot. 
+The [model's cadCAD Canvas / Differential Model Specification](https://lucid.app/lucidchart/c7656072-e601-4ec4-a44b-0a15c9a5700d/view) is accessible via LucidChart. Below is an illustrative screenshot. 
 
-![](https://i.imgur.com/vGaNGf3.png)
+![](https://i.imgur.com/DQWxj7W.png)
 
 We describe the state update logic along the columns of the model's cadCAD Canvas' columns, also known as "Partial State Update Blocks" (PSUB). One round of execution of these Partial State Update Blocks would represent the state transition from one epoch to the next.
 
@@ -227,25 +242,21 @@ The following constants are used in the derivation of the State Update Logic.
 
 ### PSUB 1: Environmental Processes
 
-:::info
-These are the ETH price and ETH staked processes, defined in the model specification, that update the ETH price and ETH staked at each timestep.
-:::
+ETH price and ETH staked are driven by environmental processes, defined earlier in the Model Specification, that update the ETH price and ETH staked at each timestep.
 
 The ETH supply at the next epoch is equal to ETH supply at the current epoch plus the total network issuance:
 $$
 S^+ = S + (R_v + R_w - Z_v - \psi - F)
 $$
 
-The total ETH staked is the sum ETH staked for all validator types:
+The total ETH staked is the sum of ETH staked for all validator types:
 $$
 X = \sum_{i=1}^{V}{\sigma_{ij}}
 $$
 
 ### PSUB 2: Validators
 
-:::info
 Validators entering the system are driven by the total ETH staked in the system, and online and offline validators are approximated statistically.
-:::
 
 The total validators is equal to the number of online and offline validators:
 
@@ -266,10 +277,6 @@ The following mathematical pseudo-code is used to calculate the aggregate averag
 
 ### PSUB 3: Base Reward
 
-:::info
-The base reward is updated at each timestep according to the average effective balance and the amount of ETH staked in the system.
-:::
-
 The base reward is calculated as the average effective balance multiplied by the ratio of the base reward factor, to the square-root of the total ETH staked multiplied by the base rewards per epoch:
 
 $$
@@ -278,9 +285,7 @@ $$
 
 ### PSUB 4: Block Proposal and Attestation
 
-:::info
 The rewards and penalties from PoS block proposal and attestation are approximated and aggregated across all validators at each epoch.
-:::
 
 #### Source, Target, and Head Rewards
 
@@ -327,10 +332,6 @@ $$
 
 ### PSUB 5: Slashing
 
-:::info
-Slashing is performed and whistleblower rewards distributed, approximated using the total number of offline validators.
-:::
-
 The whistleblower reward is calculated as the current average effective balance divided by the whistleblower reward quotient, multiplied by the number of slashing events in the current epoch:
 
 $$
@@ -345,10 +346,6 @@ $$
 
 ### PSUB 6: EIP1559 Sub-system
 
-:::info
-The total basefee and tips to validators are calculated at each timestep, according to average expected transaction rates.
-:::
-
 EIP1559 introduces a basefee that is burned, and tips to validators, the total basefee and tips per epoch being calculated as:
 
 $$
@@ -359,16 +356,13 @@ $$
 T = \frac{\text{eip1559_avg_transactions_per_day}}{E_{day}} \times \text{eip1559_avg_gas_per_transaction} \\ \times \text{eip1559_avg_tip_amount} 
 $$
 
-
-
-
-The following state-update logic for system metric State Variables can also be performend in post-processing, to improve run-time performance.
-
 ## System Metrics
 
-System Metrics are computed from State Variables in order to assess the performance of the system. The calculation of our System Metrics is also represented in the [model's cadCAD Canvas / Differential Specification](https://lucid.app/lucidchart/invitations/accept/07b715e4-80c9-4901-8ba7-f3309e52a38d?viewport_loc=41%2C-239%2C5380%2C3206%2CQe-m-rCpJ8RS) and accessible via LucidChart. Below is an illustrative screenshot. 
+System Metrics are computed from State Variables in order to assess the performance of the system. The calculation of our System Metrics is also represented in the [model's cadCAD Canvas / Differential Model Specification](https://lucid.app/lucidchart/c7656072-e601-4ec4-a44b-0a15c9a5700d/view) and accessible via LucidChart. Below is an illustrative screenshot.
 
-![](https://i.imgur.com/VTiLNne.png)
+![](https://i.imgur.com/5xAaCCm.png)
+
+The following state-update logic for system metric State Variables can also be performed in post-processing, to improve run-time performance.
 
 #### Network Costs
 

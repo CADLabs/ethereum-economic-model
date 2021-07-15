@@ -554,7 +554,7 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
     # Beacon Chain genesis Dec-01-2020 12:00:35 PM +UTC
 
     historical_dates = [
-        ("Frontier", datetime.strptime("Jul-30-2015", '%b-%d-%Y'), (5, 45)),
+        ("Frontier", datetime.strptime("Jul-30-2015", '%b-%d-%Y'), (-20, 45)),
         ("Frontier thawing", datetime.strptime("Sep-07-2015", '%b-%d-%Y'), (35, 50)),
         ("Homestead", datetime.strptime("Mar-14-2016", '%b-%d-%Y'), (-30, 0)),
         ("Byzantium", datetime.strptime("Oct-16-2017", '%b-%d-%Y'), (30, 40)),
@@ -571,7 +571,12 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
     ]
 
     for (name, date, (ay, ax)) in historical_dates:
-        fig.add_annotation(x=date, y=df.loc[date.strftime("%Y-%m-%d")][column][0],
+        nearest_row = df.iloc[
+            df.index.get_loc(date.strftime("%Y-%m-%d"), method='nearest')
+        ]
+        x_datetime = nearest_row['timestamp'][0]
+        y_value = nearest_row[column][0]
+        fig.add_annotation(x=x_datetime, y=y_value,
                            text=name,
                            ay=ay,
                            ax=ax,
@@ -580,7 +585,7 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
                            arrowsize=1.5)
 
     date_pos = parameters['date_pos'][0] 
-    peak_eth_supply =  df.loc[date_pos.strftime("%Y-%m-%d")]['eth_supply'][0]
+    peak_eth_supply = df.loc[date_pos.strftime("%Y-%m-%d")]['eth_supply'][0]
     if peak_eth_supply > df['eth_supply'].iloc[-1]:
         fig.add_annotation(x=date_pos, y=df.loc[date_pos.strftime("%Y-%m-%d")]['eth_supply'][0],
                             text='Peak ETH Supply',
@@ -665,7 +670,11 @@ def plot_eth_supply_over_all_stages(df):
 def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated, parameters=parameters):
     df_historical = df_historical.set_index('timestamp', drop=False)
     df_simulated = df_simulated.set_index('timestamp', drop=False)
-
+    
+    df_historical['supply_inflation_pct'] = df_historical['supply_inflation_pct_rolling']
+    df_historical = df_historical.drop(df_historical.tail(1).index)  
+    df_historical.loc[df_simulated.index[0]] = df_simulated.iloc[0]
+    
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
     fig.add_trace(
