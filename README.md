@@ -93,13 +93,13 @@ The [Mathematical Model Specification](https://hackmd.io/@CADLabs/ryLrPm2T_) art
 
 ### Differential Model Specification
 
-The [Differential Model Specification](https://hackmd.io/@CADLabs/HyENPQ36u) visualizes the model's overall structure across System States, System Inputs, System Parameters, State Update Logic and System Metrics.
+The [Differential Model Specification](https://hackmd.io/@CADLabs/HyENPQ36u) depicts the model's overall structure across System States, System Inputs, System Parameters, State Update Logic and System Metrics.
 
 ## Environment Setup
 
 1. Clone or download the Git repository: `git clone https://github.com/CADLabs/ethereum-model` or using GitHub Desktop
 2. If completing the cadCAD Edu Masterclass MOOC, check out the version `v1.0.0` tag: `git checkout tags/v1.0.0`
-3. Set up your development environment using of the following two following two options
+3. Set up your development environment using of the following two options:
 
 ### Option 1: Local Development Environment
 
