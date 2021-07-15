@@ -594,6 +594,22 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
                             arrowhead=2,
                             arrowsize=1.5)
 
+    date_annotation = datetime.strptime("Dec-01-2024", '%b-%d-%Y')
+    fig.add_annotation(x=date_annotation, y=-1.75,
+                        text='Deflationary',
+                        showarrow=True,
+                        ay=-30,
+                        ax=0,
+                        arrowhead=2,
+                        arrowsize=1.5)
+
+    fig.add_annotation(x=date_annotation, y=1.75,
+                        text='Inflationary',
+                        showarrow=True,
+                        ay=30,
+                        ax=0,
+                        arrowhead=2,
+                        arrowsize=1.5)
 
     for idx, (name, date) in enumerate(system_dates):
         fig.add_trace(
