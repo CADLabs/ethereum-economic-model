@@ -105,7 +105,7 @@ The [Differential Model Specification](https://hackmd.io/@CADLabs/HyENPQ36u) dep
 
 This section describes how to set up a custom development environment using Python 3 and Jupyter.
 
-Please note the following prerequisites before gettings started:
+Please note the following prerequisites before getting started:
 * Python: tested with versions 3.7, 3.8, 3.9
 * NodeJS might be needed if using Plotly with Jupyter Lab (Plotly works out the box when using the Anaconda/Conda package manager with Jupyter Lab or Jupyter Notebook)
 
