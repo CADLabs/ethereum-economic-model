@@ -16,7 +16,6 @@ eth_price_mean = df_ether_price.Value.mean()
 eth_price_min = df_ether_price.Value.min()
 eth_price_max = df_ether_price.Value.max()
 
-
 # Calculate historical Ether supply inflation
 df_ether_supply = pd.read_csv(file_ether_supply_csv)
 df_ether_supply['timestamp'] = pd.to_datetime(df_ether_supply['UnixTimeStamp'], unit='s')
@@ -26,5 +25,6 @@ df_ether_supply = df_ether_supply.set_index('timestamp', drop=False)
 df_ether_supply['supply_inflation'] = \
     constants.epochs_per_year * (df_ether_supply['eth_supply'].shift(-1) - df_ether_supply['eth_supply']) \
     / (df_ether_supply['eth_supply'] * DELTA_TIME)
-df_ether_supply = df_ether_supply.fillna(method='bfill')
 df_ether_supply['supply_inflation_pct'] = df_ether_supply['supply_inflation'] * 100
+df_ether_supply['supply_inflation_pct_rolling'] = df_ether_supply['supply_inflation_pct'].rolling(14).mean()
+df_ether_supply = df_ether_supply.fillna(method='bfill')
