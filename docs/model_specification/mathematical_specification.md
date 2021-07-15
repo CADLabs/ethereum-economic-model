@@ -3,9 +3,13 @@
 
 Mathematical Model Specification for the [CADLabs Ethereum Economic Model](https://github.com/CADLabs/ethereum-economic-model/releases/tag/v1.0.0) version v1.0.0.
 
-:warning: While the implemented model reflects the official Ethereum [Altair](https://github.com/ethereum/eth2.0-specs#altair) spec updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release, this Mathematical Model Specification is still being updated.
+:::warning
+While the implemented model reflects the official Ethereum [Altair](https://github.com/ethereum/eth2.0-specs#altair) spec updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release, this Mathematical Model Specification is still being updated.
+:::
 
-:warning: If you are not viewing this document in HackMD, it was formatted using Markdown and LaTeX to be rendered in HackMD. For the best viewing experience see https://hackmd.io/@CADLabs/ryLrPm2T_
+:::info
+If you are not viewing this document in HackMD, it was formatted using Markdown and LaTeX to be rendered in HackMD. For the best viewing experience see https://hackmd.io/@CADLabs/ryLrPm2T_
+:::
 
 ## Overview
 
