@@ -271,3 +271,19 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 The code repository `CADLabs/ethereum-economic-model` is licensed under the GNU General Public License v3.0.
 
 Permissions of this strong copyleft license are conditioned on making available complete source code of licensed works and modifications, which include larger works using a licensed work under the same license. Copyright and license notices must be preserved. Contributors provide an express grant of patent rights.
+
+If you'd like to cite this code and/or research, we suggest the following format:
+
+> CADLabs, Ethereum Economic Model, (2021), GitHub repository, https://github.com/CADLabs/ethereum-economic-model
+
+```latex
+@misc{Charles2013,
+  author = {CADLabs},
+  title = {Ethereum Economic Model},
+  year = {2021},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/CADLabs/ethereum-economic-model}},
+  version = {v1.0.0}
+}
+```
