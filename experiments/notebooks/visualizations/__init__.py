@@ -554,13 +554,13 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
     # Beacon Chain genesis Dec-01-2020 12:00:35 PM +UTC
 
     historical_dates = [
-        ("Frontier", datetime.strptime("Jul-30-2015", '%b-%d-%Y')),
-        ("Frontier thawing", datetime.strptime("Sep-07-2015", '%b-%d-%Y')),
-        ("Homestead", datetime.strptime("Mar-14-2016", '%b-%d-%Y')),
-        ("Byzantium", datetime.strptime("Oct-16-2017", '%b-%d-%Y')),
-        ("Constantinople", datetime.strptime("Feb-28-2019", '%b-%d-%Y')),
-        ("Istanbul", datetime.strptime("Dec-08-2019", '%b-%d-%Y')),
-        ("Muir Glacier", datetime.strptime("Jan-02-2020", '%b-%d-%Y')),
+        ("Frontier", datetime.strptime("Jul-30-2015", '%b-%d-%Y'), (-20, 45)),
+        ("Frontier thawing", datetime.strptime("Sep-07-2015", '%b-%d-%Y'), (35, 50)),
+        ("Homestead", datetime.strptime("Mar-14-2016", '%b-%d-%Y'), (-30, 0)),
+        ("Byzantium", datetime.strptime("Oct-16-2017", '%b-%d-%Y'), (30, 40)),
+        ("Constantinople", datetime.strptime("Feb-28-2019", '%b-%d-%Y'), (30, -15)),
+        ("Istanbul", datetime.strptime("Dec-08-2019", '%b-%d-%Y'), (30, -10)),
+        ("Muir Glacier", datetime.strptime("Jan-02-2020", '%b-%d-%Y'), (-30, 0)),
     ]
 
     system_dates = [
@@ -570,7 +570,7 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
         ("Proof of Stake", parameters["date_pos"][0]),
     ]
 
-    for (name, date) in historical_dates:
+    for (name, date, (ay, ax)) in historical_dates:
         nearest_row = df.iloc[
             df.index.get_loc(date.strftime("%Y-%m-%d"), method='nearest')
         ]
@@ -578,10 +578,38 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
         y_value = nearest_row[column][0]
         fig.add_annotation(x=x_datetime, y=y_value,
                            text=name,
+                           ay=ay,
+                           ax=ax,
                            showarrow=True,
                            arrowhead=2,
                            arrowsize=1.5)
-    
+
+    date_pos = parameters['date_pos'][0] 
+    peak_eth_supply = df.loc[date_pos.strftime("%Y-%m-%d")]['eth_supply'][0]
+    if peak_eth_supply > df['eth_supply'].iloc[-1]:
+        fig.add_annotation(x=date_pos, y=df.loc[date_pos.strftime("%Y-%m-%d")]['eth_supply'][0],
+                            text='Peak ETH Supply',
+                            yref='y2',
+                            showarrow=True,
+                            arrowhead=2,
+                            arrowsize=1.5)
+
+    date_annotation = datetime.strptime("Dec-01-2024", '%b-%d-%Y')
+    fig.add_annotation(x=date_annotation, y=-1.75,
+                        text='Deflationary',
+                        showarrow=True,
+                        ay=-30,
+                        ax=0,
+                        arrowhead=2,
+                        arrowsize=1.5)
+
+    fig.add_annotation(x=date_annotation, y=1.75,
+                        text='Inflationary',
+                        showarrow=True,
+                        ay=30,
+                        ax=0,
+                        arrowhead=2,
+                        arrowsize=1.5)
 
     for idx, (name, date) in enumerate(system_dates):
         fig.add_trace(
@@ -592,7 +620,7 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
                 marker_line_width=2, marker_size=10,
                 hovertemplate=name,
                 name=name,
-                textfont_size=11,
+                #textfont_size=11,
                 text=name,
                 textposition="top center",
                 legendgroup='markers',
@@ -726,6 +754,7 @@ def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated, p
 
     fig.update_layout(
         xaxis_title="Date",
+        title="Peak ETH Simulator",
         legend_title="",
         height=1000,
         legend=dict(
