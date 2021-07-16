@@ -913,7 +913,7 @@ def plot_number_of_validators_in_activation_queue_over_time(df):
     return fig
 
 
-def plot_revenue_profit_yields_over_time_foreach_subset_subplots(df, subplot_titles=[]):
+def plot_yields_per_subset_subplots(df, subplot_titles=[]):
     color_cycle = itertools.cycle(cadlabs_colorway_sequence)
 
     fig = make_subplots(rows=1, cols=3, shared_yaxes=True, subplot_titles=subplot_titles)
@@ -979,7 +979,7 @@ def plot_revenue_profit_yields_over_time_foreach_subset_subplots(df, subplot_tit
     return fig
 
 
-def plot_revenue_profit_yields_over_time_foreach_subset(df):
+def plot_yields_per_subset(df):
     scenario_names = {0: 'Normal Adoption', 1: 'Low Adoption', 2: 'High Adoption'}
     color_cycle = itertools.cycle(cadlabs_colorway_sequence)
 
@@ -1029,7 +1029,8 @@ def plot_revenue_profit_yields_over_time_foreach_subset(df):
             dict(
                 label='Revenue Yields',
                 method='update',
-                args=[{'visible': [True, 'legendonly']}, {'showlegend': True}]
+                args=[{'visible': [True, 'legendonly']}, {'showlegend': True}],
+                
             ),
             dict(
                 label='Profit Yields',
@@ -1042,7 +1043,7 @@ def plot_revenue_profit_yields_over_time_foreach_subset(df):
         pad={"t": 10},
         x=0,
         xanchor="left",
-        y=1.1,
+        y=1.15,
         yanchor="top"
     )])
 
@@ -1051,7 +1052,7 @@ def plot_revenue_profit_yields_over_time_foreach_subset(df):
     return fig
 
 
-def plot_expanding_mean_revenue_profit_yields_over_time_foreach_subset(df):
+def plot_cumulative_yields_per_subset(df):
     scenario_names = {0: 'Normal Adoption', 1: 'Low Adoption', 2: 'High Adoption'}
     color_cycle = itertools.cycle(cadlabs_colorway_sequence)
 
@@ -1059,15 +1060,18 @@ def plot_expanding_mean_revenue_profit_yields_over_time_foreach_subset(df):
 
     for subset in df.subset.unique():
         df_subset = df.query(f'subset == {subset}').copy()
-
-        df_subset['avg_revenue_yields_pct'] = df_subset['total_revenue_yields_pct'].expanding().mean()
-        df_subset['avg_profit_yields_pct'] = df_subset['total_profit_yields_pct'].expanding().mean()
+        
+        df_subset['daily_revenue_yields_pct'] = df_subset['total_revenue_yields_pct'] / 365
+        df_subset['daily_profit_yields_pct'] = df_subset['total_profit_yields_pct'] / 365
+        
+        df_subset['cumulative_revenue_yields_pct'] = df_subset['daily_revenue_yields_pct'].expanding().sum()
+        df_subset['cumulative_profit_yields_pct'] = df_subset['daily_profit_yields_pct'].expanding().sum()
 
         color = next(color_cycle)
         fig.add_trace(
             go.Scatter(
                 x=df['timestamp'],
-                y=df_subset['avg_revenue_yields_pct'],
+                y=df_subset['cumulative_revenue_yields_pct'],
                 name=f"{scenario_names[subset]} Revenue Yields",
                 line=dict(color=color),
             ),
@@ -1075,7 +1079,7 @@ def plot_expanding_mean_revenue_profit_yields_over_time_foreach_subset(df):
         fig.add_trace(
             go.Scatter(
                 x=df['timestamp'],
-                y=df_subset['avg_profit_yields_pct'],
+                y=df_subset['cumulative_profit_yields_pct'],
                 name=f"{scenario_names[subset]} Profit Yields",
                 line=dict(color=color, dash='dash'),
                 visible=False
@@ -1083,9 +1087,9 @@ def plot_expanding_mean_revenue_profit_yields_over_time_foreach_subset(df):
         )
 
     fig.update_layout(
-        title="Cumulative Average Revenue or Profit Yields Over Time",
+        title="Cumulative Revenue or Profit Yields Over Time",
         xaxis_title="Date",
-        yaxis_title="Yields (%/year)",
+        yaxis_title="Cumulative Yields (%)",
         legend_title=""
     )
 
@@ -1122,7 +1126,88 @@ def plot_expanding_mean_revenue_profit_yields_over_time_foreach_subset(df):
     )])
 
     fig.update_layout(hovermode='x unified')
+    
+    return fig
 
+
+def plot_cumulative_returns_per_subset(df):
+    scenario_names = {0: 'Normal Adoption', 1: 'Low Adoption', 2: 'High Adoption'}
+    color_cycle = itertools.cycle(cadlabs_colorway_sequence)
+
+    fig = go.Figure()
+
+    for subset in df.subset.unique():
+        df_subset = df.query(f'subset == {subset}').copy()
+        
+        df_subset['daily_revenue_yields_pct'] = df_subset['total_revenue_yields_pct'] / 365
+        df_subset['daily_profit_yields_pct'] = df_subset['total_profit_yields_pct'] / 365
+        
+        df_subset['cumulative_revenue_yields_pct'] = df_subset['daily_revenue_yields_pct'].expanding().sum()
+        df_subset['cumulative_profit_yields_pct'] = df_subset['daily_profit_yields_pct'].expanding().sum()
+        
+        df_subset['cumulative_revenue'] = 1 + df_subset['cumulative_revenue_yields_pct'] / 100
+        df_subset['cumulative_profit'] = 1 + df_subset['cumulative_revenue_yields_pct'] / 100
+
+        color = next(color_cycle)
+        fig.add_trace(
+            go.Scatter(
+                x=df['timestamp'],
+                y=df_subset['cumulative_revenue'],
+                name=f"{scenario_names[subset]} Revenue Yields",
+                line=dict(color=color),
+            ),
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=df['timestamp'],
+                y=df_subset['cumulative_profit'],
+                name=f"{scenario_names[subset]} Profit Yields",
+                line=dict(color=color, dash='dash'),
+                visible=False
+            ),
+        )
+
+    fig.update_layout(
+        title="Cumulative Revenue or Profit Returns Over Time",
+        xaxis_title="Date",
+        yaxis_title="Cumulative Returns (USD)",
+        legend_title=""
+    )
+
+    fig.update_layout(
+        xaxis=dict(
+            rangeslider=dict(
+                visible=True
+            ),
+            type="date"
+        )
+    )
+
+    fig.update_layout(updatemenus=[dict(
+        type="buttons",
+        buttons=[
+            dict(
+                label='Revenue Yields',
+                method='update',
+                args=[{'visible': [True, 'legendonly']}, {'showlegend': True}]
+            ),
+            dict(
+                label='Profit Yields',
+                method='update',
+                args=[{'visible': ['legendonly', True]}, {'showlegend': True}]
+            )
+        ],
+        direction='right',
+        showactive=True,
+        pad={"t": 10},
+        x=0,
+        xanchor="left",
+        y=1.1,
+        yanchor="top"
+    )])
+
+    fig.update_layout(hovermode='x unified')
+    
     return fig
 
 
@@ -1291,7 +1376,7 @@ def plot_network_issuance_scenarios(df, simulation_names):
                                         simulation_names[simulation_key][subset] for subset in
                                         simulation_df.subset.unique()
                                     ]),
-                                    'type': 'scatter'
+                                    'type': 'scatter',
                                 }
                             ],
                             ))
