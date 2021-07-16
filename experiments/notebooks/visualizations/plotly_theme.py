@@ -142,7 +142,6 @@ pio.templates["cadlabs_dark"] = go.layout.Template(
     layout_paper_bgcolor='rgb(17,17,17)',
     layout_width=1200,
     layout_height=675,
-
     layout_colorway = cadlabs_colorway_sequence,
     layout_xaxis={
             'automargin': True,
@@ -211,7 +210,7 @@ pio.templates["cadlabs_frontend"] = go.layout.Template(
      }
 )
 
-
+# Set this to one of the custom themes above to change default
 pio.templates.default = "cadlabs"
 
 # Legend at bottom of chart
