@@ -1,0 +1,807 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Experiment Notebook: Model Validation &#8212; CADLabs Ethereum Research Model Documentation</title>
+    
+  <link href="../../_static/css/theme.css" rel="stylesheet" />
+  <link href="../../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.acff12b8f9c144ce68a297486a2fa670.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Experiment Notebook: Validator Revenue and Profit Yields" href="2_validator_revenue_and_profit_yields.html" />
+    <link rel="prev" title="Experiment Quick-Start Guide" href="0_README.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+      
+      <h1 class="site-logo" id="site-title">CADLabs Ethereum Research Model Documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../docs/landing-page.html">
+   Landing Page
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Documentation
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference external" href="https://cadlabs.github.io/ethereum-economic-model/model/index.html">
+   Model Code Documentation
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Experiment Notebooks
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="0_README.html">
+   Experiment Quick-Start Guide
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Experiment Notebook: Model Validation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="2_validator_revenue_and_profit_yields.html">
+   Experiment Notebook: Validator Revenue and Profit Yields
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="3_network_issuance_and_inflation_rate.html">
+   Experiment Notebook: Network Issuance and Inflation Rate
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Simulation Profiling
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="simulation_profiling/simulation_timestep_substep_profiling.html">
+   Simulation Timestep &amp; Substep Profiling
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/experiments/notebooks/1_model_validation.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/experiments/notebooks/1_model_validation.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Experiment Notebook: Model Validation
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#table-of-contents">
+   Table of Contents
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#experiment-summary">
+   Experiment Summary
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#experiment-assumptions">
+   Experiment Assumptions
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#experiment-setup">
+   Experiment Setup
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#analysis-1-profit-yields-across-validator-environments">
+     Analysis 1: Profit Yields Across Validator Environments
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#configuration">
+       Configuration
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#execution">
+       Execution
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#output-preparation">
+       Output Preparation
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#analysis-results">
+       Analysis Results
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#analysis-2-network-yields-and-network-inflation">
+     Analysis 2: Network Yields and Network Inflation
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id1">
+       Configuration
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id2">
+       Execution
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id3">
+       Output Preparation
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id4">
+       Analysis Results
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#analysis-3-revenue-profit-yield-spread-three-region-analysis">
+     Analysis 3: Revenue/Profit Yield Spread (“Three Region Analysis”)
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id5">
+       Configuration
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id6">
+       Execution
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id7">
+       Output Preparation
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id8">
+       Analysis Results
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="experiment-notebook-model-validation">
+<h1>Experiment Notebook: Model Validation<a class="headerlink" href="#experiment-notebook-model-validation" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="table-of-contents">
+<h1>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="#Experiment-Summary">Experiment Summary</a></p></li>
+<li><p><a class="reference external" href="#Experiment-Assumptions">Experiment Assumptions</a></p></li>
+<li><p><a class="reference external" href="#Experiment-Setup">Experiment Setup</a></p></li>
+<li><p><a class="reference external" href="#Analysis-1:-Profit-Yields-Across-Validator-Environments">Analysis 1: Profit Yields Across Validator Environments</a></p></li>
+<li><p><a class="reference external" href="#Analysis-2:-Network-Yields-and-Network-Inflation">Analysis 2: Network Yields and Network Inflation</a></p></li>
+<li><p><a class="reference external" href="#Analysis-3:-Revenue/Profit-Yield-Spread-(%22Three-Region-Analysis%22)">Analysis 3: Revenue/Profit Yield Spread (“Three Region Analysis”)</a></p></li>
+</ul>
+</div>
+<div class="section" id="experiment-summary">
+<h1>Experiment Summary<a class="headerlink" href="#experiment-summary" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of this notebook is to recreate selected scenario analyses from the (widely acknowledged) <a class="reference external" href="https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE">Hoban/Borgers Ethereum 2.0 Economic Model</a> using the CADLabs model, and to compare the results.</p>
+<p><strong>Analysis 1, “Profit Yields Across Validator Environments”</strong>, plots the average profitability of validators across different validator environments in two different adoption (i.e. total ETH staked) scenarios and a wide range of ETH prices. A description of the different validator environments and respective assumptions can be found in the <span class="xref myst">assumptions document</span>.</p>
+<p><strong>Analysis 2, “Network Yields and Network Inflation”</strong>, combines the simulation of average (i.e. not validator-environment specific) Revenue Yields, Profit Yields (across two illustrative ETH price levels), with the associated overall network inflation.</p>
+<p><strong>Analysis 3, “Revenue/Profit Yield Spread “Three Region Analysis””</strong>, compares the spread between average (i.e. not validator-environment specific) Revenue Yields and Profit Yields across a wide range of ETH prices, and across the two adoption scenarios seen earlier in this notebook.</p>
+<p>These analyses and illustrative insights will be described in further detail in their corresponding sections.</p>
+</div>
+<div class="section" id="experiment-assumptions">
+<h1>Experiment Assumptions<a class="headerlink" href="#experiment-assumptions" title="Permalink to this headline">¶</a></h1>
+<p>Our model adopts a range of assumptions from the Hoban/Borgers Ethereum 2.0 Economic Model (notably all validator cost assumptions across validator environments).
+However, because the Hoban/Borgers Model was published pre-Altair and the CADLabs model post-Altair, some assumptions differ slightly (notably validator incentive parameters, and rewards such as the new sync committee reward). Hence, rather than a perfect match of simulation results, we expect a very close match, which will serve the purpose of a sanity check.</p>
+<p>See <span class="xref myst">assumptions document</span> for further details.</p>
+</div>
+<div class="section" id="experiment-setup">
+<h1>Experiment Setup<a class="headerlink" href="#experiment-setup" title="Permalink to this headline">¶</a></h1>
+<p>We begin with several experiment-notebook-level preparatory setup operations:</p>
+<ul class="simple">
+<li><p>Import relevant dependencies</p></li>
+<li><p>Import relevant experiment templates</p></li>
+<li><p>Create copies of experiments</p></li>
+<li><p>Configure and customize experiments</p></li>
+</ul>
+<p>Analysis-specific setup operations are handled in their respective notebook sections.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">setup</span>
+
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">radcad</span> <span class="kn">import</span> <span class="n">Engine</span>
+
+<span class="kn">import</span> <span class="nn">experiments.notebooks.visualizations</span> <span class="k">as</span> <span class="nn">visualizations</span>
+<span class="kn">from</span> <span class="nn">experiments.run</span> <span class="kn">import</span> <span class="n">run</span>
+<span class="kn">from</span> <span class="nn">model.types</span> <span class="kn">import</span> <span class="n">Stage</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Enable/disable logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import experiment templates</span>
+<span class="kn">from</span> <span class="nn">experiments.default_experiment</span> <span class="kn">import</span> <span class="n">experiment</span><span class="p">,</span> <span class="n">TIMESTEPS</span><span class="p">,</span> <span class="n">DELTA_TIME</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a copy of the simulation</span>
+<span class="n">simulation</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">experiment</span><span class="o">.</span><span class="n">simulations</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># Override default-experiment System Parameters</span>
+<span class="c1"># using assumptions from Hoban/Borgers Economic Report</span>
+<span class="n">simulation</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+    <span class="s2">&quot;stage&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">Stage</span><span class="o">.</span><span class="n">BEACON_CHAIN</span><span class="p">],</span>
+    <span class="s2">&quot;daily_pow_issuance&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>  <span class="c1"># ETH</span>
+    <span class="c1"># Combine the validator internet (99.9%), power (99.9%), and technical (98.2%) uptime</span>
+    <span class="c1"># from Hoban/Borgers Report</span>
+    <span class="s2">&quot;validator_uptime_process&quot;</span><span class="p">:</span> <span class="p">[</span><span class="k">lambda</span> <span class="n">_run</span><span class="p">,</span> <span class="n">_timestep</span><span class="p">:</span> <span class="mf">0.999</span> <span class="o">*</span> <span class="mf">0.999</span> <span class="o">*</span> <span class="mf">0.982</span><span class="p">],</span>  <span class="c1"># Percentage (unitless)</span>
+<span class="p">})</span>
+
+<span class="c1"># Override default-experiment State Variables</span>
+<span class="c1"># using assumptions from Hoban/Borgers Economic Report</span>
+<span class="n">simulation</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">initial_state</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+    <span class="s2">&quot;eth_supply&quot;</span><span class="p">:</span> <span class="mi">112_000_000</span><span class="p">,</span>  <span class="c1"># ETH</span>
+    <span class="s2">&quot;eth_price&quot;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>  <span class="c1"># USD/ETH</span>
+    <span class="s2">&quot;eth_staked&quot;</span><span class="p">:</span> <span class="mi">524_288</span><span class="p">,</span>  <span class="c1"># ETH</span>
+    <span class="s2">&quot;number_of_validators&quot;</span><span class="p">:</span> <span class="mi">16_384</span><span class="p">,</span>  <span class="c1"># Unitless</span>
+<span class="p">})</span>
+
+<span class="c1"># Set runs to number of ETH price / staked samples</span>
+<span class="n">simulation</span><span class="o">.</span><span class="n">runs</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="c1"># Run single timestep, set unit of time `dt` to multiple epochs</span>
+<span class="c1"># (see 0_README.ipynb for further details)</span>
+<span class="n">simulation</span><span class="o">.</span><span class="n">timesteps</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">simulation</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;dt&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">TIMESTEPS</span> <span class="o">*</span> <span class="n">DELTA_TIME</span><span class="p">]})</span>
+
+<span class="c1"># Drop state history substeps to improve performance</span>
+<span class="c1"># (see 0_README.ipynb for further details)</span>
+<span class="n">simulation</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">(</span><span class="n">drop_substeps</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="analysis-1-profit-yields-across-validator-environments">
+<h2>Analysis 1: Profit Yields Across Validator Environments<a class="headerlink" href="#analysis-1-profit-yields-across-validator-environments" title="Permalink to this headline">¶</a></h2>
+<p>The below analysis from the <a class="reference external" href="https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE">Hoban/Borgers Ethereum 2.0 Economic Model</a> simulates how the average annual-validator profitability varies across validator environments (deployment type) and ETH price ranges. The first analysis simulates the original Beacon Chain minimum requirement of 524,288 ETH staked, the second analysis a much higher adoption level at 33,6m ETH staked. Insights include:</p>
+<ul class="simple">
+<li><p>The average annual-validator profitability across all validator environments is much lower in the high-adoption scenario due to systematically lower revenue yields</p></li>
+<li><p>As ETH approaches very low price levels, a “profitability cliff” exists for all non-StaaS (Staking-as-a-Service) validator environments in both adoption scenarios (assumes that StaaS providers offer constant ETH returns)</p></li>
+<li><p>Average annual-validator profitability between validator environments converge as adoption and ETH price grow, due to decreasing relevance of operational costs</p></li>
+</ul>
+<p>In a next step, we will recreate the below analysis using the CADLabs model and compare the results.</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Annualized Model - Profit Yields of Validator Environments at 524_288 ETH Staked</p></th>
+<th class="head"><p>Annualized Model - Profit Yields of Validator Environments at 33_600_000 ETH Staked</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><img alt="alt" src="../../_images/experiment_model_validation_scenario_1a.png" /></p></td>
+<td><p><img alt="alt" src="../../_images/experiment_model_validation_scenario_1b.png" /></p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a copy of the simulation</span>
+<span class="n">simulation_1</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">simulation</span><span class="p">)</span>
+
+<span class="c1"># Create a range of 50 discrete ETH price values starting at</span>
+<span class="c1"># 25 USD/ETH and ending at 1500 USD/ETH</span>
+<span class="c1"># Assumption adopted from Hoban/Borgers Economic Report</span>
+<span class="n">eth_price_samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
+    <span class="n">start</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+    <span class="n">stop</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span>
+    <span class="n">num</span><span class="o">=</span><span class="mi">50</span>
+<span class="p">)</span>
+
+<span class="n">parameter_overrides</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;eth_price_process&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="c1"># Sample the ETH price values using the run as the index</span>
+        <span class="k">lambda</span> <span class="n">run</span><span class="p">,</span> <span class="n">timestep</span><span class="p">:</span> <span class="n">eth_price_samples</span><span class="p">[</span><span class="n">run</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;eth_staked_process&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="c1"># A sweep of two fixed ETH staked points</span>
+        <span class="c1"># Assumption adopted from Hoban/Borgers Economic Report</span>
+        <span class="k">lambda</span> <span class="n">_run</span><span class="p">,</span> <span class="n">_timestep</span><span class="p">:</span> <span class="mi">524_288</span><span class="p">,</span>  <span class="c1"># Beacon Chain genesis ETH staked requirement</span>
+        <span class="k">lambda</span> <span class="n">_run</span><span class="p">,</span> <span class="n">_timestep</span><span class="p">:</span> <span class="mi">33_600_000</span><span class="p">,</span>  <span class="c1"># 30% of the total ETH supply</span>
+    <span class="p">],</span>
+<span class="p">}</span>
+
+<span class="c1"># Override default experiment parameters</span>
+<span class="n">simulation_1</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parameter_overrides</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="execution">
+<h3>Execution<a class="headerlink" href="#execution" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_1</span><span class="p">,</span> <span class="n">exceptions</span> <span class="o">=</span> <span class="n">run</span><span class="p">(</span><span class="n">simulation_1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="output-preparation">
+<h3>Output Preparation<a class="headerlink" href="#output-preparation" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_1</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="analysis-results">
+<h3>Analysis Results<a class="headerlink" href="#analysis-results" title="Permalink to this headline">¶</a></h3>
+<p>The below plots recreate Hoban/Borgers’ analysis using the same validator adoption levels (524,288 ETH to 33,6m ETH) and cost assumptions. The profit yields across validator environments and adoption levels match very closely (e.g. at the 524,288 ETH staked adoption level and assuming an ETH price of 500 USD/ETH, profit yields for a StaaS validator are shown at around 18-19%; those were profitable days. We conclude that the model is valid for this specific analysis.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">visualizations</span><span class="o">.</span><span class="n">plot_validator_environment_yields</span><span class="p">(</span><span class="n">df_1</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="analysis-2-network-yields-and-network-inflation">
+<h2>Analysis 2: Network Yields and Network Inflation<a class="headerlink" href="#analysis-2-network-yields-and-network-inflation" title="Permalink to this headline">¶</a></h2>
+<p>The below analysis from the <a class="reference external" href="https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE">Hoban/Borgers Ethereum 2.0 Economic Model</a> combines the simulation of average (i.e. not validator-environment specific) Revenue Yields, Profit Yields (across two illutrative ETH price levels), with the associated overall network inflation. Illustrative insights include:</p>
+<ul class="simple">
+<li><p>Both Revenue Yields and Profit Yields decrease systematically as adoption grows (base-reward decreases at square root of number of validators, hence yields decrease)</p></li>
+<li><p>Profit Yields at the 25 USD/ETH price level are lower (in fact negative as adoption grows) than at the 1500 USD/ETH price level (decreasing relevance of operational costs)</p></li>
+<li><p>Network issuance is expected to stay below 1% per year (and in fact turn negative after EIP1559 implementation)</p></li>
+</ul>
+<p>In a next step, we will recreate the below analysis using the CADLabs model and compare the results.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">profit_yield_at_1500_dollars</span> <span class="o">=</span> <span class="mf">20.48</span>
+<span class="n">profit_yield_at_25_dollars</span> <span class="o">=</span> <span class="mf">14.39</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Difference between profit yields for each ETH price scenario</span>
+<span class="n">profit_yield_at_1500_dollars</span> <span class="o">-</span> <span class="n">profit_yield_at_25_dollars</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Annualized Model – Rev Yields vs. Network Inflation
+<span style="display:block;"><img src="../outputs/hoban_borgers_economic_model/experiment_model_validation_scenario_2.png" width="50%"/></span></p>
+<div class="section" id="id1">
+<h3>Configuration<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a copy of the simulation</span>
+<span class="n">simulation_2</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">simulation</span><span class="p">)</span>
+
+<span class="c1"># Create a range of 50 discrete ETH staked values starting at</span>
+<span class="c1"># the Beacon Chain genesis requirement of 524_288 ETH staked and ending at</span>
+<span class="c1"># 30% of the ETH supply (33_600_000 ETH staked at time of report)</span>
+<span class="c1"># Assumption adopted from Hoban/Borgers Economic Report</span>
+<span class="n">eth_staked_samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
+    <span class="mi">524_288</span><span class="p">,</span>
+    <span class="mi">33_600_000</span><span class="p">,</span>
+    <span class="mi">50</span>
+<span class="p">)</span>
+
+<span class="n">parameter_overrides</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;eth_staked_process&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="c1"># Sample the ETH staked values using the run as the index</span>
+        <span class="k">lambda</span> <span class="n">run</span><span class="p">,</span> <span class="n">timestep</span><span class="p">:</span> <span class="n">eth_staked_samples</span><span class="p">[</span><span class="n">run</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;eth_price_process&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="c1"># A sweep of two fixed ETH price points</span>
+        <span class="c1"># Assumption adopted from Hoban/Borgers Economic Report</span>
+        <span class="k">lambda</span> <span class="n">_run</span><span class="p">,</span> <span class="n">_timestep</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">_run</span><span class="p">,</span> <span class="n">_timestep</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">}</span>
+
+<span class="c1"># Override default experiment parameters</span>
+<span class="n">simulation_2</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parameter_overrides</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="id2">
+<h3>Execution<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_2</span><span class="p">,</span> <span class="n">exceptions</span> <span class="o">=</span> <span class="n">run</span><span class="p">(</span><span class="n">simulation_2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>Output Preparation<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_2</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="id4">
+<h3>Analysis Results<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>The below plot recreates Hoban/Borgers’ analysis. The Profit Yields in each ETH price scenario differ slightly between the Hoban/Borgers and the CADLabs model – likely due to the Altair updates – whereas the annualized inflation rates match very closely, within <code class="docutils literal notranslate"><span class="pre">0.01</span></code> of a percent. We conclude that the model is valid for this specific scenario analysis.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">visualizations</span><span class="o">.</span><span class="n">plot_revenue_yields_vs_network_inflation</span><span class="p">(</span><span class="n">df_2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Difference between profit yields for each ETH price scenario</span>
+<span class="n">df_2</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;subset == 1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;total_profit_yields_pct&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_2</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;subset == 0&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;total_profit_yields_pct&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Minimum and maximum annualized inflation rate</span>
+<span class="p">(</span><span class="n">df_2</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;subset == 0&#39;</span><span class="p">)[</span><span class="s1">&#39;supply_inflation&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="analysis-3-revenue-profit-yield-spread-three-region-analysis">
+<h2>Analysis 3: Revenue/Profit Yield Spread (“Three Region Analysis”)<a class="headerlink" href="#analysis-3-revenue-profit-yield-spread-three-region-analysis" title="Permalink to this headline">¶</a></h2>
+<p>The below “Three Region Analysis” from the <a class="reference external" href="https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE">Hoban/Borgers Ethereum 2.0 Economic Model</a> compares the spread between average (i.e. not validator-environment specific) Revenue Yields and Profit Yields across a wide range of ETH prices, and across the two adoption scenarios seen earlier in this notebook. Illustrative insights include:</p>
+<ul class="simple">
+<li><p>As ETH approaches very low price levels, a “profitability cliff” exists in both adoption scenarios, as operational costs squeeze validators’ margins</p></li>
+<li><p>The Revenue/Profit Yield Spread is smaller in the high-adoption scenario as Revenue decreases, but costs remain constant in dollars</p></li>
+</ul>
+<p>In a next step, we will recreate the below analysis using the CADLabs model and compare the results.</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Annualized Model - Revenue/Profit Yield Spread at 524_288 ETH Staked</p></th>
+<th class="head"><p>Annualized Model - Revenue/Profit Yield Spread at 33_600_000 ETH Staked</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><img alt="alt" src="../../_images/experiment_model_validation_scenario_3a.png" /></p></td>
+<td><p><img alt="alt" src="../../_images/experiment_model_validation_scenario_3b.png" /></p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="id5">
+<h3>Configuration<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a copy of the simulation</span>
+<span class="n">simulation_3</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">simulation</span><span class="p">)</span>
+
+<span class="c1"># Create a range of 50 discrete ETH price values starting at</span>
+<span class="c1"># 25 USD/ETH and ending at 1500 USD/ETH</span>
+<span class="c1"># Assumption adopted from Hoban/Borgers Economic Report</span>
+<span class="n">eth_price_samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
+    <span class="n">start</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+    <span class="n">stop</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span>
+    <span class="n">num</span><span class="o">=</span><span class="mi">50</span>
+<span class="p">)</span>
+
+<span class="n">parameter_overrides</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;eth_price_process&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="c1"># Sample the ETH price values using the run as the index</span>
+        <span class="k">lambda</span> <span class="n">run</span><span class="p">,</span> <span class="n">_timestep</span><span class="p">:</span> <span class="n">eth_price_samples</span><span class="p">[</span><span class="n">run</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;eth_staked_process&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="c1"># A sweep of two fixed ETH staked points</span>
+        <span class="c1"># Assumption adopted from Hoban/Borgers Economic Report</span>
+        <span class="k">lambda</span> <span class="n">_run</span><span class="p">,</span> <span class="n">_timestep</span><span class="p">:</span> <span class="mi">524_288</span><span class="p">,</span>  <span class="c1"># Beacon Chain genesis ETH staked requirement</span>
+        <span class="k">lambda</span> <span class="n">_run</span><span class="p">,</span> <span class="n">_timestep</span><span class="p">:</span> <span class="mi">33_600_000</span><span class="p">,</span>  <span class="c1"># 30% of the total ETH supply</span>
+    <span class="p">],</span>
+<span class="p">}</span>
+
+<span class="c1"># Override default experiment parameters</span>
+<span class="n">simulation_3</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parameter_overrides</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="id6">
+<h3>Execution<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_3</span><span class="p">,</span> <span class="n">exceptions</span> <span class="o">=</span> <span class="n">run</span><span class="p">(</span><span class="n">simulation_3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="id7">
+<h3>Output Preparation<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_3</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="id8">
+<h3>Analysis Results<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<p>The below plots recreate Hoban/Borgers’ analysis. The Revenue/Profit Yield Spread for our model closely matches the <a class="reference external" href="https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE">Hoban/Borgers Ethereum 2.0 Economic Model</a> for both scenarios. We can conclude that the model is valid for this specific scenario analysis.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">visualizations</span><span class="o">.</span><span class="n">plot_three_region_yield_analysis</span><span class="p">(</span><span class="n">df_3</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;subset == 0&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">visualizations</span><span class="o">.</span><span class="n">plot_three_region_yield_analysis</span><span class="p">(</span><span class="n">df_3</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;subset == 1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python-cadlabs-eth-model",
+            path: "./experiments/notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python-cadlabs-eth-model'</script>
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+    <a class='left-prev' id="prev-link" href="0_README.html" title="previous page">Experiment Quick-Start Guide</a>
+    <a class='right-next' id="next-link" href="2_validator_revenue_and_profit_yields.html" title="next page">Experiment Notebook: Validator Revenue and Profit Yields</a>
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By The Jupyter Book community<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>

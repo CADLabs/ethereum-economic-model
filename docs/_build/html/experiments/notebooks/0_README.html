@@ -1,0 +1,793 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Experiment Quick-Start Guide &#8212; CADLabs Ethereum Research Model Documentation</title>
+    
+  <link href="../../_static/css/theme.css" rel="stylesheet" />
+  <link href="../../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.acff12b8f9c144ce68a297486a2fa670.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Experiment Notebook: Model Validation" href="1_model_validation.html" />
+    <link rel="prev" title="Landing Page" href="../../docs/landing-page.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+      
+      <h1 class="site-logo" id="site-title">CADLabs Ethereum Research Model Documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../docs/landing-page.html">
+   Landing Page
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Documentation
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference external" href="https://cadlabs.github.io/ethereum-economic-model/model/index.html">
+   Model Code Documentation
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Experiment Notebooks
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Experiment Quick-Start Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="1_model_validation.html">
+   Experiment Notebook: Model Validation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="2_validator_revenue_and_profit_yields.html">
+   Experiment Notebook: Validator Revenue and Profit Yields
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="3_network_issuance_and_inflation_rate.html">
+   Experiment Notebook: Network Issuance and Inflation Rate
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Simulation Profiling
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="simulation_profiling/simulation_timestep_substep_profiling.html">
+   Simulation Timestep &amp; Substep Profiling
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/experiments/notebooks/0_README.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/experiments/notebooks/0_README.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Experiment Quick-Start Guide
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#table-of-contents">
+     Table of Contents
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#overview-of-experiment-architecture">
+   Overview of Experiment Architecture
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#experiment-workflow">
+   Experiment Workflow
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#modifying-state-variables">
+     Modifying State Variables
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#modifying-system-parameters">
+     Modifying System Parameters
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#executing-experiments">
+     Executing Experiments
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#post-processing-and-analysing-results">
+     Post-processing and Analysing Results
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#visualizing-results">
+     Visualizing Results
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#creating-new-customized-experiment-notebooks">
+   Creating New, Customized Experiment Notebooks
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#advanced-experiment-configuration-simulation-techniques">
+   Advanced Experiment-configuration &amp; Simulation Techniques
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#setting-simulation-timesteps-and-unit-of-time-dt">
+     Setting Simulation Timesteps and Unit of Time
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       dt
+      </span>
+     </code>
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#considerations-when-performing-efficient-phase-space-simulations">
+       Considerations When Performing Efficient Phase-space Simulations
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#changing-the-ethereum-network-upgrade-stage">
+     Changing the Ethereum Network Upgrade Stage
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#performing-large-scale-experiments">
+     Performing Large-scale Experiments
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#composing-an-experiment-using-simulations-runs-and-subsets">
+       Composing an Experiment Using
+       <strong>
+        simulations, runs, and subsets
+       </strong>
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#configuring-the-radcad-engine-for-high-performance">
+       Configuring the radCAD Engine for High Performance
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#indexing-a-large-scale-experiment-dataset">
+       Indexing a Large-scale Experiment Dataset
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="experiment-quick-start-guide">
+<h1>Experiment Quick-Start Guide<a class="headerlink" href="#experiment-quick-start-guide" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="table-of-contents">
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="#Overview-of-Experiment-Architecture">Overview of Experiment Architecture</a></p></li>
+<li><p><a class="reference external" href="#Experiment-Workflow">Experiment Workflow</a></p>
+<ul>
+<li><p><a class="reference external" href="#Modifying-State-Variables">Modifying State Variables</a></p></li>
+<li><p><a class="reference external" href="#Modifying-System-Parameters">Modifying System Parameters</a></p></li>
+<li><p><a class="reference external" href="#Executing-Experiments">Executing Experiments</a></p></li>
+<li><p><a class="reference external" href="#Post-processing-and-Analysing-Results">Post-processing and Analysing Results</a></p></li>
+<li><p><a class="reference external" href="#Visualizing-Results">Visualizing Results</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#Creating-New,-Customized-Experiment-Notebooks">Creating New, Customized Experiment Notebooks</a></p>
+<ul>
+<li><p>Step 1: Select an experiment template</p></li>
+<li><p>Step 2: Create a new notebook</p></li>
+<li><p>Step 3: Customize the experiment</p></li>
+<li><p>Step 4: Execute the experiment</p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#Advanced-Experiment-configuration-&amp;-Simulation-Techniques">Advanced Experiment-configuration &amp; Simulation Techniques</a></p>
+<ul>
+<li><p><a class="reference external" href="#Setting-Simulation-Timesteps-and-Unit-of-Time-dt">Setting Simulation Timesteps and Unit of Time <code class="docutils literal notranslate"><span class="pre">dt</span></code></a></p></li>
+<li><p><a class="reference external" href="#Changing-the-Ethereum-Network-Upgrade-Stage">Changing the Ethereum Network Upgrade Stage</a></p></li>
+<li><p><a class="reference external" href="#Performing-Large-scale-Experiments">Performing Large-scale Experiments</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="overview-of-experiment-architecture">
+<h1>Overview of Experiment Architecture<a class="headerlink" href="#overview-of-experiment-architecture" title="Permalink to this headline">¶</a></h1>
+<p>The experiment architecture is composed of the following four elements – the <strong>model</strong>, <strong>default experiment</strong>, <strong>experiment templates</strong>, and <strong>experiment notebooks</strong>:</p>
+<ol class="simple">
+<li><p>The <strong>model</strong> is initialized with a default Initial State and set of System Parameters defined in the <code class="docutils literal notranslate"><span class="pre">model</span></code> module.</p></li>
+<li><p>The <strong>default experiment</strong> – in the <code class="docutils literal notranslate"><span class="pre">experiments.default_experiment</span></code> module – is an experiment composed of a single simulation that uses the default cadCAD <strong>model</strong> Initial State and System Parameters. Additional default simulation execution settings such as the number of timesteps and runs are also set in the <strong>default experiment</strong>.</p></li>
+<li><p>The <strong>experiment templates</strong> – in the <code class="docutils literal notranslate"><span class="pre">experiments.templates</span></code> module – contain pre-configured analyses based on the <strong>default experiment</strong>. Examples include <code class="docutils literal notranslate"><span class="pre">experiments.templates.time_domain_analysis</span></code> (simulation in the time-domain over a period of 5 years) and <code class="docutils literal notranslate"><span class="pre">experiments.templates.eth_price_sweep_analysis</span></code> (simulation in the phase-space sweeping over discrete ETH Price values).</p></li>
+<li><p>The <strong>experiment notebooks</strong> perform various scenario analyses by importing existing <strong>experiment templates</strong>, optionally modifying the Initial State and System Parameters within the notebook, and then executing them.</p></li>
+</ol>
+</div>
+<div class="section" id="experiment-workflow">
+<h1>Experiment Workflow<a class="headerlink" href="#experiment-workflow" title="Permalink to this headline">¶</a></h1>
+<p>If you just want to run (execute) existing experiment notebooks, simply open the respective notebook and execute all cells.</p>
+<p>The experiment notebooks will start by importing some standard dependencies:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import the setup module:</span>
+<span class="c1"># * sets up the Python path</span>
+<span class="c1"># * runs shared notebook-configuration methods, such as loading IPython modules</span>
+<span class="kn">import</span> <span class="nn">setup</span>
+
+<span class="c1"># External dependencies</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># Project dependencies</span>
+<span class="kn">import</span> <span class="nn">model.constants</span> <span class="k">as</span> <span class="nn">constants</span>
+<span class="kn">import</span> <span class="nn">experiments.notebooks.visualizations</span> <span class="k">as</span> <span class="nn">visualizations</span>
+<span class="kn">from</span> <span class="nn">experiments.run</span> <span class="kn">import</span> <span class="n">run</span>
+<span class="kn">from</span> <span class="nn">experiments.utils</span> <span class="kn">import</span> <span class="n">inspect_module</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can then import the default experiment, and create a copy of the simulation object – we create a new copy for each analysis we’d like to perform:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">experiments.default_experiment</span> <span class="k">as</span> <span class="nn">default_experiment</span>
+<span class="kn">import</span> <span class="nn">experiments.templates.time_domain_analysis</span> <span class="k">as</span> <span class="nn">time_domain_analysis</span>
+<span class="kn">import</span> <span class="nn">experiments.templates.eth_price_eth_staked_grid_analysis</span> <span class="k">as</span> <span class="nn">eth_price_eth_staked_grid_analysis</span>
+
+<span class="n">simulation_analysis_1</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">default_experiment</span><span class="o">.</span><span class="n">experiment</span><span class="o">.</span><span class="n">simulations</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">simulation_analysis_2</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">time_domain_analysis</span><span class="o">.</span><span class="n">experiment</span><span class="o">.</span><span class="n">simulations</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">simulation_analysis_3</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">eth_price_eth_staked_grid_analysis</span><span class="o">.</span><span class="n">experiment</span><span class="o">.</span><span class="n">simulations</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can use the <code class="docutils literal notranslate"><span class="pre">inspect_module</span></code> method to see the configuration of the default experiment before making changes:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inspect_module</span><span class="p">(</span><span class="n">default_experiment</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="modifying-state-variables">
+<h2>Modifying State Variables<a class="headerlink" href="#modifying-state-variables" title="Permalink to this headline">¶</a></h2>
+<p>To view what the Initial State (radCAD model-configuration setting <code class="docutils literal notranslate"><span class="pre">initial_state</span></code>) of the State Variables are, and to what value they have been set, we can inspect the dictionary as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pprint</span><span class="p">(</span><span class="n">simulation_analysis_1</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">initial_state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>To modify the value of <strong>State Variables</strong> for a specific analysis, you need to select the relevant simulation and update the chosen model Initial State. For example, updating the <code class="docutils literal notranslate"><span class="pre">eth_supply</span></code> Initial State to <code class="docutils literal notranslate"><span class="pre">100e6</span></code> (100 million ETH):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">simulation_analysis_1</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">initial_state</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+    <span class="s2">&quot;eth_supply&quot;</span><span class="p">:</span> <span class="mf">100e6</span><span class="p">,</span> 
+<span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="modifying-system-parameters">
+<h2>Modifying System Parameters<a class="headerlink" href="#modifying-system-parameters" title="Permalink to this headline">¶</a></h2>
+<p>To view what the System Parameters (radCAD model configuration setting <code class="docutils literal notranslate"><span class="pre">params</span></code>) are, and to what value they have been set, we can inspect the dictionary as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pprint</span><span class="p">(</span><span class="n">simulation_analysis_1</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>To modify the value of <strong>System Parameters</strong> for a specific analysis, you need to select the relevant simulation, and update the chosen model System Parameter (which is a list of values). For example, updating the <code class="docutils literal notranslate"><span class="pre">BASE_REWARD_FACTOR</span></code> System Parameter to a sweep of two values, <code class="docutils literal notranslate"><span class="pre">64</span></code> and <code class="docutils literal notranslate"><span class="pre">32</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">simulation_analysis_1</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+    <span class="s2">&quot;BASE_REWARD_FACTOR&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">64</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="executing-experiments">
+<h2>Executing Experiments<a class="headerlink" href="#executing-experiments" title="Permalink to this headline">¶</a></h2>
+<p>We can now execute our custom analysis and retrieve the post-processed Pandas DataFrame using the <code class="docutils literal notranslate"><span class="pre">run(...)</span></code> method:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">,</span> <span class="n">exceptions</span> <span class="o">=</span> <span class="n">run</span><span class="p">(</span><span class="n">simulation_analysis_1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="post-processing-and-analysing-results">
+<h2>Post-processing and Analysing Results<a class="headerlink" href="#post-processing-and-analysing-results" title="Permalink to this headline">¶</a></h2>
+<p>We can see that we had no exceptions for the single simulation we executed:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">exceptions</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;exception&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can simply display the Pandas DataFrame to inspect the results. This DataFrame already has some default post-processing applied (see <span class="xref myst">experiments/post_processing.py</span>)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="visualizing-results">
+<h2>Visualizing Results<a class="headerlink" href="#visualizing-results" title="Permalink to this headline">¶</a></h2>
+<p>Once we have the results post-processed and in a Pandas DataFrame, we can use Plotly for plotting our results, or Pandas for numerical analyses:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">visualizations</span><span class="o">.</span><span class="n">plot_validating_rewards</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">subplot_titles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Base Reward Factor = 64&quot;</span><span class="p">,</span> <span class="s2">&quot;Base Reward Factor = 32&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="creating-new-customized-experiment-notebooks">
+<h1>Creating New, Customized Experiment Notebooks<a class="headerlink" href="#creating-new-customized-experiment-notebooks" title="Permalink to this headline">¶</a></h1>
+<p>If you want to create an entirely new analysis, you’ll need to create a new experiment notebook, which entails the following steps:</p>
+<ul class="simple">
+<li><p>Step 1: Select a base experiment template from the <code class="docutils literal notranslate"><span class="pre">experiments/templates/</span></code> directory to start from. The template <span class="xref myst">example_analysis.py</span> gives an example of extending the default experiment to override default State Variables and System Parameters.</p></li>
+<li><p>Step 2: Create a new notebook in the <code class="docutils literal notranslate"><span class="pre">experiments/notebooks/</span></code> directory, using the <span class="xref myst">template.ipynb</span> notebook as a guide, and import the experiment from the experiment template.</p></li>
+<li><p>Step 3: Customize the experiment for your specific analysis.</p></li>
+<li><p>Step 4: Execute your experiment, post-process and analyze the results, and create Plotly charts!</p></li>
+</ul>
+</div>
+<div class="section" id="advanced-experiment-configuration-simulation-techniques">
+<h1>Advanced Experiment-configuration &amp; Simulation Techniques<a class="headerlink" href="#advanced-experiment-configuration-simulation-techniques" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="setting-simulation-timesteps-and-unit-of-time-dt">
+<h2>Setting Simulation Timesteps and Unit of Time <code class="docutils literal notranslate"><span class="pre">dt</span></code><a class="headerlink" href="#setting-simulation-timesteps-and-unit-of-time-dt" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">model.simulation_configuration</span> <span class="kn">import</span> <span class="n">TIMESTEPS</span><span class="p">,</span> <span class="n">DELTA_TIME</span><span class="p">,</span> <span class="n">SIMULATION_TIME_MONTHS</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can configure the number of simulation timesteps <code class="docutils literal notranslate"><span class="pre">TIMESTEPS</span></code> from a simulation time in months <code class="docutils literal notranslate"><span class="pre">SIMULATION_TIME_MONTHS</span></code>, multiplied by the number of epochs in a month, and divided by the simulation unit of time <code class="docutils literal notranslate"><span class="pre">DELTA_TIME</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SIMULATION_TIME_MONTHS</span> <span class="o">/</span> <span class="mi">12</span>  <span class="c1"># Divide months by 12 to get number of years</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">DELTA_TIME</span></code> is a variable that sets how many epochs are simulated for each timestep. Sometimes, if we don’t need a finer granularity (1 epoch per timestep, for example), we can then set <code class="docutils literal notranslate"><span class="pre">DELTA_TIME</span></code> to a larger value for better performance. The default value is 1 day or <code class="docutils literal notranslate"><span class="pre">225</span></code> epochs. This means that all our time-based states will be for a period of 1 day (we call this “aggregation”), which is convenient.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DELTA_TIME</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">TIMESTEPS</span></code> is now simply the simulation time in months, multiplied by the number of epochs in a month, divided by <code class="docutils literal notranslate"><span class="pre">DELTA_TIME</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">TIMESTEPS</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">epochs_per_month</span> <span class="o">*</span> <span class="n">SIMULATION_TIME_MONTHS</span> <span class="o">//</span> <span class="n">DELTA_TIME</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">TIMESTEPS</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, to set the simulation timesteps (note, you may have to update the environmental processes that depend on the number of timesteps, and override the relevant parameters):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">simulation_analysis_1</span><span class="o">.</span><span class="n">timesteps</span> <span class="o">=</span> <span class="n">TIMESTEPS</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="considerations-when-performing-efficient-phase-space-simulations">
+<h3>Considerations When Performing Efficient Phase-space Simulations<a class="headerlink" href="#considerations-when-performing-efficient-phase-space-simulations" title="Permalink to this headline">¶</a></h3>
+<p>In <code class="docutils literal notranslate"><span class="pre">simulation_analysis_3</span></code>, <code class="docutils literal notranslate"><span class="pre">timesteps</span></code> is decreased to <code class="docutils literal notranslate"><span class="pre">1</span></code>, but <code class="docutils literal notranslate"><span class="pre">dt</span></code> is increased to <code class="docutils literal notranslate"><span class="pre">TIMESTEPS</span> <span class="pre">*</span> <span class="pre">DELTA_TIME</span></code>, where <code class="docutils literal notranslate"><span class="pre">DELTA_TIME</span></code> is the full duration of the simulation. This produces the final result in a single processing cycle, producing the full phase-space with very low processing overhead. This is achieved by ignoring all time-series information between the beginning and end of the simulation.</p>
+<p>There is a test function <code class="docutils literal notranslate"><span class="pre">test_dt(...)</span></code> in <code class="docutils literal notranslate"><span class="pre">tests/test_integration.py</span></code> that can be used to verify that no information is lost due to the approximations taken along the time axis for the specific State Variables that you are interested in, and that your custom code has not introduced mechanisms that might not work well with this kind of approximation.</p>
+<p>An example of a type of mechanism that would not work with this kind of approximation is a mechanism that implements some form of feedback loop.</p>
+</div>
+</div>
+<div class="section" id="changing-the-ethereum-network-upgrade-stage">
+<h2>Changing the Ethereum Network Upgrade Stage<a class="headerlink" href="#changing-the-ethereum-network-upgrade-stage" title="Permalink to this headline">¶</a></h2>
+<p>The model operates over different Ethereum-network upgrade stages. The default experiment operates in the “post-merge” Proof of Stake stage.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Stage</span></code> is an Enum; we can import it and see what options we have:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">model.types</span> <span class="kn">import</span> <span class="n">Stage</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The model is well documented, and we can view the Python docstring to see what a Stage is, and create a dictionary to view the Enum members:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">Stage</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+<span class="p">{</span><span class="n">e</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">e</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">Stage</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">PROOF_OF_STAKE</span></code> stage, for example, assumes the Beacon Chain has been implemented, EIP1559 has been enabled, and POW issuance is disabled:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inspect_module</span><span class="p">(</span><span class="n">Stage</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As before, we can update the “stage” System Parameter to set the relevant Stage:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">simulation_analysis_1</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+    <span class="s2">&quot;stage&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">Stage</span><span class="o">.</span><span class="n">PROOF_OF_STAKE</span><span class="p">]</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="performing-large-scale-experiments">
+<h2>Performing Large-scale Experiments<a class="headerlink" href="#performing-large-scale-experiments" title="Permalink to this headline">¶</a></h2>
+<p>When executing an experiment, we have three degrees of freedom - <strong>simulations, runs, and subsets</strong> (parameter sweeps).</p>
+<p>We can have multiple simulations for a single experiment, multiple runs for every simulation, and we can have multiple subsets for every run. Remember that <code class="docutils literal notranslate"><span class="pre">simulation</span></code>, <code class="docutils literal notranslate"><span class="pre">run</span></code>, and <code class="docutils literal notranslate"><span class="pre">subset</span></code> are simply additional State Variables set by the radCAD engine during execution – we then use those State Variables to index the results for a specific dimension, e.g. simulation 1, run 5, and subset 2.</p>
+<p>Each dimension has a generally accepted purpose:</p>
+<ul class="simple">
+<li><p>Simulations are used for A/B testing</p></li>
+<li><p>Runs are used for Monte Carlo analysis</p></li>
+<li><p>Subsets are used for parameter sweeps</p></li>
+</ul>
+<p>In some cases, we break these “rules” to allow for more degrees of freedom or easier configuration.</p>
+<p>One example of this is the <code class="docutils literal notranslate"><span class="pre">eth_price_eth_staked_grid_analysis</span></code> experiment template we imported earlier:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inspect_module</span><span class="p">(</span><span class="n">eth_price_eth_staked_grid_analysis</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here, we create a grid of two State Variables – ETH price and ETH staked – using the <code class="docutils literal notranslate"><span class="pre">eth_price_process</span></code> and <code class="docutils literal notranslate"><span class="pre">eth_staked_process</span></code>.</p>
+<p>Instead of sweeping the two System Parameters to create different subsets, we pre-generate all possible combinations of the two values first and use the specific <code class="docutils literal notranslate"><span class="pre">run</span></code> to index the data, i.e. for each run we get a new ETH price and ETH staked sample.</p>
+<p>This allows the experimenter (you!) to use a parameter sweep on top of this analysis if they choose, and we have kept one degree of freedom.</p>
+<div class="section" id="composing-an-experiment-using-simulations-runs-and-subsets">
+<h3>Composing an Experiment Using <strong>simulations, runs, and subsets</strong><a class="headerlink" href="#composing-an-experiment-using-simulations-runs-and-subsets" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">radcad</span> <span class="kn">import</span> <span class="n">Experiment</span><span class="p">,</span> <span class="n">Engine</span><span class="p">,</span> <span class="n">Backend</span>
+
+
+<span class="c1"># Create a new Experiment of three Simulations:</span>
+<span class="c1"># * Simulation Analysis 1 has one run and two subsets – a parameter sweep of two values (BASE_REWARD_FACTOR = [64, 32])</span>
+<span class="c1"># * Simulation Analysis 2 has one run and one subset – a basic simulation configuration</span>
+<span class="c1"># * Simulation Analysis 3 has 400 runs (20 * 20) and one subset – a parameter grid indexed using `run`</span>
+<span class="n">experiment</span> <span class="o">=</span> <span class="n">Experiment</span><span class="p">([</span><span class="n">simulation_analysis_1</span><span class="p">,</span> <span class="n">simulation_analysis_2</span><span class="p">,</span> <span class="n">simulation_analysis_3</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="configuring-the-radcad-engine-for-high-performance">
+<h3>Configuring the radCAD Engine for High Performance<a class="headerlink" href="#configuring-the-radcad-engine-for-high-performance" title="Permalink to this headline">¶</a></h3>
+<p>To improve simulation performance for large-scale experiments, we can set the following settings using the radCAD <code class="docutils literal notranslate"><span class="pre">Engine</span></code>. Both Experiments and Simulations have the same <code class="docutils literal notranslate"><span class="pre">Engine</span></code>; when executing an <code class="docutils literal notranslate"><span class="pre">Experiment</span></code> we set these settings on the <code class="docutils literal notranslate"><span class="pre">Experiment</span></code> instance:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configure Experiment Engine</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">(</span>
+    <span class="c1"># Use a single process; the overhead of creating multiple processes</span>
+    <span class="c1"># for parallel-processing is only worthwhile when the Simulation runtime is long</span>
+    <span class="n">backend</span> <span class="o">=</span> <span class="n">Backend</span><span class="o">.</span><span class="n">SINGLE_PROCESS</span><span class="p">,</span>
+    <span class="c1"># Disable System Parameter and State Variable deepcopy:</span>
+    <span class="c1"># * Deepcopy prevents mutation of state at the cost of lower performance</span>
+    <span class="c1"># * Disabling it leaves it up to the experimenter to use Python best-practises to avoid </span>
+    <span class="c1"># state mutation, like manually using `copy` and `deepcopy` methods before</span>
+    <span class="c1"># performing mutating calculations when necessary</span>
+    <span class="n">deepcopy</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="c1"># If we don&#39;t need the state history from individual substeps,</span>
+    <span class="c1"># we can get rid of them for higher performance</span>
+    <span class="n">drop_substeps</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Disable logging</span>
+<span class="c1"># For large experiments, there is lots of logging. This can get messy...</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="c1"># Execute Experiment</span>
+<span class="n">raw_results</span> <span class="o">=</span> <span class="n">experiment</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="indexing-a-large-scale-experiment-dataset">
+<h3>Indexing a Large-scale Experiment Dataset<a class="headerlink" href="#indexing-a-large-scale-experiment-dataset" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a Pandas DataFrame from the raw results</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">experiment</span><span class="o">.</span><span class="n">results</span><span class="p">)</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Select each Simulation dataset</span>
+<span class="n">df_0</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">simulation</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">df_1</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">simulation</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">df_2</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">simulation</span> <span class="o">==</span> <span class="mi">2</span><span class="p">]</span>
+
+<span class="n">datasets</span> <span class="o">=</span> <span class="p">[</span><span class="n">df_0</span><span class="p">,</span> <span class="n">df_1</span><span class="p">,</span> <span class="n">df_2</span><span class="p">]</span>
+
+<span class="c1"># Determine size of Simulation datasets</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">datasets</span><span class="p">):</span>
+    <span class="n">runs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+    <span class="n">subsets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">subset</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+    <span class="n">timesteps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">timestep</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Simulation </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> has </span><span class="si">{</span><span class="n">runs</span><span class="si">}</span><span class="s2"> runs * </span><span class="si">{</span><span class="n">subsets</span><span class="si">}</span><span class="s2"> subsets * </span><span class="si">{</span><span class="n">timesteps</span><span class="si">}</span><span class="s2"> timesteps = </span><span class="si">{</span><span class="n">runs</span> <span class="o">*</span> <span class="n">subsets</span> <span class="o">*</span> <span class="n">timesteps</span><span class="si">}</span><span class="s2"> rows&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Indexing simulation 0, run 1 (indexed from one!), subset 1, timestep 1</span>
+<span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;simulation == 0 and run == 1 and subset == 1 and timestep == 1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python-cadlabs-eth-model",
+            path: "./experiments/notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python-cadlabs-eth-model'</script>
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+    <a class='left-prev' id="prev-link" href="../../docs/landing-page.html" title="previous page">Landing Page</a>
+    <a class='right-next' id="next-link" href="1_model_validation.html" title="next page">Experiment Notebook: Model Validation</a>
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By The Jupyter Book community<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>

@@ -1,0 +1,542 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Experiment Notebook: Network Issuance and Inflation Rate &#8212; CADLabs Ethereum Research Model Documentation</title>
+    
+  <link href="../../_static/css/theme.css" rel="stylesheet" />
+  <link href="../../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.acff12b8f9c144ce68a297486a2fa670.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Simulation Timestep &amp; Substep Profiling" href="simulation_profiling/simulation_timestep_substep_profiling.html" />
+    <link rel="prev" title="Experiment Notebook: Validator Revenue and Profit Yields" href="2_validator_revenue_and_profit_yields.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+      
+      <h1 class="site-logo" id="site-title">CADLabs Ethereum Research Model Documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../docs/landing-page.html">
+   Landing Page
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Documentation
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference external" href="https://cadlabs.github.io/ethereum-economic-model/model/index.html">
+   Model Code Documentation
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Experiment Notebooks
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="0_README.html">
+   Experiment Quick-Start Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="1_model_validation.html">
+   Experiment Notebook: Model Validation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="2_validator_revenue_and_profit_yields.html">
+   Experiment Notebook: Validator Revenue and Profit Yields
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Experiment Notebook: Network Issuance and Inflation Rate
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Simulation Profiling
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="simulation_profiling/simulation_timestep_substep_profiling.html">
+   Simulation Timestep &amp; Substep Profiling
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/experiments/notebooks/3_network_issuance_and_inflation_rate.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/experiments/notebooks/3_network_issuance_and_inflation_rate.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Experiment Notebook: Network Issuance and Inflation Rate
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#table-of-contents">
+   Table of Contents
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#experiment-summary">
+   Experiment Summary
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#experiment-assumptions">
+   Experiment Assumptions
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#experiment-setup">
+   Experiment Setup
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#analysis-inflation-rate-and-eth-supply-over-time">
+   Analysis: Inflation Rate and ETH Supply Over Time
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="experiment-notebook-network-issuance-and-inflation-rate">
+<h1>Experiment Notebook: Network Issuance and Inflation Rate<a class="headerlink" href="#experiment-notebook-network-issuance-and-inflation-rate" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="table-of-contents">
+<h1>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="#Experiment-Summary">Experiment Summary</a></p></li>
+<li><p><a class="reference external" href="#Experiment-Assumptions">Experiment Assumptions</a></p></li>
+<li><p><a class="reference external" href="#Experiment-Setup">Experiment Setup</a></p></li>
+<li><p><a class="reference external" href="#Analysis:-Inflation-Rate-and-ETH-Supply-Over-Time">Analysis: Inflation Rate and ETH Supply Over Time</a></p></li>
+</ul>
+</div>
+<div class="section" id="experiment-summary">
+<h1>Experiment Summary<a class="headerlink" href="#experiment-summary" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of this notebook is to explore the ETH issuance and resulting annualized inflation rate across different time horizons, adoption scenarios, and network-upgrade stages for both historical data and simulated states.</p>
+</div>
+<div class="section" id="experiment-assumptions">
+<h1>Experiment Assumptions<a class="headerlink" href="#experiment-assumptions" title="Permalink to this headline">¶</a></h1>
+<p>See <span class="xref myst">assumptions document</span> for further details.</p>
+</div>
+<div class="section" id="experiment-setup">
+<h1>Experiment Setup<a class="headerlink" href="#experiment-setup" title="Permalink to this headline">¶</a></h1>
+<p>We begin with several experiment-notebook-level preparatory setup operations:</p>
+<ul class="simple">
+<li><p>Import relevant dependencies</p></li>
+<li><p>Import relevant experiment templates</p></li>
+<li><p>Create copies of experiments</p></li>
+<li><p>Configure and customize experiments</p></li>
+</ul>
+<p>Analysis-specific setup operations are handled in their respective notebook sections.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">setup</span>
+
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">IPython</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">import</span> <span class="nn">experiments.notebooks.visualizations</span> <span class="k">as</span> <span class="nn">visualizations</span>
+<span class="kn">from</span> <span class="nn">experiments.notebooks.visualizations.eth_supply_simulator</span> <span class="kn">import</span> <span class="n">run_eth_supply_simulator</span>
+<span class="kn">from</span> <span class="nn">experiments.run</span> <span class="kn">import</span> <span class="n">run</span>
+<span class="kn">from</span> <span class="nn">model.types</span> <span class="kn">import</span> <span class="n">Stage</span>
+<span class="kn">from</span> <span class="nn">data.historical_values</span> <span class="kn">import</span> <span class="n">df_ether_supply</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%html</span>
+<span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+<span class="c">/* Set dark-theme button opacity - see https://github.com/plotly/plotly.py/issues/3120 */</span>
+<span class="p">.</span><span class="nc">updatemenu-item-rect</span> <span class="p">{</span>
+    <span class="n">fill-opacity</span><span class="p">:</span> <span class="mf">0.3</span> <span class="cp">!important</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Enable/disable logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;werkzeug&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;urllib3&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import experiment templates</span>
+<span class="kn">import</span> <span class="nn">experiments.templates.time_domain_analysis</span> <span class="k">as</span> <span class="nn">time_domain_analysis</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fetch the time-domain analysis experiment</span>
+<span class="n">experiment</span> <span class="o">=</span> <span class="n">time_domain_analysis</span><span class="o">.</span><span class="n">experiment</span>
+<span class="c1"># Create a copy of the experiment simulation</span>
+<span class="n">simulation</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">experiment</span><span class="o">.</span><span class="n">simulations</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Experiment configuration</span>
+
+<span class="n">simulation_names</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;Validator Adoption Scenarios&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s1">&#39;Normal Adoption&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Low Adoption&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;High Adoption&#39;</span>
+    <span class="p">],</span>
+    <span class="s1">&#39;PoS Activation Date Scenarios&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;2021/12/1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;2022/03/1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;2022/06/1&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s1">&#39;EIP1559 Scenarios&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s1">&#39;Disabled&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Enabled: Steady State&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;Enabled: MEV&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+
+<span class="n">simulation_1</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">simulation</span><span class="p">)</span>
+<span class="n">simulation_1</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+    <span class="s1">&#39;validator_process&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="k">lambda</span> <span class="n">_run</span><span class="p">,</span> <span class="n">_timestep</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>  <span class="c1"># Normal adoption: current average active validators per epoch from Beaconscan</span>
+        <span class="k">lambda</span> <span class="n">_run</span><span class="p">,</span> <span class="n">_timestep</span><span class="p">:</span> <span class="mi">3</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">,</span>  <span class="c1"># Low adoption: 50%-lower scenario</span>
+        <span class="k">lambda</span> <span class="n">_run</span><span class="p">,</span> <span class="n">_timestep</span><span class="p">:</span> <span class="mi">3</span> <span class="o">*</span> <span class="mf">1.5</span><span class="p">,</span>  <span class="c1"># High adoption: 50%-higher scenario</span>
+    <span class="p">],</span>
+<span class="p">})</span>
+
+<span class="n">simulation_2</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">simulation</span><span class="p">)</span>
+<span class="n">simulation_2</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+    <span class="s1">&#39;date_pos&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s2">&quot;2021/12/1&quot;</span><span class="p">,</span> <span class="s2">&quot;%Y/%m/</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">),</span>
+        <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s2">&quot;2022/03/1&quot;</span><span class="p">,</span> <span class="s2">&quot;%Y/%m/</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">),</span>
+        <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s2">&quot;2022/06/1&quot;</span><span class="p">,</span> <span class="s2">&quot;%Y/%m/</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">),</span>
+    <span class="p">],</span>
+<span class="p">})</span>
+
+<span class="n">simulation_3</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">simulation</span><span class="p">)</span>
+<span class="n">simulation_3</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+    <span class="s1">&#39;base_fee_process&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="k">lambda</span> <span class="n">_run</span><span class="p">,</span> <span class="n">_timestep</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="c1"># Disabled</span>
+        <span class="k">lambda</span> <span class="n">_run</span><span class="p">,</span> <span class="n">_timestep</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="c1"># Enabled: Steady state</span>
+        <span class="k">lambda</span> <span class="n">_run</span><span class="p">,</span> <span class="n">_timestep</span><span class="p">:</span> <span class="mi">70</span><span class="p">,</span> <span class="c1"># Enabled: MEV</span>
+    <span class="p">],</span>  <span class="c1"># Gwei per gas</span>
+    <span class="s1">&#39;priority_fee_process&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="k">lambda</span> <span class="n">_run</span><span class="p">,</span> <span class="n">_timestep</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="c1"># Disabled</span>
+        <span class="k">lambda</span> <span class="n">_run</span><span class="p">,</span> <span class="n">_timestep</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="c1"># Enabled: Steady state</span>
+        <span class="k">lambda</span> <span class="n">_run</span><span class="p">,</span> <span class="n">_timestep</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span> <span class="c1"># Enabled: MEV</span>
+    <span class="p">],</span>  <span class="c1"># Gwei per gas</span>
+<span class="p">})</span>
+
+<span class="n">experiment</span><span class="o">.</span><span class="n">simulations</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">simulation_1</span><span class="p">,</span>
+    <span class="n">simulation_2</span><span class="p">,</span>
+    <span class="n">simulation_3</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">,</span> <span class="n">_exceptions</span> <span class="o">=</span> <span class="n">run</span><span class="p">(</span><span class="n">experiment</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="analysis-inflation-rate-and-eth-supply-over-time">
+<h1>Analysis: Inflation Rate and ETH Supply Over Time<a class="headerlink" href="#analysis-inflation-rate-and-eth-supply-over-time" title="Permalink to this headline">¶</a></h1>
+<p>This analysis enables the exploration of the inflation rate and ETH supply over time, and supports the three adoption scenarios introduced in the second experiment notebook, as well as custom parameter choices for the Proof-of-Stake (PoS) Activation Date (“The Merge”) and EIP1559 base fee and average priority fee.</p>
+<p>Default scenarios were selected for each of the Validator Adoption, Proof-of-Stake Activation Date, and EIP1559 categories:</p>
+<ul class="simple">
+<li><p>Validator Adoption (as seen in Notebook “Validator Revenue and Profit Yields”)</p>
+<ul>
+<li><p>Normal adoption: assumes an average of 3 new validators per epoch. These rates correspond to the actual historical validator adoption between 15th January 2021 and 15 July 2021 as per Beaconscan.</p></li>
+<li><p>Low adoption: assumes an average of 1.5 new validators per epoch, i.e. a 50% lower rate compared to the base scenario</p></li>
+<li><p>High adoption: assumes an average of 4.5 new validators per epoch, i.e. a 50% higher rate compared to the base scenario</p></li>
+</ul>
+</li>
+<li><p>Proof-of-Stake Activation Date</p>
+<ul>
+<li><p>Four scenarios starting from 1 Decemeber 2021 in quarterly increments</p></li>
+</ul>
+</li>
+<li><p>EIP1559 Base Fee and Average Priority Fee (Gwei per gas)</p>
+<ul>
+<li><p>EIP1559 Enabled / No MEV: Base Fee 100, Priority Fee 1 (steady state at current gas prices)</p></li>
+<li><p>EIP1559 Enabled / MEV: Base Fee 70, Priority Fee 30 (models potential influence of MEV on blockspace auction)</p></li>
+<li><p>EIP1559 Disabled: Base Fee 0, Priority Fee 0</p></li>
+</ul>
+</li>
+</ul>
+<p>The first chart (“Inflation Rate and ETH Supply Analysis Scenarios”) depicts the ETH supply for default scenarios of the Validator Adoption, Proof-of-Stake Activation Date, and EIP1559 scenario categories, side by side (choose via button selector). This allows comparative analysis for each category.</p>
+<p>We can interpret that:</p>
+<ul class="simple">
+<li><p>Increased Validator Adoption (i.e. implied ETH staked over time) results in higher inflation due to increased issuance for validator rewards</p></li>
+<li><p>A delay in the Proof-of-Stake Activation Date results in a higher peak ETH supply due to Proof-of-Work issuance being significantly higher than that of Proof-of-Stake</p></li>
+<li><p>EIP1559 results in a deflationary ETH supply, and MEV lowers the base fee in proportion to the increase in priority fee, which reduces the ETH burned and in turn increases the annual inflation rate</p></li>
+</ul>
+<p>The second chart (“Inflation Rate and ETH Supply Over Time”) depicts the historical inflation rate and ETH supply over time alongside the simulated projections of the inflation rate and ETH supply. Various historical and simulated milestones are included for context, such as the “Homestead” hard-fork causing a temporary increase in the inflation rate, or the simulated effect of EIP1559 being enabled and Proof-of-Stake being activated. The interface allows us to both select the default scenarios defined above, or customize each parameter for unique analyses.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">visualizations</span><span class="o">.</span><span class="n">plot_network_issuance_scenarios</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">simulation_names</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">logger</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">run_eth_supply_simulator</span><span class="p">(</span><span class="n">execution_mode</span><span class="o">=</span><span class="s1">&#39;inline&#39;</span><span class="p">)</span>
+
+<span class="c1"># To display in new browser tab at http://127.0.0.1:8050/:</span>
+<span class="c1"># run_eth_supply_simulator(execution_mode=&#39;external&#39;)</span>
+
+<span class="c1"># To display either in &quot;inline&quot; mode when using Jupyter Notebook,</span>
+<span class="c1"># or &quot;jupyterlab&quot; mode when using Jupyter Lab:</span>
+<span class="c1"># run_eth_supply_simulator()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python-cadlabs-eth-model",
+            path: "./experiments/notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python-cadlabs-eth-model'</script>
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+    <a class='left-prev' id="prev-link" href="2_validator_revenue_and_profit_yields.html" title="previous page">Experiment Notebook: Validator Revenue and Profit Yields</a>
+    <a class='right-next' id="next-link" href="simulation_profiling/simulation_timestep_substep_profiling.html" title="next page">Simulation Timestep &amp; Substep Profiling</a>
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By The Jupyter Book community<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>

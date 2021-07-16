@@ -1,12 +1,9 @@
 format: jb-book
 root: docs/landing-page
 parts:
-  - caption: Model Specification
-    chapters:
-    - file: docs/model_specification/mathematical_specification
   - caption: Documentation
     chapters:
-    - url: https://cadlabs.gitlab.io/cadlabs-ethereum-model-docs/docs/index.html
+    - url: https://cadlabs.github.io/ethereum-economic-model/model/index.html
       title: Model Code Documentation
   - caption: Experiment Notebooks
     chapters:

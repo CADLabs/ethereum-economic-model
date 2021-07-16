@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.9.2" />
-<title>model.parts.ethereum_system API documentation</title>
+<title>model.parts.ethereum API documentation</title>
 <meta name="description" content="Ethereum System …" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
@@ -19,12 +19,11 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>model.parts.ethereum_system</code></h1>
+<h1 class="title">Module <code>model.parts.ethereum</code></h1>
 </header>
 <section id="section-intro">
 <h1 id="ethereum-system">Ethereum System</h1>
-<p>General Ethereum mechanisms, such as managing the system upgrade process,
-the EIP1559 transaction pricing mechanism, and updating the ETH price and ETH supply.</p>
+<p>Policy Functions and State Update Functions shared between the Eth1 and Eth2 systems.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -32,94 +31,18 @@ the EIP1559 transaction pricing mechanism, and updating the ETH price and ETH su
 <pre><code class="python">&#34;&#34;&#34;
 # Ethereum System
 
-General Ethereum mechanisms, such as managing the system upgrade process,
-the EIP1559 transaction pricing mechanism, and updating the ETH price and ETH supply.
+Policy Functions and State Update Functions shared between the Eth1 and Eth2 systems.
 &#34;&#34;&#34;
 
 import typing
-import datetime
 
-from model import constants as constants
+import model.constants as constants
 from model.types import ETH, USD_per_ETH, Gwei, Stage
-
-
-def policy_upgrade_stages(params, substep, state_history, previous_state):
-    &#34;&#34;&#34;
-    ## Upgrade Stages Policy
-
-    Transitions the model from one stage in the Ethereum network
-    upgrade process to the next at different milestones.
-
-    This is essentially a finite-state machine: https://en.wikipedia.org/wiki/Finite-state_machine
-    &#34;&#34;&#34;
-
-    # Parameters
-    dt = params[&#34;dt&#34;]
-    stage: Stage = params[&#34;stage&#34;]
-    date_start = params[&#34;date_start&#34;]
-    date_eip1559 = params[&#34;date_eip1559&#34;]
-    date_pos = params[&#34;date_pos&#34;]
-
-    # State Variables
-    current_stage = previous_state[&#34;stage&#34;]
-    timestep = previous_state[&#34;timestep&#34;]
-
-    # Calculate current timestamp from timestep
-    timestamp = date_start + datetime.timedelta(
-        days=(timestep * dt / constants.epochs_per_day)
-    )
-
-    # Initialize stage State Variable at start of simulation
-    if current_stage is None:
-        current_stage = stage
-    else:
-        # Convert Stage enum value (int) to Stage enum
-        current_stage = Stage(current_stage)
-
-    # Stage finite-state machine
-    if stage == Stage.ALL:
-        # If Stage ALL selected, transition through all stages
-        # at different timestamps
-        if (
-            current_stage in [Stage.ALL, Stage.BEACON_CHAIN]
-            and timestamp &lt; date_eip1559
-        ):
-            current_stage = Stage.BEACON_CHAIN
-        elif (
-            current_stage in [Stage.ALL, Stage.BEACON_CHAIN, Stage.EIP1559]
-            and timestamp &lt; date_pos
-        ):
-            current_stage = Stage.EIP1559
-        else:
-            current_stage = Stage.PROOF_OF_STAKE
-    elif stage == Stage.BEACON_CHAIN:
-        # If Stage BEACON_CHAIN selected, only execute single stage
-        current_stage = Stage.BEACON_CHAIN
-    elif stage == Stage.EIP1559:
-        # If Stage EIP1559 selected, only execute single stage
-        current_stage = Stage.EIP1559
-    elif stage == Stage.PROOF_OF_STAKE:
-        # If Stage PROOF_OF_STAKE selected, only execute single stage
-        current_stage = Stage.PROOF_OF_STAKE
-    else:
-        # Else, raise exception if invalid Stage
-        raise Exception(&#34;Invalid Stage selected&#34;)
-
-    return {
-        &#34;stage&#34;: current_stage.value,
-        &#34;timestamp&#34;: timestamp,
-    }
 
 
 def policy_network_issuance(
     params, substep, state_history, previous_state
 ) -&gt; typing.Dict[str, ETH]:
-    &#34;&#34;&#34;
-    ## Network Issuance Policy Function
-
-    Calculate the total network issuance and issuance from Proof of Work block rewards.
-    &#34;&#34;&#34;
-
     # Parameters
     dt = params[&#34;dt&#34;]
     daily_pow_issuance = params[&#34;daily_pow_issuance&#34;]
@@ -127,18 +50,16 @@ def policy_network_issuance(
     # State Variables
     stage = previous_state[&#34;stage&#34;]
     amount_slashed = previous_state[&#34;amount_slashed&#34;]
-    total_base_fee = previous_state[&#34;total_base_fee&#34;]
-    total_priority_fee_to_validators = previous_state[
-        &#34;total_priority_fee_to_validators&#34;
-    ]
+    total_basefee = previous_state[&#34;total_basefee&#34;]
+    total_priority_fee_to_validators = previous_state[&#34;total_priority_fee_to_validators&#34;]
     total_online_validator_rewards = previous_state[&#34;total_online_validator_rewards&#34;]
 
     # Calculate network issuance in ETH
     network_issuance = (
-        # Remove priority fee to validators which is not issuance (ETH transferred rather than minted)
+        # Remove tips to validators which is not issuance (ETH transferred rather than minted)
         (total_online_validator_rewards - total_priority_fee_to_validators)
         - amount_slashed
-        - total_base_fee
+        - total_basefee
     ) / constants.gwei
 
     # Calculate Proof of Work issuance
@@ -158,9 +79,7 @@ def policy_network_issuance(
 def policy_eip1559_transaction_pricing(
     params, substep, state_history, previous_state
 ) -&gt; typing.Dict[str, Gwei]:
-    &#34;&#34;&#34;
-    ## EIP1559 Transaction Pricing Mechanism
-
+    &#34;&#34;&#34;EIP1559 Transaction Pricing Mechanism
     A transaction pricing mechanism that includes fixed-per-block network fee
     that is burned and dynamically expands/contracts block sizes to deal with transient congestion.
 
@@ -170,32 +89,33 @@ def policy_eip1559_transaction_pricing(
     &#34;&#34;&#34;
 
     stage = Stage(previous_state[&#34;stage&#34;])
-    if stage not in [Stage.EIP1559, Stage.PROOF_OF_STAKE]:
+    if not stage in [Stage.EIP1559, Stage.PROOF_OF_STAKE]:
         return {
-            &#34;base_fee_per_gas&#34;: 0,
-            &#34;total_base_fee&#34;: 0,
-            &#34;total_priority_fee_to_miners&#34;: 0,
+            &#34;basefee&#34;: 0,
+            &#34;total_basefee&#34;: 0,
+            &#34;total_tips_to_miners&#34;: 0,
             &#34;total_priority_fee_to_validators&#34;: 0,
         }
 
     # Parameters
     dt = params[&#34;dt&#34;]
-    gas_target_process = params[&#34;gas_target_process&#34;]  # Gas
+    gas_target = params[&#34;gas_target&#34;]  # Gas
     ELASTICITY_MULTIPLIER = params[&#34;ELASTICITY_MULTIPLIER&#34;]
-    base_fee_process = params[&#34;base_fee_process&#34;]
-    priority_fee_process = params[&#34;priority_fee_process&#34;]
+    BASE_FEE_MAX_CHANGE_DENOMINATOR = params[&#34;BASE_FEE_MAX_CHANGE_DENOMINATOR&#34;]
+    eip1559_basefee_process = params[&#34;eip1559_basefee_process&#34;]
+    eip1559_tip_process = params[&#34;eip1559_tip_process&#34;]
+    daily_transactions_process = params[&#34;daily_transactions_process&#34;]
+    transaction_average_gas = params[&#34;transaction_average_gas&#34;]
 
     # State Variables
     run = previous_state[&#34;run&#34;]
     timestep = previous_state[&#34;timestep&#34;]
+    previous_basefee = previous_state[&#34;basefee&#34;]
 
-    # Get samples for current run and timestep from base fee, priority fee, and transaction processes
-    base_fee_per_gas = base_fee_process(run, timestep * dt)  # Gwei per Gas
-
-    gas_target = gas_target_process(run, timestep * dt)  # Gas
+    # Get samples for current run and timestep from basefee, tip, and transaction processes
+    basefee = eip1559_basefee_process(run, timestep * dt)  # Gwei per Gas
 
     # Ensure basefee changes by no more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %
-    _BASE_FEE_MAX_CHANGE_DENOMINATOR = params[&#34;BASE_FEE_MAX_CHANGE_DENOMINATOR&#34;]
     # assert (
     #     abs(basefee - previous_basefee) / previous_basefee
     #     &lt;= constants.slots_per_epoch / BASE_FEE_MAX_CHANGE_DENOMINATOR
@@ -203,22 +123,24 @@ def policy_eip1559_transaction_pricing(
     #     else True
     # ), &#34;basefee changed by more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %&#34;
 
-    avg_priority_fee_per_gas = priority_fee_process(run, timestep * dt)  # Gwei per Gas
+    avg_tip_amount = eip1559_tip_process(run, timestep * dt)  # Gwei per Gas
+    transactions_per_day = daily_transactions_process(
+        run, timestep * dt
+    )  # Transactions per day
+    transactions_per_epoch = (
+        transactions_per_day / constants.epochs_per_day
+    )  # Transactions per epoch
 
-    if stage in [Stage.EIP1559]:
-        gas_used = constants.pow_blocks_per_epoch * gas_target  # Gas
-    else:  # stage is Stage.PROOF_OF_STAKE
-        gas_used = constants.slots_per_epoch * gas_target  # Gas
-
-    # Calculate total base fee, and priority fee to validators
-    total_base_fee = gas_used * base_fee_per_gas  # Gwei
-    total_priority_fee = gas_used * avg_priority_fee_per_gas  # Gwei
+    # Calculate total basefee and tips to validators
+    gas_used = transactions_per_epoch * transaction_average_gas  # Gas
+    total_basefee = gas_used * basefee  # Gwei
+    total_tips = gas_used * avg_tip_amount  # Gwei
 
     if stage in [Stage.PROOF_OF_STAKE]:
-        total_priority_fee_to_miners = 0
-        total_priority_fee_to_validators = total_priority_fee
+        total_tips_to_miners = 0
+        total_priority_fee_to_validators = total_tips
     else:
-        total_priority_fee_to_miners = total_priority_fee
+        total_tips_to_miners = total_tips
         total_priority_fee_to_validators = 0
 
     # Check if the block used too much gas
@@ -227,9 +149,9 @@ def policy_eip1559_transaction_pricing(
     ), &#34;invalid block: too much gas used&#34;
 
     return {
-        &#34;base_fee_per_gas&#34;: base_fee_per_gas,
-        &#34;total_base_fee&#34;: total_base_fee * dt,
-        &#34;total_priority_fee_to_miners&#34;: total_priority_fee_to_miners * dt,
+        &#34;basefee&#34;: basefee,
+        &#34;total_basefee&#34;: total_basefee * dt,
+        &#34;total_tips_to_miners&#34;: total_tips_to_miners * dt,
         &#34;total_priority_fee_to_validators&#34;: total_priority_fee_to_validators * dt,
     }
 
@@ -237,12 +159,6 @@ def policy_eip1559_transaction_pricing(
 def update_eth_price(
     params, substep, state_history, previous_state, policy_input
 ) -&gt; typing.Tuple[str, USD_per_ETH]:
-    &#34;&#34;&#34;
-    ## ETH Price State Update Function
-
-    Update the ETH price from the `eth_price_process`.
-    &#34;&#34;&#34;
-
     # Parameters
     dt = params[&#34;dt&#34;]
     eth_price_process = params[&#34;eth_price_process&#34;]
@@ -260,12 +176,6 @@ def update_eth_price(
 def update_eth_supply(
     params, substep, state_history, previous_state, policy_input
 ) -&gt; typing.Tuple[str, ETH]:
-    &#34;&#34;&#34;
-    ## ETH Supply State Update Function
-
-    Update the ETH supply from the Network Issuance Policy Function.
-    &#34;&#34;&#34;
-
     # Policy Inputs
     network_issuance = policy_input[&#34;network_issuance&#34;]
 
@@ -282,12 +192,12 @@ def update_eth_supply(
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="model.parts.ethereum_system.policy_eip1559_transaction_pricing"><code class="name flex">
+<dt id="model.parts.ethereum.policy_eip1559_transaction_pricing"><code class="name flex">
 <span>def <span class="ident">policy_eip1559_transaction_pricing</span></span>(<span>params, substep, state_history, previous_state) ‑> Dict[str, float]</span>
 </code></dt>
 <dd>
-<div class="desc"><h2 id="eip1559-transaction-pricing-mechanism">EIP1559 Transaction Pricing Mechanism</h2>
-<p>A transaction pricing mechanism that includes fixed-per-block network fee
+<div class="desc"><p>EIP1559 Transaction Pricing Mechanism
+A transaction pricing mechanism that includes fixed-per-block network fee
 that is burned and dynamically expands/contracts block sizes to deal with transient congestion.</p>
 <p>See:
 * <a href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md">https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md</a>
@@ -299,9 +209,7 @@ that is burned and dynamically expands/contracts block sizes to deal with transi
 <pre><code class="python">def policy_eip1559_transaction_pricing(
     params, substep, state_history, previous_state
 ) -&gt; typing.Dict[str, Gwei]:
-    &#34;&#34;&#34;
-    ## EIP1559 Transaction Pricing Mechanism
-
+    &#34;&#34;&#34;EIP1559 Transaction Pricing Mechanism
     A transaction pricing mechanism that includes fixed-per-block network fee
     that is burned and dynamically expands/contracts block sizes to deal with transient congestion.
 
@@ -311,32 +219,33 @@ that is burned and dynamically expands/contracts block sizes to deal with transi
     &#34;&#34;&#34;
 
     stage = Stage(previous_state[&#34;stage&#34;])
-    if stage not in [Stage.EIP1559, Stage.PROOF_OF_STAKE]:
+    if not stage in [Stage.EIP1559, Stage.PROOF_OF_STAKE]:
         return {
-            &#34;base_fee_per_gas&#34;: 0,
-            &#34;total_base_fee&#34;: 0,
-            &#34;total_priority_fee_to_miners&#34;: 0,
+            &#34;basefee&#34;: 0,
+            &#34;total_basefee&#34;: 0,
+            &#34;total_tips_to_miners&#34;: 0,
             &#34;total_priority_fee_to_validators&#34;: 0,
         }
 
     # Parameters
     dt = params[&#34;dt&#34;]
-    gas_target_process = params[&#34;gas_target_process&#34;]  # Gas
+    gas_target = params[&#34;gas_target&#34;]  # Gas
     ELASTICITY_MULTIPLIER = params[&#34;ELASTICITY_MULTIPLIER&#34;]
-    base_fee_process = params[&#34;base_fee_process&#34;]
-    priority_fee_process = params[&#34;priority_fee_process&#34;]
+    BASE_FEE_MAX_CHANGE_DENOMINATOR = params[&#34;BASE_FEE_MAX_CHANGE_DENOMINATOR&#34;]
+    eip1559_basefee_process = params[&#34;eip1559_basefee_process&#34;]
+    eip1559_tip_process = params[&#34;eip1559_tip_process&#34;]
+    daily_transactions_process = params[&#34;daily_transactions_process&#34;]
+    transaction_average_gas = params[&#34;transaction_average_gas&#34;]
 
     # State Variables
     run = previous_state[&#34;run&#34;]
     timestep = previous_state[&#34;timestep&#34;]
+    previous_basefee = previous_state[&#34;basefee&#34;]
 
-    # Get samples for current run and timestep from base fee, priority fee, and transaction processes
-    base_fee_per_gas = base_fee_process(run, timestep * dt)  # Gwei per Gas
-
-    gas_target = gas_target_process(run, timestep * dt)  # Gas
+    # Get samples for current run and timestep from basefee, tip, and transaction processes
+    basefee = eip1559_basefee_process(run, timestep * dt)  # Gwei per Gas
 
     # Ensure basefee changes by no more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %
-    _BASE_FEE_MAX_CHANGE_DENOMINATOR = params[&#34;BASE_FEE_MAX_CHANGE_DENOMINATOR&#34;]
     # assert (
     #     abs(basefee - previous_basefee) / previous_basefee
     #     &lt;= constants.slots_per_epoch / BASE_FEE_MAX_CHANGE_DENOMINATOR
@@ -344,22 +253,24 @@ that is burned and dynamically expands/contracts block sizes to deal with transi
     #     else True
     # ), &#34;basefee changed by more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %&#34;
 
-    avg_priority_fee_per_gas = priority_fee_process(run, timestep * dt)  # Gwei per Gas
+    avg_tip_amount = eip1559_tip_process(run, timestep * dt)  # Gwei per Gas
+    transactions_per_day = daily_transactions_process(
+        run, timestep * dt
+    )  # Transactions per day
+    transactions_per_epoch = (
+        transactions_per_day / constants.epochs_per_day
+    )  # Transactions per epoch
 
-    if stage in [Stage.EIP1559]:
-        gas_used = constants.pow_blocks_per_epoch * gas_target  # Gas
-    else:  # stage is Stage.PROOF_OF_STAKE
-        gas_used = constants.slots_per_epoch * gas_target  # Gas
-
-    # Calculate total base fee, and priority fee to validators
-    total_base_fee = gas_used * base_fee_per_gas  # Gwei
-    total_priority_fee = gas_used * avg_priority_fee_per_gas  # Gwei
+    # Calculate total basefee and tips to validators
+    gas_used = transactions_per_epoch * transaction_average_gas  # Gas
+    total_basefee = gas_used * basefee  # Gwei
+    total_tips = gas_used * avg_tip_amount  # Gwei
 
     if stage in [Stage.PROOF_OF_STAKE]:
-        total_priority_fee_to_miners = 0
-        total_priority_fee_to_validators = total_priority_fee
+        total_tips_to_miners = 0
+        total_priority_fee_to_validators = total_tips
     else:
-        total_priority_fee_to_miners = total_priority_fee
+        total_tips_to_miners = total_tips
         total_priority_fee_to_validators = 0
 
     # Check if the block used too much gas
@@ -368,19 +279,18 @@ that is burned and dynamically expands/contracts block sizes to deal with transi
     ), &#34;invalid block: too much gas used&#34;
 
     return {
-        &#34;base_fee_per_gas&#34;: base_fee_per_gas,
-        &#34;total_base_fee&#34;: total_base_fee * dt,
-        &#34;total_priority_fee_to_miners&#34;: total_priority_fee_to_miners * dt,
+        &#34;basefee&#34;: basefee,
+        &#34;total_basefee&#34;: total_basefee * dt,
+        &#34;total_tips_to_miners&#34;: total_tips_to_miners * dt,
         &#34;total_priority_fee_to_validators&#34;: total_priority_fee_to_validators * dt,
     }</code></pre>
 </details>
 </dd>
-<dt id="model.parts.ethereum_system.policy_network_issuance"><code class="name flex">
+<dt id="model.parts.ethereum.policy_network_issuance"><code class="name flex">
 <span>def <span class="ident">policy_network_issuance</span></span>(<span>params, substep, state_history, previous_state) ‑> Dict[str, float]</span>
 </code></dt>
 <dd>
-<div class="desc"><h2 id="network-issuance-policy-function">Network Issuance Policy Function</h2>
-<p>Calculate the total network issuance and issuance from Proof of Work block rewards.</p></div>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -388,12 +298,6 @@ that is burned and dynamically expands/contracts block sizes to deal with transi
 <pre><code class="python">def policy_network_issuance(
     params, substep, state_history, previous_state
 ) -&gt; typing.Dict[str, ETH]:
-    &#34;&#34;&#34;
-    ## Network Issuance Policy Function
-
-    Calculate the total network issuance and issuance from Proof of Work block rewards.
-    &#34;&#34;&#34;
-
     # Parameters
     dt = params[&#34;dt&#34;]
     daily_pow_issuance = params[&#34;daily_pow_issuance&#34;]
@@ -401,18 +305,16 @@ that is burned and dynamically expands/contracts block sizes to deal with transi
     # State Variables
     stage = previous_state[&#34;stage&#34;]
     amount_slashed = previous_state[&#34;amount_slashed&#34;]
-    total_base_fee = previous_state[&#34;total_base_fee&#34;]
-    total_priority_fee_to_validators = previous_state[
-        &#34;total_priority_fee_to_validators&#34;
-    ]
+    total_basefee = previous_state[&#34;total_basefee&#34;]
+    total_priority_fee_to_validators = previous_state[&#34;total_priority_fee_to_validators&#34;]
     total_online_validator_rewards = previous_state[&#34;total_online_validator_rewards&#34;]
 
     # Calculate network issuance in ETH
     network_issuance = (
-        # Remove priority fee to validators which is not issuance (ETH transferred rather than minted)
+        # Remove tips to validators which is not issuance (ETH transferred rather than minted)
         (total_online_validator_rewards - total_priority_fee_to_validators)
         - amount_slashed
-        - total_base_fee
+        - total_basefee
     ) / constants.gwei
 
     # Calculate Proof of Work issuance
@@ -429,92 +331,11 @@ that is burned and dynamically expands/contracts block sizes to deal with transi
     }</code></pre>
 </details>
 </dd>
-<dt id="model.parts.ethereum_system.policy_upgrade_stages"><code class="name flex">
-<span>def <span class="ident">policy_upgrade_stages</span></span>(<span>params, substep, state_history, previous_state)</span>
-</code></dt>
-<dd>
-<div class="desc"><h2 id="upgrade-stages-policy">Upgrade Stages Policy</h2>
-<p>Transitions the model from one stage in the Ethereum network
-upgrade process to the next at different milestones.</p>
-<p>This is essentially a finite-state machine: <a href="https://en.wikipedia.org/wiki/Finite-state_machine">https://en.wikipedia.org/wiki/Finite-state_machine</a></p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def policy_upgrade_stages(params, substep, state_history, previous_state):
-    &#34;&#34;&#34;
-    ## Upgrade Stages Policy
-
-    Transitions the model from one stage in the Ethereum network
-    upgrade process to the next at different milestones.
-
-    This is essentially a finite-state machine: https://en.wikipedia.org/wiki/Finite-state_machine
-    &#34;&#34;&#34;
-
-    # Parameters
-    dt = params[&#34;dt&#34;]
-    stage: Stage = params[&#34;stage&#34;]
-    date_start = params[&#34;date_start&#34;]
-    date_eip1559 = params[&#34;date_eip1559&#34;]
-    date_pos = params[&#34;date_pos&#34;]
-
-    # State Variables
-    current_stage = previous_state[&#34;stage&#34;]
-    timestep = previous_state[&#34;timestep&#34;]
-
-    # Calculate current timestamp from timestep
-    timestamp = date_start + datetime.timedelta(
-        days=(timestep * dt / constants.epochs_per_day)
-    )
-
-    # Initialize stage State Variable at start of simulation
-    if current_stage is None:
-        current_stage = stage
-    else:
-        # Convert Stage enum value (int) to Stage enum
-        current_stage = Stage(current_stage)
-
-    # Stage finite-state machine
-    if stage == Stage.ALL:
-        # If Stage ALL selected, transition through all stages
-        # at different timestamps
-        if (
-            current_stage in [Stage.ALL, Stage.BEACON_CHAIN]
-            and timestamp &lt; date_eip1559
-        ):
-            current_stage = Stage.BEACON_CHAIN
-        elif (
-            current_stage in [Stage.ALL, Stage.BEACON_CHAIN, Stage.EIP1559]
-            and timestamp &lt; date_pos
-        ):
-            current_stage = Stage.EIP1559
-        else:
-            current_stage = Stage.PROOF_OF_STAKE
-    elif stage == Stage.BEACON_CHAIN:
-        # If Stage BEACON_CHAIN selected, only execute single stage
-        current_stage = Stage.BEACON_CHAIN
-    elif stage == Stage.EIP1559:
-        # If Stage EIP1559 selected, only execute single stage
-        current_stage = Stage.EIP1559
-    elif stage == Stage.PROOF_OF_STAKE:
-        # If Stage PROOF_OF_STAKE selected, only execute single stage
-        current_stage = Stage.PROOF_OF_STAKE
-    else:
-        # Else, raise exception if invalid Stage
-        raise Exception(&#34;Invalid Stage selected&#34;)
-
-    return {
-        &#34;stage&#34;: current_stage.value,
-        &#34;timestamp&#34;: timestamp,
-    }</code></pre>
-</details>
-</dd>
-<dt id="model.parts.ethereum_system.update_eth_price"><code class="name flex">
+<dt id="model.parts.ethereum.update_eth_price"><code class="name flex">
 <span>def <span class="ident">update_eth_price</span></span>(<span>params, substep, state_history, previous_state, policy_input) ‑> Tuple[str, float]</span>
 </code></dt>
 <dd>
-<div class="desc"><h2 id="eth-price-state-update-function">ETH Price State Update Function</h2>
-<p>Update the ETH price from the <code>eth_price_process</code>.</p></div>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -522,12 +343,6 @@ upgrade process to the next at different milestones.</p>
 <pre><code class="python">def update_eth_price(
     params, substep, state_history, previous_state, policy_input
 ) -&gt; typing.Tuple[str, USD_per_ETH]:
-    &#34;&#34;&#34;
-    ## ETH Price State Update Function
-
-    Update the ETH price from the `eth_price_process`.
-    &#34;&#34;&#34;
-
     # Parameters
     dt = params[&#34;dt&#34;]
     eth_price_process = params[&#34;eth_price_process&#34;]
@@ -542,12 +357,11 @@ upgrade process to the next at different milestones.</p>
     return &#34;eth_price&#34;, eth_price_sample</code></pre>
 </details>
 </dd>
-<dt id="model.parts.ethereum_system.update_eth_supply"><code class="name flex">
+<dt id="model.parts.ethereum.update_eth_supply"><code class="name flex">
 <span>def <span class="ident">update_eth_supply</span></span>(<span>params, substep, state_history, previous_state, policy_input) ‑> Tuple[str, float]</span>
 </code></dt>
 <dd>
-<div class="desc"><h2 id="eth-supply-state-update-function">ETH Supply State Update Function</h2>
-<p>Update the ETH supply from the Network Issuance Policy Function.</p></div>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -555,12 +369,6 @@ upgrade process to the next at different milestones.</p>
 <pre><code class="python">def update_eth_supply(
     params, substep, state_history, previous_state, policy_input
 ) -&gt; typing.Tuple[str, ETH]:
-    &#34;&#34;&#34;
-    ## ETH Supply State Update Function
-
-    Update the ETH supply from the Network Issuance Policy Function.
-    &#34;&#34;&#34;
-
     # Policy Inputs
     network_issuance = policy_input[&#34;network_issuance&#34;]
 
@@ -590,11 +398,10 @@ upgrade process to the next at different milestones.</p>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="model.parts.ethereum_system.policy_eip1559_transaction_pricing" href="#model.parts.ethereum_system.policy_eip1559_transaction_pricing">policy_eip1559_transaction_pricing</a></code></li>
-<li><code><a title="model.parts.ethereum_system.policy_network_issuance" href="#model.parts.ethereum_system.policy_network_issuance">policy_network_issuance</a></code></li>
-<li><code><a title="model.parts.ethereum_system.policy_upgrade_stages" href="#model.parts.ethereum_system.policy_upgrade_stages">policy_upgrade_stages</a></code></li>
-<li><code><a title="model.parts.ethereum_system.update_eth_price" href="#model.parts.ethereum_system.update_eth_price">update_eth_price</a></code></li>
-<li><code><a title="model.parts.ethereum_system.update_eth_supply" href="#model.parts.ethereum_system.update_eth_supply">update_eth_supply</a></code></li>
+<li><code><a title="model.parts.ethereum.policy_eip1559_transaction_pricing" href="#model.parts.ethereum.policy_eip1559_transaction_pricing">policy_eip1559_transaction_pricing</a></code></li>
+<li><code><a title="model.parts.ethereum.policy_network_issuance" href="#model.parts.ethereum.policy_network_issuance">policy_network_issuance</a></code></li>
+<li><code><a title="model.parts.ethereum.update_eth_price" href="#model.parts.ethereum.update_eth_price">update_eth_price</a></code></li>
+<li><code><a title="model.parts.ethereum.update_eth_supply" href="#model.parts.ethereum.update_eth_supply">update_eth_supply</a></code></li>
 </ul>
 </li>
 </ul>

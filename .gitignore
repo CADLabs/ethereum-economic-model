@@ -73,7 +73,8 @@ instance/
 .scrapy
 
 # Sphinx documentation
-docs/_build/
+docs/_build/*
+!docs/_build/html/
 
 # PyBuilder
 target/
@@ -134,8 +135,8 @@ dmypy.json
 
 # Assorted
 .vscode/
-scratchpad.*
-scratchpad/
+scratchpad*
+scratchpad
 .DS_Store
 .idea/
 *.cache/
