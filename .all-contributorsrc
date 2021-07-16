@@ -73,8 +73,10 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/35999312?v=4",
       "profile": "https://github.com/JGBSci",
       "contributions": [
+        "code",
         "review",
         "doc",
+        "bug",
         "ideas"
       ]
     },
