@@ -9,13 +9,13 @@ import psutil
 
 import experiments.notebooks.visualizations as visualizations
 import experiments.notebooks.visualizations.plotly_theme
-import experiments.templates.peak_eth_simulation as peak_eth_simulation
+import experiments.templates.eth_supply_analysis as eth_supply_analysis
 from experiments.run import run
 from data.historical_values import df_ether_supply
 
 
-# Fetch the Peak ETH Simulation experiment
-experiment = peak_eth_simulation.experiment
+# Fetch the ETH Supply Analysis experiment
+experiment = eth_supply_analysis.experiment
 # Create a copy of the experiment simulation
 simulation = copy.deepcopy(experiment.simulations[0])
 
@@ -187,7 +187,7 @@ def update_output_graph(validator_adoption, pos_launch_date, eip1559_base_fee):
     return (
         validator_dropdown,
         eip1559_dropdown,
-        visualizations.plot_eth_supply_and_inflation_over_all_stages(df_ether_supply, df, parameters=parameters)
+        visualizations.plot_eth_supply_and_inflation(df_ether_supply, df, parameters=parameters)
     )
 
 
@@ -209,16 +209,16 @@ def run_simulation(validators_per_epoch, pos_launch_date, eip1559_base_fee):
     return df, simulation.model.params
 
 
-def run_peak_eth_simulator(execution_mode=None):
+def run_eth_supply_simulator(execution_mode=None):
     '''
     Run app and display result in the notebook:
     
     To display in new browser tab at http://127.0.0.1:8050/:
-    `run_peak_eth_simulator(execution_mode='external')`
+    `run_eth_supply_simulator(execution_mode='external')`
 
     To display either in "inline" mode when using Jupyter Notebook,
     or "jupyterlab" mode when using Jupyter Lab:
-    `run_peak_eth_simulator()`
+    `run_eth_supply_simulator()`
     '''
     processes = psutil.Process().parent().cmdline()
     is_jupyter_lab = any('lab' in p for p in processes)

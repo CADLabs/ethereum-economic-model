@@ -10,7 +10,8 @@ pio.templates["cadlabs"] = go.layout.Template(
     layout_font={'color': '#2a3f5f'},
     layout_plot_bgcolor='white',
     layout_paper_bgcolor='white',
-    layout_height=800,
+    layout_width=1200,
+    layout_height=675,
     layout_colorway=cadlabs_colorway_sequence,
     layout_xaxis={
             'automargin': True,
@@ -139,7 +140,8 @@ pio.templates["cadlabs_dark"] = go.layout.Template(
     layout_font={'color': '#f2f5fa'},   
     layout_plot_bgcolor='rgb(17,17,17)',
     layout_paper_bgcolor='rgb(17,17,17)',
-    layout_height=800,
+    layout_width=1200,
+    layout_height=675,
 
     layout_colorway = cadlabs_colorway_sequence,
     layout_xaxis={
@@ -173,6 +175,8 @@ pio.templates["cadlabs_dark"] = go.layout.Template(
 )
 
 pio.templates["cadlabs_frontend"] = go.layout.Template(
+    layout_width=1200,
+    layout_height=675,
     layout_font={'color': '#ffffff'},
     layout_plot_bgcolor='#272838',
     layout_paper_bgcolor='#272838',

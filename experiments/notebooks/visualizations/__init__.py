@@ -8,77 +8,91 @@ import plotly.graph_objects as go
 from ipywidgets import widgets
 from plotly.subplots import make_subplots
 
-from experiments.notebooks.visualizations.plotly_theme import cadlabs_colors, cadlabs_colorway_sequence
+from experiments.notebooks.visualizations.plotly_theme import (
+    cadlabs_colors,
+    cadlabs_colorway_sequence,
+)
 from model.system_parameters import parameters, validator_environments
 
 # Set plotly as the default plotting backend for pandas
 pd.options.plotting.backend = "plotly"
 
 validator_environment_name_mapping = {
-    'custom': 'Custom',
-    'diy_hardware': 'DIY Hardware',
-    'diy_cloud': 'DIY Cloud',
-    'pool_staas': 'Pool StaaS',
-    'pool_hardware': 'Pool Hardware',
-    'pool_cloud': 'Pool Cloud',
-    'staas_full': 'StaaS Full',
-    'staas_self_custodied': 'StaaS Self-custodied',
+    "custom": "Custom",
+    "diy_hardware": "DIY Hardware",
+    "diy_cloud": "DIY Cloud",
+    "pool_staas": "Pool StaaS",
+    "pool_hardware": "Pool Hardware",
+    "pool_cloud": "Pool Cloud",
+    "staas_full": "StaaS Full",
+    "staas_self_custodied": "StaaS Self-custodied",
 }
 
 legend_state_variable_name_mapping = {
-    'timestamp': 'Date',
-    'eth_price': 'ETH Price',
-    'eth_staked': 'ETH Staked',
-    'eth_supply': 'ETH Supply',
-    'source_reward_eth': 'Source Reward',
-    'target_reward_eth': 'Target Reward',
-    'head_reward_eth': 'Head Reward',
-    'block_proposer_reward_eth': 'Block Proposer Reward',
-    'sync_reward_eth': 'Sync Reward',
-    'total_priority_fee_to_validators_eth': 'Priority Fees',
-    'supply_inflation_pct': 'ETH Supply inflation',
-    'total_revenue_yields_pct': 'Total Revenue Yields',
-    'total_profit_yields_pct': 'Total Profit Yields',
-    'revenue_profit_yield_spread_pct': 'Revenue/Profit Yield Spread',
-    **dict([(validator.type + '_profit_yields_pct', validator_environment_name_mapping[validator.type]) for validator in
-            validator_environments])
+    "timestamp": "Date",
+    "eth_price": "ETH Price",
+    "eth_staked": "ETH Staked",
+    "eth_supply": "ETH Supply",
+    "source_reward_eth": "Source Reward",
+    "target_reward_eth": "Target Reward",
+    "head_reward_eth": "Head Reward",
+    "block_proposer_reward_eth": "Block Proposer Reward",
+    "sync_reward_eth": "Sync Reward",
+    "total_priority_fee_to_validators_eth": "Priority Fees",
+    "supply_inflation_pct": "ETH Supply inflation",
+    "total_revenue_yields_pct": "Total Revenue Yields",
+    "total_profit_yields_pct": "Total Profit Yields",
+    "revenue_profit_yield_spread_pct": "Revenue/Profit Yield Spread",
+    **dict(
+        [
+            (
+                validator.type + "_profit_yields_pct",
+                validator_environment_name_mapping[validator.type],
+            )
+            for validator in validator_environments
+        ]
+    ),
 }
 
 axis_state_variable_name_mapping = {
     **legend_state_variable_name_mapping,
-    'eth_price': 'ETH Price (USD/ETH)',
-    'eth_staked': 'ETH Staked (ETH)',
-    'eth_supply': 'ETH Supply (ETH)',
+    "eth_price": "ETH Price (USD/ETH)",
+    "eth_staked": "ETH Staked (ETH)",
+    "eth_supply": "ETH Supply (ETH)",
 }
 
-millnames = ['', ' k', ' m', ' bn', ' tn']
+millnames = ["", " k", " m", " bn", " tn"]
 
 
 def millify(n):
     n = float(n)
-    millidx = max(0, min(len(millnames) - 1,
-                         int(math.floor(0 if n == 0 else math.log10(abs(n)) / 3))))
+    millidx = max(
+        0,
+        min(
+            len(millnames) - 1, int(math.floor(0 if n == 0 else math.log10(abs(n)) / 3))
+        ),
+    )
 
-    return '{:.0f}{}'.format(n / 10 ** (3 * millidx), millnames[millidx])
+    return "{:.0f}{}".format(n / 10 ** (3 * millidx), millnames[millidx])
 
 
 def update_legend_names(fig, name_mapping=legend_state_variable_name_mapping):
     for i, dat in enumerate(fig.data):
         for elem in dat:
-            if elem == 'name':
+            if elem == "name":
                 try:
                     fig.data[i].name = name_mapping[fig.data[i].name]
                 except KeyError:
                     continue
-    return (fig)
+    return fig
 
 
 def update_axis_names(fig, name_mapping=axis_state_variable_name_mapping):
     def update_axis_name(axis):
-        title = axis['title']
-        text = title['text']
+        title = axis["title"]
+        text = title["text"]
         updated_text = name_mapping.get(text, text)
-        title.update({'text': updated_text})
+        title.update({"text": updated_text})
 
     fig.for_each_xaxis(lambda ax: update_axis_name(ax))
     fig.for_each_yaxis(lambda ax: update_axis_name(ax))
@@ -86,21 +100,27 @@ def update_axis_names(fig, name_mapping=axis_state_variable_name_mapping):
 
 
 def apply_plotly_standards(
-        fig,
-        title=None,
-        xaxis_title=None,
-        yaxis_title=None,
-        legend_title=None,
-        axis_state_variable_name_mapping_override={},
-        legend_state_variable_name_mapping_override={},
+    fig,
+    title=None,
+    xaxis_title=None,
+    yaxis_title=None,
+    legend_title=None,
+    axis_state_variable_name_mapping_override={},
+    legend_state_variable_name_mapping_override={},
 ):
     update_axis_names(
         fig,
-        {**axis_state_variable_name_mapping, **axis_state_variable_name_mapping_override},
+        {
+            **axis_state_variable_name_mapping,
+            **axis_state_variable_name_mapping_override,
+        },
     )
     update_legend_names(
         fig,
-        {**legend_state_variable_name_mapping, **legend_state_variable_name_mapping_override},
+        {
+            **legend_state_variable_name_mapping,
+            **legend_state_variable_name_mapping_override,
+        },
     )
 
     if title:
@@ -117,29 +137,36 @@ def apply_plotly_standards(
 
 def plot_validating_rewards(df, subplot_titles=[]):
     validating_rewards = [
-        'source_reward_eth',
-        'target_reward_eth',
-        'head_reward_eth',
-        'block_proposer_reward_eth',
-        'sync_reward_eth',
+        "source_reward_eth",
+        "target_reward_eth",
+        "head_reward_eth",
+        "block_proposer_reward_eth",
+        "sync_reward_eth",
     ]
 
-    fig = make_subplots(rows=1, cols=len(df.subset.unique()), shared_yaxes=True, subplot_titles=subplot_titles)
+    fig = make_subplots(
+        rows=1,
+        cols=len(df.subset.unique()),
+        shared_yaxes=True,
+        subplot_titles=subplot_titles,
+    )
 
     for subset in df.subset.unique():
         color_cycle = itertools.cycle(cadlabs_colorway_sequence)
-        df_subset = df.query(f'subset == {subset}')
+        df_subset = df.query(f"subset == {subset}")
         for reward_index, reward_key in enumerate(validating_rewards):
             color = next(color_cycle)
             fig.add_trace(
                 go.Scatter(
-                    x=df_subset.timestamp, y=df_subset[reward_key],
-                    stackgroup='one',
+                    x=df_subset.timestamp,
+                    y=df_subset[reward_key],
+                    stackgroup="one",
                     showlegend=(True if subset == 0 else False),
                     line=dict(color=color),
-                    name=validating_rewards[reward_index]
+                    name=validating_rewards[reward_index],
                 ),
-                row=1, col=subset + 1
+                row=1,
+                col=subset + 1,
             )
 
     update_legend_names(fig)
@@ -156,25 +183,51 @@ def plot_validating_rewards(df, subplot_titles=[]):
 
 def plot_validating_rewards_pie_chart(df, with_priority_fee=False):
     if with_priority_fee:
-        title = 'Validating Rewards with Priority Fees'
+        title = "Validating Rewards with Priority Fees"
         validator_rewards = df.iloc[-1][
-            ['total_priority_fee_to_validators_eth', 'source_reward_eth', 'target_reward_eth', 'head_reward_eth',
-             'block_proposer_reward_eth', 'sync_reward_eth']].to_dict()
-        names = ["Priority Fees}", "Source Reward", "Target Reward", "Head Reward", "Block Proposer Reward", "Sync Reward"]
+            [
+                "total_priority_fee_to_validators_eth",
+                "source_reward_eth",
+                "target_reward_eth",
+                "head_reward_eth",
+                "block_proposer_reward_eth",
+                "sync_reward_eth",
+            ]
+        ].to_dict()
+        names = [
+            "Priority Fees}",
+            "Source Reward",
+            "Target Reward",
+            "Head Reward",
+            "Block Proposer Reward",
+            "Sync Reward",
+        ]
     else:
-        title = 'Validating Rewards'
+        title = "Validating Rewards"
         validator_rewards = df.iloc[-1][
-            ['source_reward_eth', 'target_reward_eth', 'head_reward_eth', 'block_proposer_reward_eth',
-             'sync_reward_eth']].to_dict()
-        names = ["Source Reward", "Target Reward", "Head Reward", "Block Proposer Reward", "Sync Reward"]
+            [
+                "source_reward_eth",
+                "target_reward_eth",
+                "head_reward_eth",
+                "block_proposer_reward_eth",
+                "sync_reward_eth",
+            ]
+        ].to_dict()
+        names = [
+            "Source Reward",
+            "Target Reward",
+            "Head Reward",
+            "Block Proposer Reward",
+            "Sync Reward",
+        ]
 
     fig = px.pie(df, values=validator_rewards.values(), names=names)
 
     fig.for_each_trace(
         lambda trace: trace.update(
-            textinfo='label+percent',
-            insidetextorientation='radial',
-            marker=dict(line=dict(color='#000000', width=2))
+            textinfo="label+percent",
+            insidetextorientation="radial",
+            marker=dict(line=dict(color="#000000", width=2)),
         ),
     )
 
@@ -198,24 +251,28 @@ def plot_revenue_profit_yields_over_eth_staked(df):
     # Add traces
     fig.add_trace(
         go.Scatter(
-            x=df_subset_0.eth_staked, y=df_subset_0.total_revenue_yields_pct, name='Revenue Yields',
-            line=dict(color=cadlabs_colorway_sequence[3])
+            x=df_subset_0.eth_staked,
+            y=df_subset_0.total_revenue_yields_pct,
+            name="Revenue Yields",
+            line=dict(color=cadlabs_colorway_sequence[3]),
         ),
     )
 
     fig.add_trace(
         go.Scatter(
-            x=df_subset_0.eth_staked, y=df_subset_0.total_profit_yields_pct,
+            x=df_subset_0.eth_staked,
+            y=df_subset_0.total_profit_yields_pct,
             name=f"Profit Yields @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
-            line=dict(color=cadlabs_colorway_sequence[4], dash='dash')
+            line=dict(color=cadlabs_colorway_sequence[4], dash="dash"),
         ),
     )
 
     fig.add_trace(
         go.Scatter(
-            x=df_subset_1.eth_staked, y=df_subset_1.total_profit_yields_pct,
+            x=df_subset_1.eth_staked,
+            y=df_subset_1.total_profit_yields_pct,
             name=f"Profit Yields @ {df_subset_1.eth_price.iloc[0]:.0f} USD/ETH",
-            line=dict(color=cadlabs_colorway_sequence[5], dash='dash')
+            line=dict(color=cadlabs_colorway_sequence[5], dash="dash"),
         ),
     )
 
@@ -230,7 +287,7 @@ def plot_revenue_profit_yields_over_eth_staked(df):
 
     # Set secondary y-axes titles
     fig.update_yaxes(title_text="Yields (%/year)")
-    fig.update_layout(hovermode='x unified')
+    fig.update_layout(hovermode="x unified")
 
     return fig
 
@@ -241,17 +298,19 @@ def plot_revenue_profit_yields_over_eth_price(df):
     # Add traces
     fig.add_trace(
         go.Scatter(
-            x=df.eth_price, y=df.total_revenue_yields_pct,
+            x=df.eth_price,
+            y=df.total_revenue_yields_pct,
             name=f"Revenue Yields @ ({millify(df.eth_staked.iloc[0])} ETH Staked)",
-            line=dict(color=cadlabs_colorway_sequence[3])
+            line=dict(color=cadlabs_colorway_sequence[3]),
         )
     )
 
     fig.add_trace(
         go.Scatter(
-            x=df.eth_price, y=df.total_profit_yields_pct,
+            x=df.eth_price,
+            y=df.total_profit_yields_pct,
             name=f"Profit Yields @ ({millify(df.eth_staked.iloc[0])} ETH Staked)",
-            line=dict(color=cadlabs_colorway_sequence[4], dash='dash')
+            line=dict(color=cadlabs_colorway_sequence[4], dash="dash"),
         ),
     )
 
@@ -266,33 +325,38 @@ def plot_revenue_profit_yields_over_eth_price(df):
 
     # Set secondary y-axes titles
     fig.update_yaxes(title_text="Yields (%/year)")
-    fig.update_layout(hovermode='x unified')
+    fig.update_layout(hovermode="x unified")
 
     return fig
 
 
 def plot_validator_environment_yields(df):
-    validator_profit_yields_pct = [validator.type + '_profit_yields_pct' for validator in validator_environments]
+    validator_profit_yields_pct = [
+        validator.type + "_profit_yields_pct" for validator in validator_environments
+    ]
 
     fig = df.plot(
-        x='eth_price',
-        y=(validator_profit_yields_pct + ['total_profit_yields_pct']),
-        facet_col='subset',
+        x="eth_price",
+        y=(validator_profit_yields_pct + ["total_profit_yields_pct"]),
+        facet_col="subset",
         facet_col_wrap=2,
-        facet_col_spacing=0.05
+        facet_col_spacing=0.05,
     )
 
-    fig.for_each_annotation(lambda a: a.update(
-        text=f"ETH Staked = {df.query(f'subset == {a.text.split(chr(61))[1]}').eth_staked.iloc[0]:.0f} ETH"))
+    fig.for_each_annotation(
+        lambda a: a.update(
+            text=f"ETH Staked = {df.query(f'subset == {a.text.split(chr(61))[1]}').eth_staked.iloc[0]:.0f} ETH"
+        )
+    )
 
     fig.update_layout(
-        title=f'Profit Yields of Validator Environments',
+        title=f"Profit Yields of Validator Environments",
         xaxis_title="ETH Price (USD/ETH)",
         yaxis_title="Profit Yields (%/year)",
         legend_title="",
     )
 
-    fig.for_each_xaxis(lambda x: x['title'].update({'text': "ETH Price (USD/ETH)"}))
+    fig.for_each_xaxis(lambda x: x["title"].update({"text": "ETH Price (USD/ETH)"}))
     fig.update_yaxes(matches=None)
     fig.update_yaxes(showticklabels=True)
 
@@ -303,29 +367,32 @@ def plot_validator_environment_yields(df):
 
 def plot_three_region_yield_analysis(fig_df):
     fig = fig_df.plot(
-        x='eth_price',
-        y=['total_revenue_yields_pct', 'total_profit_yields_pct'],
+        x="eth_price",
+        y=["total_revenue_yields_pct", "total_profit_yields_pct"],
     )
 
     fig.add_annotation(
-        x=fig_df['eth_price'].min() + 100, y=fig_df['total_revenue_yields_pct'].max(),
+        x=fig_df["eth_price"].min() + 100,
+        y=fig_df["total_revenue_yields_pct"].max(),
         text="Cliff",
         showarrow=False,
-        yshift=10
+        yshift=10,
     )
 
     fig.add_annotation(
-        x=fig_df['eth_price'].median(), y=fig_df['total_revenue_yields_pct'].max(),
+        x=fig_df["eth_price"].median(),
+        y=fig_df["total_revenue_yields_pct"].max(),
         text="Economics of Scale",
         showarrow=False,
-        yshift=10
+        yshift=10,
     )
 
     fig.add_annotation(
-        x=fig_df['eth_price'].max() - 100, y=fig_df['total_revenue_yields_pct'].max(),
+        x=fig_df["eth_price"].max() - 100,
+        y=fig_df["total_revenue_yields_pct"].max(),
         text="Stability",
         showarrow=False,
-        yshift=10
+        yshift=10,
     )
 
     update_legend_names(fig)
@@ -349,24 +416,38 @@ def plot_revenue_yields_vs_network_inflation(df):
 
     # Add traces
     fig.add_trace(
-        go.Scatter(x=df_subset_0.eth_staked, y=df_subset_0.total_revenue_yields_pct, name='Revenue Yields'),
+        go.Scatter(
+            x=df_subset_0.eth_staked,
+            y=df_subset_0.total_revenue_yields_pct,
+            name="Revenue Yields",
+        ),
         secondary_y=False,
     )
 
     fig.add_trace(
-        go.Scatter(x=df_subset_0.eth_staked, y=df_subset_0.total_profit_yields_pct,
-                   name=f"Profit Yields @ {df_subset_0.eth_price.iloc[0]} USD/ETH"),
+        go.Scatter(
+            x=df_subset_0.eth_staked,
+            y=df_subset_0.total_profit_yields_pct,
+            name=f"Profit Yields @ {df_subset_0.eth_price.iloc[0]} USD/ETH",
+        ),
         secondary_y=False,
     )
 
     fig.add_trace(
-        go.Scatter(x=df_subset_1.eth_staked, y=df_subset_1.total_profit_yields_pct,
-                   name=f"Profit Yields @ {df_subset_1.eth_price.iloc[0]} USD/ETH"),
+        go.Scatter(
+            x=df_subset_1.eth_staked,
+            y=df_subset_1.total_profit_yields_pct,
+            name=f"Profit Yields @ {df_subset_1.eth_price.iloc[0]} USD/ETH",
+        ),
         secondary_y=False,
     )
 
     fig.add_trace(
-        go.Scatter(x=df_subset_0.eth_staked, y=df_subset_0.supply_inflation_pct, name='Network Inflation Rate'),
+        go.Scatter(
+            x=df_subset_0.eth_staked,
+            y=df_subset_0.supply_inflation_pct,
+            name="Network Inflation Rate",
+        ),
         secondary_y=True,
     )
 
@@ -400,18 +481,22 @@ def plot_validator_environment_yield_contour(df):
             row.append(z_value)
         z.append(row)
 
-    fig = go.Figure(data=[
-        go.Contour(
-            x=x, y=y, z=z,
-            line_smoothing=0.85,
-            colorscale=cadlabs_colors,
-            colorbar=dict(
-                title='Profit Yields (%/year)',
-                titleside='right',
-                titlefont=dict(size=14)
+    fig = go.Figure(
+        data=[
+            go.Contour(
+                x=x,
+                y=y,
+                z=z,
+                line_smoothing=0.85,
+                colorscale=cadlabs_colors,
+                colorbar=dict(
+                    title="Profit Yields (%/year)",
+                    titleside="right",
+                    titlefont=dict(size=14),
+                ),
             )
-        )
-    ])
+        ]
+    )
 
     update_legend_names(fig)
 
@@ -428,7 +513,9 @@ def plot_validator_environment_yield_contour(df):
 
 
 def plot_revenue_profit_yield_spread(df):
-    grouped = df.groupby(["eth_price", "eth_staked"]).last()["revenue_profit_yield_spread_pct"]
+    grouped = df.groupby(["eth_price", "eth_staked"]).last()[
+        "revenue_profit_yield_spread_pct"
+    ]
 
     x = df.groupby(["run"]).first()["eth_price"].unique()
     y = df.groupby(["run"]).first()["eth_staked"].unique()
@@ -441,25 +528,27 @@ def plot_revenue_profit_yield_spread(df):
             row.append(z_value)
         z.append(row)
 
-    fig = go.Figure(data=[
-        go.Contour(
-            x=x, y=y, z=z,
-            line_smoothing=0.85,
-            contours=dict(
-                showlabels=True,  # show labels on contours
-                labelfont=dict(  # label font properties
-                    size=12,
-                    color='white',
-                )
-            ),
-            colorbar=dict(
-                title='Spread (%/year)',
-                titleside='right',
-                titlefont=dict(size=14)
-            ),
-            colorscale=cadlabs_colors
-        )
-    ])
+    fig = go.Figure(
+        data=[
+            go.Contour(
+                x=x,
+                y=y,
+                z=z,
+                line_smoothing=0.85,
+                contours=dict(
+                    showlabels=True,  # show labels on contours
+                    labelfont=dict(  # label font properties
+                        size=12,
+                        color="white",
+                    ),
+                ),
+                colorbar=dict(
+                    title="Spread (%/year)", titleside="right", titlefont=dict(size=14)
+                ),
+                colorscale=cadlabs_colors,
+            )
+        ]
+    )
 
     update_legend_names(fig)
 
@@ -489,35 +578,39 @@ def plot_validator_environment_yield_surface(df):
             row.append(z_value)
         z.append(row)
 
-    fig = go.Figure(data=[go.Surface(
-        x=x, y=y, z=z,
-        colorbar=dict(
-            title='Profit Yields (%/year)',
-            titleside='right',
-            titlefont=dict(size=14)
-        ),
-        colorscale=cadlabs_colors
-    )])
+    fig = go.Figure(
+        data=[
+            go.Surface(
+                x=x,
+                y=y,
+                z=z,
+                colorbar=dict(
+                    title="Profit Yields (%/year)",
+                    titleside="right",
+                    titlefont=dict(size=14),
+                ),
+                colorscale=cadlabs_colors,
+            )
+        ]
+    )
 
-    fig.update_traces(contours_z=dict(
-        show=True,
-        usecolormap=True,
-        project_z=True
-    ))
+    fig.update_traces(contours_z=dict(show=True, usecolormap=True, project_z=True))
 
     update_legend_names(fig)
 
     fig.update_layout(
         title="Profit Yields Over ETH Price vs. ETH Staked",
         autosize=False,
-        width=1000,
         legend_title="",
         margin=dict(l=65, r=50, b=65, t=90),
         scene={
-            "xaxis": {"title": {"text": "ETH Price (USD/ETH)"}, "type": "log", },
+            "xaxis": {
+                "title": {"text": "ETH Price (USD/ETH)"},
+                "type": "log",
+            },
             "yaxis": {"title": {"text": "ETH Staked (ETH)"}},
             "zaxis": {"title": {"text": "Profit Yields (%/year)"}},
-        }
+        },
     )
 
     return fig
@@ -529,13 +622,27 @@ def fig_add_stage_vrects(df, fig, parameters=parameters):
     date_pos = parameters["date_pos"][0]
     date_end = df.index[-1]
 
-    fig.add_vrect(x0=date_eip1559, x1=date_pos, row="all", col=1,
-                  layer="below",
-                  fillcolor="gray", opacity=0.25, line_width=0)
+    fig.add_vrect(
+        x0=date_eip1559,
+        x1=date_pos,
+        row="all",
+        col=1,
+        layer="below",
+        fillcolor="gray",
+        opacity=0.25,
+        line_width=0,
+    )
 
-    fig.add_vrect(x0=date_pos, x1=date_end, row="all", col=1,
-                  layer="below",
-                  fillcolor="gray", opacity=0.1, line_width=0)
+    fig.add_vrect(
+        x0=date_pos,
+        x1=date_end,
+        row="all",
+        col=1,
+        layer="below",
+        fillcolor="gray",
+        opacity=0.1,
+        line_width=0,
+    )
     return fig
 
 
@@ -554,17 +661,17 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
     # Beacon Chain genesis Dec-01-2020 12:00:35 PM +UTC
 
     historical_dates = [
-        ("Frontier", datetime.strptime("Jul-30-2015", '%b-%d-%Y'), (-20, 45)),
-        ("Frontier thawing", datetime.strptime("Sep-07-2015", '%b-%d-%Y'), (35, 50)),
-        ("Homestead", datetime.strptime("Mar-14-2016", '%b-%d-%Y'), (-30, 0)),
-        ("Byzantium", datetime.strptime("Oct-16-2017", '%b-%d-%Y'), (30, 40)),
-        ("Constantinople", datetime.strptime("Feb-28-2019", '%b-%d-%Y'), (30, -15)),
-        ("Istanbul", datetime.strptime("Dec-08-2019", '%b-%d-%Y'), (30, -10)),
-        ("Muir Glacier", datetime.strptime("Jan-02-2020", '%b-%d-%Y'), (-30, 0)),
+        ("Frontier", datetime.strptime("Jul-30-2015", "%b-%d-%Y"), (-20, 45)),
+        ("Frontier thawing", datetime.strptime("Sep-07-2015", "%b-%d-%Y"), (35, 50)),
+        ("Homestead", datetime.strptime("Mar-14-2016", "%b-%d-%Y"), (-30, 0)),
+        ("Byzantium", datetime.strptime("Oct-16-2017", "%b-%d-%Y"), (30, 40)),
+        ("Constantinople", datetime.strptime("Feb-28-2019", "%b-%d-%Y"), (30, -15)),
+        ("Istanbul", datetime.strptime("Dec-08-2019", "%b-%d-%Y"), (30, -10)),
+        ("Muir Glacier", datetime.strptime("Jan-02-2020", "%b-%d-%Y"), (-35, 0)),
     ]
 
     system_dates = [
-        ("Beacon Chain", datetime.strptime("Dec-01-2020", '%b-%d-%Y')),
+        ("Beacon Chain", datetime.strptime("Dec-01-2020", "%b-%d-%Y")),
         # ("Today", parameters["date_start"][0]),
         ("EIP1559", parameters["date_eip1559"][0]),
         ("Proof of Stake", parameters["date_pos"][0]),
@@ -572,104 +679,77 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
 
     for (name, date, (ay, ax)) in historical_dates:
         nearest_row = df.iloc[
-            df.index.get_loc(date.strftime("%Y-%m-%d"), method='nearest')
+            df.index.get_loc(date.strftime("%Y-%m-%d"), method="nearest")
         ]
-        x_datetime = nearest_row['timestamp'][0]
+        x_datetime = nearest_row["timestamp"][0]
         y_value = nearest_row[column][0]
-        fig.add_annotation(x=x_datetime, y=y_value,
-                           text=name,
-                           ay=ay,
-                           ax=ax,
-                           showarrow=True,
-                           arrowhead=2,
-                           arrowsize=1.5)
-
-    date_pos = parameters['date_pos'][0] 
-    peak_eth_supply = df.loc[date_pos.strftime("%Y-%m-%d")]['eth_supply'][0]
-    if peak_eth_supply > df['eth_supply'].iloc[-1]:
-        fig.add_annotation(x=date_pos, y=df.loc[date_pos.strftime("%Y-%m-%d")]['eth_supply'][0],
-                            text='Peak ETH Supply',
-                            yref='y2',
-                            showarrow=True,
-                            arrowhead=2,
-                            arrowsize=1.5)
-
-    date_annotation = datetime.strptime("Dec-01-2024", '%b-%d-%Y')
-    fig.add_annotation(x=date_annotation, y=-1.75,
-                        text='Deflationary',
-                        showarrow=True,
-                        ay=-30,
-                        ax=0,
-                        arrowhead=2,
-                        arrowsize=1.5)
-
-    fig.add_annotation(x=date_annotation, y=1.75,
-                        text='Inflationary',
-                        showarrow=True,
-                        ay=30,
-                        ax=0,
-                        arrowhead=2,
-                        arrowsize=1.5)
+        fig.add_annotation(
+            x=x_datetime,
+            y=y_value,
+            text=name,
+            ay=ay,
+            ax=ax,
+            showarrow=True,
+            arrowhead=2,
+            arrowsize=1.25,
+        )
 
     for idx, (name, date) in enumerate(system_dates):
         fig.add_trace(
             go.Scatter(
                 mode="markers+text",
-                x=[date], y=[df.loc[date.strftime("%Y-%m-%d")][column][0]],
+                x=[date],
+                y=[df.loc[date.strftime("%Y-%m-%d")][column][0]],
                 marker_symbol=["diamond"],
-                marker_line_width=2, marker_size=10,
+                marker_line_width=2,
+                marker_size=10,
                 hovertemplate=name,
                 name=name,
-                #textfont_size=11,
+                # textfont_size=11,
                 text=name,
                 textposition="top center",
-                legendgroup='markers',
+                legendgroup="markers",
                 showlegend=False,
             ),
-            *(secondary_y, secondary_y) if secondary_y else ()
+            *(secondary_y, secondary_y) if secondary_y else (),
         )
         fig.add_trace(
             go.Scatter(
                 mode="markers",
-                x=[date], y=[df.loc[date.strftime("%Y-%m-%d")][column][0]],
+                x=[date],
+                y=[df.loc[date.strftime("%Y-%m-%d")][column][0]],
                 marker_symbol=["diamond"],
                 marker_line_color="black",
-                marker_color=cadlabs_colorway_sequence[idx+1],
-                marker_line_width=2, marker_size=10,
+                marker_color=cadlabs_colorway_sequence[idx + 1],
+                marker_line_width=2,
+                marker_size=10,
                 hovertemplate=name,
                 name=name,
                 textfont_size=11,
                 textposition="top center",
-                legendgroup='markers',
+                legendgroup="markers",
                 showlegend=True,
             ),
-            *(secondary_y, secondary_y) if secondary_y else ()
-            )
+            *(secondary_y, secondary_y) if secondary_y else (),
+        )
 
     return fig
 
 
 def plot_eth_supply_over_all_stages(df):
-    df = df.set_index('timestamp', drop=False)
+    df = df.set_index("timestamp", drop=False)
 
     fig = go.Figure()
 
     fig.add_trace(
-        go.Scatter(x=df.timestamp, y=df.eth_supply, name='ETH Supply'),
+        go.Scatter(x=df.timestamp, y=df.eth_supply, name="ETH Supply"),
     )
 
-    fig_add_stage_markers(df, 'eth_supply', fig)
+    fig_add_stage_markers(df, "eth_supply", fig)
     fig_add_stage_vrects(df, fig)
 
     # Add range slider
-    fig.update_layout(
-        xaxis=dict(
-            rangeslider=dict(
-                visible=True
-            ),
-            type="date"
-        )
-    )
+    fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="date"))
 
     update_legend_names(fig)
 
@@ -683,30 +763,36 @@ def plot_eth_supply_over_all_stages(df):
     return fig
 
 
-def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated, parameters=parameters):
-    df_historical = df_historical.set_index('timestamp', drop=False)
-    df_simulated = df_simulated.set_index('timestamp', drop=False)
-    
-    df_historical['supply_inflation_pct'] = df_historical['supply_inflation_pct_rolling']
-    df_historical = df_historical.drop(df_historical.tail(1).index)  
+def plot_eth_supply_and_inflation(df_historical, df_simulated, parameters=parameters):
+    df_historical = df_historical.set_index("timestamp", drop=False)
+    df_simulated = df_simulated.set_index("timestamp", drop=False)
+
+    df_historical["supply_inflation_pct"] = df_historical[
+        "supply_inflation_pct_rolling"
+    ]
+    df_historical = df_historical.drop(df_historical.tail(1).index)
     df_historical.loc[df_simulated.index[0]] = df_simulated.iloc[0]
-    
+
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
     fig.add_trace(
         go.Scatter(
-            x=df_historical.timestamp, y=df_historical.supply_inflation_pct, name='Historical Network Inflation Rate',
-            line=dict(color='#FC1CBF'),
-            legendgroup='historical'
+            x=df_historical.timestamp,
+            y=df_historical.supply_inflation_pct,
+            name="Historical Network Inflation Rate",
+            line=dict(color="#FC1CBF"),
+            legendgroup="historical",
         ),
         secondary_y=False,
     )
 
     fig.add_trace(
         go.Scatter(
-            x=df_historical.timestamp, y=df_historical.eth_supply, name='Historical ETH Supply',
-            line=dict(color='#3283FE'),
-            legendgroup='historical'
+            x=df_historical.timestamp,
+            y=df_historical.eth_supply,
+            name="Historical ETH Supply",
+            line=dict(color="#3283FE"),
+            legendgroup="historical",
         ),
         secondary_y=True,
     )
@@ -715,20 +801,24 @@ def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated, p
         df_subset = df_simulated.query(f"subset == {subset}")
         fig.add_trace(
             go.Scatter(
-                x=df_subset.timestamp, y=df_subset.supply_inflation_pct, name='Simulated Network Inflation Rate',
-                line=dict(color='#FC1CBF', dash='dot'),
+                x=df_subset.timestamp,
+                y=df_subset.supply_inflation_pct,
+                name="Simulated Network Inflation Rate",
+                line=dict(color="#FC1CBF", dash="dot"),
                 showlegend=(True if subset == 0 else False),
-                legendgroup='simulated'
+                legendgroup="simulated",
             ),
             secondary_y=False,
         )
 
         fig.add_trace(
             go.Scatter(
-                x=df_subset.timestamp, y=df_subset.eth_supply, name='Simulated ETH Supply',
-                line=dict(color='#3283FE', dash='dot'),
+                x=df_subset.timestamp,
+                y=df_subset.eth_supply,
+                name="Simulated ETH Supply",
+                line=dict(color="#3283FE", dash="dot"),
                 showlegend=(True if subset == 0 else False),
-                legendgroup='simulated'
+                legendgroup="simulated",
             ),
             secondary_y=True,
         )
@@ -736,17 +826,42 @@ def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated, p
 
     df = df_historical.append(df_simulated)
 
-    fig_add_stage_markers(df, 'supply_inflation_pct', fig, secondary_y=False, parameters=parameters)
+    fig_add_stage_markers(
+        df, "supply_inflation_pct", fig, secondary_y=False, parameters=parameters
+    )
     fig_add_stage_vrects(df, fig, parameters=parameters)
+
+    date_inflation_annotation = datetime.strptime("Dec-01-2024", "%b-%d-%Y")
+    fig.add_annotation(
+        x=date_inflation_annotation,
+        y=-2.75,
+        text="Deflationary",
+        showarrow=True,
+        ay=-35,
+        ax=0,
+        arrowhead=2,
+        arrowsize=1.25,
+    )
+
+    fig.add_annotation(
+        x=date_inflation_annotation,
+        y=2.75,
+        text="Inflationary",
+        showarrow=True,
+        ay=35,
+        ax=0,
+        arrowhead=2,
+        arrowsize=1.25,
+    )
 
     # Add range slider
     fig.update_layout(
-        height=800,
         xaxis=dict(
             rangeslider=dict(
-                visible=True
+                visible=True,
             ),
-            type="date"
+            rangeslider_thickness=0.15,
+            type="date",
         )
     )
 
@@ -754,28 +869,31 @@ def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated, p
 
     fig.update_layout(
         xaxis_title="Date",
-        title="Peak ETH Simulator",
+        title="ETH Supply Simulator",
         legend_title="",
-        height=1000,
+        height=675,
+        width=1200,
         legend=dict(
             title=dict(
                 text="",
             ),
             orientation="h",
             yanchor="top",
-            y=-0.7,
+            y=-0.425,
             xanchor="center",
             x=0.5,
-            traceorder='grouped',
+            traceorder="grouped",
             itemclick=False,
-        )
+        ),
     )
 
-    fig.add_hline(y=0,
-                  line_color="#808080",
-                  line_width=0.75,
-                  annotation_text="",
-                  annotation_position="bottom right")
+    fig.add_hline(
+        y=0,
+        line_color="#808080",
+        line_width=0.75,
+        annotation_text="",
+        annotation_position="bottom right",
+    )
 
     # Set secondary y-axes titles
     fig.update_yaxes(title_text="Network Inflation Rate (%/year)", secondary_y=False)
@@ -785,7 +903,7 @@ def plot_eth_supply_and_inflation_over_all_stages(df_historical, df_simulated, p
 
 
 def plot_network_inflation_over_all_stages(df):
-    df = df.set_index('timestamp', drop=False)
+    df = df.set_index("timestamp", drop=False)
 
     fig = go.Figure()
 
@@ -793,21 +911,14 @@ def plot_network_inflation_over_all_stages(df):
         go.Scatter(x=df.timestamp, y=df.supply_inflation_pct)  # , fill='tozeroy'
     )
 
-    fig.add_hline(y=0,
-                  annotation_text="Ultra-sound barrier",
-                  annotation_position="bottom right")
+    fig.add_hline(
+        y=0, annotation_text="Ultra-sound barrier", annotation_position="bottom right"
+    )
 
-    fig_add_stage_markers(df, 'supply_inflation_pct', fig)
+    fig_add_stage_markers(df, "supply_inflation_pct", fig)
     fig_add_stage_vrects(df, fig)
 
-    fig.update_layout(
-        xaxis=dict(
-            rangeslider=dict(
-                visible=True
-            ),
-            type="date"
-        )
-    )
+    fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="date"))
 
     update_legend_names(fig)
 
@@ -822,20 +933,13 @@ def plot_network_inflation_over_all_stages(df):
 
 
 def plot_eth_staked_over_all_stages(df):
-    df = df.set_index('timestamp', drop=False)
+    df = df.set_index("timestamp", drop=False)
 
-    fig = df.plot(x='timestamp', y='eth_staked')
+    fig = df.plot(x="timestamp", y="eth_staked")
 
-    fig_add_stage_markers(df, 'eth_staked', fig)
+    fig_add_stage_markers(df, "eth_staked", fig)
 
-    fig.update_layout(
-        xaxis=dict(
-            rangeslider=dict(
-                visible=True
-            ),
-            type="date"
-        )
-    )
+    fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="date"))
 
     update_legend_names(fig)
 
@@ -850,15 +954,15 @@ def plot_eth_staked_over_all_stages(df):
 
 
 def plot_number_of_validators_over_time_foreach_subset(df):
-    scenario_names = {0: 'Normal Adoption', 1: 'Low Adoption', 2: 'High Adoption'}
+    scenario_names = {0: "Normal Adoption", 1: "Low Adoption", 2: "High Adoption"}
 
     fig = go.Figure()
 
     for subset in df.subset.unique():
         fig.add_trace(
             go.Scatter(
-                x=df['timestamp'],
-                y=df[df.subset == subset]['number_of_validators'],
+                x=df["timestamp"],
+                y=df[df.subset == subset]["number_of_validators"],
                 name=scenario_names[subset],
             )
         )
@@ -868,13 +972,9 @@ def plot_number_of_validators_over_time_foreach_subset(df):
         xaxis_title="Date",
         yaxis_title="Active Validators",
         legend_title="",
-        xaxis=dict(
-            rangeslider=dict(
-                visible=True
-            )
-        )
+        xaxis=dict(rangeslider=dict(visible=True)),
     )
-    fig.update_layout(hovermode='x unified')
+    fig.update_layout(hovermode="x unified")
 
     return fig
 
@@ -882,22 +982,24 @@ def plot_number_of_validators_over_time_foreach_subset(df):
 def plot_number_of_validators_in_activation_queue_over_time(df):
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
-    fig_df = df.query('subset == 2')
+    fig_df = df.query("subset == 2")
 
     fig.add_trace(
         go.Scatter(
-            x=fig_df['timestamp'], y=fig_df['number_of_validators'],
-            name='Number of validators'
+            x=fig_df["timestamp"],
+            y=fig_df["number_of_validators"],
+            name="Number of validators",
         ),
-        secondary_y=False
+        secondary_y=False,
     )
 
     fig.add_trace(
         go.Scatter(
-            x=fig_df['timestamp'], y=fig_df['number_of_validators_in_activation_queue'],
-            name='Activation queue'
+            x=fig_df["timestamp"],
+            y=fig_df["number_of_validators_in_activation_queue"],
+            name="Activation queue",
         ),
-        secondary_y=True
+        secondary_y=True,
     )
 
     fig.update_layout(
@@ -913,51 +1015,55 @@ def plot_number_of_validators_in_activation_queue_over_time(df):
     return fig
 
 
-def plot_revenue_profit_yields_over_time_foreach_subset_subplots(df, subplot_titles=[]):
+def plot_yields_per_subset_subplots(df, subplot_titles=[]):
     color_cycle = itertools.cycle(cadlabs_colorway_sequence)
 
-    fig = make_subplots(rows=1, cols=3, shared_yaxes=True, subplot_titles=subplot_titles)
+    fig = make_subplots(
+        rows=1, cols=3, shared_yaxes=True, subplot_titles=subplot_titles
+    )
 
     for subset in df.subset.unique():
         color = next(color_cycle)
         fig.add_trace(
             go.Scatter(
-                x=df['timestamp'],
-                y=df[df.subset == subset]['total_revenue_yields_pct'],
+                x=df["timestamp"],
+                y=df[df.subset == subset]["total_revenue_yields_pct"],
                 name="Revenue Yields",
                 line=dict(color=color),
-                showlegend=False
+                showlegend=False,
             ),
-            row=1, col=subset + 1
+            row=1,
+            col=subset + 1,
         )
         fig.add_trace(
             go.Scatter(
-                x=df['timestamp'],
-                y=df[df.subset == subset]['total_profit_yields_pct'],
+                x=df["timestamp"],
+                y=df[df.subset == subset]["total_profit_yields_pct"],
                 name="Profit Yields",
-                line=dict(color=color, dash='dash'),
-                showlegend=False
+                line=dict(color=color, dash="dash"),
+                showlegend=False,
             ),
-            row=1, col=subset + 1
+            row=1,
+            col=subset + 1,
         )
 
     # Add uncoloured legend for traces
     fig.add_trace(
         go.Scatter(
-            x=df['timestamp'],
+            x=df["timestamp"],
             y=[None],
-            mode='lines',
-            line=dict(color='black'),
-            name='Revenue Yields',
+            mode="lines",
+            line=dict(color="black"),
+            name="Revenue Yields",
         )
     )
     fig.add_trace(
         go.Scatter(
-            x=df['timestamp'],
+            x=df["timestamp"],
             y=[None],
-            mode='lines',
-            line=dict(color='black', dash='dash'),
-            name='Profit Yields',
+            mode="lines",
+            line=dict(color="black", dash="dash"),
+            name="Profit Yields",
         )
     )
 
@@ -969,7 +1075,7 @@ def plot_revenue_profit_yields_over_time_foreach_subset_subplots(df, subplot_tit
         hovermode="x",
     )
 
-    fig.for_each_xaxis(lambda x: x.update(dict(title=dict(text='Date'))))
+    fig.for_each_xaxis(lambda x: x.update(dict(title=dict(text="Date"))))
 
     # Removes the 'subset=' from the facet_col title
     fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
@@ -979,31 +1085,31 @@ def plot_revenue_profit_yields_over_time_foreach_subset_subplots(df, subplot_tit
     return fig
 
 
-def plot_revenue_profit_yields_over_time_foreach_subset(df):
-    scenario_names = {0: 'Normal Adoption', 1: 'Low Adoption', 2: 'High Adoption'}
+def plot_yields_per_subset(df):
+    scenario_names = {0: "Normal Adoption", 1: "Low Adoption", 2: "High Adoption"}
     color_cycle = itertools.cycle(cadlabs_colorway_sequence)
 
     fig = go.Figure()
 
     for subset in df.subset.unique():
-        df_subset = df.query(f'subset == {subset}').copy()
+        df_subset = df.query(f"subset == {subset}").copy()
 
         color = next(color_cycle)
         fig.add_trace(
             go.Scatter(
-                x=df['timestamp'],
-                y=df_subset['total_revenue_yields_pct'],
+                x=df["timestamp"],
+                y=df_subset["total_revenue_yields_pct"],
                 name=f"{scenario_names[subset]} Revenue Yields",
                 line=dict(color=color),
             ),
         )
         fig.add_trace(
             go.Scatter(
-                x=df['timestamp'],
-                y=df_subset['total_profit_yields_pct'],
+                x=df["timestamp"],
+                y=df_subset["total_profit_yields_pct"],
                 name=f"{scenario_names[subset]} Profit Yields",
-                line=dict(color=color, dash='dash'),
-                visible=False
+                line=dict(color=color, dash="dash"),
+                visible=False,
             ),
         )
 
@@ -1011,132 +1117,228 @@ def plot_revenue_profit_yields_over_time_foreach_subset(df):
         title="Revenue or Profit Yields Over Time",
         xaxis_title="Date",
         yaxis_title="Yields (%/year)",
-        legend_title=""
+        legend_title="",
     )
+
+    fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="date"))
 
     fig.update_layout(
-        xaxis=dict(
-            rangeslider=dict(
-                visible=True
-            ),
-            type="date"
-        )
+        updatemenus=[
+            dict(
+                type="buttons",
+                buttons=[
+                    dict(
+                        label="Revenue Yields",
+                        method="update",
+                        args=[{"visible": [True, "legendonly"]}, {"showlegend": True}],
+                    ),
+                    dict(
+                        label="Profit Yields",
+                        method="update",
+                        args=[{"visible": ["legendonly", True]}, {"showlegend": True}],
+                    ),
+                ],
+                direction="right",
+                showactive=True,
+                pad={"t": 10},
+                x=0,
+                xanchor="left",
+                y=1.15,
+                yanchor="top",
+            )
+        ]
     )
 
-    fig.update_layout(updatemenus=[dict(
-        type="buttons",
-        buttons=[
-            dict(
-                label='Revenue Yields',
-                method='update',
-                args=[{'visible': [True, 'legendonly']}, {'showlegend': True}]
-            ),
-            dict(
-                label='Profit Yields',
-                method='update',
-                args=[{'visible': ['legendonly', True]}, {'showlegend': True}]
-            )
-        ],
-        direction='right',
-        showactive=True,
-        pad={"t": 10},
-        x=0,
-        xanchor="left",
-        y=1.1,
-        yanchor="top"
-    )])
-
-    fig.update_layout(hovermode='x unified')
+    fig.update_layout(hovermode="x unified")
 
     return fig
 
 
-def plot_expanding_mean_revenue_profit_yields_over_time_foreach_subset(df):
-    scenario_names = {0: 'Normal Adoption', 1: 'Low Adoption', 2: 'High Adoption'}
+def plot_cumulative_yields_per_subset(df):
+    scenario_names = {0: "Normal Adoption", 1: "Low Adoption", 2: "High Adoption"}
     color_cycle = itertools.cycle(cadlabs_colorway_sequence)
 
     fig = go.Figure()
 
     for subset in df.subset.unique():
-        df_subset = df.query(f'subset == {subset}').copy()
+        df_subset = df.query(f"subset == {subset}").copy()
 
-        df_subset['avg_revenue_yields_pct'] = df_subset['total_revenue_yields_pct'].expanding().mean()
-        df_subset['avg_profit_yields_pct'] = df_subset['total_profit_yields_pct'].expanding().mean()
+        df_subset["daily_revenue_yields_pct"] = (
+            df_subset["total_revenue_yields_pct"] / 365
+        )
+        df_subset["daily_profit_yields_pct"] = (
+            df_subset["total_profit_yields_pct"] / 365
+        )
+
+        df_subset["cumulative_revenue_yields_pct"] = (
+            df_subset["daily_revenue_yields_pct"].expanding().sum()
+        )
+        df_subset["cumulative_profit_yields_pct"] = (
+            df_subset["daily_profit_yields_pct"].expanding().sum()
+        )
 
         color = next(color_cycle)
         fig.add_trace(
             go.Scatter(
-                x=df['timestamp'],
-                y=df_subset['avg_revenue_yields_pct'],
+                x=df["timestamp"],
+                y=df_subset["cumulative_revenue_yields_pct"],
                 name=f"{scenario_names[subset]} Revenue Yields",
                 line=dict(color=color),
             ),
         )
         fig.add_trace(
             go.Scatter(
-                x=df['timestamp'],
-                y=df_subset['avg_profit_yields_pct'],
+                x=df["timestamp"],
+                y=df_subset["cumulative_profit_yields_pct"],
                 name=f"{scenario_names[subset]} Profit Yields",
-                line=dict(color=color, dash='dash'),
-                visible=False
+                line=dict(color=color, dash="dash"),
+                visible=False,
             ),
         )
 
     fig.update_layout(
-        title="Cumulative Average Revenue or Profit Yields Over Time",
+        title="Cumulative Revenue or Profit Yields Over Time",
         xaxis_title="Date",
-        yaxis_title="Yields (%/year)",
-        legend_title=""
+        yaxis_title="Cumulative Yields (%)",
+        legend_title="",
     )
+
+    fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="date"))
 
     fig.update_layout(
-        xaxis=dict(
-            rangeslider=dict(
-                visible=True
-            ),
-            type="date"
-        )
+        updatemenus=[
+            dict(
+                type="buttons",
+                buttons=[
+                    dict(
+                        label="Revenue Yields",
+                        method="update",
+                        args=[{"visible": [True, "legendonly"]}, {"showlegend": True}],
+                    ),
+                    dict(
+                        label="Profit Yields",
+                        method="update",
+                        args=[{"visible": ["legendonly", True]}, {"showlegend": True}],
+                    ),
+                ],
+                direction="right",
+                showactive=True,
+                pad={"t": 10},
+                x=0,
+                xanchor="left",
+                y=1.1,
+                yanchor="top",
+            )
+        ]
     )
 
-    fig.update_layout(updatemenus=[dict(
-        type="buttons",
-        buttons=[
-            dict(
-                label='Revenue Yields',
-                method='update',
-                args=[{'visible': [True, 'legendonly']}, {'showlegend': True}]
-            ),
-            dict(
-                label='Profit Yields',
-                method='update',
-                args=[{'visible': ['legendonly', True]}, {'showlegend': True}]
-            )
-        ],
-        direction='right',
-        showactive=True,
-        pad={"t": 10},
-        x=0,
-        xanchor="left",
-        y=1.1,
-        yanchor="top"
-    )])
+    fig.update_layout(hovermode="x unified")
 
-    fig.update_layout(hovermode='x unified')
+    return fig
+
+
+def plot_cumulative_returns_per_subset(df):
+    scenario_names = {0: "Normal Adoption", 1: "Low Adoption", 2: "High Adoption"}
+    color_cycle = itertools.cycle(cadlabs_colorway_sequence)
+
+    fig = go.Figure()
+
+    for subset in df.subset.unique():
+        df_subset = df.query(f"subset == {subset}").copy()
+
+        df_subset["daily_revenue_yields_pct"] = (
+            df_subset["total_revenue_yields_pct"] / 365
+        )
+        df_subset["daily_profit_yields_pct"] = (
+            df_subset["total_profit_yields_pct"] / 365
+        )
+
+        df_subset["cumulative_revenue_yields_pct"] = (
+            df_subset["daily_revenue_yields_pct"].expanding().sum()
+        )
+        df_subset["cumulative_profit_yields_pct"] = (
+            df_subset["daily_profit_yields_pct"].expanding().sum()
+        )
+
+        df_subset["cumulative_revenue"] = (
+            1 + df_subset["cumulative_revenue_yields_pct"] / 100
+        )
+        df_subset["cumulative_profit"] = (
+            1 + df_subset["cumulative_revenue_yields_pct"] / 100
+        )
+
+        color = next(color_cycle)
+        fig.add_trace(
+            go.Scatter(
+                x=df["timestamp"],
+                y=df_subset["cumulative_revenue"],
+                name=f"{scenario_names[subset]} Revenue Yields",
+                line=dict(color=color),
+            ),
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=df["timestamp"],
+                y=df_subset["cumulative_profit"],
+                name=f"{scenario_names[subset]} Profit Yields",
+                line=dict(color=color, dash="dash"),
+                visible=False,
+            ),
+        )
+
+    fig.update_layout(
+        title="Cumulative Revenue or Profit Returns Over Time",
+        xaxis_title="Date",
+        yaxis_title="Cumulative Returns (USD)",
+        legend_title="",
+    )
+
+    fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="date"))
+
+    fig.update_layout(
+        updatemenus=[
+            dict(
+                type="buttons",
+                buttons=[
+                    dict(
+                        label="Revenue Yields",
+                        method="update",
+                        args=[{"visible": [True, "legendonly"]}, {"showlegend": True}],
+                    ),
+                    dict(
+                        label="Profit Yields",
+                        method="update",
+                        args=[{"visible": ["legendonly", True]}, {"showlegend": True}],
+                    ),
+                ],
+                direction="right",
+                showactive=True,
+                pad={"t": 10},
+                x=0,
+                xanchor="left",
+                y=1.1,
+                yanchor="top",
+            )
+        ]
+    )
+
+    fig.update_layout(hovermode="x unified")
 
     return fig
 
 
 def plot_figure_widget_revenue_yields_over_time_foreach_subset(df):
     subset = widgets.Dropdown(
-        options=list(df['subset'].unique()),
+        options=list(df["subset"].unique()),
         value=0,
-        description='Scenario:',
+        description="Scenario:",
     )
 
-    fig_df = df.query('subset == 0')
+    fig_df = df.query("subset == 0")
 
     trace1 = go.Scatter(
-        x=fig_df['timestamp'], y=fig_df['total_revenue_yields_pct'],
+        x=fig_df["timestamp"],
+        y=fig_df["total_revenue_yields_pct"],
     )
 
     fig = go.FigureWidget(data=[trace1])
@@ -1145,28 +1347,31 @@ def plot_figure_widget_revenue_yields_over_time_foreach_subset(df):
         title="Revenue Yields Over Time",
         xaxis_title="Date",
         yaxis_title="Revenue Yields (%/year)",
-        yaxis=dict(
-            tickmode='linear',
-            dtick=0.5
-        )
+        yaxis=dict(tickmode="linear", dtick=0.5),
     )
 
-    max_y = fig_df['total_revenue_yields_pct'].max()
-    min_y = fig_df['total_revenue_yields_pct'].min()
-    fig.add_hline(y=max_y, line_dash="dot",
-                  annotation_text=f"Default scenario max={max_y:.2f}%/year",
-                  annotation_position="bottom right")
-    fig.add_hline(y=min_y, line_dash="dot",
-                  annotation_text=f"Default scenario min={min_y:.2f}%/year",
-                  annotation_position="bottom right")
+    max_y = fig_df["total_revenue_yields_pct"].max()
+    min_y = fig_df["total_revenue_yields_pct"].min()
+    fig.add_hline(
+        y=max_y,
+        line_dash="dot",
+        annotation_text=f"Default scenario max={max_y:.2f}%/year",
+        annotation_position="bottom right",
+    )
+    fig.add_hline(
+        y=min_y,
+        line_dash="dot",
+        annotation_text=f"Default scenario min={min_y:.2f}%/year",
+        annotation_position="bottom right",
+    )
 
     def response(change):
         _subset = subset.value
-        fig_df = df.query(f'subset == {_subset}')
+        fig_df = df.query(f"subset == {_subset}")
 
         with fig.batch_update():
-            fig.data[0].x = fig_df['timestamp']
-            fig.data[0].y = fig_df['total_revenue_yields_pct']
+            fig.data[0].x = fig_df["timestamp"]
+            fig.data[0].y = fig_df["total_revenue_yields_pct"]
 
     subset.observe(response, names="value")
 
@@ -1174,45 +1379,46 @@ def plot_figure_widget_revenue_yields_over_time_foreach_subset(df):
 
     update_legend_names(fig)
 
-    return widgets.VBox([container,
-                         fig])
+    return widgets.VBox([container, fig])
 
 
 def plot_revenue_yields_rolling_mean(df_rolling):
-    fig = go.Figure([
-        go.Scatter(
-            name='Mean',
-            x=df_rolling['timestamp'],
-            y=df_rolling['rolling_mean'],
-            mode='lines',
-            line=dict(color='rgb(31, 119, 180)'),
-        ),
-        go.Scatter(
-            name='Upper Bound (max)',
-            x=df_rolling['timestamp'],
-            y=df_rolling['max'],
-            mode='lines',
-            marker=dict(color="#444"),
-            line=dict(width=0),
-            showlegend=False
-        ),
-        go.Scatter(
-            name='Lower Bound (min)',
-            x=df_rolling['timestamp'],
-            y=df_rolling['min'],
-            marker=dict(color="#444"),
-            line=dict(width=0),
-            mode='lines',
-            fillcolor='rgba(68, 68, 68, 0.3)',
-            fill='tonexty',
-            showlegend=False
-        )
-    ])
+    fig = go.Figure(
+        [
+            go.Scatter(
+                name="Mean",
+                x=df_rolling["timestamp"],
+                y=df_rolling["rolling_mean"],
+                mode="lines",
+                line=dict(color="rgb(31, 119, 180)"),
+            ),
+            go.Scatter(
+                name="Upper Bound (max)",
+                x=df_rolling["timestamp"],
+                y=df_rolling["max"],
+                mode="lines",
+                marker=dict(color="#444"),
+                line=dict(width=0),
+                showlegend=False,
+            ),
+            go.Scatter(
+                name="Lower Bound (min)",
+                x=df_rolling["timestamp"],
+                y=df_rolling["min"],
+                marker=dict(color="#444"),
+                line=dict(width=0),
+                mode="lines",
+                fillcolor="rgba(68, 68, 68, 0.3)",
+                fill="tonexty",
+                showlegend=False,
+            ),
+        ]
+    )
     fig.update_layout(
-        yaxis_title='Revenue Yields (%/year)',
-        xaxis_title='Date',
-        title='Revenue Yields Rolling Mean Over Time',
-        hovermode="x"
+        yaxis_title="Revenue Yields (%/year)",
+        xaxis_title="Date",
+        title="Revenue Yields Rolling Mean Over Time",
+        hovermode="x",
     )
 
     update_legend_names(fig)
@@ -1221,16 +1427,18 @@ def plot_revenue_yields_rolling_mean(df_rolling):
 
 
 def plot_profit_yields_by_environment_over_time(df):
-    validator_profit_yields = [validator.type + '_profit_yields_pct' for validator in validator_environments]
+    validator_profit_yields = [
+        validator.type + "_profit_yields_pct" for validator in validator_environments
+    ]
 
     fig = go.Figure()
 
     for key in validator_profit_yields:
         fig.add_trace(
             go.Scatter(
-                x=df['timestamp'],
+                x=df["timestamp"],
                 y=df[key],
-                name=legend_state_variable_name_mapping[key]
+                name=legend_state_variable_name_mapping[key],
             )
         )
 
@@ -1238,33 +1446,30 @@ def plot_profit_yields_by_environment_over_time(df):
         title="Profit Yields by Environment Over Time",
         xaxis_title="Date",
         yaxis_title="Profit Yields (%/year)",
-        legend_title='',
-        xaxis=dict(
-            rangeslider=dict(
-                visible=True
-            ),
-            type="date"
-        ),
-        hovermode='x unified'
+        legend_title="",
+        xaxis=dict(rangeslider=dict(visible=True), type="date"),
+        hovermode="x unified",
     )
 
     return fig
 
 
 def plot_network_issuance_scenarios(df, simulation_names):
-    df = df.set_index('timestamp', drop=False)
+    df = df.set_index("timestamp", drop=False)
 
     fig = go.Figure()
 
     initial_simulation = 0
-    for subset in df.query(f'simulation == {initial_simulation}').subset.unique():
+    for subset in df.query(f"simulation == {initial_simulation}").subset.unique():
         simulation_key = list(simulation_names.keys())[initial_simulation]
         fig.add_trace(
             go.Scatter(
                 x=df.index,
-                y=df.query(f'subset == {subset} and simulation == {initial_simulation}').eth_supply,
+                y=df.query(
+                    f"subset == {subset} and simulation == {initial_simulation}"
+                ).eth_supply,
                 name=simulation_names[simulation_key][subset],
-                visible=True
+                visible=True,
             )
         )
 
@@ -1272,47 +1477,56 @@ def plot_network_issuance_scenarios(df, simulation_names):
 
     for simulation_index in df.simulation.unique():
         simulation_key = list(simulation_names.keys())[simulation_index]
-        simulation_df = df.query(f'simulation == {simulation_index}')
+        simulation_df = df.query(f"simulation == {simulation_index}")
         subset_len = len(simulation_df.subset.unique())
         visible_traces = [False for i in range(4)]
         visible_traces[:subset_len] = [True for i in range(subset_len)]
-        buttons.append(dict(method='update',
-                            label=str(simulation_key),
-                            visible=True,
-                            args=[
-                                {
-                                    "visible": visible_traces,
-                                    'y': [
-                                        simulation_df.query(f'subset == {subset}').eth_supply \
-                                        for subset in simulation_df.subset.unique()
-                                    ],
-                                    'x': [df.index],
-                                    'name': list([
-                                        simulation_names[simulation_key][subset] for subset in
-                                        simulation_df.subset.unique()
-                                    ]),
-                                    'type': 'scatter'
-                                }
-                            ],
-                            ))
-
-    fig.update_layout(updatemenus=[dict(
-        type='buttons',
-        buttons=buttons,
-        direction='right',
-        showactive=True,
-        pad={"t": 25},
-        x=0,
-        xanchor="left",
-        y=1.1,
-        yanchor="top"
-    )])
+        buttons.append(
+            dict(
+                method="update",
+                label=str(simulation_key),
+                visible=True,
+                args=[
+                    {
+                        "visible": visible_traces,
+                        "y": [
+                            simulation_df.query(f"subset == {subset}").eth_supply
+                            for subset in simulation_df.subset.unique()
+                        ],
+                        "x": [df.index],
+                        "name": list(
+                            [
+                                simulation_names[simulation_key][subset]
+                                for subset in simulation_df.subset.unique()
+                            ]
+                        ),
+                        "type": "scatter",
+                    }
+                ],
+            )
+        )
 
     fig.update_layout(
-        yaxis_title='ETH Supply (ETH)',
-        xaxis_title='Date',
-        title='Inflation Rate and ETH Supply Analysis Scenarios',
-        hovermode="x unified"
+        updatemenus=[
+            dict(
+                type="buttons",
+                buttons=buttons,
+                direction="right",
+                showactive=True,
+                pad={"t": 25},
+                x=0,
+                xanchor="left",
+                y=1.1,
+                yanchor="top",
+            )
+        ]
+    )
+
+    fig.update_layout(
+        yaxis_title="ETH Supply (ETH)",
+        xaxis_title="Date",
+        title="Inflation Rate and ETH Supply Analysis Scenarios",
+        hovermode="x unified",
     )
 
     return fig
