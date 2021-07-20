@@ -22,7 +22,7 @@ The model supports the simulation of validator economics across different "valid
 ### Validator Environment Categories and Cost Structures
 
 By default, the model implements the 7 validator environment categories as suggested by 
-[Hoban/Borgers Ethereum 2.0 Economic Model](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE). Below is a short characterization of each category. For the respective hardware-setup and cost-assumption details, please refer to ["Cost of Validating"](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE).
+[Hoban/Borgers Ethereum 2.0 Economic Model](https://thomasborgers.medium.com/ethereum-2-0-economic-review-1fc4a9b8c2d9). Below is a short characterization of each category. For the respective hardware-setup and cost-assumption details, please refer to ["Cost of Validating"](https://docs.google.com/spreadsheets/d/1y18MoYSBLlHZ-ueN9m0a-JpC6tYjqDtpISJ6_WdicdE).
 
 1. **Run own hardware validator ("DIY-Hardware")**
 - Setup: Individual running a Beacon Node and Validator Client with one or more Validators on their own hardware
