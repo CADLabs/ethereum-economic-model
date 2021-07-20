@@ -32,7 +32,11 @@ from model.types import (
     Stage,
 )
 from model.utils import default
-from data.historical_values import eth_price_mean
+from data.historical_values import (
+    eth_price_mean,
+    eth_gas_price_mean,
+    eth_block_rewards_mean
+)
 
 
 # Configure validator environment distribution
@@ -170,8 +174,6 @@ class Parameters:
     date_pos: List[datetime] = default([datetime.strptime("2021/12/1", "%Y/%m/%d")])
     """
     Eth1/Eth2 merge date as Python datetime, after which POW is disabled and POS is enabled.
-
-    Source: https://twitter.com/drakefjustin/status/1379052831982956547
     """
 
     # Environmental processes
@@ -211,7 +213,7 @@ class Parameters:
     """
 
     # Ethereum system parameters
-    daily_pow_issuance: List[ETH] = default([13_550])
+    daily_pow_issuance: List[ETH] = default([eth_block_rewards_mean])
     """
     The average daily Proof of Work issuance in ETH.
 
@@ -359,15 +361,15 @@ class Parameters:
 
     # EIP1559 transaction pricing parameters
     base_fee_process: List[Callable[[Run, Timestep], Gwei_per_Gas]] = default(
-        [lambda _run, _timestep: 70]  # Gwei per gas
+        [lambda _run, _timestep: 0.7 * eth_gas_price_mean]  # Gwei per gas
     )
     """
     The base fee burned, in Gwei per gas, for each transaction.
 
-    An average of 100 Gwei per gas expected to be set as transaction fee cap,
+    An average of approx. 100 Gwei per gas expected to be set as transaction fee cap,
     split between the base fee and priority fee - the fee cap less the base fee is sent as a priority fee to miners/validators.
 
-    Approximated using average gas price from https://etherscan.io/gastracker as of 20/04/21
+    Approximated using average gas price from Etherscan over last 12 months.
 
     An extract from https://notes.ethereum.org/@vbuterin/eip-1559-faq
 
@@ -378,12 +380,12 @@ class Parameters:
     """
 
     priority_fee_process: List[Callable[[Run, Timestep], Gwei_per_Gas]] = default(
-        [lambda _run, _timestep: 30]  # Gwei per gas
+        [lambda _run, _timestep: 0.3 * eth_gas_price_mean]  # Gwei per gas
     )
     """
     EIP1559 transaction pricing priority fee, in Gwei per gas.
 
-    Due to MEV, average priority fee expected to be higher than usual as bid for inclusion in blockscpace market.
+    Due to MEV, average priority fee expected to be higher than usual as bid for inclusion in blockscpace market. We assume 30% of the fee cap.
 
     The priority fee is the difference between the fee cap set per transaction, and the base fee.
 
