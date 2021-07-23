@@ -414,7 +414,7 @@ W_{sync} &= \text{SYNC_REWARD_WEIGHT}
 
 #### Validating Rewards
 
-The total validating rewards is calculated as the sum of all validator reward State Variables:
+The **total validating rewards** is calculated as the sum of all validator reward State Variables:
 
 $$
 R_v = r_p + r_s + r_t + r_h + r_{sync}
@@ -422,7 +422,7 @@ $$
 
 #### Validating Penalties
 
-The total validating penalties is the sum of attestation and sync-committee penalties:
+The **total validating penalties** is the sum of attestation and sync-committee penalties:
 
 $$
 Z = Z_a + Z_{sync}
@@ -440,7 +440,7 @@ First, we calculate the slashing reward for a single slashing event, indicated b
 \end{aligned}
 \end{equation}
 
-The whistleblower rewards are made up of both a reward for the whistleblower, and for the proposer:
+The **whistleblower rewards** are made up of both a reward for the whistleblower, and for the proposer:
 
 \begin{equation}
 \begin{aligned}
@@ -450,7 +450,7 @@ R'_w &= \frac{\bar{B}}{\text{WHISTLEBLOWER_REWARD_QUOTIENT}} \qquad &(\text{rewa
 \end{aligned}
 \end{equation}
 
-In addition to the slashing penalty, there is a slashing penalty proportional to the total slashings in the current time period using the `PROPORTIONAL_SLASHING_MULTIPLIER`:
+In addition to the **slashing penalty**, there is a slashing penalty proportional to the total slashings in the current time period using the `PROPORTIONAL_SLASHING_MULTIPLIER`:
 
 \begin{equation}
 \begin{aligned}
@@ -468,7 +468,7 @@ $$
 \psi' = \psi' + \psi'_{proportional}
 $$
 
-To calculate the total amount slashed and whistleblower rewards for the epoch, we scale by the number of slashing events per epoch:
+To calculate the **total amount slashed** and **whistleblower rewards** for the epoch, we scale by the number of slashing events per epoch:
 
 \begin{equation}
 \begin{aligned}
