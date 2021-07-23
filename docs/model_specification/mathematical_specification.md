@@ -344,7 +344,7 @@ To approximate the source, target, and head vote rewards, it is assumed that all
 
 \begin{equation}
 \begin{aligned}
-r_s &= \frac{\text{TIMELY_SOURCE_WEIGHT}}{\text{WEIGHT_DENOMINATOR}} \times \beta \\
+r_s &= \frac{\text{TIMELY_SOURCE_WEIGHT}}{\text{WEIGHT_DENOMINATOR}} \times \beta \qquad &(\text{proportion of base reward})\\
 &\times \frac{V_{online}}{V} \qquad &\text{(scale by proportion of online valdiators)}\\
 &\times V_{online} \qquad &\text{(aggregation over all online validators)}\\
 \end{aligned}
@@ -354,8 +354,7 @@ r_s &= \frac{\text{TIMELY_SOURCE_WEIGHT}}{\text{WEIGHT_DENOMINATOR}} \times \bet
 
 \begin{equation}
 \begin{aligned}
-r_{sync} &= \beta \times V \qquad &(\text{calculate total base rewards per epoch})\\
-&\times \frac{\text{SYNC_REWARD_WEIGHT}}{\text{WEIGHT_DENOMINATOR}} \qquad &(\text{get proportion of total base rewards})\\
+r_{sync} &= \frac{\text{SYNC_REWARD_WEIGHT}}{\text{WEIGHT_DENOMINATOR}} \times \beta \times V \qquad &(\text{proportion of total base rewards})\\
 &\times \frac{V_{online}}{V} \qquad &\text{(scale by proportion of online valdiators)}\\
 \end{aligned}
 \end{equation}
