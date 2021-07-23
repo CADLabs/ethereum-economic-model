@@ -17,7 +17,7 @@ The model implements the official [Ethereum Specification](https://github.com/et
 
 ### Level of Aggregation
 
-Although cadCAD technically supports several computational modelling paradigms (e.g. agent-based modelling, population-level modelling, system dynamics modelling, hybrid modelling, etc.) we adopt an aggregate system dynamics lense. Rather than modelling the behaviour of individual agents, we consider what is often called a "representative agent" in economics literature. This allows us to apply aggregation and approximation for groups of agents, or in our case - validators aggregated as validator environments.
+Although cadCAD technically supports several computational modelling paradigms (e.g. agent-based modelling, population-level modelling, system dynamics modelling, hybrid modelling, etc.) we adopt an aggregate system dynamics lens. Rather than modelling the behaviour of individual agents, we consider what is often called a "representative agent" in economics literature. This allows us to apply aggregation and approximation for groups of agents, or in our case - validators aggregated as validator environments.
 
 ### Epoch-level Granularity
 
@@ -96,7 +96,7 @@ We define the State Variables' domain, range, and units. The "variable" column v
 
 ### System Metric State Variables
 
-We first define System Metrics on the level of the following 7 validator environments, using Numpy array matrix alegbra:
+We first define System Metrics on the level of the following 7 validator environments, using Numpy array matrix algebra:
 
 1. DIY Hardware
 2. DIY Cloud
@@ -185,7 +185,7 @@ For reasons of clarity and comprehensibility we categorize parameters as either 
 
 ### Ethereum Official Specification System Parameters
 
-All System Parameters in this category use the same uppercase snake-case variable naming seen in the [Ethereum Official Specification](https://github.com/ethereum/eth2.0-specs) for easy recognition. See the [annotated-spec](https://github.com/ethereum/annotated-spec/blob/master/altair/beacon-chain.md) repository and [Benjaminion's annotated spec](https://benjaminion.xyz/eth2-annotated-spec/phase0/beacon-chain/) for further referrence.
+All System Parameters in this category use the same uppercase snake-case variable naming seen in the [Ethereum Official Specification](https://github.com/ethereum/eth2.0-specs) for easy recognition. See the [annotated-spec](https://github.com/ethereum/annotated-spec/blob/master/altair/beacon-chain.md) repository and [Benjaminion's annotated spec](https://benjaminion.xyz/eth2-annotated-spec/phase0/beacon-chain/) for further reference.
 
 | Variable | Default Value | Unit |
 | -------- | -------- | -------- |
@@ -463,7 +463,7 @@ N &= \frac{\text{slashing_events_per_1000_epochs}}{1000} \qquad (\text{slashing 
 \end{equation}
 
 
-Finally, the individual slashing penalty is calculated as the sum of the indivdual slashing and proportional slashing penalties:
+Finally, the individual slashing penalty is calculated as the sum of the individual slashing and proportional slashing penalties:
 
 $$
 \psi' = \psi' + \psi'_{proportional}
