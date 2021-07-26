@@ -108,7 +108,7 @@ In its initial version, the model does not model Ethereum's inactivity leak mech
 Validator adoption is the assumed rate of new validators entering the activation queue per epoch, that results in an implied ETH staked value over time.
 
 The "Validator Revenue and Profit Yields" experiment notebook introduces three linear adoption scenarios (historical adoption has been approximately linear):
-* Normal adoption: assumes an average of 3 new validators per epoch. These rates correspond to the actual historical validator adoption between 15 January 2021 and 15 July 2021 as per [Beaconscan](https://beaconscan.com/stat/validator).
+* Normal adoption: assumes an average of 3 new validators per epoch. These rates correspond to the historical average newly **activated** validators per epoch between 15 January 2021 and 15 July 2021 as per [Beaconscan](https://beaconscan.com/stat/validator).
 * Low adoption: assumes an average of 1.5 new validators per epoch, i.e. a 50% lower rate compared to the base scenario
 * High adoption: assumes an average of 4.5 new validators per epoch, i.e. a 50% higher rate compared to the base scenario
 
@@ -164,9 +164,7 @@ The long-term average gas target per block is set to 15m gas; by default we assu
 
 The [EIP-1559 proposal](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md) defines a variable `max_fee_per_gas` to set a fee cap per transaction. This fee cap is the maximum fee in Gwei per gas a user will pay per transaction. This fee is made up of the base fee and a priority fee, where the base fee is burned and the priority fee is paid to miners/validators.
 
-Pre EIP-1559 the fee cap is equivalent to the gas price in Gwei per gas. We use the historical mean gas price over the past 12 months to set the average fee cap, which in this model is equivalent to the sum of the values from the `base_fee_process` and `priority_fee_process`.
-
-We use a static value of 100 Gwei per gas (historical mean gas price) to set the default values for the `base_fee_process` and `priority_fee_process`. See [Miner Extractable Value as Percentage of Average Fee Cap](#miner-extractable-value-as-percentage-of-average-fee-cap) for further related assumptions.
+Pre EIP-1559 the fee cap is equivalent to the gas price in Gwei per gas. Prior to the adoption of the Flashbots MEV-geth client, gas prices were artificially high due to MEV bots spamming blocks with higher gas bids to ensure their transaction would occur before the transaction that they were attacking. Since then, the majority of MEV bots have moved to the Flashbots network, relieving the network of this spam that drove gas prices up. Now that MEV is extracted on an independent channel (Flashbots) and from a different mechanism (shared profit vs. high gas fees), gas prices have decreased - for this reason, we use the median gas price value over a recent 3-month period of 65 Gwei per gas to set the default values for the `base_fee_process` and `priority_fee_process`. See [Miner Extractable Value as Percentage of Average Fee Cap](#miner-extractable-value-as-percentage-of-average-fee-cap) for further related assumptions.
 
 ### Miner Extractable Value as Percentage of Average Fee Cap
 
