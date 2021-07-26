@@ -181,7 +181,10 @@ There are several auction mechanisms coexisting in Ethereum, identified by Flash
 * Transaction privacy via Flashbots/Darkpools
 * Transaction ordering via Flashbots/Other relays
 
-MEV has an influence on the EIP-1559 base fee and priority fee in the following scenarios:
+Flashbots claims that transaction inclusion, where EIP-1559 has the priority fee mechanism to handle an auction, is in fact less important than transaction ordering in the following research article ["MEV and EIP-1559"](https://hackmd.io/@flashbots/MEV-1559):
+> The fee mechanism put forth in EIP-1559 was designed (and later analyzed) with an auction for transaction inclusion in mind. In fact, however, much of the activity in Ethereum is concerned with not only inclusion but also transaction ordering within a block. Most MEV extraction opportunities depend on the relative positioning of transactions, just having transactions included won’t cut it.
+
+MEV can have an influence on the EIP-1559 base fee and priority fee in the following scenarios:
 * Miners/validators including less-than-target sized blocks to drive the baseefee down to 0, although there is a clear economic downside for miners to adopt this strategy because they would be effectively losing out on profit with each block
 * Miners/validators creating a blockspace auction for transaction inclusion, driving the priority fee up
 * Flashbots style "Off-Chain Agreements" resulting in value extraction outside of EIP-1559 auction mechanisms
