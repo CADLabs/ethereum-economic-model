@@ -168,19 +168,38 @@ Pre EIP-1559 the fee cap is equivalent to the gas price in Gwei per gas. Prior t
 
 ### Miner Extractable Value as Percentage of Average Fee Cap
 
-TODO: get Roger to review and validate
+Miner Extractable Value (MEV) is a measure of the profit a miner/validator can make by arbitrarily including, excluding, or re-ordering transactions within the blocks they produce. MEV comes in many forms, and we are most interested in those mechanisms which ultimately influence the Ethereum gas market (base fee and priority fee post EIP-1559) directly.
 
-Miner Extractable Value (MEV) is a measure of the profit a miner/validator can make by arbitrarily including, excluding, or re-ordering transactions within the blocks they produce.
+The most prominent form of MEV has been that introduced by Flashbots' MEV-geth client, and we include an extract from the research article by Flashbots ["MEV and EIP-1559"](https://hackmd.io/@flashbots/MEV-1559) for context:
 
-Under the influence of MEV, it is assumed a certain proportion of miners/validators would run MEV nodes (e.g. Flashbots), resulting in a blockspace auction where users would need to increase their transaction priority fee in order to get transactions included in the blockspace. In steady state, without the influence of MEV, it is assumed the priority fee would be on average 1 Gwei per gas to compensate for uncle risk - see https://notes.ethereum.org/@vbuterin/BkSQmQTS8#Why-would-miners-include-transactions-at-all.
+> Flashbots has introduced a way for searchers to express their transaction ordering preferences to miners, leading to a more efficient market all Ethereum users should ideally benefit from. In order to achieve this, Flashbots provides custom mining software (MEV-geth) to a number of miners jointly controlling the vast majority of Ethereum’s hashrate (85% at the time of writing).
 
-Calculating MEV as a percentage of transaction fees is nontrivial, but based on the following two pieces of research, we assume that 30% of transaction fees can be attributed to MEV:
+The general consensus among researchers is that MEV is hard to quantify, and the future interaction between EIP-1559 and MEV is at this stage uncertain and complex. For this reason we adopt the conservative assumptions from prominent researchers, identify the paths and mechanisms through which MEV can be extracted, and suggest to refine the model assumptions once more data and research about the interaction between EIP-1559 and MEV is available.
+
+There are several auction mechanisms coexisting in Ethereum, identified by Flashbots in their research article ["MEV and EIP-1559"](https://hackmd.io/@flashbots/MEV-1559):
+* Transaction inclusion via EIP-1559 priority fees
+* Transaction privacy via Flashbots/Darkpools
+* Transaction ordering via Flashbots/Other relays
+
+MEV has an influence on the EIP-1559 base fee and priority fee in the following scenarios:
+* Miners/validators including less-than-target sized blocks to drive the baseefee down to 0, although there is a clear economic downside for miners to adopt this strategy because they would be effectively losing out on profit with each block
+* Miners/validators creating a blockspace auction for transaction inclusion, driving the priority fee up
+* Flashbots style "Off-Chain Agreements" resulting in value extraction outside of EIP-1559 auction mechanisms
+
+Under the influence of MEV, it is assumed a certain proportion of miners/validators would run MEV nodes (e.g. Flashbots' MEV-gath client), resulting in a blockspace auction where users would need to increase their transaction priority fee in order to get transactions included in the blockspace. In steady state, without the influence of MEV, it is assumed the priority fee would be on average 1-5 Gwei per gas to compensate for uncle risk - see https://notes.ethereum.org/@barnabe/rk5ue1WF_.
+
+Calculating MEV as a percentage of transaction fees is nontrivial, but based on the following two pieces of research, we adopt the assumption that the EIP-1559 priority fee will be artificially driven up by a transaction inclusion auction, and make up 30% of total transaction fees:
 * A [Twitter post by Robert Miller](https://mobile.twitter.com/bertcmiller/status/1405234475680862210) presents a time-series of MEV as a percentage of transaction fees over the period 1 March 2021 to 1 June 2021 (Flashbots started around December 2020, and got popular first quarter 2021) ranging between 11% and 46% with an upwards trend. This time-series is based on data collected using the [Flashbots MEV Inspect library](https://github.com/flashbots/mev-inspect-py). It's worth noting the caveats mentioned in the Twitter thread for more rigorous analysis.
 * Just Drake's spreadsheet ["staking APR with EVM fee rewards"](https://docs.google.com/spreadsheets/d/1FslqTnECKvi7_l4x6lbyRhNtzW9f6CVEzwDf04zprfA) presents a "Best guess" of a 70% fee burn percentage - this means 70% of the average fee cap is attributed to the base fee.
 
-We assume the effect of MEV will continue, and thus assume a static value of 0.3 (30%) multiplied by the [average fee cap](#average-fee-cap-max_fee_per_gas) to set the default value for the EIP-1559 priority fee in Gwei per gas - to change this value, update the `priority_fee_process` [System Parameter](./model/system_parameters.py). The `priority_fee_process` [System Parameter](./model/system_parameters.py) can also be a time-series of priority fee values, if you would like to test more complex scenarios.
+We assume the effect of MEV will continue in some form, and thus assume a static value of 0.3 (30%) multiplied by the [average fee cap](#average-fee-cap-max_fee_per_gas) to set the default value for the EIP-1559 priority fee in Gwei per gas - to change this value, update the `priority_fee_process` [System Parameter](./model/system_parameters.py). The `priority_fee_process` [System Parameter](./model/system_parameters.py) can also be a time-series of priority fee values, if you would like to test more complex scenarios.
 
-In the "Network Issuance and Inflation Rate" experiment notebook we set the proportion between the base fee and priority fee for different scenarios as follows:
-* EIP1559 Enabled / No MEV: Base Fee 100, Priority Fee 1 (steady state at average gas prices)
-* EIP1559 Enabled / MEV: Base Fee 70, Priority Fee 30
+In the "Network Issuance and Inflation Rate" experiment notebook we set the proportion between the base fee and priority fee (both in Gwei per gas) for different scenarios as follows:
+* EIP1559 Enabled / No MEV: Base Fee 65, Priority Fee 1 (steady state at 3-month median gas prices)
+* EIP1559 Enabled / MEV: Base Fee 70% of 65, Priority Fee 30% of 65
 * EIP1559 Disabled: Base Fee 0, Priority Fee 0
+
+Further reading:
+* [Tim Roughgarden, "Transaction Fee Mechanism Design for the Ethereum Blockchain:An Economic Analysis of EIP-1559"](https://timroughgarden.org/papers/eip1559.pdf)
+* [Flashbots' MEV Research repository](https://github.com/flashbots/mev-research)
+* [Barnabé Monnot, "Uncle risk/MEV miner fee calculation"](https://notes.ethereum.org/@barnabe/rk5ue1WF_)
