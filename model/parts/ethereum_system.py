@@ -124,11 +124,49 @@ def policy_network_issuance(
     }
 
 
+def policy_mev(params, substep, state_history, previous_state) -> typing.Dict[str, ETH]:
+    """
+    ## Miner Extractable Value (MEV) Policy
+
+    MEV is allocated to miners pre Proof-of-Stake and validators post Proof-of-Stake,
+    using the `realized_mev_per_block` System Parameter.
+
+    By default `realized_mev_per_block` is set zero, to only consider the
+    influence of Proof-of-Stake (PoS) incentives on validator yields.
+
+    See [ASSUMPTIONS.md](ASSUMPTIONS.md) document for further details.
+    """
+    # Parameters
+    dt = params["dt"]
+    realized_mev_per_block = params["realized_mev_per_block"]
+
+    # State Variables
+    stage = Stage(previous_state["stage"])
+
+    if stage in [Stage.PROOF_OF_STAKE]:
+        total_realized_mev_to_miners = 0
+        # Allocate realized MEV to validators post Proof-of-Stake
+        total_realized_mev_to_validators = (
+            realized_mev_per_block * constants.slots_per_epoch * dt
+        )
+    else:  # Stage is pre Proof-of-Stake
+        # Allocate realized MEV to miners pre Proof-of-Stake
+        total_realized_mev_to_miners = (
+            realized_mev_per_block * constants.pow_blocks_per_epoch * dt
+        )
+        total_realized_mev_to_validators = 0
+
+    return {
+        "total_realized_mev_to_miners": total_realized_mev_to_miners,
+        "total_realized_mev_to_validators": total_realized_mev_to_validators,
+    }
+
+
 def policy_eip1559_transaction_pricing(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
     """
-    ## EIP1559 Transaction Pricing Mechanism
+    ## EIP1559 Transaction Pricing Policy
 
     A transaction pricing mechanism that includes fixed-per-block network fee
     that is burned and dynamically expands/contracts block sizes to deal with transient congestion.
@@ -179,7 +217,7 @@ def policy_eip1559_transaction_pricing(
     else:  # stage is Stage.PROOF_OF_STAKE
         gas_used = constants.slots_per_epoch * gas_target  # Gas
 
-    # Calculate total base fee, and priority fee to validators
+    # Calculate the total base fee and priority fee
     total_base_fee = gas_used * base_fee_per_gas  # Gwei
     total_priority_fee = gas_used * avg_priority_fee_per_gas  # Gwei
 

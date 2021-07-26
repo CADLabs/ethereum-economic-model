@@ -125,9 +125,15 @@ class StateVariables:
     total_base_fee: Gwei = 0
     """The total base fee burned for all transactions included in blockspace"""
     total_priority_fee_to_miners: Gwei = 0
-    """"The total priority fee to miners pre-merge for all transactions included in blockspace"""
+    """"The total priority fee to miners pre Proof-of-Stake for all transactions included in blockspace"""
     total_priority_fee_to_validators: Gwei = 0
-    """"The total priority fee to validators post-merge for all transactions included in blockspace"""
+    """"The total priority fee to validators post Proof-of-Stake for all transactions included in blockspace"""
+
+    # Miner Extractable Value (MEV) state variables
+    total_realized_mev_to_miners: ETH = 0
+    """The total realized MEV to miners pre Proof-of-Stake"""
+    total_realized_mev_to_validators: ETH = 0
+    """The total realized MEV to validators post Proof-of-Stake"""
 
     # System metric state variables
     validator_eth_staked: np.ndarray = np.zeros(
@@ -152,7 +158,6 @@ class StateVariables:
     )
     """The total annualized profit (income received - costs) yields (percentage of investment amount)
     per validator environment"""
-
     validator_count_distribution: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=int
     )

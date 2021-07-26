@@ -39,6 +39,7 @@ legend_state_variable_name_mapping = {
     "block_proposer_reward_eth": "Block Proposer Reward",
     "sync_reward_eth": "Sync Reward",
     "total_priority_fee_to_validators_eth": "Priority Fees",
+    "total_realized_mev_to_validators": "Realized MEV",
     "supply_inflation_pct": "ETH Supply inflation",
     "total_revenue_yields_pct": "Total Revenue Yields",
     "total_profit_yields_pct": "Total Profit Yields",
@@ -1083,8 +1084,7 @@ def plot_yields_per_subset_subplots(df, subplot_titles=[]):
     return fig
 
 
-def plot_yields_per_subset(df):
-    scenario_names = {0: "Normal Adoption", 1: "Low Adoption", 2: "High Adoption"}
+def plot_yields_per_subset(df, scenario_names={0: "Normal Adoption", 1: "Low Adoption", 2: "High Adoption"}):
     color_cycle = itertools.cycle(cadlabs_colorway_sequence)
 
     fig = go.Figure()
@@ -1380,7 +1380,17 @@ def plot_figure_widget_revenue_yields_over_time_foreach_subset(df):
     return widgets.VBox([container, fig])
 
 
-def plot_revenue_yields_rolling_mean(df_rolling):
+def plot_revenue_yields_rolling_mean(df):
+    
+    rolling_window = df.groupby('timestamp')['total_revenue_yields_pct'].mean().rolling(7)
+    df_rolling = pd.DataFrame()
+    df_rolling['rolling_std'] = rolling_window.std()
+    df_rolling['rolling_mean'] = rolling_window.mean()
+    df_rolling['max'] = df.groupby('timestamp')['total_revenue_yields_pct'].max()
+    df_rolling['min'] = df.groupby('timestamp')['total_revenue_yields_pct'].min()
+    df_rolling = df_rolling.fillna(method="ffill")
+    df_rolling = df_rolling.reset_index()
+    
     fig = go.Figure(
         [
             go.Scatter(
@@ -1388,10 +1398,10 @@ def plot_revenue_yields_rolling_mean(df_rolling):
                 x=df_rolling["timestamp"],
                 y=df_rolling["rolling_mean"],
                 mode="lines",
-                line=dict(color="rgb(31, 119, 180)"),
+#                 line=dict(color="rgb(31, 119, 180)"),
             ),
             go.Scatter(
-                name="Upper Bound (max)",
+                name="Max",
                 x=df_rolling["timestamp"],
                 y=df_rolling["max"],
                 mode="lines",
@@ -1400,7 +1410,7 @@ def plot_revenue_yields_rolling_mean(df_rolling):
                 showlegend=False,
             ),
             go.Scatter(
-                name="Lower Bound (min)",
+                name="Min",
                 x=df_rolling["timestamp"],
                 y=df_rolling["min"],
                 marker=dict(color="#444"),

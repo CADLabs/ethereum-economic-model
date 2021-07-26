@@ -35,7 +35,7 @@ from model.utils import default
 from data.historical_values import (
     eth_price_mean,
     eth_gas_price_mean,
-    eth_block_rewards_mean
+    eth_block_rewards_mean,
 )
 
 
@@ -205,7 +205,7 @@ class Parameters:
         ]
     )
     """
-    A process that returns the number of new validators per epoch.
+    A process that returns the number of new validators added to the activation queue per epoch.
 
     Used if model not driven using `eth_staked_process`.
 
@@ -215,9 +215,26 @@ class Parameters:
     # Ethereum system parameters
     daily_pow_issuance: List[ETH] = default([eth_block_rewards_mean])
     """
-    The average daily Proof of Work issuance in ETH.
+    The average daily Proof-of-Work issuance in ETH.
 
     See https://etherscan.io/chart/blockreward
+    """
+
+    realized_mev_per_block: List[ETH] = default([0])
+    """
+    By default the realized Miner Extractable Value (MEV) per block is set to zero
+    to only consider the influence of Proof-of-Stake (PoS) incentives on validator yields.
+    
+    To investigate the influence of MEV on validator yields,
+    set this parameter to a reasonable value for the realized MEV per block / slot.
+    
+    The realized MEV per block is allocated to miners pre-PoS and validators post-PoS,
+    increasing the effective yields of those miners / validators
+    that use MEV clients such as Flashbots' MEV-geth.
+    
+    An example of a valid assumption for the realized MEV
+    would be the 30-day realized MEV from https://explore.flashbots.net/,
+    this value can then be calculated per-block to set the `realized_mev_per_block` parameter.
     """
 
     # Parameters from the Eth2 specification
@@ -361,9 +378,12 @@ class Parameters:
 
     # EIP1559 transaction pricing parameters
     base_fee_process: List[Callable[[Run, Timestep], Gwei_per_Gas]] = default(
-        [lambda _run, _timestep: 0.7 * eth_gas_price_mean]  # Gwei per gas
+        # TODO: confirm value using historical data
+        [lambda _run, _timestep: 30]  # Gwei per gas
     )
     """
+    TODO: update description with new assumptions
+    
     The base fee burned, in Gwei per gas, for each transaction.
 
     An average of approx. 100 Gwei per gas expected to be set as transaction fee cap,
@@ -380,9 +400,11 @@ class Parameters:
     """
 
     priority_fee_process: List[Callable[[Run, Timestep], Gwei_per_Gas]] = default(
-        [lambda _run, _timestep: 0.3 * eth_gas_price_mean]  # Gwei per gas
+        [lambda _run, _timestep: 2]  # Gwei per gas
     )
     """
+    TODO: update description with new assumptions
+    
     EIP1559 transaction pricing priority fee, in Gwei per gas.
 
     Due to MEV, average priority fee expected to be higher than usual as bid for inclusion in blockscpace market. We assume 30% of the fee cap.
