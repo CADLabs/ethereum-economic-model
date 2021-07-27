@@ -168,10 +168,10 @@ The blockspace market currently follows a demand curve - transactions with a hig
 Effectively what this means is that some transactions will be priced out and not included in the block. In practise, 10-15% of the gas used in a block is by zero-fee transactions, due to for example MEV clients including Flashbots bundles - for this reason, instead of taking the minimum gas price in the block to calculate a reasonable value for the future base fee at equilibrium, we take the 25th percentile to remove zero-fee outliers (which are no longer possible after EIP-1559). This is a reasonable assumption because at equilibrium the base fee is meant to target the user in the upper percentiles of the current demand curve at 15m gas.
 
 Using a [Dune Analytics query](https://duneanalytics.com/queries/91241) we calculate the 90-day 25th and 50th percentile gas price by transaction:
-* 90-Day 50th Percentile ("Median"): 33 Gwei per gas
-* 90-Day 25th Percentile: 18 Gwei per gas
+* 90-Day 50th Percentile ("Median") as the upper bound: 33 Gwei per gas
+* 90-Day 25th Percentile as the lower bound: 18 Gwei per gas
 
-We expect the steady state average base fee to be in the range of 20-30 Gwei per gas, and by default set the `base_fee_process` [System Parameter](./model/system_parameters.py) halfway to a constant 25 Gwei per gas. 
+We expect the steady state average base fee to be in the range of 18-33 Gwei per gas, and by default set the `base_fee_process` [System Parameter](./model/system_parameters.py) to a constant 25 Gwei per gas. 
 
 The following scenarios may exist, outside of the steady state:
 * An increased base fee when rollups start paying for publishing on L1
