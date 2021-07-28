@@ -1398,7 +1398,6 @@ def plot_revenue_yields_rolling_mean(df):
                 x=df_rolling["timestamp"],
                 y=df_rolling["rolling_mean"],
                 mode="lines",
-#                 line=dict(color="rgb(31, 119, 180)"),
             ),
             go.Scatter(
                 name="Max",
