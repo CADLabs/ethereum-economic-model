@@ -27,7 +27,7 @@ eth_price_max = df_ether_price.Value.max()
 df_gas_price = pd.read_csv(file_ether_avg_gas_price)
 df_gas_price = df_gas_price.set_index(['Date(UTC)'], drop=False)
 df_gas_price = df_gas_price.loc[window_start:window_end]
-eth_gas_price_mean: Gwei_per_Gas = df_gas_price['Value (Wei)'].mean() / constants.gwei
+eth_gas_price_median: Gwei_per_Gas = df_gas_price['Value (Wei)'].median() / constants.gwei
 
 # Calculate Ethereum average block rewards over last 12 months from Etherscan
 df_block_rewards = pd.read_csv(file_ether_block_rewards)
