@@ -129,7 +129,7 @@ class StateVariables:
     total_priority_fee_to_validators: Gwei = 0
     """"The total priority fee to validators post Proof-of-Stake for all transactions included in blockspace"""
 
-    # Miner Extractable Value (MEV) state variables
+    # Maximum Extractable Value (MEV) state variables
     total_realized_mev_to_miners: ETH = 0
     """The total realized MEV to miners pre Proof-of-Stake"""
     total_realized_mev_to_validators: ETH = 0
