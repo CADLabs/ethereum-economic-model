@@ -713,25 +713,6 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
             ),
             *(secondary_y, secondary_y) if secondary_y else (),
         )
-        fig.add_trace(
-            go.Scatter(
-                mode="markers",
-                x=[date],
-                y=[df.loc[date.strftime("%Y-%m-%d")][column][0]],
-                marker_symbol=["diamond"],
-                marker_line_color="black",
-                marker_color=cadlabs_colorway_sequence[idx + 1],
-                marker_line_width=2,
-                marker_size=10,
-                hovertemplate=name,
-                name=name,
-                textfont_size=11,
-                textposition="top center",
-                legendgroup="markers",
-                showlegend=True,
-            ),
-            *(secondary_y, secondary_y) if secondary_y else (),
-        )
 
     return fig
 
