@@ -154,7 +154,7 @@ _state_update_blocks = [
     },
     {
         "description": """
-            Miner Extractable Value (MEV)
+            Maximum Extractable Value (MEV)
         """,
         "policies": {
             "mev": ethereum.policy_mev,

@@ -126,7 +126,7 @@ def policy_network_issuance(
 
 def policy_mev(params, substep, state_history, previous_state) -> typing.Dict[str, ETH]:
     """
-    ## Miner Extractable Value (MEV) Policy
+    ## Maximum Extractable Value (MEV) Policy
 
     MEV is allocated to miners pre Proof-of-Stake and validators post Proof-of-Stake,
     using the `realized_mev_per_block` System Parameter.
