@@ -952,9 +952,7 @@ def plot_eth_staked_over_all_stages(df):
     return fig
 
 
-def plot_number_of_validators_over_time_foreach_subset(df):
-    scenario_names = {0: "Normal Adoption", 1: "Low Adoption", 2: "High Adoption"}
-
+def plot_number_of_validators_per_subset(df, scenario_names):
     fig = go.Figure()
 
     for subset in df.subset.unique():
@@ -1084,7 +1082,7 @@ def plot_yields_per_subset_subplots(df, subplot_titles=[]):
     return fig
 
 
-def plot_yields_per_subset(df, scenario_names={0: "Normal Adoption", 1: "Low Adoption", 2: "High Adoption"}):
+def plot_yields_per_subset(df, scenario_names):
     color_cycle = itertools.cycle(cadlabs_colorway_sequence)
 
     fig = go.Figure()
@@ -1152,8 +1150,7 @@ def plot_yields_per_subset(df, scenario_names={0: "Normal Adoption", 1: "Low Ado
     return fig
 
 
-def plot_cumulative_yields_per_subset(df):
-    scenario_names = {0: "Normal Adoption", 1: "Low Adoption", 2: "High Adoption"}
+def plot_cumulative_yields_per_subset(df, scenario_names):
     color_cycle = itertools.cycle(cadlabs_colorway_sequence)
 
     fig = go.Figure()
@@ -1228,6 +1225,44 @@ def plot_cumulative_yields_per_subset(df):
                 yanchor="top",
             )
         ]
+    )
+
+    fig.update_layout(hovermode="x unified")
+
+    return fig
+
+
+def plot_cumulative_revenue_yields_per_subset(df, scenario_names):
+    color_cycle = itertools.cycle(cadlabs_colorway_sequence)
+
+    fig = go.Figure()
+
+    for subset in df.subset.unique():
+        df_subset = df.query(f"subset == {subset}").copy()
+
+        df_subset["daily_revenue_yields_pct"] = (
+            df_subset["total_revenue_yields_pct"] / 365
+        )
+
+        df_subset["cumulative_revenue_yields_pct"] = (
+            df_subset["daily_revenue_yields_pct"].expanding().sum()
+        )
+
+        color = next(color_cycle)
+        fig.add_trace(
+            go.Scatter(
+                x=df["timestamp"],
+                y=df_subset["cumulative_revenue_yields_pct"],
+                name=f"{scenario_names[subset]}",
+                line=dict(color=color),
+            ),
+        )
+
+    fig.update_layout(
+        title="Cumulative Revenue Yields Over Time",
+        xaxis_title="Date",
+        yaxis_title="Cumulative Yields (%)",
+        legend_title="",
     )
 
     fig.update_layout(hovermode="x unified")
