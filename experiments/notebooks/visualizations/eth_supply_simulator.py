@@ -40,7 +40,7 @@ app.layout = html.Div([
                         {'label': 'Normal Adoption', 'value': 'Normal Adoption'},
                         {'label': 'Low Adoption', 'value': 'Low Adoption'},
                         {'label': 'High Adoption', 'value': 'High Adoption'},
-                        {'label': 'Custom', 'value': 'Custom'}
+                        {'label': 'Custom Value', 'value': 'Custom Value'}
                     ]
                 )
             ]),
@@ -84,7 +84,7 @@ app.layout = html.Div([
         html.Div([
             # EIP1559 Scenarios Dropdown
             html.Div([
-                html.Label('EIP1559 Scenarios'),
+                html.Label('EIP1559 Scenario'),
                 dcc.Dropdown(
                     id='eip1559-dropdown',
                     clearable=False,
@@ -148,7 +148,7 @@ def update_eip1559_sliders_by_scenarios(eip1559_dropdown):
     [Input('validator-dropdown', 'value')]
 )
 def update_validator_adoption_sliders_by_scenarios(validator_dropdown):
-    if validator_dropdown == 'Custom':
+    if validator_dropdown == 'Custom Value':
         raise PreventUpdate
 
     validator_scenarios = {'Normal Adoption': 3, 'Low Adoption': 3 * 0.5, 'High Adoption': 3 * 1.5}
@@ -175,7 +175,7 @@ def update_output_graph(validator_adoption, pos_launch_date, eip1559_base_fee):
     elif validator_adoption == 3 * 1.5:
         validator_dropdown = 'High Adoption'
     else:
-        validator_dropdown = 'Custom'
+        validator_dropdown = 'Custom Value'
 
     if eip1559_base_fee == 0:
         eip1559_dropdown = 'Disabled (Base Fee = 0)'
