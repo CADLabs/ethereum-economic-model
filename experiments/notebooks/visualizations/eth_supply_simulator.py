@@ -73,7 +73,10 @@ app.layout = html.Div([
                     {'label': 'Dec 2021', 'value': '2021/12/1'},
                     {'label': 'Mar 2022', 'value': '2022/03/1'},
                     {'label': 'Jun 2022', 'value': '2022/06/1'},
-                    {'label': 'Sep 2022', 'value': '2022/09/1'}
+                    {'label': 'Sep 2022', 'value': '2022/09/1'},                  
+                    {'label': 'Dec 2022', 'value': '2022/12/1'},
+                    {'label': 'Mar 2023', 'value': '2023/03/1'},
+                    {'label': 'Jun 2023', 'value': '2023/06/1'}
                 ]
             )
         ], className='input-section'),
@@ -85,12 +88,11 @@ app.layout = html.Div([
                 dcc.Dropdown(
                     id='eip1559-dropdown',
                     clearable=False,
-                    value='Enabled: Steady State',
+                    value='Enabled (Base Fee = 25)',
                     options=[
-                        {'label': 'Disabled', 'value': 'Disabled'},
-                        {'label': 'Enabled: Steady State', 'value': 'Enabled: Steady State'},
-                        {'label': 'Enabled: MEV', 'value': 'Enabled: MEV'},
-                        {'label': 'Custom', 'value': 'Custom'}
+                        {'label': 'Disabled (Base Fee = 0)', 'value': 'Disabled (Base Fee = 0)'},
+                        {'label': 'Enabled (Base Fee = 25)', 'value': 'Enabled (Base Fee = 25)'},
+                        {'label': 'Enabled (Custom Value)', 'value': 'Enabled (Custom Value)'}
                     ]
                 )
             ]),
@@ -133,10 +135,10 @@ app.layout = html.Div([
     [Input('eip1559-dropdown', 'value')]
 )
 def update_eip1559_sliders_by_scenarios(eip1559_dropdown):
-    if eip1559_dropdown == 'Custom':
+    if eip1559_dropdown == 'Enabled (Custom Value)':
         raise PreventUpdate
 
-    eip1559_scenarios = {'Disabled': 0, 'Enabled: Steady State': 100, 'Enabled: MEV': 70}
+    eip1559_scenarios = {'Disabled (Base Fee = 0)': 0, 'Enabled (Base Fee = 25)': 25}
 
     return eip1559_scenarios[eip1559_dropdown]
 
@@ -176,13 +178,11 @@ def update_output_graph(validator_adoption, pos_launch_date, eip1559_base_fee):
         validator_dropdown = 'Custom'
 
     if eip1559_base_fee == 0:
-        eip1559_dropdown = 'Disabled'
-    elif eip1559_base_fee == 100:
-        eip1559_dropdown = 'Enabled: Steady State'
-    elif eip1559_base_fee == 70:
-        eip1559_dropdown = 'Enabled: MEV'
+        eip1559_dropdown = 'Disabled (Base Fee = 0)'
+    elif eip1559_base_fee == 25:
+        eip1559_dropdown = 'Enabled (Base Fee = 25)'
     else:
-        eip1559_dropdown = 'Custom'
+        eip1559_dropdown = 'Enabled (Custom Value)'
 
     return (
         validator_dropdown,
