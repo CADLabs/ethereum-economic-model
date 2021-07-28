@@ -64,7 +64,7 @@ app.layout = html.Div([
                     value=3,
                     tooltip={'placement': 'top'}
                 )
-            ])
+            ], className='slider-input')
         ], className='input-section'),
         # Proof of Stake Activation Date Dropdown
         html.Div([
@@ -118,7 +118,7 @@ app.layout = html.Div([
                     value=100,
                     tooltip={'placement': 'top'},
                 )
-            ])
+            ], className='slider-input')
         ], className='input-section')
     ], className='input-row'),
 

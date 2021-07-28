@@ -852,18 +852,20 @@ def plot_eth_supply_and_inflation(df_historical, df_simulated, parameters=parame
         xaxis_title="Date",
         title="ETH Supply Simulator",
         legend_title="",
+        height=550,
         legend=dict(
             title=dict(
                 text="",
             ),
             orientation="h",
             yanchor="top",
-            y=-0.425,
+            y=-0.475,
             xanchor="center",
             x=0.5,
             traceorder="grouped",
             itemclick=False,
         ),
+        margin=dict(l=60, r=0, t=30, b=20),
     )
 
     fig.add_hline(
