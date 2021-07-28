@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `realized_mev_per_block` System Parameter
 - Maximum Extractable Value (MEV) Policy Function
 - "Ethereum Network Assumptions" and "Ethereum Transaction & EIP-1559 Assumptions" added to [ASSUMPTIONS.md](ASSUMPTIONS.md) doc
+- Additional datasets in [data/](data/): Historical Ethereum Average Gas Price, Historical Ethereum Block Rewards, Daily Extracted MEV, Historical Ethereum Gas Used
 
 ## [1.0.0] - 2021-07-15
 ### Changed
