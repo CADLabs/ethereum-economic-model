@@ -1,7 +1,7 @@
 # Mathematical Model Specification
 [![hackmd-github-sync-badge](https://hackmd.io/wHM-t557Tp2BH1gItdRvFA/badge)](https://hackmd.io/wHM-t557Tp2BH1gItdRvFA)
 
-Mathematical Model Specification for the [CADLabs Ethereum Economic Model](https://github.com/CADLabs/ethereum-economic-model/releases/tag/v1.0.0) version v1.0.0.
+Mathematical Model Specification for the [CADLabs Ethereum Economic Model](https://github.com/CADLabs/ethereum-economic-model/releases/tag/v1.1.0) version v1.1.0.
 
 :::info
 If you are not viewing this document in HackMD, it was formatted using Markdown and LaTeX to be rendered in HackMD. For the best viewing experience see https://hackmd.io/@CADLabs/ryLrPm2T_
