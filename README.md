@@ -4,7 +4,7 @@
 
 A modular dynamical-systems model of Ethereum's validator economics, based on the open-source Python library [radCAD](https://github.com/CADLabs/radCAD), an extension to [cadCAD](https://cadcad.org).
 
-* Current model version: `v1.0.0`
+* Current model version: `v1.1.0`
 * Implements the official Ethereum [Altair](https://github.com/ethereum/eth2.0-specs#altair) spec updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release
 
 ## Table of Contents
@@ -100,7 +100,7 @@ The [Differential Model Specification](https://hackmd.io/@CADLabs/HyENPQ36u) dep
 ## Environment Setup
 
 1. Clone or download the Git repository: `git clone https://github.com/CADLabs/ethereum-model` or using GitHub Desktop
-2. If completing the cadCAD Edu Masterclass MOOC, check out the version `v1.0.0` tag: `git checkout tags/v1.0.0`
+2. If completing the cadCAD Edu Masterclass MOOC, check out the version `v1.1.0` tag: `git checkout tags/v1.1.0`
 3. Set up your development environment using of the following two options:
 
 ### Option 1: Local Development Environment
@@ -286,6 +286,6 @@ If you'd like to cite this code and/or research, we suggest the following format
   publisher = {GitHub},
   journal = {GitHub repository},
   howpublished = {\url{https://github.com/CADLabs/ethereum-economic-model}},
-  version = {v1.0.0}
+  version = {v1.1.0}
 }
 ```
