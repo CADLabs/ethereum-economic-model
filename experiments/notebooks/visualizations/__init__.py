@@ -1224,7 +1224,7 @@ def plot_cumulative_yields_per_subset(df):
                 pad={"t": 10},
                 x=0,
                 xanchor="left",
-                y=1.1,
+                y=1.15,
                 yanchor="top",
             )
         ]
