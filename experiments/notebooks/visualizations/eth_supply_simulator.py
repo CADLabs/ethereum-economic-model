@@ -18,6 +18,10 @@ from data.historical_values import df_ether_supply
 experiment = eth_supply_analysis.experiment
 # Create a copy of the experiment simulation
 simulation = copy.deepcopy(experiment.simulations[0])
+# Configure scenarios
+eip1559_scenarios = {'Disabled (Base Fee = 0)': 0, 'Enabled (Base Fee = 25)': 25}
+validator_scenarios = {'Normal Adoption': 3, 'Low Adoption': 3 * 0.5, 'High Adoption': 3 * 1.5}
+
 
 # Load Data
 external_stylesheets = ['assets/default_stylesheet.css']
@@ -138,8 +142,6 @@ def update_eip1559_sliders_by_scenarios(eip1559_dropdown):
     if eip1559_dropdown == 'Enabled (Custom Value)':
         raise PreventUpdate
 
-    eip1559_scenarios = {'Disabled (Base Fee = 0)': 0, 'Enabled (Base Fee = 25)': 25}
-
     return eip1559_scenarios[eip1559_dropdown]
 
 
@@ -150,8 +152,6 @@ def update_eip1559_sliders_by_scenarios(eip1559_dropdown):
 def update_validator_adoption_sliders_by_scenarios(validator_dropdown):
     if validator_dropdown == 'Custom Value':
         raise PreventUpdate
-
-    validator_scenarios = {'Normal Adoption': 3, 'Low Adoption': 3 * 0.5, 'High Adoption': 3 * 1.5}
 
     return validator_scenarios[validator_dropdown]
 
@@ -168,21 +168,11 @@ def update_validator_adoption_sliders_by_scenarios(validator_dropdown):
 def update_output_graph(validator_adoption, pos_launch_date, eip1559_base_fee):
     df, parameters = run_simulation(validator_adoption, pos_launch_date, eip1559_base_fee)
 
-    if validator_adoption == 3:
-        validator_dropdown = 'Normal Adoption'
-    elif validator_adoption == 3 * 0.5:
-        validator_dropdown = 'Low Adoption'
-    elif validator_adoption == 3 * 1.5:
-        validator_dropdown = 'High Adoption'
-    else:
-        validator_dropdown = 'Custom Value'
+    _validator_scenarios = dict((v, k) for k, v in validator_scenarios.items())
+    validator_dropdown = _validator_scenarios.get(validator_adoption, 'Custom Value')
 
-    if eip1559_base_fee == 0:
-        eip1559_dropdown = 'Disabled (Base Fee = 0)'
-    elif eip1559_base_fee == 25:
-        eip1559_dropdown = 'Enabled (Base Fee = 25)'
-    else:
-        eip1559_dropdown = 'Enabled (Custom Value)'
+    _eip1559_scenarios = dict((v, k) for k, v in eip1559_scenarios.items())
+    eip1559_dropdown = _eip1559_scenarios.get(eip1559_base_fee, 'Enabled (Custom Value)')
 
     return (
         validator_dropdown,
