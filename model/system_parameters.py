@@ -34,7 +34,6 @@ from model.types import (
 from model.utils import default
 from data.historical_values import (
     eth_price_mean,
-    eth_gas_price_mean,
     eth_block_rewards_mean,
 )
 
@@ -138,6 +137,8 @@ class Parameters:
     system parameter key: system parameter type = default system parameter value
 
     Because lists are mutable, we need to wrap each parameter list in the `default(...)` method.
+
+    For default value assumptions, see the ASSUMPTIONS.md document.
     """
 
     # Time parameters
@@ -222,7 +223,7 @@ class Parameters:
 
     realized_mev_per_block: List[ETH] = default([0])
     """
-    By default the realized Miner Extractable Value (MEV) per block is set to zero
+    By default the realized Maximum Extractable Value (MEV) per block is set to zero
     to only consider the influence of Proof-of-Stake (PoS) incentives on validator yields.
     
     To investigate the influence of MEV on validator yields,
@@ -378,21 +379,16 @@ class Parameters:
 
     # EIP1559 transaction pricing parameters
     base_fee_process: List[Callable[[Run, Timestep], Gwei_per_Gas]] = default(
-        # TODO: confirm value using historical data
-        [lambda _run, _timestep: 30]  # Gwei per gas
+        [lambda _run, _timestep: 25]  # Gwei per gas
     )
     """
-    TODO: update description with new assumptions
+    EIP1559 transaction pricing base fee burned, in Gwei per gas, for each transaction.
+    See https://eips.ethereum.org/EIPS/eip-1559 for EIP-1559 proposal.
+
+    See ASSUMPTIONS.md doc for further details about default value assumption.
+
+    An extract from https://notes.ethereum.org/@vbuterin/eip-1559-faq:
     
-    The base fee burned, in Gwei per gas, for each transaction.
-
-    An average of approx. 100 Gwei per gas expected to be set as transaction fee cap,
-    split between the base fee and priority fee - the fee cap less the base fee is sent as a priority fee to miners/validators.
-
-    Approximated using average gas price from Etherscan over last 12 months.
-
-    An extract from https://notes.ethereum.org/@vbuterin/eip-1559-faq
-
     > Each “full block” (ie. a block whose gas is 2x the TARGET) increases the BASEFEE by 1.125x,
     > so a series of constant full blocks will increase the gas price by a factor of 10 every
     > ~20 blocks (~4.3 min on average).
@@ -403,16 +399,10 @@ class Parameters:
         [lambda _run, _timestep: 2]  # Gwei per gas
     )
     """
-    TODO: update description with new assumptions
+    EIP1559 transaction pricing average priority fee, in Gwei per gas, for each transaction.
+    See https://eips.ethereum.org/EIPS/eip-1559 for EIP-1559 proposal.
     
-    EIP1559 transaction pricing priority fee, in Gwei per gas.
-
-    Due to MEV, average priority fee expected to be higher than usual as bid for inclusion in blockscpace market. We assume 30% of the fee cap.
-
-    The priority fee is the difference between the fee cap set per transaction, and the base fee.
-
-    For PoW system without MEV influence, the priority fee level compensates for uncle risk:
-    See https://notes.ethereum.org/@vbuterin/BkSQmQTS8#Why-would-miners-include-transactions-at-all
+    See ASSUMPTIONS.md doc for further details about default value assumption.
     """
 
     gas_target_process: List[Callable[[Run, Timestep], Gas]] = default(
@@ -426,7 +416,8 @@ class Parameters:
     * a “hard per-block cap” (twice the current gas limit) == gas limit
 
     EIP1559 gas limit = gas_target * ELASTICITY_MULTIPLIER
-    See https://eips.ethereum.org/EIPS/eip-1559
+    
+    See ASSUMPTIONS.md doc for further details about default value assumption.
     """
 
 
