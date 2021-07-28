@@ -713,25 +713,6 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
             ),
             *(secondary_y, secondary_y) if secondary_y else (),
         )
-        fig.add_trace(
-            go.Scatter(
-                mode="markers",
-                x=[date],
-                y=[df.loc[date.strftime("%Y-%m-%d")][column][0]],
-                marker_symbol=["diamond"],
-                marker_line_color="black",
-                marker_color=cadlabs_colorway_sequence[idx + 1],
-                marker_line_width=2,
-                marker_size=10,
-                hovertemplate=name,
-                name=name,
-                textfont_size=11,
-                textposition="top center",
-                legendgroup="markers",
-                showlegend=True,
-            ),
-            *(secondary_y, secondary_y) if secondary_y else (),
-        )
 
     return fig
 
@@ -871,18 +852,20 @@ def plot_eth_supply_and_inflation(df_historical, df_simulated, parameters=parame
         xaxis_title="Date",
         title="ETH Supply Simulator",
         legend_title="",
+        height=550,
         legend=dict(
             title=dict(
                 text="",
             ),
             orientation="h",
             yanchor="top",
-            y=-0.425,
+            y=-0.475,
             xanchor="center",
             x=0.5,
             traceorder="grouped",
             itemclick=False,
         ),
+        margin=dict(l=60, r=0, t=30, b=20),
     )
 
     fig.add_hline(
