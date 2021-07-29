@@ -221,7 +221,7 @@ class Parameters:
     See https://etherscan.io/chart/blockreward
     """
 
-    realized_mev_per_block: List[ETH] = default([0])
+    mev_per_block: List[ETH] = default([0])
     """
     By default the realized Maximum Extractable Value (MEV) per block is set to zero
     to only consider the influence of Proof-of-Stake (PoS) incentives on validator yields.
@@ -235,7 +235,7 @@ class Parameters:
     
     An example of a valid assumption for the realized MEV
     would be the 30-day realized MEV from https://explore.flashbots.net/,
-    this value can then be calculated per-block to set the `realized_mev_per_block` parameter.
+    this value can then be calculated per-block to set the `mev_per_block` parameter.
     """
 
     # Parameters from the Eth2 specification

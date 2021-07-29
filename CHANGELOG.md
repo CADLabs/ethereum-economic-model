@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Experiment notebook 2, "Validator Revenue and Profit Yields": updated time-domain simulations to run over all stages
 
 ### Added
-- `realized_mev_per_block` System Parameter
+- `mev_per_block` System Parameter
 - Maximum Extractable Value (MEV) Policy Function
 - "Ethereum Network Assumptions" and "Ethereum Transaction & EIP-1559 Assumptions" added to [ASSUMPTIONS.md](ASSUMPTIONS.md) doc
 - Additional datasets in [data/](data/): Historical Ethereum Average Gas Price, Historical Ethereum Block Rewards, Daily Extracted MEV, Historical Ethereum Gas Used

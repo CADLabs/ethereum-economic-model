@@ -129,16 +129,16 @@ def policy_mev(params, substep, state_history, previous_state) -> typing.Dict[st
     ## Maximum Extractable Value (MEV) Policy
 
     MEV is allocated to miners pre Proof-of-Stake and validators post Proof-of-Stake,
-    using the `realized_mev_per_block` System Parameter.
+    using the `mev_per_block` System Parameter.
 
-    By default `realized_mev_per_block` is set zero, to only consider the
+    By default `mev_per_block` is set zero, to only consider the
     influence of Proof-of-Stake (PoS) incentives on validator yields.
 
     See [ASSUMPTIONS.md](ASSUMPTIONS.md) document for further details.
     """
     # Parameters
     dt = params["dt"]
-    realized_mev_per_block = params["realized_mev_per_block"]
+    mev_per_block = params["mev_per_block"]
 
     # State Variables
     stage = Stage(previous_state["stage"])
@@ -147,12 +147,12 @@ def policy_mev(params, substep, state_history, previous_state) -> typing.Dict[st
         total_realized_mev_to_miners = 0
         # Allocate realized MEV to validators post Proof-of-Stake
         total_realized_mev_to_validators = (
-            realized_mev_per_block * constants.slots_per_epoch * dt
+            mev_per_block * constants.slots_per_epoch * dt
         )
     else:  # Stage is pre Proof-of-Stake
         # Allocate realized MEV to miners pre Proof-of-Stake
         total_realized_mev_to_miners = (
-            realized_mev_per_block * constants.pow_blocks_per_epoch * dt
+            mev_per_block * constants.pow_blocks_per_epoch * dt
         )
         total_realized_mev_to_validators = 0
 

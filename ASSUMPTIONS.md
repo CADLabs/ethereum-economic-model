@@ -206,4 +206,4 @@ Prior to the adoption of the Flashbots MEV-geth client, gas prices were artifici
 
 The consensus among researchers is that MEV is hard to quantify, and the future interaction between EIP-1559 and MEV is at this stage uncertain and complex. For this reason we adopt the assumption that in normal conditions MEV will be extracted via off-chain mechanisms, and so will be treated as a seperate process to EIP-1559 - we suggest to refine the model assumptions once more data and research about the interaction between EIP-1559 and MEV is available.
 
-The `realized_mev_per_block` [System Parameter](./model/system_parameters.py) can be used to set the realized MEV in ETH per block. By default, we set the `realized_mev_per_block` to zero ETH, and leave it up to the reader to set their own assumptions.
+The `mev_per_block` [System Parameter](./model/system_parameters.py) can be used to set the realized MEV in ETH per block. By default, we set the `mev_per_block` to zero ETH, and leave it up to the reader to set their own assumptions.
