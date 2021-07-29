@@ -51,7 +51,7 @@ class StateVariables:
     """
     The stage of the network upgrade process.
 
-    By default set to PROOF_OF_STAKE Stage, where EIP1559 is enabled and POW issuance is disabled.
+    By default set to PROOF_OF_STAKE Stage, where EIP-1559 is enabled and POW issuance is disabled.
 
     Otherwise set to ALL Stage, which transitions through each stage, updating the `stage` State Variable.
 
@@ -119,7 +119,7 @@ class StateVariables:
     whistleblower_rewards: Gwei = 0
     """The total rewards received as a proportion of the effective balance of the slashed validators"""
 
-    # EIP1559 state variables
+    # EIP-1559 state variables
     base_fee_per_gas: Gwei_per_Gas = 1
     """The base fee burned, in Gwei per gas, dynamically updated for each block"""
     total_base_fee: Gwei = 0

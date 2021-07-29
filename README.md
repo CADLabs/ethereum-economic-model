@@ -34,12 +34,12 @@ This open-source model was developed in collaboration with the Ethereum Robust I
 ### Model Features
 
 * Configurable to reflect protocol behaviour at different points in time of the development roadmap (referred to as "upgrade stages"):
-  * Post Beacon Chain launch, pre EIP1559, pre PoS (validators receive PoS incentives, EIP1559 disabled, and PoW still in operation)
-  * Post Beacon Chain launch, post EIP1559, pre PoS (validators receive PoS incentives, EIP1559 enabled with miners receiving priority fees, and PoW still in operation)
-  * Post Beacon Chain launch, post EIP1559, post PoS (validators receive PoS incentives, EIP1559 enabled with validators receiving priority fees, and PoW deprecated)
+  * Post Beacon Chain launch, pre EIP-1559, pre PoS (validators receive PoS incentives, EIP-1559 disabled, and PoW still in operation)
+  * Post Beacon Chain launch, post EIP-1559, pre PoS (validators receive PoS incentives, EIP-1559 enabled with miners receiving priority fees, and PoW still in operation)
+  * Post Beacon Chain launch, post EIP-1559, post PoS (validators receive PoS incentives, EIP-1559 enabled with validators receiving priority fees, and PoW deprecated)
 * Flexible calculation granularity: By default, State Variables, System Metrics, and System Parameters are calculated at epoch level and aggregated daily (~= 225 epochs). Users can easily change epoch aggregation using the delta-time (`dt`) parameter. The model can be extended for slot-level granularity and analysis if that is desired (see [Model Extension Roadmap](#Model-Extension-Roadmap)).
 * Supports [state-space analysis](https://en.wikipedia.org/wiki/State-space_representation) (i.e. simulation of system state over time) and [phase-space analysis](https://en.wikipedia.org/wiki/Phase_space) (i.e. generation of all unique system states in a given experimental setup).
-* Customizable processes to set important variables such as ETH price, ETH staked, and EIP1559 transaction pricing.
+* Customizable processes to set important variables such as ETH price, ETH staked, and EIP-1559 transaction pricing.
 * Modular model structure for convenient extension and modification. This allows different user groups to refactor the model for different purposes, rapidly test new incentive mechanisms, or update the model as Ethereum implements new protocol improvements.
 * References to official [Eth2 specs](https://github.com/ethereum/eth2.0-specs) in Policy and State Update Function logic. This enables seamless onboarding of protocol developers and allows the more advanced cadCAD user to dig into the underlying protocol design that inspired the logic.
 
@@ -62,7 +62,7 @@ The model is composed of several structural modules in the [model/parts/](model/
 
 | Module | Description |
 | --- | --- |
-| [ethereum_system.py](model/parts/ethereum_system.py) | General Ethereum mechanisms, such as managing the system upgrade process, the EIP1559 transaction pricing mechanism, and updating the ETH price and ETH supply |
+| [ethereum_system.py](model/parts/ethereum_system.py) | General Ethereum mechanisms, such as managing the system upgrade process, the EIP-1559 transaction pricing mechanism, and updating the ETH price and ETH supply |
 | [pos_incentives.py](model/parts/pos_incentives.py) | Calculation of PoS incentives such as attestation and block proposal rewards and penalties |
 | [system_metrics.py](model/parts/system_metrics.py) | Calculation of metrics such as validator operational costs and yields |
 | [validators.py](model/parts/validators.py) | Validator processes such as validator activation, staking, and uptime |

@@ -77,11 +77,11 @@ app.layout = html.Div([
                 ]
             )
         ], className='input-section'),
-        # EIP1559
+        # EIP-1559
         html.Div([
-            # EIP1559 Scenarios Dropdown
+            # EIP-1559 Scenarios Dropdown
             html.Div([
-                html.Label('EIP1559 Scenarios'),
+                html.Label('EIP-1559 Scenarios'),
                 dcc.Dropdown(
                     id='eip1559-dropdown',
                     clearable=False,

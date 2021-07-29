@@ -2,7 +2,7 @@
 # Ethereum System
 
 General Ethereum mechanisms, such as managing the system upgrade process,
-the EIP1559 transaction pricing mechanism, and updating the ETH price and ETH supply.
+the EIP-1559 transaction pricing mechanism, and updating the ETH price and ETH supply.
 """
 
 import typing
@@ -65,7 +65,7 @@ def policy_upgrade_stages(params, substep, state_history, previous_state):
         # If Stage BEACON_CHAIN selected, only execute single stage
         current_stage = Stage.BEACON_CHAIN
     elif stage == Stage.EIP1559:
-        # If Stage EIP1559 selected, only execute single stage
+        # If Stage EIP-1559 selected, only execute single stage
         current_stage = Stage.EIP1559
     elif stage == Stage.PROOF_OF_STAKE:
         # If Stage PROOF_OF_STAKE selected, only execute single stage
@@ -166,7 +166,7 @@ def policy_eip1559_transaction_pricing(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
     """
-    ## EIP1559 Transaction Pricing Policy
+    ## EIP-1559 Transaction Pricing Policy
 
     A transaction pricing mechanism that includes fixed-per-block network fee
     that is burned and dynamically expands/contracts block sizes to deal with transient congestion.

@@ -436,7 +436,7 @@ class Parameters:
     * a “long-term average target” (equal to the current gas limit) == gas target
     * a “hard per-block cap” (twice the current gas limit) == gas limit
 
-    EIP1559 gas limit = gas_target * ELASTICITY_MULTIPLIER
+    EIP-1559 gas limit = gas_target * ELASTICITY_MULTIPLIER
     See https://eips.ethereum.org/EIPS/eip-1559
     &#34;&#34;&#34;
 
@@ -499,7 +499,7 @@ system parameter key: system parameter type = default system parameter value</p>
     &#34;&#34;&#34;
     Which stage or stages of the network upgrade process to simulate.
 
-    By default set to PROOF_OF_STAKE stage, where EIP1559 is enabled and POW issuance is disabled.
+    By default set to PROOF_OF_STAKE stage, where EIP-1559 is enabled and POW issuance is disabled.
 
     See model.types.Stage Enum for further documentation.
     &#34;&#34;&#34;
@@ -511,7 +511,7 @@ system parameter key: system parameter type = default system parameter value</p>
         [datetime.strptime(&#34;2021/07/14&#34;, &#34;%Y/%m/%d&#34;)]
     )
     &#34;&#34;&#34;
-    EIP1559 activation date as Python datetime.
+    EIP-1559 activation date as Python datetime.
 
     Source: https://github.com/ethereum/pm/issues/245#issuecomment-825751460
     &#34;&#34;&#34;
@@ -649,11 +649,11 @@ system parameter key: system parameter type = default system parameter value</p>
     &#34;&#34;&#34;
     BASE_FEE_MAX_CHANGE_DENOMINATOR: List[int] = default([8])
     &#34;&#34;&#34;
-    Used to set the maximum rate at which the EIP1559 base fee can change per block, approx. 12.5%.
+    Used to set the maximum rate at which the EIP-1559 base fee can change per block, approx. 12.5%.
     &#34;&#34;&#34;
     ELASTICITY_MULTIPLIER: List[int] = default([2])
     &#34;&#34;&#34;
-    Used to calculate gas limit from EIP1559 gas target
+    Used to calculate gas limit from EIP-1559 gas target
     &#34;&#34;&#34;
 
     # Validator parameters
@@ -706,7 +706,7 @@ system parameter key: system parameter type = default system parameter value</p>
     The number of slashing events per 1000 epochs.
     &#34;&#34;&#34;
 
-    # EIP1559 transaction pricing parameters
+    # EIP-1559 transaction pricing parameters
     base_fee_process: List[Callable[[Run, Timestep], Gwei_per_Gas]] = default(
         [lambda _run, _timestep: 70]  # Gwei per gas
     )
@@ -730,7 +730,7 @@ system parameter key: system parameter type = default system parameter value</p>
         [lambda _run, _timestep: 30]  # Gwei per gas
     )
     &#34;&#34;&#34;
-    EIP1559 transaction pricing priority fee, in Gwei per gas.
+    EIP-1559 transaction pricing priority fee, in Gwei per gas.
 
     Due to MEV, average priority fee expected to be higher than usual as bid for inclusion in blockscpace market.
 
@@ -750,7 +750,7 @@ system parameter key: system parameter type = default system parameter value</p>
     * a “long-term average target” (equal to the current gas limit) == gas target
     * a “hard per-block cap” (twice the current gas limit) == gas limit
 
-    EIP1559 gas limit = gas_target * ELASTICITY_MULTIPLIER
+    EIP-1559 gas limit = gas_target * ELASTICITY_MULTIPLIER
     See https://eips.ethereum.org/EIPS/eip-1559
     &#34;&#34;&#34;</code></pre>
 </details>

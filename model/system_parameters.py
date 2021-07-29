@@ -157,7 +157,7 @@ class Parameters:
     """
     Which stage or stages of the network upgrade process to simulate.
 
-    By default set to PROOF_OF_STAKE stage, where EIP1559 is enabled and POW issuance is disabled.
+    By default set to PROOF_OF_STAKE stage, where EIP-1559 is enabled and POW issuance is disabled.
 
     See model.types.Stage Enum for further documentation.
     """
@@ -169,7 +169,7 @@ class Parameters:
         [datetime.strptime("2021/08/04", "%Y/%m/%d")]
     )
     """
-    Expected EIP1559 activation date as Python datetime.
+    Expected EIP-1559 activation date as Python datetime.
     """
 
     date_pos: List[datetime] = default([datetime.strptime("2021/12/1", "%Y/%m/%d")])
@@ -320,11 +320,11 @@ class Parameters:
     """
     BASE_FEE_MAX_CHANGE_DENOMINATOR: List[int] = default([8])
     """
-    Used to set the maximum rate at which the EIP1559 base fee can change per block, approx. 12.5%.
+    Used to set the maximum rate at which the EIP-1559 base fee can change per block, approx. 12.5%.
     """
     ELASTICITY_MULTIPLIER: List[int] = default([2])
     """
-    Used to calculate gas limit from EIP1559 gas target
+    Used to calculate gas limit from EIP-1559 gas target
     """
 
     # Validator parameters
@@ -377,12 +377,12 @@ class Parameters:
     The number of slashing events per 1000 epochs.
     """
 
-    # EIP1559 transaction pricing parameters
+    # EIP-1559 transaction pricing parameters
     base_fee_process: List[Callable[[Run, Timestep], Gwei_per_Gas]] = default(
         [lambda _run, _timestep: 25]  # Gwei per gas
     )
     """
-    EIP1559 transaction pricing base fee burned, in Gwei per gas, for each transaction.
+    EIP-1559 transaction pricing base fee burned, in Gwei per gas, for each transaction.
     See https://eips.ethereum.org/EIPS/eip-1559 for EIP-1559 proposal.
 
     See ASSUMPTIONS.md doc for further details about default value assumption.
@@ -399,7 +399,7 @@ class Parameters:
         [lambda _run, _timestep: 2]  # Gwei per gas
     )
     """
-    EIP1559 transaction pricing average priority fee, in Gwei per gas, for each transaction.
+    EIP-1559 transaction pricing average priority fee, in Gwei per gas, for each transaction.
     See https://eips.ethereum.org/EIPS/eip-1559 for EIP-1559 proposal.
     
     See ASSUMPTIONS.md doc for further details about default value assumption.
@@ -415,7 +415,7 @@ class Parameters:
     * a “long-term average target” (equal to the current gas limit) == gas target
     * a “hard per-block cap” (twice the current gas limit) == gas limit
 
-    EIP1559 gas limit = gas_target * ELASTICITY_MULTIPLIER
+    EIP-1559 gas limit = gas_target * ELASTICITY_MULTIPLIER
     
     See ASSUMPTIONS.md doc for further details about default value assumption.
     """

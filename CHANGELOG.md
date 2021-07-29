@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.2] - 2021-04-29
 ### Changed
-- Refactor of EIP1559 mechanism
+- Refactor of EIP-1559 mechanism
 - Various refactors post-review
 
 ## [0.1.1] - 2021-04-05

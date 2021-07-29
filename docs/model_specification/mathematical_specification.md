@@ -49,7 +49,7 @@ The following domain notation is used in the Mathematical Model Specification:
 
 To create a state-space representation, we first describe the system's [state-space](https://www.google.com/search?q=state+space+state+variables&oq=state+space+state+variables&aqs=chrome..69i57.4591j0j1&sourceid=chrome&ie=UTF-8) in the form of a set of State Variables. A state-space is a data structure that consists of all possible values of State Variables. The state of the system can be represented as a state vector within the state-space.
 
-For reasons of clarity and comprehensibility we categorize State Variables as follows: Constants State Variables, ETH State Variables, Validator State Variables, Reward and Penalty State Variables, EIP1559 State Variables, and System Metric State Variables.  
+For reasons of clarity and comprehensibility we categorize State Variables as follows: Constants State Variables, ETH State Variables, Validator State Variables, Reward and Penalty State Variables, EIP-1559 State Variables, and System Metric State Variables.  
 
 We define the State Variables' domain, range, and units. The "variable" column values are direct referrences to the to-be-built cadCAD model code.
 
@@ -87,7 +87,7 @@ We define the State Variables' domain, range, and units. The "variable" column v
 | Validating Penalties | $Z_v$ | $\mathbb{R}^+$ | $\text{Gwei}$ | `validating_penalties` |
 | Total Online Validator Rewards | $R_o$ | $\mathbb{R}^+$ | $\text{Gwei}$ | `total_online_validator_rewards` |
 
-### EIP1559 State Variables
+### EIP-1559 State Variables
 
 | Name | Symbol | Domain | Unit | Variable |
 | -------- | -------- | -------- | -------- | --------|
@@ -215,8 +215,8 @@ All System Parameters in this category use uppercase snake-case variable naming 
 
 | Variable | Default Value | Unit | Description |
 | -------- | -------- | -------- | -------- |
-| `base_fee_process` | `70` | $\text{Gwei/gas}$ | EIP1559 transaction pricing base fee burned, in Gwei per gas, for each transaction. Default value approximated using average gas price, assuming influence of MEV. |
-| `priority_fee_process` | `30` | $\text{Gwei/gas}$ | EIP1559 transaction pricing priority fee, in Gwei per gas. Default value approximated using average gas price, assuming influence of MEV. |
+| `base_fee_process` | `70` | $\text{Gwei/gas}$ | EIP-1559 transaction pricing base fee burned, in Gwei per gas, for each transaction. Default value approximated using average gas price, assuming influence of MEV. |
+| `priority_fee_process` | `30` | $\text{Gwei/gas}$ | EIP-1559 transaction pricing priority fee, in Gwei per gas. Default value approximated using average gas price, assuming influence of MEV. |
 | `gas_target_process` | `15e6` | $\text{Gas}$ | The long-term average gas target per block. Simplifying assumption that gas used per block will equal gas target on average over long-term. |
 
 ## State Update Logic
@@ -344,9 +344,9 @@ $$
 \psi = \frac{\bar{B}}{\text{MIN_SLASHING_PENALTY_QUOTIENT}} \times \frac{\text{slashing_events_per_1000_epochs}}{1000}
 $$
 
-### PSUB 6: EIP1559 Sub-system
+### PSUB 6: EIP-1559 Sub-system
 
-EIP1559 introduces a basefee that is burned, and tips to validators, the total basefee and tips per epoch being calculated as:
+EIP-1559 introduces a basefee that is burned, and tips to validators, the total basefee and tips per epoch being calculated as:
 
 $$
 F = \frac{\text{eip1559_avg_transactions_per_day}}{E_{day}} \times \text{eip1559_avg_gas_per_transaction} \\ \times \text{eip1559_basefee} 
