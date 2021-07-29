@@ -1240,14 +1240,6 @@ def plot_cumulative_revenue_yields_per_subset(df, scenario_names):
     for subset in df.subset.unique():
         df_subset = df.query(f"subset == {subset}").copy()
 
-        df_subset["daily_revenue_yields_pct"] = (
-            df_subset["total_revenue_yields_pct"] / 365
-        )
-
-        df_subset["cumulative_revenue_yields_pct"] = (
-            df_subset["daily_revenue_yields_pct"].expanding().sum()
-        )
-
         color = next(color_cycle)
         fig.add_trace(
             go.Scatter(
@@ -1261,9 +1253,33 @@ def plot_cumulative_revenue_yields_per_subset(df, scenario_names):
     fig.update_layout(
         title="Cumulative Revenue Yields Over Time",
         xaxis_title="Date",
-        yaxis_title="Cumulative Yields (%)",
+        yaxis_title="Cumulative Revenue Yields (%)",
         legend_title="",
     )
+
+    fig.update_layout(hovermode="x unified")
+
+    return fig
+
+
+def plot_stacked_cumulative_column_per_subset(df, column, scenario_names):
+    color_cycle = itertools.cycle(cadlabs_colorway_sequence[6:])
+
+    fig = go.Figure()
+
+    for subset in df.subset.unique():
+        df_subset = df.query(f"subset == {subset}").copy()
+
+        color = next(color_cycle)
+        fig.add_trace(
+            go.Scatter(
+                x=df["timestamp"],
+                y=df_subset[column],
+                name=f"{scenario_names[subset]}",
+                line=dict(color=color),
+                stackgroup='one'
+            ),
+        )
 
     fig.update_layout(hovermode="x unified")
 

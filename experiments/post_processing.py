@@ -59,6 +59,12 @@ def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameter
     validator_penalties = ['validating_penalties', 'amount_slashed']
     df[[penalty + '_eth' for penalty in validator_penalties]] = df[validator_penalties] / constants.gwei
 
+    # Calculate cumulative revenue and profit yields
+    df["daily_revenue_yields_pct"] = df["total_revenue_yields_pct"] / 365
+    df["cumulative_revenue_yields_pct"] = df.groupby('subset')["daily_revenue_yields_pct"].transform('cumsum')
+    df["daily_profit_yields_pct"] = df["total_profit_yields_pct"] / 365
+    df["cumulative_profit_yields_pct"] = df.groupby('subset')["daily_profit_yields_pct"].transform('cumsum')
+
     # Drop the initial state for plotting
     if drop_timestep_zero:
         df = df.drop(df.query('timestep == 0').index)
