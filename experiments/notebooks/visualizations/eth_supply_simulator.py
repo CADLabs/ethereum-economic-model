@@ -115,7 +115,7 @@ app.layout = html.Div([
                         75: '75',
                         100: '100'
                     },
-                    value=100,
+                    value=25,
                     tooltip={'placement': 'top'},
                 )
             ], className='slider-input')
