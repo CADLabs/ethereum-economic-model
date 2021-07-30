@@ -1263,7 +1263,11 @@ def plot_cumulative_revenue_yields_per_subset(df, scenario_names):
 
 
 def plot_stacked_cumulative_column_per_subset(df, column, scenario_names):
-    color_cycle = itertools.cycle(cadlabs_colorway_sequence[6:])
+    color_cycle = itertools.cycle([
+        "#782AB6",
+        "#1C8356",
+        "#F6222E",
+    ])
 
     fig = go.Figure()
 
