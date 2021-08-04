@@ -13,6 +13,8 @@ from experiments.notebooks.visualizations.plotly_theme import (
     cadlabs_colorway_sequence,
 )
 from model.system_parameters import parameters, validator_environments
+import model.constants as constants
+
 
 # Set plotly as the default plotting backend for pandas
 pd.options.plotting.backend = "plotly"
@@ -1150,7 +1152,7 @@ def plot_yields_per_subset(df, scenario_names):
     return fig
 
 
-def plot_cumulative_yields_per_subset(df, scenario_names):
+def plot_cumulative_yields_per_subset(df, DELTA_TIME, scenario_names):
     color_cycle = itertools.cycle(cadlabs_colorway_sequence)
 
     fig = go.Figure()
@@ -1159,10 +1161,11 @@ def plot_cumulative_yields_per_subset(df, scenario_names):
         df_subset = df.query(f"subset == {subset}").copy()
 
         df_subset["daily_revenue_yields_pct"] = (
-            df_subset["total_revenue_yields_pct"] / 365
+            df_subset["total_revenue_yields_pct"] / (constants.epochs_per_year / DELTA_TIME)
         )
         df_subset["daily_profit_yields_pct"] = (
-            df_subset["total_profit_yields_pct"] / 365
+
+            df_subset["total_profit_yields_pct"] / (constants.epochs_per_year / DELTA_TIME)
         )
 
         df_subset["cumulative_revenue_yields_pct"] = (
