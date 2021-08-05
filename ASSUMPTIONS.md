@@ -5,12 +5,12 @@ While the model implements the official Ethereum Specification wherever possible
 * [Network-level Assumptions](#network-level-assumptions)
   * [ETH Price](#ETH-Price)
   * [Proof-of-Work ETH Issuance](#Proof-of-Work-ETH-Issuance)
-  * [Upgrade Stage Dates](#Protocol-Upgrade-Stage-Assumptions)
+  * [Upgrade Stage Dates](#Upgrade-Stage-Dates)
     * [Simulation Start Date](#Simulation-Start-Date)
     * [EIP-1559 Activation Date](#EIP-1559-Activation-Date)
     * [Proof-of-Stake Activation Date](#Proof-of-Stake-Activation-Date)
   * [Average Block Size](#Average-Block-Size)
-  * [Average Base Fee](#Average-Block-Size)
+  * [Average Base Fee](#Average-Base-Fee)
   * [Average Priority Fee](#Average-Priority-Fee)
   * [Maximum Extractable Value (MEV)](#Maximum-Extractable-Value-(MEV))
 * [Validator-level Assumptions](#Validator-level-Assumptions)
@@ -37,19 +37,19 @@ Note: In future releases of this model, we may periodically update this value au
 
 ### Proof-of-Work ETH Issuance
 
-The Proof-of-Work ETH issuance (block rewards) in all time-domain analyses before the model'sis set to the mean daily issuance over the last 12 months from Etherscan. This value is constant and calculated from a CSV file in the [data/](data/) directory, in the [data.historical_values](data/historical_values.py) module.  
+The Proof-of-Work ETH issuance (block rewards) in all time-domain analyses before the model's PoS Activation Date is set to the mean daily issuance over the last 12 months from Etherscan. This value is constant and calculated from a CSV file in the [data/](data/) directory, in the [data.historical_values](data/historical_values.py) module.  
 
 To change this value, update the `daily_pow_issuance` [System Parameter](./model/system_parameters.py).
 
 Note: In future releases of this model, we may periodically update this value automatically until the merge. 
 
-### Upgrade Stage Date Assumptions
+### Upgrade Stage Dates
 
 The model is configurable to reflect protocol behaviour at different points in time along the Ethereum development roadmap (referred to as "upgrade stages" in this repo).
 
 #### Simulation Start Date
 
-In all state-space (i.e. time-domain) analyses of this repo, the default start date is set to the current date, i.e. all analyses start "today". (TODO: CONFIRM / MAKE EXPLICIT WHAT THIS DOES NOT MEAN)
+In all state-space (i.e. time-domain) analyses of this repo, the default start date is set to the current date, i.e. all analyses start "today". That being said, there are certain Initial States and System Parameter default values that are static, and don't update dynamically from an API. In these cases we generally use an average value over a time period, for example for the validator adoption System Parameter.
 
 The simulation start date can be set using the `date_start` [System Parameter](./model/system_parameters.py). 
 
@@ -61,29 +61,29 @@ To change the EIP-1559 Activation Date, update the `date_eip1559` [System Parame
 
 #### Proof-of-Stake Activation Date
 
-The model by default assumes 1 March 2022 for the Proof-of-Stake activation date ("The Merge"), since this seeemed to be the Ethereum Community's consensus exectation at the time the model's default assumptions were defined. Launch dates are hard to predict, hence we recommend to play with alternative dates.
+The model by default assumes 1 March 2022 for the Proof-of-Stake activation date ("The Merge"), since this seemed to be the Ethereum Community's consensus expectation at the time the model's default assumptions were defined. Launch dates are hard to predict, hence we recommend to play with alternative dates.
 
 To change the Proof-of-Stake activation date, update the `date_pos` [System Parameter](./model/system_parameters.py).
 
 ## Average Block Size
 
-With the introduction of [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559) the pre-EIP1559 block size (gas limit) has been replaced by two values: a “long-term average target” (equal to the pre-EIP1559 gas limit, i.e. 15m gas), and a “hard per-block cap” (set to twice the pre-EIP1559 gas limit, i.e. 30m gas). By default, the model assumes that the block size (gas used per block) will on average be equal to the gas target, i.e. 15m). 
+With the introduction of [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559) the pre-EIP1559 block size (gas limit) has been replaced by two values: a “long-term average target” (equal to the pre-EIP1559 gas limit, i.e. 15m gas), and a “hard per-block cap” (set to twice the pre-EIP1559 gas limit, i.e. 30m gas). 
 
-By default we assume the gas used per block will on average be equal to the gas target. To change this value, update the `gas_target_process` [System Parameter](./model/system_parameters.py).
+By default, the model assumes that the block size (gas used per block) will on average be equal to the gas target, i.e. 15m gas. To change this value, update the `gas_target_process` [System Parameter](./model/system_parameters.py).
 
-Note for cadCAD engineers: It is quite straight forward to extend the model for dynamic block size and base fee (see TODO: ADD LINK TO RESEARCH ROADMAP) and we encourage you to give this a try. This would also open the model up automatic updates via live adoption data.
+Note for cadCAD engineers: It is quite straight forward to extend the model for dynamic block size and base fee (see [roadmap document](ROADMAP.md)), and we encourage you to give this a try. This would also open the model up automatic updates via live adoption data.
 
 ## Average Base Fee
 
 [EIP-1559](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md) defines a variable `max_fee_per_gas` to set a fee cap per transaction. This fee cap is the maximum fee in Gwei per gas a user will pay per transaction. This fee is made up of the base fee and a priority fee, where the base fee is burned and the priority fee is paid to miners/validators.
 
-The pre-EIP1559 blockspace market currently followed a demand curve - transactions with a higher value (gas used x gas price) are prioritized by miners over transactions with a lower value, and the total gas used in a block is limited to 15m.
+The pre-EIP1559 blockspace market followed a demand curve - transactions with a higher value (gas used x gas price) are prioritized by miners over transactions with a lower value, and the total gas used in a block is limited to 15m.
 Effectively this meant that some transactions would be priced out and not included in the block. In practise, 10-15% of the gas used in a block is by zero-fee transactions, due to for example MEV clients including Flashbots bundles.
 
-For the above reason (and until we actual base fee data becomes available), instead of taking a historical minimum gas price per block to extrapulate to a reasonable future base fee at equalibrium, we take the 3 months median (April 2021 - June 2021 TODO PLEASE CONFIRM EXACT DATE RANGE) to remove zero-fee outliers (e.g. Flashbot bundles) for pre-EIP-1559 date ranges (zero fee transactions are  no longer possible with EIP-1559).
+For the above reason (and until actual base fee data becomes available), instead of taking a historical minimum gas price per block to extrapolate to a reasonable future base fee at equilibrium, we take a 3 month median (4 May 2021 - 4 August 2021) to remove zero-fee outliers (e.g. Flashbot bundles) for pre-EIP-1559 date ranges (zero fee transactions are no longer possible with EIP-1559).
 
 Using a [Dune Analytics query](https://duneanalytics.com/queries/91241) we calculate the 90-day median gas price by transaction:
-* 90-Day 50th Percentile ("Median") as the upper bound: 30 Gwei per gas
+* 90-Day 50th Percentile ("Median"): 30 Gwei per gas
 
 To change the default average base fee, update the `base_fee_process` [System Parameter](./model/system_parameters.py).
 
@@ -105,11 +105,11 @@ To change the default average priority fee, update the `priority_fee_process` [S
 
 The consensus among researchers is that MEV is hard to quantify, and the future interaction between EIP-1559 and MEV is at this stage uncertain and complex. For this reason we adopt the assumption that in normal conditions MEV will be extracted via off-chain mechanisms, and so will be treated as a seperate process to EIP-1559 - we suggest to refine the model assumptions once more data and research about the interaction between EIP-1559 and MEV is available.
 
-The `mev_per_block` [System Parameter](./model/system_parameters.py) can be used to set the realized MEV in ETH per block. By default, we set the `mev_per_block` to 0.13 ETH per block, as per (TODO: add flashbots source).
+The `mev_per_block` [System Parameter](./model/system_parameters.py) can be used to set the realized MEV in ETH per block. By default, we set the `mev_per_block` to zero ETH to better analyse PoS incentives in isolation, and leave it up to the reader to set their own assumptions. In some analyses we set the `mev_per_block` to the 3 month median value calculated using [Flashbots MEV-Explore analytics](https://explore.flashbots.net/).
 
 Note: In future releases of this model, we may periodically update this value automatically using API data.
 
-Further reading:
+**Further reading:**
 
 Maximum Extractable Value (MEV), previously referred to as "Miner Extractable Value", is a measure of the profit a miner/validator can make by arbitrarily including, excluding, or re-ordering transactions within the blocks they produce.
 
@@ -135,7 +135,7 @@ The "Validator Revenue and Profit Yields" experiment notebook introduces three l
 * Low adoption: assumes an average of 1.5 new validators per epoch, i.e. a 50% lower rate compared to the base scenario
 * High adoption: assumes an average of 4.5 new validators per epoch, i.e. a 50% higher rate compared to the base scenario
 
-The activation queue is modelled as follows: TODO: ADD INFO RE ACTIVATION QUEUE SO PEOPLE CAN UNDERSTAND THE VISUAL DIFFERENCE IN THE ADOPTION LINE IN THE CHART
+The activation queue is modelled as follows: Validators that deposit 32 ETH are only activated and allowed to validate once they pass through the queue, and the queue has a maximum rate at which it can process and activate new validators. This activation rate is what changes the effective validator adoption rate in some analyses where there are more validators wanting to enter the system than being activated per epoch.
 
 The normal adoption scenario is used as the default validator adoption rate for all experiments - to change this value, update the `validator_process` [System Parameter](./model/system_parameters.py).
 
