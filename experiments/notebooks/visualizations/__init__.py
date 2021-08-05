@@ -1288,7 +1288,18 @@ def plot_stacked_cumulative_column_per_subset(df, column, scenario_names):
             ),
         )
 
-    fig.update_layout(hovermode="x unified")
+    fig.update_layout(
+        hovermode="x unified",
+        margin=dict(r=30, b=65, l=80),
+        xaxis_title="Date",
+        xaxis=dict(
+            rangeslider=dict(
+                visible=True,
+            ),
+            rangeslider_thickness=0.15,
+            type="date",
+        )
+    )
 
     return fig
 
