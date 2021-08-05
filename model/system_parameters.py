@@ -379,7 +379,7 @@ class Parameters:
 
     # EIP-1559 transaction pricing parameters
     base_fee_process: List[Callable[[Run, Timestep], Gwei_per_Gas]] = default(
-        [lambda _run, _timestep: 25]  # Gwei per gas
+        [lambda _run, _timestep: 30]  # Gwei per gas
     )
     """
     EIP-1559 transaction pricing base fee burned, in Gwei per gas, for each transaction.
