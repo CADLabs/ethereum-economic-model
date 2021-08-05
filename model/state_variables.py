@@ -15,6 +15,7 @@ from datetime import datetime
 import model.constants as constants
 import data.api.beaconchain as beaconchain
 import data.api.etherscan as etherscan
+import model.system_parameters as system_parameters
 from model.system_parameters import validator_environments
 from model.types import (
     Gwei,
@@ -32,7 +33,7 @@ from data.historical_values import eth_price_mean, eth_price_min, eth_price_max
 number_of_validator_environments = len(validator_environments)
 
 # Intial state from external live data source, setting a default in case API call fails
-number_of_validators: int = beaconchain.get_validators_count(default=156_250)
+number_of_active_validators: int = beaconchain.get_validators_count(default=156_250)
 eth_staked: ETH = (
     beaconchain.get_total_validator_balance(default=5_000_000e9) / constants.gwei
 )
@@ -81,8 +82,15 @@ class StateVariables:
     """The number of validators in activation queue"""
     average_effective_balance: Gwei = 32 * constants.gwei
     """The validator average effective balance"""
-    number_of_validators: int = number_of_validators
-    """The total number of validators"""
+    number_of_active_validators: int = number_of_active_validators
+    """The total number of active validators"""
+    number_of_awake_validators: int = max(
+        system_parameters.parameters['MAX_VALIDATOR_COUNT'][0],
+        number_of_active_validators
+    )
+    """The total number of active & awake validators"""
+    validator_uptime: Percentage = 1
+    """The combination of validator internet, power, and technical uptime, as a percentage"""
     number_of_validators_online: int = 0
     """The total number of online validators"""
     number_of_validators_offline: int = 0

@@ -30,10 +30,11 @@ def policy_attestation_rewards(
     TIMELY_HEAD_WEIGHT = params["TIMELY_HEAD_WEIGHT"]
     WEIGHT_DENOMINATOR = params["WEIGHT_DENOMINATOR"]
 
+
     # State Variables
     base_reward = previous_state["base_reward"]
-    number_of_validators = previous_state["number_of_validators"]
-    number_of_validators_online = previous_state["number_of_validators_online"]
+    number_of_validators = previous_state["number_of_awake_validators"]
+    number_of_validators_online = number_of_validators * previous_state["validator_uptime"]
 
     # Calculate total source reward
     # All submitted attestations have to match source vote
@@ -125,8 +126,8 @@ def policy_sync_committee_reward(
 
     # State Variables
     base_reward = previous_state["base_reward"]
-    number_of_validators = previous_state["number_of_validators"]
-    number_of_validators_online = previous_state["number_of_validators_online"]
+    number_of_validators = previous_state["number_of_awake_validators"]
+    number_of_validators_online = number_of_validators * previous_state["validator_uptime"]
 
     # Calculate total base rewards
     total_base_rewards = base_reward * number_of_validators
@@ -162,8 +163,8 @@ def policy_sync_committee_penalties(
 
     # State Variables
     base_reward = previous_state["base_reward"]
-    number_of_validators = previous_state["number_of_validators"]
-    number_of_validators_offline = previous_state["number_of_validators_offline"]
+    number_of_validators = previous_state["number_of_awake_validators"]
+    number_of_validators_offline = number_of_validators * (1 - previous_state["validator_uptime"])
 
     # Calculate total base rewards
     total_base_rewards = base_reward * number_of_validators
@@ -370,7 +371,7 @@ def update_validating_rewards(
     head_reward = previous_state["head_reward"]
 
     base_reward = previous_state["base_reward"]
-    number_of_validators_online = previous_state["number_of_validators_online"]
+    number_of_validators_online = previous_state["number_of_awake_validators"] * previous_state['validator_uptime']
 
     # Calculate total validating rewards
     validating_rewards = (

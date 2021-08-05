@@ -326,6 +326,23 @@ class Parameters:
     """
     Used to calculate gas limit from EIP-1559 gas target
     """
+    MAX_VALIDATOR_COUNT: List[int] = default([2**19])
+    """
+    A proposal to set the maximum validators (2**19 == 524,288 validators)
+    that are validating ("awake") at any given time. This proposal does not stop validators from 
+    depositing and becoming active validators, but rather introduces a rotating validator set.
+    "Awake" validators are a subset of "active" validators.
+    
+    The economic impact of this is as follows:
+    
+    > Once the active validator set size exceeds MAX_VALIDATOR_COUNT,
+    > validator returns should start decreasing proportionately to 1/total_deposits
+    > and not 1/sqrt(total_deposits).
+    
+    See https://ethresear.ch/t/simplified-active-validator-cap-and-rotation-proposal
+    
+    > The goal of this proposal is to cap the active validator set to some fixed value...
+    """
 
     # Validator parameters
     validator_uptime_process: List[Percentage] = default(

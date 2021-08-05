@@ -28,7 +28,7 @@ def policy_validator_costs(
 
     # State Variables
     eth_price = previous_state["eth_price"]
-    number_of_validators = previous_state["number_of_validators"]
+    number_of_validators = previous_state["number_of_active_validators"]
     total_online_validator_rewards = previous_state["total_online_validator_rewards"]
 
     # Calculate hardware, cloud, and third-party costs per validator type

@@ -13,6 +13,38 @@ from model.types import Gwei
 
 # Beacon state accessors
 
+def get_active_validator_indices(state: StateVariables) -> Gwei:
+    """
+    See https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/beacon-chain.md#get_active_validator_indices
+
+    ```python
+    def get_active_validator_indices(state: BeaconState, epoch: Epoch) -> Sequence[ValidatorIndex]:
+        '''
+        Return the sequence of active validator indices at ``epoch``.
+        '''
+        return [ValidatorIndex(i) for i, v in enumerate(state.validators) if is_active_validator(v, epoch)]
+    ```
+    """
+    return state["number_of_active_validators"]
+
+
+def get_awake_validator_indices(params: Parameters, state: StateVariables) -> Gwei:
+    """
+    Simplified Active Validator Cap and Rotation Proposal
+
+    See https://ethresear.ch/t/simplified-active-validator-cap-and-rotation-proposal
+    """
+    # Parameters
+    MAX_VALIDATOR_COUNT = params['MAX_VALIDATOR_COUNT']
+
+    # State Variables
+    active_validators = get_active_validator_indices(state)
+
+    # Get awake validators as subset of active validators
+    awake_validators = max(MAX_VALIDATOR_COUNT, active_validators)
+
+    return awake_validators
+
 
 def get_total_active_balance(params: Parameters, state: StateVariables) -> Gwei:
     """
@@ -34,7 +66,9 @@ def get_total_active_balance(params: Parameters, state: StateVariables) -> Gwei:
 
     # State Variables
     eth_staked = state["eth_staked"]
-    number_of_validators = state["number_of_validators"]
+
+    # Get active & awake validators (see proposal)
+    number_of_validators = get_awake_validator_indices(params, state)
 
     # Calculate total active balance
     total_active_balance = (
@@ -115,7 +149,7 @@ def get_validator_churn_limit(params: Parameters, state: StateVariables) -> int:
     MIN_PER_EPOCH_CHURN_LIMIT = params["MIN_PER_EPOCH_CHURN_LIMIT"]
     CHURN_LIMIT_QUOTIENT = params["CHURN_LIMIT_QUOTIENT"]
 
-    # State Variables
-    number_of_validators = state["number_of_validators"]
+    # Get active & awake validators (see proposal)
+    number_of_validators = get_awake_validator_indices(params, state)
 
     return max(MIN_PER_EPOCH_CHURN_LIMIT, number_of_validators // CHURN_LIMIT_QUOTIENT)

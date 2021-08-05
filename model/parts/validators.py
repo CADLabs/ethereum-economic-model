@@ -30,7 +30,7 @@ def policy_staking(
     run = previous_state["run"]
     timestep = previous_state["timestep"]
     eth_supply = previous_state["eth_supply"]
-    number_of_validators = previous_state["number_of_validators"]
+    number_of_validators = previous_state["number_of_active_validators"]
     average_effective_balance = previous_state["average_effective_balance"]
 
     # If the eth_staked_process is defined
@@ -61,7 +61,7 @@ def policy_validators(params, substep, state_history, previous_state):
     # State Variables
     run = previous_state["run"]
     timestep = previous_state["timestep"]
-    number_of_validators = previous_state["number_of_validators"]
+    number_of_active_validators = previous_state["number_of_active_validators"]
     number_of_validators_in_activation_queue = previous_state[
         "number_of_validators_in_activation_queue"
     ]
@@ -70,7 +70,7 @@ def policy_validators(params, substep, state_history, previous_state):
     # Calculate the number of validators using ETH staked
     if eth_staked_process(0, 0) is not None:
         eth_staked = eth_staked_process(run, timestep * dt)
-        number_of_validators = int(
+        number_of_active_validators = int(
             round(eth_staked / (average_effective_balance / constants.gwei))
         )
     else:
@@ -84,27 +84,24 @@ def policy_validators(params, substep, state_history, previous_state):
             number_of_validators_in_activation_queue, validator_churn_limit
         )
 
-        number_of_validators += activated_validators
+        number_of_active_validators += activated_validators
         number_of_validators_in_activation_queue -= activated_validators
 
-    # Calculate the number of validators online and offline using validator uptime
-    validator_uptime = validator_uptime_process(run, timestep * dt)
-    number_of_validators_online = int(round(number_of_validators * validator_uptime))
-    number_of_validators_offline = number_of_validators - number_of_validators_online
+    # Calculate the number of "awake" validators
+    # See proposal: https://ethresear.ch/t/simplified-active-validator-cap-and-rotation-proposal
+    number_of_awake_validators = spec.get_awake_validator_indices(params, previous_state)
 
-    # Assert expected conditions
+    # Calculate the validator uptime
+    validator_uptime = validator_uptime_process(run, timestep * dt)
+
     # Assume a participation of more than 2/3 due to lack of inactivity leak mechanism
     assert validator_uptime >= 2 / 3, "Validator uptime must be greater than 2/3"
-    assert (
-        number_of_validators
-        == number_of_validators_online + number_of_validators_offline
-    )
 
     return {
         "number_of_validators_in_activation_queue": number_of_validators_in_activation_queue,
-        "number_of_validators": number_of_validators,
-        "number_of_validators_online": number_of_validators_online,
-        "number_of_validators_offline": number_of_validators_offline,
+        "number_of_active_validators": number_of_active_validators,
+        "number_of_awake_validators": number_of_awake_validators,
+        "validator_uptime": validator_uptime,
     }
 
 
@@ -116,7 +113,7 @@ def policy_average_effective_balance(
     Calculate the validator average effective balance.
     """
     # State Variables
-    number_of_validators = previous_state["number_of_validators"]
+    number_of_validators = previous_state["number_of_awake_validators"]
 
     # Get total active balance
     total_active_balance = spec.get_total_active_balance(params, previous_state)
