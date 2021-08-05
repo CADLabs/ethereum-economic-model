@@ -1,7 +1,7 @@
 """
 # Time Domain Analysis
 
-Executes a time-domain simulation over a long time period of 5 years,
+Executes a time-domain simulation over a long time period of 3 years,
 over all Ethereum network upgrade stages.
 """
 
@@ -17,7 +17,7 @@ from experiments.default_experiment import experiment
 experiment = copy.deepcopy(experiment)
 
 DELTA_TIME = constants.epochs_per_day  # epochs per timestep
-SIMULATION_TIME_MONTHS = 12 * 5  # number of months
+SIMULATION_TIME_MONTHS = 12 * 3  # number of months
 TIMESTEPS = constants.epochs_per_month * SIMULATION_TIME_MONTHS // DELTA_TIME
 
 # Generate stochastic process realizations

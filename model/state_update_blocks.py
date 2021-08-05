@@ -154,6 +154,22 @@ _state_update_blocks = [
     },
     {
         "description": """
+            Maximum Extractable Value (MEV)
+        """,
+        "policies": {
+            "mev": ethereum.policy_mev,
+        },
+        "variables": {
+            "total_realized_mev_to_miners": update_from_signal(
+                "total_realized_mev_to_miners"
+            ),
+            "total_realized_mev_to_validators": update_from_signal(
+                "total_realized_mev_to_validators"
+            ),
+        },
+    },
+    {
+        "description": """
             Online validator reward aggregation
         """,
         "policies": {

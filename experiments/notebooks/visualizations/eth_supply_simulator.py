@@ -84,9 +84,9 @@ app.layout = html.Div([
                 ]
             )
         ], className='input-section'),
-        # EIP1559
+        # EIP-1559
         html.Div([
-            # EIP1559 Scenarios Dropdown
+            # EIP-1559 Scenarios Dropdown
             html.Div([
                 html.Label('EIP1559 Scenario'),
                 dcc.Dropdown(
@@ -95,7 +95,7 @@ app.layout = html.Div([
                     value='Enabled (Base Fee = 25)',
                     options=[
                         {'label': 'Disabled (Base Fee = 0)', 'value': 'Disabled (Base Fee = 0)'},
-                        {'label': 'Enabled (Base Fee = 25)', 'value': 'Enabled (Base Fee = 25)'},
+                        {'label': 'Enabled (Base Fee = 30)', 'value': 'Enabled (Base Fee = 30)'},
                         {'label': 'Enabled (Custom Value)', 'value': 'Enabled (Custom Value)'}
                     ]
                 )

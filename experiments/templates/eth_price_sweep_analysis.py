@@ -20,7 +20,6 @@ experiment = copy.deepcopy(experiment)
 eth_price_samples = np.linspace(start=100, stop=eth_price_max, num=50)
 
 parameter_overrides = {
-    "stage": [Stage.BEACON_CHAIN],
     "eth_price_process": [
         lambda run, _timestep: eth_price_samples[run - 1]
     ],

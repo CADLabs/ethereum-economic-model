@@ -13,6 +13,8 @@ from experiments.notebooks.visualizations.plotly_theme import (
     cadlabs_colorway_sequence,
 )
 from model.system_parameters import parameters, validator_environments
+import model.constants as constants
+
 
 # Set plotly as the default plotting backend for pandas
 pd.options.plotting.backend = "plotly"
@@ -39,6 +41,7 @@ legend_state_variable_name_mapping = {
     "block_proposer_reward_eth": "Block Proposer Reward",
     "sync_reward_eth": "Sync Reward",
     "total_priority_fee_to_validators_eth": "Priority Fees",
+    "total_realized_mev_to_validators": "Realized MEV",
     "supply_inflation_pct": "ETH Supply inflation",
     "total_revenue_yields_pct": "Total Revenue Yields",
     "total_profit_yields_pct": "Total Profit Yields",
@@ -934,9 +937,7 @@ def plot_eth_staked_over_all_stages(df):
     return fig
 
 
-def plot_number_of_validators_over_time_foreach_subset(df):
-    scenario_names = {0: "Normal Adoption", 1: "Low Adoption", 2: "High Adoption"}
-
+def plot_number_of_validators_per_subset(df, scenario_names):
     fig = go.Figure()
 
     for subset in df.subset.unique():
@@ -1066,8 +1067,7 @@ def plot_yields_per_subset_subplots(df, subplot_titles=[]):
     return fig
 
 
-def plot_yields_per_subset(df):
-    scenario_names = {0: "Normal Adoption", 1: "Low Adoption", 2: "High Adoption"}
+def plot_yields_per_subset(df, scenario_names):
     color_cycle = itertools.cycle(cadlabs_colorway_sequence)
 
     fig = go.Figure()
@@ -1135,8 +1135,7 @@ def plot_yields_per_subset(df):
     return fig
 
 
-def plot_cumulative_yields_per_subset(df):
-    scenario_names = {0: "Normal Adoption", 1: "Low Adoption", 2: "High Adoption"}
+def plot_cumulative_yields_per_subset(df, DELTA_TIME, scenario_names):
     color_cycle = itertools.cycle(cadlabs_colorway_sequence)
 
     fig = go.Figure()
@@ -1145,10 +1144,11 @@ def plot_cumulative_yields_per_subset(df):
         df_subset = df.query(f"subset == {subset}").copy()
 
         df_subset["daily_revenue_yields_pct"] = (
-            df_subset["total_revenue_yields_pct"] / 365
+            df_subset["total_revenue_yields_pct"] / (constants.epochs_per_year / DELTA_TIME)
         )
         df_subset["daily_profit_yields_pct"] = (
-            df_subset["total_profit_yields_pct"] / 365
+
+            df_subset["total_profit_yields_pct"] / (constants.epochs_per_year / DELTA_TIME)
         )
 
         df_subset["cumulative_revenue_yields_pct"] = (
@@ -1207,13 +1207,82 @@ def plot_cumulative_yields_per_subset(df):
                 pad={"t": 10},
                 x=0,
                 xanchor="left",
-                y=1.1,
+                y=1.15,
                 yanchor="top",
             )
         ]
     )
 
     fig.update_layout(hovermode="x unified")
+
+    return fig
+
+
+def plot_cumulative_revenue_yields_per_subset(df, scenario_names):
+    color_cycle = itertools.cycle(cadlabs_colorway_sequence)
+
+    fig = go.Figure()
+
+    for subset in df.subset.unique():
+        df_subset = df.query(f"subset == {subset}").copy()
+
+        color = next(color_cycle)
+        fig.add_trace(
+            go.Scatter(
+                x=df["timestamp"],
+                y=df_subset["cumulative_revenue_yields_pct"],
+                name=f"{scenario_names[subset]}",
+                line=dict(color=color),
+            ),
+        )
+
+    fig.update_layout(
+        title="Cumulative Revenue Yields Over Time",
+        xaxis_title="Date",
+        yaxis_title="Cumulative Revenue Yields (%)",
+        legend_title="",
+    )
+
+    fig.update_layout(hovermode="x unified")
+
+    return fig
+
+
+def plot_stacked_cumulative_column_per_subset(df, column, scenario_names):
+    color_cycle = itertools.cycle([
+        "#782AB6",
+        "#1C8356",
+        "#F6222E",
+    ])
+
+    fig = go.Figure()
+
+    for subset in df.subset.unique():
+        df_subset = df.query(f"subset == {subset}").copy()
+
+        color = next(color_cycle)
+        fig.add_trace(
+            go.Scatter(
+                x=df["timestamp"],
+                y=df_subset[column],
+                name=f"{scenario_names[subset]}",
+                line=dict(color=color),
+                stackgroup='one',
+            ),
+        )
+
+    fig.update_layout(
+        hovermode="x unified",
+        margin=dict(r=30, b=65, l=80),
+        xaxis_title="Date",
+        xaxis=dict(
+            rangeslider=dict(
+                visible=True,
+            ),
+            rangeslider_thickness=0.15,
+            type="date",
+        )
+    )
 
     return fig
 
@@ -1363,7 +1432,17 @@ def plot_figure_widget_revenue_yields_over_time_foreach_subset(df):
     return widgets.VBox([container, fig])
 
 
-def plot_revenue_yields_rolling_mean(df_rolling):
+def plot_revenue_yields_rolling_mean(df):
+    
+    rolling_window = df.groupby('timestamp')['total_revenue_yields_pct'].mean().rolling(7)
+    df_rolling = pd.DataFrame()
+    df_rolling['rolling_std'] = rolling_window.std()
+    df_rolling['rolling_mean'] = rolling_window.mean()
+    df_rolling['max'] = df.groupby('timestamp')['total_revenue_yields_pct'].max()
+    df_rolling['min'] = df.groupby('timestamp')['total_revenue_yields_pct'].min()
+    df_rolling = df_rolling.fillna(method="ffill")
+    df_rolling = df_rolling.reset_index()
+    
     fig = go.Figure(
         [
             go.Scatter(
@@ -1371,10 +1450,9 @@ def plot_revenue_yields_rolling_mean(df_rolling):
                 x=df_rolling["timestamp"],
                 y=df_rolling["rolling_mean"],
                 mode="lines",
-                line=dict(color="rgb(31, 119, 180)"),
             ),
             go.Scatter(
-                name="Upper Bound (max)",
+                name="Max",
                 x=df_rolling["timestamp"],
                 y=df_rolling["max"],
                 mode="lines",
@@ -1383,7 +1461,7 @@ def plot_revenue_yields_rolling_mean(df_rolling):
                 showlegend=False,
             ),
             go.Scatter(
-                name="Lower Bound (min)",
+                name="Min",
                 x=df_rolling["timestamp"],
                 y=df_rolling["min"],
                 marker=dict(color="#444"),

@@ -134,7 +134,7 @@ dmypy.json
 
 # Assorted
 .vscode/
-scratchpad.*
+scratchpad*
 scratchpad/
 .DS_Store
 .idea/
