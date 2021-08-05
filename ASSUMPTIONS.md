@@ -12,7 +12,7 @@ While the model implements the official Ethereum Specification wherever possible
   * [Average Block Size](#Average-Block-Size)
   * [Average Base Fee](#Average-Base-Fee)
   * [Average Priority Fee](#Average-Priority-Fee)
-  * [Maximum Extractable Value (MEV)](#Maximum-Extractable-Value-(MEV))
+  * [Maximum Extractable Value (MEV)](#maximum-extractable-value-mev)
 * [Validator-level Assumptions](#Validator-level-Assumptions)
   * [Validator Adoption](#validator-adoption)
   * [Validator Environments](#Validator-Environments)
