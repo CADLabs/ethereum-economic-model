@@ -18,6 +18,10 @@ from data.historical_values import df_ether_supply
 experiment = eth_supply_analysis.experiment
 # Create a copy of the experiment simulation
 simulation = copy.deepcopy(experiment.simulations[0])
+# Configure scenarios
+eip1559_scenarios = {'Disabled (Base Fee = 0)': 0, 'Enabled (Base Fee = 25)': 25}
+validator_scenarios = {'Normal Adoption': 3, 'Low Adoption': 3 * 0.5, 'High Adoption': 3 * 1.5}
+
 
 # Load Data
 external_stylesheets = ['assets/default_stylesheet.css']
@@ -40,7 +44,7 @@ app.layout = html.Div([
                         {'label': 'Normal Adoption', 'value': 'Normal Adoption'},
                         {'label': 'Low Adoption', 'value': 'Low Adoption'},
                         {'label': 'High Adoption', 'value': 'High Adoption'},
-                        {'label': 'Custom', 'value': 'Custom'}
+                        {'label': 'Custom Value', 'value': 'Custom Value'}
                     ]
                 )
             ]),
@@ -60,7 +64,7 @@ app.layout = html.Div([
                     value=3,
                     tooltip={'placement': 'top'}
                 )
-            ])
+            ], className='slider-input')
         ], className='input-section'),
         # Proof of Stake Activation Date Dropdown
         html.Div([
@@ -73,7 +77,10 @@ app.layout = html.Div([
                     {'label': 'Dec 2021', 'value': '2021/12/1'},
                     {'label': 'Mar 2022', 'value': '2022/03/1'},
                     {'label': 'Jun 2022', 'value': '2022/06/1'},
-                    {'label': 'Sep 2022', 'value': '2022/09/1'}
+                    {'label': 'Sep 2022', 'value': '2022/09/1'},                  
+                    {'label': 'Dec 2022', 'value': '2022/12/1'},
+                    {'label': 'Mar 2023', 'value': '2023/03/1'},
+                    {'label': 'Jun 2023', 'value': '2023/06/1'}
                 ]
             )
         ], className='input-section'),
@@ -81,16 +88,15 @@ app.layout = html.Div([
         html.Div([
             # EIP-1559 Scenarios Dropdown
             html.Div([
-                html.Label('EIP-1559 Scenarios'),
+                html.Label('EIP1559 Scenario'),
                 dcc.Dropdown(
                     id='eip1559-dropdown',
                     clearable=False,
-                    value='Enabled: Steady State',
+                    value='Enabled (Base Fee = 25)',
                     options=[
-                        {'label': 'Disabled', 'value': 'Disabled'},
-                        {'label': 'Enabled: Steady State', 'value': 'Enabled: Steady State'},
-                        {'label': 'Enabled: MEV', 'value': 'Enabled: MEV'},
-                        {'label': 'Custom', 'value': 'Custom'}
+                        {'label': 'Disabled (Base Fee = 0)', 'value': 'Disabled (Base Fee = 0)'},
+                        {'label': 'Enabled (Base Fee = 30)', 'value': 'Enabled (Base Fee = 30)'},
+                        {'label': 'Enabled (Custom Value)', 'value': 'Enabled (Custom Value)'}
                     ]
                 )
             ]),
@@ -109,10 +115,10 @@ app.layout = html.Div([
                         75: '75',
                         100: '100'
                     },
-                    value=100,
+                    value=25,
                     tooltip={'placement': 'top'},
                 )
-            ])
+            ], className='slider-input')
         ], className='input-section')
     ], className='input-row'),
 
@@ -133,10 +139,8 @@ app.layout = html.Div([
     [Input('eip1559-dropdown', 'value')]
 )
 def update_eip1559_sliders_by_scenarios(eip1559_dropdown):
-    if eip1559_dropdown == 'Custom':
+    if eip1559_dropdown == 'Enabled (Custom Value)':
         raise PreventUpdate
-
-    eip1559_scenarios = {'Disabled': 0, 'Enabled: Steady State': 100, 'Enabled: MEV': 70}
 
     return eip1559_scenarios[eip1559_dropdown]
 
@@ -146,10 +150,8 @@ def update_eip1559_sliders_by_scenarios(eip1559_dropdown):
     [Input('validator-dropdown', 'value')]
 )
 def update_validator_adoption_sliders_by_scenarios(validator_dropdown):
-    if validator_dropdown == 'Custom':
+    if validator_dropdown == 'Custom Value':
         raise PreventUpdate
-
-    validator_scenarios = {'Normal Adoption': 3, 'Low Adoption': 3 * 0.5, 'High Adoption': 3 * 1.5}
 
     return validator_scenarios[validator_dropdown]
 
@@ -166,23 +168,11 @@ def update_validator_adoption_sliders_by_scenarios(validator_dropdown):
 def update_output_graph(validator_adoption, pos_launch_date, eip1559_base_fee):
     df, parameters = run_simulation(validator_adoption, pos_launch_date, eip1559_base_fee)
 
-    if validator_adoption == 3:
-        validator_dropdown = 'Normal Adoption'
-    elif validator_adoption == 3 * 0.5:
-        validator_dropdown = 'Low Adoption'
-    elif validator_adoption == 3 * 1.5:
-        validator_dropdown = 'High Adoption'
-    else:
-        validator_dropdown = 'Custom'
+    _validator_scenarios = dict((v, k) for k, v in validator_scenarios.items())
+    validator_dropdown = _validator_scenarios.get(validator_adoption, 'Custom Value')
 
-    if eip1559_base_fee == 0:
-        eip1559_dropdown = 'Disabled'
-    elif eip1559_base_fee == 100:
-        eip1559_dropdown = 'Enabled: Steady State'
-    elif eip1559_base_fee == 70:
-        eip1559_dropdown = 'Enabled: MEV'
-    else:
-        eip1559_dropdown = 'Custom'
+    _eip1559_scenarios = dict((v, k) for k, v in eip1559_scenarios.items())
+    eip1559_dropdown = _eip1559_scenarios.get(eip1559_base_fee, 'Enabled (Custom Value)')
 
     return (
         validator_dropdown,

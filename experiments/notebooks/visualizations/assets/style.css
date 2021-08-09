@@ -19,16 +19,15 @@ label {
 .rc-slider-handle {  
   border: solid 2px #d0d0f9;
 }
-.input-section{
-    float: left;
-    width: 30%;
-    padding-bottom:20px;
-    padding-left:10px;
-    padding-right:10px;
+.slider-input{
+    margin-top:20px;
 }
 .input-row{
-    height: 170px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 370px));
+    justify-content: center;
+    grid-gap: 20px;
 }
 .output-row{
-    height: 400px;
+    height: 600px;
 }

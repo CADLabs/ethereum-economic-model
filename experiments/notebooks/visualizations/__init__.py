@@ -13,6 +13,8 @@ from experiments.notebooks.visualizations.plotly_theme import (
     cadlabs_colorway_sequence,
 )
 from model.system_parameters import parameters, validator_environments
+import model.constants as constants
+
 
 # Set plotly as the default plotting backend for pandas
 pd.options.plotting.backend = "plotly"
@@ -714,25 +716,6 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
             ),
             *(secondary_y, secondary_y) if secondary_y else (),
         )
-        fig.add_trace(
-            go.Scatter(
-                mode="markers",
-                x=[date],
-                y=[df.loc[date.strftime("%Y-%m-%d")][column][0]],
-                marker_symbol=["diamond"],
-                marker_line_color="black",
-                marker_color=cadlabs_colorway_sequence[idx + 1],
-                marker_line_width=2,
-                marker_size=10,
-                hovertemplate=name,
-                name=name,
-                textfont_size=11,
-                textposition="top center",
-                legendgroup="markers",
-                showlegend=True,
-            ),
-            *(secondary_y, secondary_y) if secondary_y else (),
-        )
 
     return fig
 
@@ -872,18 +855,20 @@ def plot_eth_supply_and_inflation(df_historical, df_simulated, parameters=parame
         xaxis_title="Date",
         title="ETH Supply Simulator",
         legend_title="",
+        height=550,
         legend=dict(
             title=dict(
                 text="",
             ),
             orientation="h",
             yanchor="top",
-            y=-0.425,
+            y=-0.475,
             xanchor="center",
             x=0.5,
             traceorder="grouped",
             itemclick=False,
         ),
+        margin=dict(l=60, r=0, t=30, b=20),
     )
 
     fig.add_hline(
@@ -1150,7 +1135,7 @@ def plot_yields_per_subset(df, scenario_names):
     return fig
 
 
-def plot_cumulative_yields_per_subset(df, scenario_names):
+def plot_cumulative_yields_per_subset(df, DELTA_TIME, scenario_names):
     color_cycle = itertools.cycle(cadlabs_colorway_sequence)
 
     fig = go.Figure()
@@ -1159,10 +1144,11 @@ def plot_cumulative_yields_per_subset(df, scenario_names):
         df_subset = df.query(f"subset == {subset}").copy()
 
         df_subset["daily_revenue_yields_pct"] = (
-            df_subset["total_revenue_yields_pct"] / 365
+            df_subset["total_revenue_yields_pct"] / (constants.epochs_per_year / DELTA_TIME)
         )
         df_subset["daily_profit_yields_pct"] = (
-            df_subset["total_profit_yields_pct"] / 365
+
+            df_subset["total_profit_yields_pct"] / (constants.epochs_per_year / DELTA_TIME)
         )
 
         df_subset["cumulative_revenue_yields_pct"] = (
@@ -1285,7 +1271,18 @@ def plot_stacked_cumulative_column_per_subset(df, column, scenario_names):
             ),
         )
 
-    fig.update_layout(hovermode="x unified")
+    fig.update_layout(
+        hovermode="x unified",
+        margin=dict(r=30, b=65, l=80),
+        xaxis_title="Date",
+        xaxis=dict(
+            rangeslider=dict(
+                visible=True,
+            ),
+            rangeslider_thickness=0.15,
+            type="date",
+        )
+    )
 
     return fig
 
