@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2021-08-09
+### Changed
+- Updated System Parameter configuration for `mev_per_block` in notebook 2, "Validator Revenue and Profit Yields", from 0.13 to 0.02 ETH/block
+
 ## [1.1.0] - 2021-07-28
 ### Changed
 - Default assumption for `base_fee_process` System Parameter
