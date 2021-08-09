@@ -84,11 +84,11 @@ class StateVariables:
     """The validator average effective balance"""
     number_of_active_validators: int = number_of_active_validators
     """The total number of active validators"""
-    number_of_awake_validators: int = max(
+    number_of_awake_validators: int = min(
         system_parameters.parameters['MAX_VALIDATOR_COUNT'][0],
         number_of_active_validators
     )
-    """The total number of active & awake validators"""
+    """The total number of awake validators"""
     validator_uptime: Percentage = 1
     """The combination of validator internet, power, and technical uptime, as a percentage"""
     number_of_validators_online: int = 0
