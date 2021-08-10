@@ -85,7 +85,7 @@ class StateVariables:
     number_of_active_validators: int = number_of_active_validators
     """The total number of active validators"""
     number_of_awake_validators: int = min(
-        system_parameters.parameters['MAX_VALIDATOR_COUNT'][0],
+        system_parameters.parameters['MAX_VALIDATOR_COUNT'][0] or float('inf'),
         number_of_active_validators
     )
     """The total number of awake validators"""

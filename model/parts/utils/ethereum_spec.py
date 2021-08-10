@@ -41,7 +41,7 @@ def get_awake_validator_indices(params: Parameters, state: StateVariables) -> Gw
     active_validators = get_active_validator_indices(state)
 
     # Get awake validators as subset of active validators
-    awake_validators = min(MAX_VALIDATOR_COUNT, active_validators)
+    awake_validators = min(MAX_VALIDATOR_COUNT or float('inf'), active_validators)
 
     return awake_validators
 
