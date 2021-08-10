@@ -219,7 +219,7 @@ def policy_block_proposal_reward(
     # State Variables
     base_reward = previous_state["base_reward"]
     sync_reward = previous_state["sync_reward"]
-    number_of_validators_online = previous_state["number_of_validators_online"]
+    number_of_validators_online = previous_state["number_of_awake_validators"] * previous_state['validator_uptime']
 
     # Calculate block proposer reward
     proposer_reward_numerator = base_reward * (
