@@ -99,7 +99,7 @@ The [Differential Model Specification](https://hackmd.io/@CADLabs/HyENPQ36u) dep
 
 1. Clone or download the Git repository: `git clone https://github.com/CADLabs/ethereum-model` or using GitHub Desktop
 2. If completing the cadCAD Edu Masterclass MOOC, check out the version `v1.1.0` tag: `git checkout tags/v1.1.0`
-3. Set up your development environment using of the following two options:
+3. Set up your development environment using one of the following two options:
 
 ### Option 1: Local Development Environment
 
