@@ -18,9 +18,19 @@ from data.historical_values import df_ether_supply
 experiment = eth_supply_analysis.experiment
 # Create a copy of the experiment simulation
 simulation = copy.deepcopy(experiment.simulations[0])
+# Default Values
+default_pos_launch_date = '2022/03/1'
+default_basefee = 30
+default_validator_adoption = 3
+default_basefee_dropdown_str = f'Enabled (Base Fee = {default_basefee})'
+default_validator_adoption_dropdown_str = 'Normal Adoption'
 # Configure scenarios
-eip1559_scenarios = {'Disabled (Base Fee = 0)': 0, 'Enabled (Base Fee = 30)': 30}
-validator_scenarios = {'Normal Adoption': 3, 'Low Adoption': 3 * 0.5, 'High Adoption': 3 * 1.5}
+eip1559_scenarios = {'Disabled (Base Fee = 0)': 0, default_basefee_dropdown_str: default_basefee}
+validator_scenarios = {
+    default_validator_adoption_dropdown_str: default_validator_adoption,
+    'Low Adoption': default_validator_adoption * 0.5,
+    'High Adoption': default_validator_adoption * 1.5
+}
 
 
 # Load Data
@@ -39,9 +49,9 @@ app.layout = html.Div([
                 dcc.Dropdown(
                     id='validator-dropdown',
                     clearable=False,
-                    value='Normal Adoption',
+                    value=default_validator_adoption_dropdown_str,
                     options=[
-                        {'label': 'Normal Adoption', 'value': 'Normal Adoption'},
+                        {'label': default_validator_adoption_dropdown_str, 'value': default_validator_adoption_dropdown_str},
                         {'label': 'Low Adoption', 'value': 'Low Adoption'},
                         {'label': 'High Adoption', 'value': 'High Adoption'},
                         {'label': 'Custom Value', 'value': 'Custom Value'}
@@ -61,7 +71,7 @@ app.layout = html.Div([
                         4: '4',
                         7.5: '7.5',
                     },
-                    value=3,
+                    value=default_validator_adoption,
                     tooltip={'placement': 'top'}
                 )
             ], className='slider-input')
@@ -72,7 +82,7 @@ app.layout = html.Div([
             dcc.Dropdown(
                 id='pos-launch-date-dropdown',
                 clearable=False,
-                value='2021/12/1',
+                value=default_pos_launch_date,
                 options=[
                     {'label': 'Dec 2021', 'value': '2021/12/1'},
                     {'label': 'Mar 2022', 'value': '2022/03/1'},
@@ -92,10 +102,10 @@ app.layout = html.Div([
                 dcc.Dropdown(
                     id='eip1559-dropdown',
                     clearable=False,
-                    value='Enabled (Base Fee = 30)',
+                    value=default_basefee_dropdown_str,
                     options=[
                         {'label': 'Disabled (Base Fee = 0)', 'value': 'Disabled (Base Fee = 0)'},
-                        {'label': 'Enabled (Base Fee = 30)', 'value': 'Enabled (Base Fee = 30)'},
+                        {'label': default_basefee_dropdown_str, 'value': default_basefee_dropdown_str},
                         {'label': 'Enabled (Custom Value)', 'value': 'Enabled (Custom Value)'}
                     ]
                 )
@@ -115,7 +125,7 @@ app.layout = html.Div([
                         75: '75',
                         100: '100'
                     },
-                    value=30,
+                    value=default_basefee,
                     tooltip={'placement': 'top'},
                 )
             ], className='slider-input')
