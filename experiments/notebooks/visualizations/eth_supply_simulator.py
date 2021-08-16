@@ -19,7 +19,7 @@ experiment = eth_supply_analysis.experiment
 # Create a copy of the experiment simulation
 simulation = copy.deepcopy(experiment.simulations[0])
 # Configure scenarios
-eip1559_scenarios = {'Disabled (Base Fee = 0)': 0, 'Enabled (Base Fee = 25)': 25}
+eip1559_scenarios = {'Disabled (Base Fee = 0)': 0, 'Enabled (Base Fee = 30)': 30}
 validator_scenarios = {'Normal Adoption': 3, 'Low Adoption': 3 * 0.5, 'High Adoption': 3 * 1.5}
 
 
@@ -92,7 +92,7 @@ app.layout = html.Div([
                 dcc.Dropdown(
                     id='eip1559-dropdown',
                     clearable=False,
-                    value='Enabled (Base Fee = 25)',
+                    value='Enabled (Base Fee = 30)',
                     options=[
                         {'label': 'Disabled (Base Fee = 0)', 'value': 'Disabled (Base Fee = 0)'},
                         {'label': 'Enabled (Base Fee = 30)', 'value': 'Enabled (Base Fee = 30)'},
@@ -115,7 +115,7 @@ app.layout = html.Div([
                         75: '75',
                         100: '100'
                     },
-                    value=25,
+                    value=30,
                     tooltip={'placement': 'top'},
                 )
             ], className='slider-input')
