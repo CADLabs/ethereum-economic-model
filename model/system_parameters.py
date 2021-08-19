@@ -14,7 +14,7 @@ from dataclasses import dataclass
 from datetime import datetime
 
 import model.constants as constants
-import model.simulation_configuration as simulation
+import experiments.simulation_configuration as simulation
 from model.types import (
     Run,
     Timestep,
