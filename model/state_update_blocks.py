@@ -48,7 +48,9 @@ state_update_block_validators = {
         "number_of_validators_in_activation_queue": update_from_signal(
             "number_of_validators_in_activation_queue"
         ),
-        "number_of_active_validators": update_from_signal("number_of_active_validators"),
+        "number_of_active_validators": update_from_signal(
+            "number_of_active_validators"
+        ),
         "number_of_awake_validators": update_from_signal("number_of_awake_validators"),
         "validator_uptime": update_from_signal("validator_uptime"),
     },

@@ -13,6 +13,7 @@ from model.types import Gwei
 
 # Beacon state accessors
 
+
 def get_active_validator_indices(state: StateVariables) -> Gwei:
     """
     See https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/beacon-chain.md#get_active_validator_indices
@@ -35,13 +36,13 @@ def get_awake_validator_indices(params: Parameters, state: StateVariables) -> Gw
     See https://ethresear.ch/t/simplified-active-validator-cap-and-rotation-proposal
     """
     # Parameters
-    MAX_VALIDATOR_COUNT = params['MAX_VALIDATOR_COUNT']
+    MAX_VALIDATOR_COUNT = params["MAX_VALIDATOR_COUNT"]
 
     # State Variables
     active_validators = get_active_validator_indices(state)
 
     # Get awake validators as subset of active validators
-    awake_validators = min(MAX_VALIDATOR_COUNT or float('inf'), active_validators)
+    awake_validators = min(MAX_VALIDATOR_COUNT or float("inf"), active_validators)
 
     return awake_validators
 

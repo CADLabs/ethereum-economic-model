@@ -332,7 +332,9 @@ class Parameters:
     that are validating ("awake") at any given time. This proposal does not stop validators from 
     depositing and becoming active validators, but rather introduces a rotating validator set.
     "Awake" validators are a subset of "active" validators.
-    
+
+    To disable the maximum validator cap, MAX_VALIDATOR_COUNT is set to None.
+
     The economic impact of this is as follows:
     
     > Once the active validator set size exceeds MAX_VALIDATOR_COUNT,

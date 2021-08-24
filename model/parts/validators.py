@@ -8,6 +8,7 @@ import typing
 
 import model.constants as constants
 import model.parts.utils.ethereum_spec as spec
+from model.parts.utils import get_number_of_awake_validators
 from model.types import ETH, Gwei
 
 
@@ -89,7 +90,9 @@ def policy_validators(params, substep, state_history, previous_state):
 
     # Calculate the number of "awake" validators
     # See proposal: https://ethresear.ch/t/simplified-active-validator-cap-and-rotation-proposal
-    number_of_awake_validators = spec.get_awake_validator_indices(params, previous_state)
+    number_of_awake_validators = spec.get_awake_validator_indices(
+        params, previous_state
+    )
 
     # Calculate the validator uptime
     validator_uptime = validator_uptime_process(run, timestep * dt)
@@ -113,7 +116,7 @@ def policy_average_effective_balance(
     Calculate the validator average effective balance.
     """
     # State Variables
-    number_of_validators = previous_state["number_of_awake_validators"]
+    number_of_validators = get_number_of_awake_validators(params, previous_state)
 
     # Get total active balance
     total_active_balance = spec.get_total_active_balance(params, previous_state)
