@@ -97,12 +97,12 @@ The [Differential Model Specification](https://hackmd.io/@CADLabs/HyENPQ36u) dep
 ## Environment Setup
 
 1. Clone or download the Git repository: `git clone https://github.com/CADLabs/ethereum-model` or using GitHub Desktop
-2. If completing the cadCAD Edu Masterclass MOOC, check out the `masterclass` branch: `git checkout masterclass`
+2. If completing the cadCAD Edu Masterclass MOOC, find and check out the latest ["Masterclass 🎓" release version](https://github.com/CADLabs/ethereum-economic-model/releases): `git checkout v1.1.1-masterclass`
 3. Set up your development environment using one of the following three options:
 
-### Option 1: Basic Anaconda Development Environment
+### Option 1: Anaconda Development Environment
 
-This option guides you through setting up a cross-platform, beginner-friendly (yet more than capable enough for the advanced user) development environment using Anaconda to install Python 3 and Jupyter. There is also a video that accompanies this option and walks through all the steps: [Environment Setup Video](TODO)
+This option guides you through setting up a cross-platform, beginner-friendly (yet more than capable enough for the advanced user) development environment using Anaconda to install Python 3 and Jupyter. There is also a video that accompanies this option and walks through all the steps: [Model Quick-Start Guide](TODO)
 
 1. Download [Anaconda](https://www.anaconda.com/products/individual)
 2. Use Anaconda to install Python 3
