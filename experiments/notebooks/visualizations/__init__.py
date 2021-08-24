@@ -698,11 +698,23 @@ def fig_add_stage_markers(df, column, fig, secondary_y=None, parameters=paramete
         )
 
     for idx, (name, date) in enumerate(system_dates):
+        if date > parameters["date_start"][0]:
+            x_datetime = date
+            y_value = df.loc[date.strftime("%Y-%m-%d")][column][0]
+
+        else:
+            nearest_row = df.iloc[
+                df.index.get_loc(date.strftime("%Y-%m-%d"), method="nearest")
+            ]
+            x_datetime = nearest_row["timestamp"][0]
+            y_value = nearest_row[column][0]
+                
+
         fig.add_trace(
             go.Scatter(
                 mode="markers+text",
-                x=[date],
-                y=[df.loc[date.strftime("%Y-%m-%d")][column][0]],
+                x=[x_datetime],
+                y=[y_value],
                 marker_symbol=["diamond"],
                 marker_line_width=2,
                 marker_size=10,
