@@ -75,7 +75,6 @@ The model is configured using several configuration modules in the [model/](mode
 | Module | Description |
 | --- | --- |
 | [constants.py](model/constants.py) | Constants used in the model, e.g. number of epochs in a year, Gwei in 1 Ether |
-| [simulation_configuration.py](model/simulation_configuration.py) | Simulation configuration such as the number of timesteps and Monte Carlo runs |
 | [state_update_blocks.py](model/state_update_blocks.py) | cadCAD model State Update Block structure, composed of Policy and State Update Functions |
 | [state_variables.py](model/state_variables.py) | Model State Variable definition, configuration, and defaults |
 | [stochastic_processes.py](model/stochastic_processes.py) | Helper functions to generate stochastic environmental processes |

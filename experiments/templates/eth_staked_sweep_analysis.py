@@ -8,11 +8,9 @@ the current maximum ETH price value over the last 6 months from Etherscan.io.
 import numpy as np
 import copy
 
-from model.simulation_configuration import TIMESTEPS, DELTA_TIME
+from experiments.simulation_configuration import TIMESTEPS, DELTA_TIME
 from model.state_variables import eth_staked, eth_supply, eth_price_max
 from experiments.default_experiment import experiment
-from model.types import Stage
-
 
 # Make a copy of the default experiment to avoid mutation
 experiment = copy.deepcopy(experiment)
