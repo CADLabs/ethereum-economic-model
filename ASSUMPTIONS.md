@@ -227,4 +227,13 @@ The model assumes that validators are either online and operating perfectly, or 
 
 In its initial version, the model does not model Ethereum's inactivity leak mechanism. We assume a **participation of more than 2/3 at all times**. We assert this requirement in the `policy_validators(...)` Policy Function.
 
+### Maximum Validator Cap
+The model adds a feature of a maximum validator cap to limit the number of validators that are validating ("awake") at any given time.
 
+This feature is based on Vitalik's proposal where validators are not stoped from depositing and becoming active validators, but rather introduces a rotating validator set.
+
+"Awake" validators are a subset of "active" validators that are "validating" and receiving rewards, while "active" validators are all the validators with ETH staked.
+
+The maximum validator cap is disabled by default, it's value is defined by the `MAX_VALIDATOR_COUNT` system parameter.
+
+See https://ethresear.ch/t/simplified-active-validator-cap-and-rotation-proposal for additional context. 
