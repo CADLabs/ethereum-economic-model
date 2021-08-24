@@ -31,7 +31,7 @@ from data.historical_values import eth_price_mean, eth_price_min, eth_price_max
 # Get number of validator environments for initializing Numpy array size
 number_of_validator_environments = len(validator_environments)
 
-# Intial state from external live data source, setting a default in case API call fails
+# Initial state from external live data source, setting a default in case API call fails
 number_of_validators: int = beaconchain.get_validators_count(default=156_250)
 eth_staked: ETH = (
     beaconchain.get_total_validator_balance(default=5_000_000e9) / constants.gwei
@@ -51,11 +51,8 @@ class StateVariables:
     """
     The stage of the network upgrade process.
 
-    By default set to PROOF_OF_STAKE Stage, where EIP-1559 is enabled and POW issuance is disabled.
-
-    Otherwise set to ALL Stage, which transitions through each stage, updating the `stage` State Variable.
-
-    See model.types.Stage Enum for further documentation.
+    See "stage" System Parameter in model.system_parameters
+    & model.types.Stage Enum for further documentation.
     """
     timestamp: datetime = None
     """
