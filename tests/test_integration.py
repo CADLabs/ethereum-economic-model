@@ -4,7 +4,7 @@ import pandas as pd
 from radcad import Simulation
 
 import experiments.default_experiment as base
-
+from model.constants import epochs_per_year
 
 def test_dt():
     simulation: Simulation = deepcopy(base.experiment.simulations[0])
@@ -92,9 +92,10 @@ def test_slashing():
 
 def test_eip1559_experiment():
     simulation: Simulation = deepcopy(base.experiment.simulations[0])
-    simulation.timesteps = 10
+    simulation.timesteps = 5  # years
 
     parameter_overrides = {
+        "dt": [epochs_per_year],
         # Sweep of EIP1559 disabled and enabled
         "base_fee_process": [
             lambda _run, _timestep: 0,
