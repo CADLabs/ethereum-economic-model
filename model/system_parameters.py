@@ -326,7 +326,7 @@ class Parameters:
     """
     Used to calculate gas limit from EIP-1559 gas target
     """
-    MAX_VALIDATOR_COUNT: List[int] = default([2**19])
+    MAX_VALIDATOR_COUNT: List[int] = default([None])
     """
     A proposal to set the maximum validators (2**19 == 524,288 validators)
     that are validating ("awake") at any given time. This proposal does not stop validators from 
