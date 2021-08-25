@@ -4,7 +4,7 @@
 
 A modular dynamical-systems model of Ethereum's validator economics, based on the open-source Python library [radCAD](https://github.com/CADLabs/radCAD), an extension to [cadCAD](https://cadcad.org).
 
-* Current model version: `v1.1.0`
+* Latest model release version: [Steady State / v1.1.0](https://github.com/CADLabs/ethereum-economic-model/releases/tag/v1.1.0)
 * Implements the official Ethereum [Altair](https://github.com/ethereum/eth2.0-specs#altair) spec updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release
 
 ## Table of Contents
@@ -97,12 +97,23 @@ The [Differential Model Specification](https://hackmd.io/@CADLabs/HyENPQ36u) dep
 ## Environment Setup
 
 1. Clone or download the Git repository: `git clone https://github.com/CADLabs/ethereum-model` or using GitHub Desktop
-2. If completing the cadCAD Edu Masterclass MOOC, check out the version `v1.1.0` tag: `git checkout tags/v1.1.0`
-3. Set up your development environment using one of the following two options:
+2. If completing the cadCAD Edu Masterclass MOOC, find and check out the latest ["Masterclass 🎓" release version](https://github.com/CADLabs/ethereum-economic-model/releases): `git checkout v1.1.1-masterclass`
+3. Set up your development environment using one of the following three options:
 
-### Option 1: Local Development Environment
+### Option 1: Anaconda Development Environment
 
-This section describes how to set up a custom development environment using Python 3 and Jupyter.
+This option guides you through setting up a cross-platform, beginner-friendly (yet more than capable enough for the advanced user) development environment using Anaconda to install Python 3 and Jupyter. There is also a video that accompanies this option and walks through all the steps: [Model Quick-Start Guide](TODO)
+
+1. Download [Anaconda](https://www.anaconda.com/products/individual)
+2. Use Anaconda to install Python 3
+3. Set up a virtual environment from within Anaconda
+4. Install Jupyter Notebook within the virtual environment
+5. Launch Jupyter Notebook and open the [setup.ipynb](setup.ipynb) notebook in the root of the project repo
+6. Follow and execute all notebook cells to install and check your Python dependencies
+
+### Option 2: Custom Development Environment
+
+This option guides you through how to set up a custom development environment using Python 3 and Jupyter.
 
 Please note the following prerequisites before getting started:
 * Python: tested with versions 3.7, 3.8, 3.9
@@ -146,7 +157,7 @@ make setup
 make start-lab
 ```
 
-### Option 2: Docker Development Environment
+### Option 3: Docker Development Environment
 
 Alternatively, you can set up your development environment using the pre-built Docker image with all the dependencies you need: [CADLabs Jupyter Lab Environment](https://github.com/CADLabs/jupyter-lab-environment)
 
