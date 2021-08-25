@@ -7,6 +7,7 @@ Calculation of PoS incentives such as attestation and block proposal rewards and
 import typing
 
 import model.parts.utils.ethereum_spec as spec
+from model.parts.utils import get_number_of_awake_validators
 from model.types import Gwei
 
 
@@ -32,8 +33,10 @@ def policy_attestation_rewards(
 
     # State Variables
     base_reward = previous_state["base_reward"]
-    number_of_validators = previous_state["number_of_validators"]
-    number_of_validators_online = previous_state["number_of_validators_online"]
+    number_of_validators = get_number_of_awake_validators(params, previous_state)
+    number_of_validators_online = (
+        number_of_validators * previous_state["validator_uptime"]
+    )
 
     # Calculate total source reward
     # All submitted attestations have to match source vote
@@ -87,7 +90,10 @@ def policy_attestation_penalties(
 
     # State Variables
     base_reward = previous_state["base_reward"]
-    number_of_validators_offline = previous_state["number_of_validators_offline"]
+    number_of_validators = get_number_of_awake_validators(params, previous_state)
+    number_of_validators_offline = number_of_validators * (
+        1 - previous_state["validator_uptime"]
+    )
 
     # Calculate attestation penalties
     attestation_penalties = (
@@ -125,8 +131,10 @@ def policy_sync_committee_reward(
 
     # State Variables
     base_reward = previous_state["base_reward"]
-    number_of_validators = previous_state["number_of_validators"]
-    number_of_validators_online = previous_state["number_of_validators_online"]
+    number_of_validators = get_number_of_awake_validators(params, previous_state)
+    number_of_validators_online = (
+        number_of_validators * previous_state["validator_uptime"]
+    )
 
     # Calculate total base rewards
     total_base_rewards = base_reward * number_of_validators
@@ -162,8 +170,10 @@ def policy_sync_committee_penalties(
 
     # State Variables
     base_reward = previous_state["base_reward"]
-    number_of_validators = previous_state["number_of_validators"]
-    number_of_validators_offline = previous_state["number_of_validators_offline"]
+    number_of_validators = get_number_of_awake_validators(params, previous_state)
+    number_of_validators_offline = number_of_validators * (
+        1 - previous_state["validator_uptime"]
+    )
 
     # Calculate total base rewards
     total_base_rewards = base_reward * number_of_validators
@@ -218,7 +228,10 @@ def policy_block_proposal_reward(
     # State Variables
     base_reward = previous_state["base_reward"]
     sync_reward = previous_state["sync_reward"]
-    number_of_validators_online = previous_state["number_of_validators_online"]
+    number_of_validators = get_number_of_awake_validators(params, previous_state)
+    number_of_validators_online = (
+        number_of_validators * previous_state["validator_uptime"]
+    )
 
     # Calculate block proposer reward
     proposer_reward_numerator = base_reward * (
@@ -370,7 +383,10 @@ def update_validating_rewards(
     head_reward = previous_state["head_reward"]
 
     base_reward = previous_state["base_reward"]
-    number_of_validators_online = previous_state["number_of_validators_online"]
+    number_of_validators = get_number_of_awake_validators(params, previous_state)
+    number_of_validators_online = (
+        number_of_validators * previous_state["validator_uptime"]
+    )
 
     # Calculate total validating rewards
     validating_rewards = (

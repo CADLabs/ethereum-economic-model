@@ -4,22 +4,23 @@ While the model implements the official Ethereum Specification wherever possible
   
 * [Network-level Assumptions](#network-level-assumptions)
   * [ETH Price](#ETH-Price)
-  * [Proof-of-Work ETH Issuance](#Proof-of-Work-ETH-Issuance)
+  * [Proof-of-Work ETH Issuance](#proof-of-work-eth-issuance)
   * [Upgrade Stage Dates](#Upgrade-Stage-Dates)
     * [Simulation Start Date](#Simulation-Start-Date)
-    * [EIP-1559 Activation Date](#EIP-1559-Activation-Date)
-    * [Proof-of-Stake Activation Date](#Proof-of-Stake-Activation-Date)
+    * [EIP-1559 Activation Date](#eip-1559-activation-date)
+    * [Proof-of-Stake Activation Date](#proof-of-stake-activation-date)
   * [Average Block Size](#Average-Block-Size)
   * [Average Base Fee](#Average-Base-Fee)
   * [Average Priority Fee](#Average-Priority-Fee)
   * [Maximum Extractable Value (MEV)](#maximum-extractable-value-mev)
-* [Validator-level Assumptions](#Validator-level-Assumptions)
+* [Validator-level Assumptions](#validator-level-assumptions)
   * [Validator Adoption](#validator-adoption)
-  * [Validator Environments](#Validator-Environments)
+  * [Max Validator Cap](#maximum-validator-cap)
+  * [Validator Environments](#validator-environments)
     * [Validator Environment Categories and Cost Structures](#Validator-Environment-Categories-and-Cost-Structures)
     * [Validator Environment Relative Weights](#Validator-Environment-Relative-Weights)
-    * [Validator Environment Equal-slashing](#Validator-Environment-Equal-slashing)
-    * [Validator Environment Equal-uptime](#Validator-Environment-Equal-uptime)
+    * [Validator Environment Equal-slashing](#validator-environment-equal-slashing)
+    * [Validator Environment Equal-uptime](#validator-environment-equal-uptime)
   * [Validator Performance](#Validator-Performance)
     * [Average Uptime](#Average-Uptime)
     * [Frequency of Slashing Events](#Frequency-of-Slashing-Events)
@@ -126,7 +127,7 @@ Prior to the adoption of the Flashbots MEV-geth client, gas prices were artifici
 
 ## Validator-level Assumptions
 
-## Validator Adoption Assumptions
+### Validator Adoption
 
 Validator adoption is the assumed rate of new validators entering the activation queue per epoch, that results in an implied ETH staked value over time.
 
@@ -139,7 +140,19 @@ The activation queue is modelled as follows: Validators that deposit 32 ETH are 
 
 The normal adoption scenario is used as the default validator adoption rate for all experiments - to change this value, update the `validator_process` [System Parameter](./model/system_parameters.py).
 
-### Validator Environment Assumptions
+### Maximum Validator Cap
+
+The model adds a feature of a maximum validator cap to limit the number of validators that are validating ("awake") at any given time.
+
+This feature is based on Vitalik's proposal where validators are not stopped from depositing and becoming active validators, but rather introduces a rotating validator set.
+
+"Awake" validators are a subset of "active" validators that are "validating" and receiving rewards, while "active" validators are all the validators with ETH staked.
+
+The maximum validator cap is disabled by default (by setting the value to `None`), it's value is defined by the `MAX_VALIDATOR_COUNT` system parameter.
+
+See https://ethresear.ch/t/simplified-active-validator-cap-and-rotation-proposal for additional context.
+
+### Validator Environments
 
 The model supports the simulation of validator economics across different "validator environments" to account for the different deployment setups validators are using to access the network, each with slightly different economics. 
 
@@ -226,5 +239,3 @@ As more statistical data is collected about slashing in different validator envi
 The model assumes that validators are either online and operating perfectly, or offline and not fulfilling their duties. Offline validators are penalized for not attesting to the source, target, and head. We do not model validators that fulfil some of their duties, and not other duties. We capture this participation rate (percentage of online validators) using the `validator_uptime_process` System Parameter.
 
 In its initial version, the model does not model Ethereum's inactivity leak mechanism. We assume a **participation of more than 2/3 at all times**. We assert this requirement in the `policy_validators(...)` Policy Function.
-
-

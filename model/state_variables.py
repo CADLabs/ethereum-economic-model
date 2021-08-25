@@ -15,6 +15,7 @@ from datetime import datetime
 import model.constants as constants
 import data.api.beaconchain as beaconchain
 import data.api.etherscan as etherscan
+import model.system_parameters as system_parameters
 from model.system_parameters import validator_environments
 from model.types import (
     Gwei,
@@ -78,12 +79,15 @@ class StateVariables:
     """The number of validators in activation queue"""
     average_effective_balance: Gwei = 32 * constants.gwei
     """The validator average effective balance"""
-    number_of_validators: int = number_of_validators
-    """The total number of validators"""
-    number_of_validators_online: int = 0
-    """The total number of online validators"""
-    number_of_validators_offline: int = 0
-    """The total number of offline validators"""
+    number_of_active_validators: int = number_of_active_validators
+    """The total number of active validators"""
+    number_of_awake_validators: int = min(
+        system_parameters.parameters["MAX_VALIDATOR_COUNT"][0] or float("inf"),
+        number_of_active_validators,
+    )
+    """The total number of awake validators"""
+    validator_uptime: Percentage = 1
+    """The combination of validator internet, power, and technical uptime, as a percentage"""
 
     # Reward and penalty state variables
     base_reward: Gwei = 0
