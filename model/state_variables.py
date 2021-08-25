@@ -91,10 +91,6 @@ class StateVariables:
     """The total number of awake validators"""
     validator_uptime: Percentage = 1
     """The combination of validator internet, power, and technical uptime, as a percentage"""
-    number_of_validators_online: int = 0
-    """The total number of online validators"""
-    number_of_validators_offline: int = 0
-    """The total number of offline validators"""
 
     # Reward and penalty state variables
     base_reward: Gwei = 0

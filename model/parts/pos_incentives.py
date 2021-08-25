@@ -90,7 +90,10 @@ def policy_attestation_penalties(
 
     # State Variables
     base_reward = previous_state["base_reward"]
-    number_of_validators_offline = previous_state["number_of_validators_offline"]
+    number_of_validators = get_number_of_awake_validators(params, previous_state)
+    number_of_validators_offline = number_of_validators * (
+        1 - previous_state["validator_uptime"]
+    )
 
     # Calculate attestation penalties
     attestation_penalties = (
