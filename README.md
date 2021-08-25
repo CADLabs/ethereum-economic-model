@@ -108,7 +108,7 @@ This option guides you through setting up a cross-platform, beginner-friendly (y
 2. Use Anaconda to install Python 3
 3. Set up a virtual environment from within Anaconda
 4. Install Jupyter Notebook within the virtual environment
-5. Launch Jupyter Notebook and open the [setup.ipynb](setup.ipynb) notebook in the root of the project repo
+5. Launch Jupyter Notebook and open the [environment_setup.ipynb](environment_setup.ipynb) notebook in the root of the project repo
 6. Follow and execute all notebook cells to install and check your Python dependencies
 
 ### Option 2: Custom Development Environment
