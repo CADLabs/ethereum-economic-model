@@ -1,3 +1,7 @@
+"""
+Misc. utility and helper functions
+"""
+
 from numpy import inf
 
 from model.state_variables import StateVariables
