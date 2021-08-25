@@ -956,7 +956,7 @@ def plot_number_of_validators_per_subset(df, scenario_names):
         fig.add_trace(
             go.Scatter(
                 x=df["timestamp"],
-                y=df[df.subset == subset]["number_of_validators"],
+                y=df[df.subset == subset]["number_of_active_validators"],
                 name=scenario_names[subset],
             )
         )
