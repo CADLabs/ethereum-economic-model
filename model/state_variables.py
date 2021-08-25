@@ -33,7 +33,7 @@ from data.historical_values import eth_price_mean, eth_price_min, eth_price_max
 number_of_validator_environments = len(validator_environments)
 
 # Initial state from external live data source, setting a default in case API call fails
-number_of_validators: int = beaconchain.get_validators_count(default=156_250)
+number_of_active_validators: int = beaconchain.get_validators_count(default=156_250)
 eth_staked: ETH = (
     beaconchain.get_total_validator_balance(default=5_000_000e9) / constants.gwei
 )
