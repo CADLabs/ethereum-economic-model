@@ -99,3 +99,28 @@ A plot showing annualized profit yields as a function of pool size.
 ### Follow-on extensions / analysis
 
 * Use the differing annualized profit yields as an input for an agent-based model to study the possible centralisation of validators in staking pools over time.
+
+## 5. Introduce live data to the model initial states
+
+### Description
+
+The current model uses static datasets for the initial states. An API is used to get the number of active validators and ETH staked balance, as the historical ETH supply and price come from a static CSV that needs to be updated regularly.
+
+Change the initial states from static datasets automatically updated values from a live source.
+
+### What’s required to make it happen
+
+* Update the number of active validators and ETH staked balance from an API to a live source.
+* Update the ETH average gas price from a CSV file to a live source.
+* Update the ETH block rewards from a CSV file to a live source.
+* Update the daily ETH price from a CSV file to a live source.
+* Update the daily ETH supply from a CSV file to a live source.
+* Update the daily MEV extracted from a JSON file to a live source.
+
+### Outcomes
+
+Turn the model a real "live digital twin", enabling the integration and automated updated with recent blockchain data.
+
+### Follow-on extensions / analysis
+
+* Integrate live blockchain data to test the model outputs with past data.
