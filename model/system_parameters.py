@@ -14,7 +14,7 @@ from dataclasses import dataclass
 from datetime import datetime
 
 import model.constants as constants
-import model.simulation_configuration as simulation
+import experiments.simulation_configuration as simulation
 from model.types import (
     Run,
     Timestep,
@@ -154,11 +154,16 @@ class Parameters:
     By default set to constants.epochs_per_day (~= 225)
     """
 
-    stage: List[Stage] = default([Stage.PROOF_OF_STAKE])
+    stage: List[Stage] = default([Stage.ALL])
     """
     Which stage or stages of the network upgrade process to simulate.
 
-    By default set to PROOF_OF_STAKE stage, where EIP-1559 is enabled and POW issuance is disabled.
+    By default set to ALL stage, which for time-domain analyses simulates
+    the transition from the current network network upgrade stage at today's date onwards
+    (i.e. the transition from the Beacon Chain Stage,
+    to the EIP-1559 Stage, to the Proof-of-Stake Stage),
+    whereas phase-space analyses simulate the current network upgrade stage
+    providing a "snapshot" of the system state at this time.
 
     See model.types.Stage Enum for further documentation.
     """
@@ -211,7 +216,8 @@ class Parameters:
 
     Used if model not driven using `eth_staked_process`.
 
-    By default set to a static value from https://beaconscan.com/statistics.
+    By default set to a static value from https://beaconscan.com/stat/validator
+    using the mean value over the last 6 months from February 26 2021 to August 26 2021.
     """
 
     # Ethereum system parameters

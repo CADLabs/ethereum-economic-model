@@ -33,6 +33,16 @@ def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameter
     df[[validator.type + '_cloud_costs' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_cloud_costs), axis=1, result_type='expand').astype('float32')
     df[[validator.type + '_third_party_costs' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_third_party_costs), axis=1, result_type='expand').astype('float32')
 
+    # Dissagregate individual validator costs
+    _mapping = dict(zip(
+        [validator.type + '_costs' for validator in validator_environments],
+        [validator.type + '_validator_count' for validator in validator_environments]
+    ))
+
+    df[['individual_validator_' + validator.type + '_costs' for validator in validator_environments]] = \
+        df[[validator.type + '_costs' for validator in validator_environments]].rename(columns=_mapping) / \
+        df[[validator.type + '_validator_count' for validator in validator_environments]]
+
     # Dissagregate revenue and profit
     df[[validator.type + '_revenue' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_revenue), axis=1, result_type='expand').astype('float32')
     df[[validator.type + '_profit' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_profit), axis=1, result_type='expand').astype('float32')

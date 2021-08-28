@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import model.constants as constants
-from model.simulation_configuration import DELTA_TIME
+from experiments.simulation_configuration import DELTA_TIME
 from model.types import  Gwei_per_Gas
 
 
