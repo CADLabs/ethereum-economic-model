@@ -5,7 +5,7 @@ Helper functions to generate stochastic environmental processes
 import numpy as np
 from stochastic import processes
 
-import model.simulation_configuration as simulation
+import experiments.simulation_configuration as simulation
 from experiments.utils import rng_generator
 
 
