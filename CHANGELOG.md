@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.2] - 2021-08-28
+### Added
+- Documentation for 5th chart of notebook 2, "Validator Revenue and Profit Yields", analysis 1
+- Anaconda environment setup docs and `environment_setup.ipynb` notebook
+
+### Changed
+- Updated radCAD from version 0.8.1 to 0.8.2
+- Default `stage` System Parameter from `PROOF_OF_STAKE` to `ALL`
+- Moved `model.simulation_configuration` to `experiments.simulation_configuration`
+- Renamed `inspect_module(...)` function to `display_code(...)`
+
 ## [1.1.1] - 2021-08-09
 ### Changed
 - Updated System Parameter configuration for `mev_per_block` in notebook 2, "Validator Revenue and Profit Yields", from 0.13 to 0.02 ETH/block
