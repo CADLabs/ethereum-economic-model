@@ -206,7 +206,6 @@ class Parameters:
 
     validator_process: List[Callable[[Run, Timestep], int]] = default(
         [
-            # From https://beaconscan.com/statistics as of 20/04/21
             lambda _run, _timestep: 3,
         ]
     )
@@ -215,7 +214,8 @@ class Parameters:
 
     Used if model not driven using `eth_staked_process`.
 
-    By default set to a static value from https://beaconscan.com/statistics.
+    By default set to a static value from https://beaconscan.com/stat/validator
+    using the mean value over the last 6 months from February 26 2021 to August 26 2021.
     """
 
     # Ethereum system parameters

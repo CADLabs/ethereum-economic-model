@@ -184,47 +184,30 @@ def plot_validating_rewards(df, subplot_titles=[]):
     return fig
 
 
-def plot_validating_rewards_pie_chart(df, with_priority_fee=False):
-    if with_priority_fee:
-        title = "Validating Rewards with Priority Fees"
-        validator_rewards = df.iloc[-1][
-            [
-                "total_priority_fee_to_validators_eth",
-                "source_reward_eth",
-                "target_reward_eth",
-                "head_reward_eth",
-                "block_proposer_reward_eth",
-                "sync_reward_eth",
-            ]
-        ].to_dict()
-        names = [
-            "Priority Fees}",
-            "Source Reward",
-            "Target Reward",
-            "Head Reward",
-            "Block Proposer Reward",
-            "Sync Reward",
+def plot_validator_incentives_pie_chart(df):
+    title = "Validator Incentives (Rewards, Priority Fees, & MEV)"
+    validator_rewards = df.iloc[-1][
+        [
+            "total_priority_fee_to_validators_eth",
+            "total_realized_mev_to_validators",
+            "source_reward_eth",
+            "target_reward_eth",
+            "head_reward_eth",
+            "block_proposer_reward_eth",
+            "sync_reward_eth",
         ]
-    else:
-        title = "Validating Rewards"
-        validator_rewards = df.iloc[-1][
-            [
-                "source_reward_eth",
-                "target_reward_eth",
-                "head_reward_eth",
-                "block_proposer_reward_eth",
-                "sync_reward_eth",
-            ]
-        ].to_dict()
-        names = [
-            "Source Reward",
-            "Target Reward",
-            "Head Reward",
-            "Block Proposer Reward",
-            "Sync Reward",
-        ]
+    ].to_dict()
+    labels = [
+        "Priority Fees",
+        "MEV",
+        "Source Reward",
+        "Target Reward",
+        "Head Reward",
+        "Block Proposer Reward",
+        "Sync Reward",
+    ]
 
-    fig = px.pie(df, values=validator_rewards.values(), names=names)
+    fig = go.Figure(data=[go.Pie(labels=labels, values=list(validator_rewards.values()), pull=[0.2, 0.2, 0, 0, 0, 0, 0])])
 
     fig.for_each_trace(
         lambda trace: trace.update(
