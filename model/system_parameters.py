@@ -36,6 +36,7 @@ from data.historical_values import (
     eth_price_mean,
     eth_block_rewards_mean,
 )
+from data.api import subgraph
 
 
 # Configure validator environment distribution
@@ -202,7 +203,7 @@ class Parameters:
     validator_process: List[Callable[[Run, Timestep], int]] = default(
         [
             # From https://beaconscan.com/statistics as of 20/04/21
-            lambda _run, _timestep: 3,
+            lambda _run, _timestep: subgraph.get_6_month_mean_validator_deposits_per_epoch(default=3),
         ]
     )
     """
