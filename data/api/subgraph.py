@@ -13,33 +13,40 @@ load_dotenv()
 cache = diskcache.Cache(".beaconchain_api.cache")
 
 
-@cache.memoize(expire=(6 * 60 * 60))  # cached for 6 hours
+@cache.memoize(expire=(24 * 60 * 60))  # cached for 24 hours
 def get_6_month_eth_deposit_data():
     SUBGRAPH_API_KEY = os.getenv("SUBGRAPH_API_KEY")
-    API_URI = (
-        "https://gateway.thegraph.com/api/"
-        + SUBGRAPH_API_KEY
-        + "/subgraphs/id/0x540b14e4bd871cfe59e48d19254328b5ff11d820-0"
-    )
-    GRAPH_QUERY = """
-    {
-    dailyDeposits(first: 180) {
-        id
-        dailyAmountDeposited
+    if SUBGRAPH_API_KEY:
+        API_URI = (
+            "https://gateway.thegraph.com/api/"
+            + SUBGRAPH_API_KEY
+            + "/subgraphs/id/0x540b14e4bd871cfe59e48d19254328b5ff11d820-0"
+        )
+        GRAPH_QUERY = """
+        {
+        dailyDeposits(first: 180) {
+            id
+            dailyAmountDeposited
+            }
         }
-    }
-    """
-    try:
-        JSON = {"query": GRAPH_QUERY}
-        r = requests.post(API_URI, json=JSON)
-        return r.json()["data"]
-    except requests.exceptions.HTTPError as err:
-        logging.error(err)
+        """
+        try:
+            JSON = {"query": GRAPH_QUERY}
+            r = requests.post(API_URI, json=JSON)
+            return r.json()["data"]
+        except requests.exceptions.HTTPError as err:
+            logging.error(err)
+            return {}
+    else:
+        logging.error("SUBGRAPH_API_KEY not defined")
         return {}
 
 
 def get_6_month_mean_validator_deposits_per_epoch(default=None):
     data = get_6_month_eth_deposit_data()
+    if not data:
+        return default
+
     daily_deposits_data = data["dailyDeposits"]
     res = defaultdict(list)
     {res[key].append(sub[key]) for sub in daily_deposits_data for key in sub}
