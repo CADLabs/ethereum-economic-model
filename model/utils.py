@@ -3,6 +3,9 @@ Misc. utility and helper functions
 """
 
 import copy
+import sys
+import importlib
+import pkgutil
 from dataclasses import field
 from functools import partial
 
@@ -43,3 +46,17 @@ def local_variables(_locals):
 
 def default(obj):
     return field(default_factory=lambda: copy.copy(obj))
+
+
+def import_submodules(package_name):
+    """ Import all submodules of a module, recursively
+
+    :param package_name: Package name
+    :type package_name: str
+    :rtype: dict[types.ModuleType]
+    """
+    package = sys.modules[package_name]
+    return {
+        name: importlib.import_module(package_name + '.' + name)
+        for loader, name, is_pkg in pkgutil.walk_packages(package.__path__)
+    }
