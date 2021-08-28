@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "cadlabs_ethereum_economic_model"
+packages = [
+    { include = "cadlabs_ethereum_economic_model", from = "package" },
+    { include = "model" },
+    { include = "model/**/*.py" },
+    { include = "experiments" },
+    { include = "experiments/**/*.py" },
+    { include = "data" },
+    { include = "data/**/*.py" },
+]
+version = "1.1.1a"
+description = "A modular dynamical-systems model of Ethereum's validator economics"
+authors = ["CADLabs <BenSchZA@users.noreply.github.com>"]
+include = [
+    "ASSUMPTIONS.md",
+    "README.md",
+    "ROADMAP.md",
+    "CHANGELOG.md",
+    "data/**/*.csv"
+]
+
+[tool.poetry.dependencies]
+python = ">=3.7,<3.10"
+numpy = "1.21.2"
+radcad = "0.8.1"
+#ipykernel = "5.5.3"
+requests = "^2.26.0"
+matplotlib = "3.3.4"
+scipy = "^1.7.1"
+stochastic = "0.6.0"
+plotly = "4.14.3"
+typing-extensions = "3.7.4.3"
+ipython-autotime = "0.3.1"
+jupyter-dash = "0.4.0"
+#jupyterlab = "3.0.14"
+ipywidgets = "7.6.3"
+notebook = "6.3.0"
+cadCAD-tools = "0.0.1.4"
+tqdm = "4.61.0"
+diskcache = "5.2.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
