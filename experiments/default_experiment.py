@@ -6,11 +6,10 @@ The defaults are defined in their respective modules (e.g. `model/system_paramet
 
 from radcad import Model, Simulation, Experiment, Backend
 
-
 from model.system_parameters import parameters
 from model.state_variables import initial_state
 from model.state_update_blocks import state_update_blocks
-from model.simulation_configuration import TIMESTEPS, DELTA_TIME, MONTE_CARLO_RUNS
+from experiments.simulation_configuration import TIMESTEPS, DELTA_TIME, MONTE_CARLO_RUNS
 
 
 # Create Model
