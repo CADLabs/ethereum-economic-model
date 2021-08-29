@@ -15,16 +15,15 @@ For this model extension, we suggest refactoring a number of the State Variables
 The following State Variables and System Parameters could be refactored to be initialized from a live data source, such as an API or Subgraph:
 * `validator_process` System Parameter: Currently set to the 6 months mean validator adoption from a static variable. This parameter directly influences the network inflation and supply, and would benefit from being updated live to reflect the current system state.
 * `eth_price_process` System Parameter: Currently set to the mean ETH price from a static CSV file from Etherscan. This parameter directly influences the profit yields of validators in certain environments, and would benefit from being updated live to reflect the current system state.
-* `base_fee_process` System Parameter: Currently calculated based on the historical 3 months gas price and set to a static variable. This parameter directly influences the network inflation and supply, and would benefit from being updated live to reflect the current system state.
+* `base_fee_process` System Parameter: Currently calculated based on the historical 3 month mean gas price and set to a static variable. This parameter directly influences the network inflation and supply, and would benefit from being updated live to reflect the current system state.
 
 ### Outcomes
 
-Turn the model a real "live digital twin", enabling the integration and automated updated with recent blockchain data.
+Turn the model into a real live "digital twin", integrating with and automatically updating from live blockchain data, enabling accurate real-time analysis of validator economics.
 
 ### Follow-on extensions / analysis
 
-* Integrate live blockchain data to test the model outputs with past data.
-* Simulate the model over historical validator deposit data from The Graph Subgraph, as a regression test, to validate the revenue yields produced by the model match those experience by validators in real-world scenario.
+* Simulate the model over historical validator deposit data from The Graph Subgraph, as a regression test, to validate the revenue yields produced by the model closely match those actually experienced by validators historically.
 
 ## 2. Study the effect of a dynamic EIP-1559 base fee under various network conditions
 
