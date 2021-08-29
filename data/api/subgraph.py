@@ -7,14 +7,14 @@ from statistics import mean
 from dotenv import load_dotenv
 from collections import defaultdict
 
-from model.constants import epochs_per_day
+from model.constants import epochs_per_day, gwei, eth_deposited_per_validator
 
 load_dotenv()
-cache = diskcache.Cache(".beaconchain_api.cache")
+cache = diskcache.Cache(".api.cache")
 
 
 @cache.memoize(expire=(24 * 60 * 60))  # cached for 24 hours
-def get_6_month_eth_deposit_data():
+def get_6_month_validator_deposit_data():
     SUBGRAPH_API_KEY = os.getenv("SUBGRAPH_API_KEY")
     if SUBGRAPH_API_KEY:
         API_URI = (
@@ -33,7 +33,7 @@ def get_6_month_eth_deposit_data():
         try:
             JSON = {"query": GRAPH_QUERY}
             r = requests.post(API_URI, json=JSON)
-            return r.json()["data"]
+            return r.json().get("data", {})
         except requests.exceptions.HTTPError as err:
             logging.error(err)
             return {}
@@ -43,7 +43,7 @@ def get_6_month_eth_deposit_data():
 
 
 def get_6_month_mean_validator_deposits_per_epoch(default=None):
-    data = get_6_month_eth_deposit_data()
+    data = get_6_month_validator_deposit_data()
     if not data:
         return default
 
@@ -52,7 +52,8 @@ def get_6_month_mean_validator_deposits_per_epoch(default=None):
     {res[key].append(sub[key]) for sub in daily_deposits_data for key in sub}
     daily_deposits = dict(res)
     daily_deposits["dailyAmountDepositedValidators"] = [
-        (float(x) * 1e-9) / 32 for x in daily_deposits["dailyAmountDeposited"]
+        float(x) / (eth_deposited_per_validator * gwei)
+        for x in daily_deposits["dailyAmountDeposited"]
     ]
     mean_validator_deposits_per_epoch = (
         mean(daily_deposits["dailyAmountDepositedValidators"]) / epochs_per_day
