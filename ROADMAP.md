@@ -13,9 +13,9 @@ For this model extension, we suggest refactoring a number of the State Variables
 ### What’s required to make it happen
 
 The following State Variables and System Parameters could be refactored to be initialized from a live data source, such as an API or Subgraph:
-* `validator_process` Sytem Parameter: Currently set to the 6 months mean validator adoption from a static variable. This parameter directly influences the network inflation and supply, and would benefit from being updated live to reflect the current system state.
-* `eth_price_process` Sytem Parameter: Currently set to the mean ETH price from a static CSV file from Etherscan. This parameter directly influences the profit yields of validators in certain environments, and would benefit from being updated live to reflect the current system state.
-* `base_fee_process` Sytem Parameter: Currently calculated based on the historical 3 months gas price and set to a static variable. This parameter directly influences the network inflation and supply, and would benefit from being updated live to reflect the current system state.
+* `validator_process` System Parameter: Currently set to the 6 months mean validator adoption from a static variable. This parameter directly influences the network inflation and supply, and would benefit from being updated live to reflect the current system state.
+* `eth_price_process` System Parameter: Currently set to the mean ETH price from a static CSV file from Etherscan. This parameter directly influences the profit yields of validators in certain environments, and would benefit from being updated live to reflect the current system state.
+* `base_fee_process` System Parameter: Currently calculated based on the historical 3 months gas price and set to a static variable. This parameter directly influences the network inflation and supply, and would benefit from being updated live to reflect the current system state.
 
 ### Outcomes
 
