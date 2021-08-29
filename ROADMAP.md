@@ -2,7 +2,31 @@
 
 The following is a list of possible model extensions to act as inspiration:
 
-## 1. Study the effect of a dynamic EIP-1559 base fee under various network conditions
+## 1. Make the model a live "digital twin"
+
+### Description
+
+The model currently has a number of State Variables and System Parameters that are initialized either using static values or calculated using static CSV files. These static values need to be updated periodically to ensure the model properly represents the real-world system state, this is currently a manual process.
+
+For this model extension, we suggest refactoring a number of the State Variables and System Parameters to be updated from live data sources, and create a true digital twin.
+
+### What’s required to make it happen
+
+The following State Variables and System Parameters could be refactored to be initialized from a live data source, such as an API or Subgraph:
+* `validator_process` Sytem Parameter: Currently set to the 6 months mean validator adoption from a static variable. This parameter directly influences the network inflation and supply, and would benefit from being updated live to reflect the current system state.
+* `eth_price_process` Sytem Parameter: Currently set to the mean ETH price from a static CSV file from Etherscan. This parameter directly influences the profit yields of validators in certain environments, and would benefit from being updated live to reflect the current system state.
+* `base_fee_process` Sytem Parameter: Currently calculated based on the historical 3 months gas price and set to a static variable. This parameter directly influences the network inflation and supply, and would benefit from being updated live to reflect the current system state.
+
+### Outcomes
+
+Turn the model a real "live digital twin", enabling the integration and automated updated with recent blockchain data.
+
+### Follow-on extensions / analysis
+
+* Integrate live blockchain data to test the model outputs with past data.
+* Simulate the model over historical validator deposit data from The Graph Subgraph, as a regression test, to validate the revenue yields produced by the model match those experience by validators in real-world scenario.
+
+## 2. Study the effect of a dynamic EIP-1559 base fee under various network conditions
 
 ### Description
 
@@ -25,7 +49,7 @@ The resulting model could be used to study how the base fee changes under variou
 * Add multiple agent types that represent how different types of users will respond to a varying base fee, introducing a feedback loop between the base fee and network usage
 * Extend the model to investigate under what scenarios priority fees to validators/miners come into play, and what the priority fee dynamics look like
 
-## 2. Investigate what the cost would be to artificially manipulate the base fee that EIP-1559 introduces
+## 3. Investigate what the cost would be to artificially manipulate the base fee that EIP-1559 introduces
 
 ### Description
 
@@ -54,7 +78,7 @@ The product of this investigation would be a surface plot with the x- and y-axis
 * What would the network inflation rate of Ethereum be if such a scenario were to come about?
 * What would the cost/benefit be to the participants in the collusion?
 
-## 3. Investigate the effect of the introduction of layer 2 solutions on layer 1 transaction costs
+## 4. Investigate the effect of the introduction of layer 2 solutions on layer 1 transaction costs
 
 ### Description
 
@@ -77,7 +101,7 @@ Determine whether the layer-1 transaction load reaches a steady state, and if so
 * Introduce multiple agent types that exhibit varying behaviour and optimization vectors, which in turn dictates which layer they transact on.
 * If transactions on layer 1 significantly decrease below the gas target and the base fee drops to near zero, what does the return on investment for validators look like if they have to rely entirely on Beacon Chain rewards? What does the network inflation rate look like under those conditions? 
 
-## 4. Introduce compounding returns for validators participating in pools
+## 5. Introduce compounding returns for validators participating in pools
 
 ### Description
 
@@ -99,28 +123,3 @@ A plot showing annualized profit yields as a function of pool size.
 ### Follow-on extensions / analysis
 
 * Use the differing annualized profit yields as an input for an agent-based model to study the possible centralisation of validators in staking pools over time.
-
-## 5. Introduce live data to the model initial states
-
-### Description
-
-The current model uses static datasets for the initial states. An API is used to get the number of active validators and ETH staked balance, as the historical ETH supply and price come from a static CSV that needs to be updated regularly.
-
-Change the initial states from static datasets automatically updated values from a live source.
-
-### What’s required to make it happen
-
-* Update the number of active validators and ETH staked balance from an API to a live source.
-* Update the ETH average gas price from a CSV file to a live source.
-* Update the ETH block rewards from a CSV file to a live source.
-* Update the daily ETH price from a CSV file to a live source.
-* Update the daily ETH supply from a CSV file to a live source.
-* Update the daily MEV extracted from a JSON file to a live source.
-
-### Outcomes
-
-Turn the model a real "live digital twin", enabling the integration and automated updated with recent blockchain data.
-
-### Follow-on extensions / analysis
-
-* Integrate live blockchain data to test the model outputs with past data.
