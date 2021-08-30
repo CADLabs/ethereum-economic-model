@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Update radCAD from v0.8.2 to v0.8.3
 - Update `date_pos` parameter to frontend default of 2022/03/1
+- Update cumulative yield chart experiment template from daily to monthly aggregation
 
 ## [1.1.2] - 2021-08-28
 ### Added
