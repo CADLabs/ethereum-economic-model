@@ -11,4 +11,8 @@ from model.state_update_blocks import state_update_blocks
 
 
 # Instantiate a new Model
-model = Model(params=parameters, initial_state=initial_state, state_update_blocks=state_update_blocks)
+model = Model(
+    params=parameters,
+    initial_state=initial_state,
+    state_update_blocks=state_update_blocks,
+)

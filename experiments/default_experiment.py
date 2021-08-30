@@ -11,7 +11,11 @@ from experiments.simulation_configuration import TIMESTEPS, DELTA_TIME, MONTE_CA
 
 
 # Create Model Simulation
-simulation = Simulation(model=model, timesteps=TIMESTEPS, runs=MONTE_CARLO_RUNS)
+simulation = Simulation(
+    model=model,
+    timesteps=TIMESTEPS,
+    runs=MONTE_CARLO_RUNS
+)
 # Create Experiment of single Simulation
 experiment = Experiment([simulation])
 # Configure Simulation & Experiment engine
