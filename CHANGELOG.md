@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.3] - 2021-08-30
+### Changed
+- Update radCAD from v0.8.2 to v0.8.3
+- Update `date_pos` parameter to frontend default of 2022/03/1
+- Update cumulative yield chart experiment template from daily to monthly aggregation
+
 ## [1.1.2] - 2021-08-28
 ### Added
 - Documentation for 5th chart of notebook 2, "Validator Revenue and Profit Yields", analysis 1
