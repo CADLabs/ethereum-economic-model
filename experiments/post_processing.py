@@ -21,7 +21,7 @@ def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameter
     # Assign parameters to DataFrame
     assign_parameters(df, parameters, [
         # Parameters to assign to DataFrame
-        # 'dt'
+        'dt'
     ])
 
     # Dissagregate validator count
@@ -70,9 +70,9 @@ def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameter
     df[[penalty + '_eth' for penalty in validator_penalties]] = df[validator_penalties] / constants.gwei
 
     # Calculate cumulative revenue and profit yields
-    df["daily_revenue_yields_pct"] = df["total_revenue_yields_pct"] / (constants.epochs_per_year / parameters['dt'][0])
+    df["daily_revenue_yields_pct"] = df["total_revenue_yields_pct"] / (constants.epochs_per_year / df['dt'])
     df["cumulative_revenue_yields_pct"] = df.groupby('subset')["daily_revenue_yields_pct"].transform('cumsum')
-    df["daily_profit_yields_pct"] = df["total_profit_yields_pct"] / (constants.epochs_per_year / parameters['dt'][0])
+    df["daily_profit_yields_pct"] = df["total_profit_yields_pct"] / (constants.epochs_per_year / df['dt'])
     df["cumulative_profit_yields_pct"] = df.groupby('subset')["daily_profit_yields_pct"].transform('cumsum')
 
     # Drop the initial state for plotting
