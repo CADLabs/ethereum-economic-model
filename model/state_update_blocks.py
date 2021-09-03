@@ -38,8 +38,9 @@ state_update_block_ethereum = {
 state_update_block_validators = {
     "description": """
         Environmental validator processes:
-        * New validators
-        * Online and offline validators
+        * Validator activation queue
+        * Validator rotation
+        * Validator uptime
     """,
     "policies": {
         "policy_validators": validators.policy_validators,
