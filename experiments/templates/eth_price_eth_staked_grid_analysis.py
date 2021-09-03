@@ -6,17 +6,16 @@ Creates a cartesian product grid of ETH price and ETH staked processes, for phas
 
 import numpy as np
 import copy
+from radcad.utils import generate_cartesian_product_parameter_sweep
 
 from model.state_variables import eth_staked, eth_supply, eth_price_max
 from experiments.default_experiment import experiment, TIMESTEPS, DELTA_TIME
-from experiments.utils import generate_cartesian_product
-from model.types import Stage
 
 
 # Make a copy of the default experiment to avoid mutation
 experiment = copy.deepcopy(experiment)
 
-sweep = generate_cartesian_product({
+sweep = generate_cartesian_product_parameter_sweep({
     # ETH price range from 100 USD/ETH to the maximum over the last 12 months
     "eth_price_samples": np.linspace(start=100, stop=eth_price_max, num=20),
     # ETH staked range from current ETH staked to minimum of 2 x ETH staked and 30% of total ETH supply
