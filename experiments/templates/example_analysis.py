@@ -17,7 +17,7 @@ parameter_overrides = {
 }
 
 state_variable_overrides = {
-    "eth_price": [0],
+    "eth_price": 0,
 }
 
 # Override default experiment System Parameters

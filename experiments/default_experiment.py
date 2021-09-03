@@ -1,7 +1,10 @@
 """
-The default experiment with default model System Parameters, State Variables, and Simulation Configuration.
+The default experiment with default model Initial State, System Parameters, and Simulation Configuration.
 
-The defaults are defined in their respective modules (e.g. `model/system_parameters.py`).
+The defaults are defined in their respective modules:
+* Initial State in `model/state_variables.py`
+* System Parameters in `model/system_parameters.py`
+* Simulation Configuration in `experiments/simulation_configuration.py`
 """
 
 from radcad import Simulation, Experiment, Backend
