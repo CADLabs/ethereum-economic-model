@@ -36,7 +36,12 @@ from data.historical_values import (
     eth_price_mean,
     eth_block_rewards_mean,
 )
+from data.api import subgraph
 
+
+mean_validator_deposits_per_epoch = (
+    subgraph.get_6_month_mean_validator_deposits_per_epoch(default=3)
+)
 
 # Configure validator environment distribution
 validator_environments = [
@@ -206,7 +211,7 @@ class Parameters:
 
     validator_process: List[Callable[[Run, Timestep], int]] = default(
         [
-            lambda _run, _timestep: 3,
+            lambda _run, _timestep: mean_validator_deposits_per_epoch,
         ]
     )
     """
@@ -214,7 +219,11 @@ class Parameters:
 
     Used if model not driven using `eth_staked_process`.
 
-    By default set to a static value from https://beaconscan.com/stat/validator
+    The value comes from The Graph Subgraph
+    https://thegraph.com/explorer/subgraph?id=0x540b14e4bd871cfe59e48d19254328b5ff11d820-0
+    using the mean value over the last 6 months from the time the model is executed.
+
+    The default value set to 3 comes from https://beaconscan.com/stat/validator
     using the mean value over the last 6 months from February 26 2021 to August 26 2021.
     """
 
