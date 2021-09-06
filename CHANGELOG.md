@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.5] - 2021-09-04
 ### Changed
 - Updated to radCAD v0.8.4
-- Added cadCAD Masterclass practical exam notebook
+- Published cadCAD Masterclass Capstone Exercise notebook
 
 ## [1.1.4] - 2021-09-03
 ### Changed

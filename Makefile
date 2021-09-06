@@ -35,12 +35,12 @@ serve-docs:
 
 execute-notebooks:
 	rm experiments/notebooks/*.nbconvert.* || true
-	GLOBIGNORE="*exam.ipynb"; jupyter nbconvert --ExecutePreprocessor.timeout=-1 --ExecutePreprocessor.kernel_name=python-cadlabs-eth-model --execute --to notebook experiments/notebooks/*.ipynb
+	jupyter nbconvert --ExecutePreprocessor.timeout=-1 --ExecutePreprocessor.kernel_name=python-cadlabs-eth-model --execute --to notebook experiments/notebooks/*.ipynb
 	rm experiments/notebooks/*.nbconvert.* || true
 
 update-notebooks:
 	rm experiments/notebooks/*.nbconvert.* || true
-	GLOBIGNORE="*exam.ipynb"; jupyter nbconvert --ExecutePreprocessor.timeout=-1 --ExecutePreprocessor.kernel_name=python-cadlabs-eth-model --execute --to notebook --inplace experiments/notebooks/*.ipynb
+	jupyter nbconvert --ExecutePreprocessor.timeout=-1 --ExecutePreprocessor.kernel_name=python-cadlabs-eth-model --execute --to notebook --inplace experiments/notebooks/*.ipynb
 	rm experiments/notebooks/*.nbconvert.* || true
 
 clear-notebook-outputs:
