@@ -1,7 +1,7 @@
 """
 CADLabs Ethereum Economic Model
 """
-__version__ = "1.1.4"
+__version__ = "1.1.5"
 
 from radcad import Model
 
