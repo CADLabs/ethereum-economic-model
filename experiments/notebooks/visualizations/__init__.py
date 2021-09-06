@@ -1119,7 +1119,7 @@ def plot_yields_per_subset(df, scenario_names):
                 pad={"t": 10},
                 x=0,
                 xanchor="left",
-                y=1.15,
+                y=1.3,
                 yanchor="top",
             )
         ]
@@ -1202,7 +1202,7 @@ def plot_cumulative_yields_per_subset(df, DELTA_TIME, scenario_names):
                 pad={"t": 10},
                 x=0,
                 xanchor="left",
-                y=1.15,
+                y=1.3,
                 yanchor="top",
             )
         ]
@@ -1570,7 +1570,7 @@ def plot_network_issuance_scenarios(df, simulation_names):
                 pad={"t": 25},
                 x=0,
                 xanchor="left",
-                y=1.1,
+                y=1.25,
                 yanchor="top",
             )
         ]

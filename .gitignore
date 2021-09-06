@@ -142,3 +142,6 @@ scratchpad/
 *.nbconvert.ipynb
 *.dat
 drafts/
+
+# Masterclass exam
+**/*answers.ipynb

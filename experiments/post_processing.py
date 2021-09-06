@@ -21,7 +21,7 @@ def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameter
     # Assign parameters to DataFrame
     assign_parameters(df, parameters, [
         # Parameters to assign to DataFrame
-        # 'dt'
+        'dt'
     ])
 
     # Dissagregate validator count
@@ -62,7 +62,18 @@ def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameter
     df['revenue_profit_yield_spread_pct'] = df['total_revenue_yields_pct'] - df['total_profit_yields_pct']
 
     # Convert validator rewards from Gwei to ETH
-    validator_rewards = ['total_online_validator_rewards', 'total_priority_fee_to_validators', 'source_reward', 'target_reward', 'head_reward', 'block_proposer_reward', 'sync_reward', 'whistleblower_rewards']
+    validator_rewards = [
+        'validating_rewards',
+        'validating_penalties',
+        'total_online_validator_rewards',
+        'total_priority_fee_to_validators',
+        'source_reward',
+        'target_reward',
+        'head_reward',
+        'block_proposer_reward',
+        'sync_reward',
+        'whistleblower_rewards'
+    ]
     df[[reward + '_eth' for reward in validator_rewards]] = df[validator_rewards] / constants.gwei
 
     # Convert validator penalties from Gwei to ETH
@@ -70,9 +81,9 @@ def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameter
     df[[penalty + '_eth' for penalty in validator_penalties]] = df[validator_penalties] / constants.gwei
 
     # Calculate cumulative revenue and profit yields
-    df["daily_revenue_yields_pct"] = df["total_revenue_yields_pct"] / (constants.epochs_per_year / parameters['dt'][0])
+    df["daily_revenue_yields_pct"] = df["total_revenue_yields_pct"] / (constants.epochs_per_year / df['dt'])
     df["cumulative_revenue_yields_pct"] = df.groupby('subset')["daily_revenue_yields_pct"].transform('cumsum')
-    df["daily_profit_yields_pct"] = df["total_profit_yields_pct"] / (constants.epochs_per_year / parameters['dt'][0])
+    df["daily_profit_yields_pct"] = df["total_profit_yields_pct"] / (constants.epochs_per_year / df['dt'])
     df["cumulative_profit_yields_pct"] = df.groupby('subset')["daily_profit_yields_pct"].transform('cumsum')
 
     # Drop the initial state for plotting

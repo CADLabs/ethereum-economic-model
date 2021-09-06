@@ -4,7 +4,7 @@
 
 A modular dynamical-systems model of Ethereum's validator economics, based on the open-source Python library [radCAD](https://github.com/CADLabs/radCAD), an extension to [cadCAD](https://cadcad.org).
 
-* Latest model release version: [Masterclass / v1.1.2](https://github.com/CADLabs/ethereum-economic-model/releases/tag/v1.1.2)
+* Latest model release version: [Masterclass / v1.1.5](https://github.com/CADLabs/ethereum-economic-model/releases/tag/v1.1.5)
 * Implements the official Ethereum [Altair](https://github.com/ethereum/eth2.0-specs#altair) spec updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release
 
 ## Table of Contents
@@ -97,7 +97,7 @@ The [Differential Model Specification](https://hackmd.io/@CADLabs/HyENPQ36u) dep
 ## Environment Setup
 
 1. Clone or download the Git repository: `git clone https://github.com/CADLabs/ethereum-model` or using GitHub Desktop
-2. If completing the cadCAD Edu Masterclass MOOC, find and check out the latest ["Masterclass 🎓" release version](https://github.com/CADLabs/ethereum-economic-model/releases): e.g. `git checkout v.1.1.2`
+2. If completing the cadCAD Edu Masterclass MOOC, find and check out the latest ["Masterclass 🎓" release version](https://github.com/CADLabs/ethereum-economic-model/releases): e.g. `git checkout v.1.1.5`
 3. Set up your development environment using one of the following three options:
 
 ### Option 1: Anaconda Development Environment
@@ -183,9 +183,9 @@ If you receive the following error and you use Anaconda, try: `conda install -c 
 
 The [experiments/](experiments/) directory contains modules for configuring and executing simulation experiments, as well as performing post-processing of the results.
 
-The [experiments/notebooks/](experiments/notebooks/) directory contains initial validator-level and network-level experiment notebooks and analyses. These notebooks and analyses do not aim to comprehensively illuminate the Ethereum protocol, but rather to suggest insights into a few salient questions the Ethereum community has been discussing, and to serve as inspiration for researchers building out their own, customized analyses and structural model extensions. 
+The [experiments/notebooks/](experiments/notebooks/) directory contains initial validator-level and network-level experiment notebooks and analyses. These notebooks and analyses do not aim to comprehensively illuminate the Ethereum protocol, but rather to suggest insights into a few salient questions the Ethereum community has been discussing, and to serve as inspiration for researchers building out their own, customized analyses and structural model extensions.
 
-The [experiments/notebooks/README.ipynb](experiments/notebooks/0_README.ipynb) contains an overview of how to execute existing experiment notebooks, and how to configure and execute new ones.
+The [Experiment README notebook](experiments/notebooks/0_README.ipynb) contains an overview of how to execute existing experiment notebooks, and how to configure and execute new ones.
 
 #### Notebook 1. Model Validation
 
@@ -294,6 +294,6 @@ If you'd like to cite this code and/or research, we suggest the following format
   publisher = {GitHub},
   journal = {GitHub repository},
   howpublished = {\url{https://github.com/CADLabs/ethereum-economic-model}},
-  version = {v1.1.2}
+  version = {v1.1.5}
 }
 ```
