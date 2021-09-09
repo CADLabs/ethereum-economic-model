@@ -4,7 +4,7 @@
 
 A modular dynamical-systems model of Ethereum's validator economics, based on the open-source Python library [radCAD](https://github.com/CADLabs/radCAD), an extension to [cadCAD](https://cadcad.org).
 
-* Latest model release version: [Subgraph / v1.1.6](https://github.com/CADLabs/ethereum-economic-model/releases/tag/v1.1.6)
+* Latest model release version: [Subgraph / v1.1.7](https://github.com/CADLabs/ethereum-economic-model/releases/tag/v1.1.7)
 * Implements the official Ethereum [Altair](https://github.com/ethereum/eth2.0-specs#altair) spec updates in the [Blue Loop / v1.1.0-alpha.7](https://github.com/ethereum/eth2.0-specs/releases/tag/v1.1.0-alpha.7) release
 
 ## Table of Contents
@@ -97,12 +97,12 @@ The [Differential Model Specification](https://hackmd.io/@CADLabs/HyENPQ36u) dep
 ## Environment Setup
 
 1. Clone or download the Git repository: `git clone https://github.com/CADLabs/ethereum-model` or using GitHub Desktop
-2. If completing the cadCAD Edu Masterclass MOOC, find and check out the latest ["Masterclass 🎓" release version](https://github.com/CADLabs/ethereum-economic-model/releases): e.g. `git checkout v.1.1.6`
+2. If completing the cadCAD Edu Masterclass MOOC, find and check out the latest ["Masterclass 🎓" release version](https://github.com/CADLabs/ethereum-economic-model/releases): e.g. `git checkout v.1.1.7`
 3. Set up your development environment using one of the following three options:
 
 ### Option 1: Anaconda Development Environment
 
-This option guides you through setting up a cross-platform, beginner-friendly (yet more than capable enough for the advanced user) development environment using Anaconda to install Python 3 and Jupyter. There is also a video that accompanies this option and walks through all the steps: [Model Quick-Start Guide](TODO)
+This option guides you through setting up a cross-platform, beginner-friendly (yet more than capable enough for the advanced user) development environment using Anaconda to install Python 3 and Jupyter. There is also a video that accompanies this option and walks through all the steps: [Model Quick-Start Guide](https://www.cadcad.education/course/masterclass-ethereum)
 
 1. Download [Anaconda](https://www.anaconda.com/products/individual)
 2. Use Anaconda to install Python 3
@@ -294,6 +294,6 @@ If you'd like to cite this code and/or research, we suggest the following format
   publisher = {GitHub},
   journal = {GitHub repository},
   howpublished = {\url{https://github.com/CADLabs/ethereum-economic-model}},
-  version = {v1.1.6}
+  version = {v1.1.7}
 }
 ```
