@@ -38,7 +38,7 @@ def get_6_month_validator_deposit_data():
             logging.error(err)
             return {}
     else:
-        logging.error("SUBGRAPH_API_KEY not defined")
+        logging.warn("SUBGRAPH_API_KEY not defined")
         return {}
 
 
