@@ -403,6 +403,29 @@ class Parameters:
 
     A vector with a value for each validator environment.
     """
+    
+    # @Ross
+    avg_pool_size: List[int] = default([None])
+    """
+    The average number of validators in a pool.
+
+    avg_pool_size is initialized by experiments investigating compounding returns for validators in pool environments. 
+    See model extension #5, in ROADMAP.md, for more information about this implementation.
+
+    By default, validator_pool_size is set to None.
+    """
+    # @Ross
+    validator_pool_sizes: List[np.zeros] = default([np.zeros(
+        (len(validator_environments), 1), dtype=int
+    )])
+    """
+    The average number of validators in a pool.
+
+    avg_pool_size is initialized by experiments investigating compounding returns for validators in pool environments. 
+    See model extension #5, in ROADMAP.md, for more information about this implementation.
+
+    By default, validator_pool_size is set to None.
+    """
 
     # Rewards, penalties, and slashing
     slashing_events_per_1000_epochs: List[int] = default([1])  # 1 / 1000 epochs

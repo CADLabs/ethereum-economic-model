@@ -9,6 +9,9 @@ import typing
 import model.constants as constants
 from model.types import Percentage, Gwei
 
+# @Ross
+import numpy as np
+from model.system_parameters import validator_environments  
 
 def policy_validator_costs(
     params, substep, state_history, previous_state
@@ -96,6 +99,7 @@ def policy_validator_yields(
     validator_revenue = (
         validator_percentage_distribution * total_online_validator_rewards
     )
+   
     validator_revenue /= constants.gwei  # Convert from Gwei to ETH
     validator_revenue *= eth_price  # Convert from ETH to Dollars
 
@@ -136,6 +140,53 @@ def policy_validator_yields(
         "total_profit": total_profit,
         "total_revenue_yields": total_revenue_yields,
         "total_profit_yields": total_profit_yields,
+    }
+
+
+
+# @Ross
+def policy_validator_pooled_returns(
+    params, substep, state_history, previous_state
+    ) -> typing.String[str, any]:
+    """
+    ## Validator Pooled Returns Policy Function
+    Compounding mechanism to calculate new validator instances created by pooling returns in staking pools.
+    """
+    # Constants
+    stake_requirement = constants.eth_deposited_per_validator
+
+    # Parameters
+    avg_pool_size = params["avg_pool_size"] # assert not > environment size?
+    eth_price = previous_state["eth_price"]
+
+    # State Variables
+    validator_profit_USD = previous_state["validator_profit"] # array
+    validator_pool_profits = previous_state["validator_pool_profits"] # array
+    validator_count_distribution = previous_state["validator_count_distribution"] # array
+    
+    # Function variables
+    number_of_validator_environments = len(validator_environments)
+    new_shared_validators = np.zeros(len(number_of_validator_environments), dtype=int)
+    pool_validator_indeces = [2, 3, 4] #update so we are not using hard-coded values
+
+    for i in pool_validator_indeces: 
+        # disaggregrate profits to individual validator
+        avg_individual_profit = (validator_profit[i] / eth_price) / validator_distribution_count[i]
+        new_pool_profit = avg_individual_profit * pool_size
+
+        # aggregrate existing pool profits
+        validator_pool_profits[i] += new_pool_profit
+
+        # Calculate new shared validator instances
+        new_shared_validators[i] = np.floor(validator_pool_profits[i] / stake_requirement)
+
+        # Calculate remaining profit
+        validator_pool_profits[i] -= new_shared_validators[i] * stake_requirement
+
+
+    return {
+        "validator_pool_profits": validator_pool_profits,
+        "shared_validator_instances": new_shared_validators
     }
 
 
