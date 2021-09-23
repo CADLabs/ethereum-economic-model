@@ -55,6 +55,27 @@ legend_state_variable_name_mapping = {
             for validator in validator_environments
         ]
     ),
+    # @Ross
+    **dict(
+        [
+            (
+                validator.type + "_validator_count",
+                validator_environment_name_mapping[validator.type],
+            )
+            for validator in validator_environments
+        ]
+    ),
+    # @Ross
+    **dict(
+        [
+            (
+                validator.type + "_profit",
+                validator_environment_name_mapping[validator.type],
+            )
+            for validator in validator_environments
+        ]
+    )
+
 }
 
 axis_state_variable_name_mapping = {
@@ -1500,6 +1521,63 @@ def plot_profit_yields_by_environment_over_time(df):
         title="Profit Yields by Environment Over Time",
         xaxis_title="Date",
         yaxis_title="Profit Yields (%/year)",
+        legend_title="",
+        xaxis=dict(rangeslider=dict(visible=True), type="date"),
+        hovermode="x unified",
+    )
+
+    return fig
+
+# @Ross
+def plot_validator_count_by_environment_over_time(df):
+    validator_count = [
+        validator.type + "_validator_count" for validator in validator_environments
+    ]
+
+    fig = go.Figure()
+
+    for key in validator_count:
+        fig.add_trace(
+            go.Scatter(
+                x=df["timestamp"],
+                y=df[key],
+                name=legend_state_variable_name_mapping[key],
+            )
+        )
+
+    fig.update_layout(
+        title="Validator Count by Environment Over Time",
+        xaxis_title="Date",
+        yaxis_title="Count",
+        legend_title="",
+        xaxis=dict(rangeslider=dict(visible=True), type="date"),
+        hovermode="x unified",
+    )
+
+    return fig
+
+
+# @Ross
+def plot_profit_by_environment_over_time(df):
+    validator_profit = [
+        validator.type + "_profit" for validator in validator_environments
+    ]
+
+    fig = go.Figure()
+
+    for key in validator_profit:
+        fig.add_trace(
+            go.Scatter(
+                x=df["timestamp"],
+                y=df[key]
+                #name=legend_state_variable_name_mapping[key],
+            )
+        )
+
+    fig.update_layout(
+        title="Profit by Environment Over Time",
+        xaxis_title="Date",
+        yaxis_title="Profit",
         legend_title="",
         xaxis=dict(rangeslider=dict(visible=True), type="date"),
         hovermode="x unified",

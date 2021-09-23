@@ -21,7 +21,8 @@ def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameter
     # Assign parameters to DataFrame
     assign_parameters(df, parameters, [
         # Parameters to assign to DataFrame
-        'dt'
+        'dt',
+        'avg_pool_size'
     ])
 
     # Dissagregate validator count
