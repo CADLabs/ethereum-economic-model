@@ -241,6 +241,7 @@ _state_update_blocks = [
             # @Ross
             "validator_pool_profits": update_from_signal("validator_pool_profits"),
             "shared_validator_instances": update_from_signal("shared_validator_instances"),
+            
         },
     },
 ]
