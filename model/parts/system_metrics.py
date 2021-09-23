@@ -25,10 +25,10 @@ def policy_validator_costs(
 
     # @Ross
     avg_pool_size = params["avg_pool_size"]
-    if(avg_pool_size not None):
-        validator_percentage_distribution = params["validator_percentage_distribution"]
-    else:
+    if(avg_pool_size is not None):
         validator_percentage_distribution = previous_state["validator_percentage_distribution"]
+    else:
+        validator_percentage_distribution = params["validator_percentage_distribution"]
 
     validator_hardware_costs_per_epoch = params["validator_hardware_costs_per_epoch"]
     validator_cloud_costs_per_epoch = params["validator_cloud_costs_per_epoch"]
@@ -90,10 +90,10 @@ def policy_validator_yields(
 
     # @Ross
     avg_pool_size = params["avg_pool_size"]
-    if(avg_pool_size not None):
-        validator_percentage_distribution = params["validator_percentage_distribution"]
-    else:
+    if(avg_pool_size is not None):
         validator_percentage_distribution = previous_state["validator_percentage_distribution"]
+    else:
+        validator_percentage_distribution = params["validator_percentage_distribution"]
 
 
     # State Variables
@@ -163,7 +163,7 @@ def policy_validator_yields(
 # @Ross
 def policy_validator_pooled_returns(
     params, substep, state_history, previous_state
-    ) -> typing.String[str, any]:
+    ) -> typing.Dict[str, any]:
     """
     ## Validator Pooled Returns Policy Function
     Compounding mechanism to calculate new validator instances created by pooling returns in staking pools.
@@ -179,31 +179,34 @@ def policy_validator_pooled_returns(
     validator_profit_USD = previous_state["validator_profit"] # array
     validator_pool_profits = previous_state["validator_pool_profits"] # array
     validator_count_distribution = previous_state["validator_count_distribution"] # array
-    
-    # Function variables
+
     number_of_validator_environments = len(validator_environments)
-    new_shared_validators = np.zeros(len(number_of_validator_environments), dtype=int)
-    pool_validator_indeces = [2, 3, 4] #update so we are not using hard-coded values
-    total_pool_validators = 0 # init counter
+    new_shared_validators = np.zeros(number_of_validator_environments, dtype=int)
+    
+    if (avg_pool_size is not None):
 
-    for i in pool_validator_indeces: 
+        # Function variables
+        pool_validator_indeces = [2, 3, 4] #update so we are not using hard-coded values
+        total_pool_validators = 0 # init counter
 
-        # Calculate total number of validators in pools
-        total_pool_validators += validator_count_distribution[i]
+        for i in pool_validator_indeces: 
 
-        # disaggregrate profits to individual validator
-        avg_individual_profit = (validator_profit[i] / eth_price) / validator_distribution_count[i] 
-        new_pool_profit = avg_individual_profit * pool_size # in ETH
+            # Calculate total number of validators in pools
+            total_pool_validators += validator_count_distribution[i]
 
-        # aggregrate any existing pool profits
-        validator_pool_profits[i] += new_pool_profit
+            # disaggregrate profits to individual validator
+            avg_individual_profit = (validator_profit_USD[i] / eth_price) / validator_count_distribution[i] 
+            new_pool_profit = avg_individual_profit * avg_pool_size # in ETH
 
-        # Calculate new shared validator instances
-        new_shared_validators[i] = np.floor(validator_pool_profits[i] / stake_requirement)
+            # aggregrate any existing pool profits
+            validator_pool_profits[i] += new_pool_profit
 
-        # Calculate remaining profit
-        validator_pool_profits[i] -= new_shared_validators[i] * stake_requirement
+            # Calculate new shared validator instances
+            new_shared_validators[i] = np.floor(validator_pool_profits[i] / stake_requirement)
 
+            # Calculate remaining profit
+            validator_pool_profits[i] -= new_shared_validators[i] * stake_requirement
+    
 
     return {
         "validator_pool_profits": validator_pool_profits,

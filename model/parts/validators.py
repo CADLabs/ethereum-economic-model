@@ -11,6 +11,10 @@ import model.parts.utils.ethereum_spec as spec
 from model.parts.utils import get_number_of_awake_validators
 from model.types import ETH, Gwei
 
+# @Ross
+import numpy as np
+from model.system_parameters import validator_environments  
+
 
 def policy_staking(
     params, substep, state_history, previous_state
@@ -71,6 +75,17 @@ def policy_validators(params, substep, state_history, previous_state):
     ]
     average_effective_balance = previous_state["average_effective_balance"]
 
+    # @Ross
+    number_of_validator_environments = len(validator_environments)
+    # State Variables
+    shared_validator_instances = previous_state["shared_validator_instances"]
+    validator_count_distribution = previous_state["validator_count_distribution"] # array
+
+    number_of_shared_validator_instances = shared_validator_instances.sum()
+    validator_percentage_distribution = previous_state["validator_percentage_distribution"]
+
+    
+
     # Calculate the number of validators using ETH staked
     if eth_staked_process(0, 0) is not None:
         eth_staked = eth_staked_process(run, timestep * dt)
@@ -80,52 +95,51 @@ def policy_validators(params, substep, state_history, previous_state):
 
         # @Ross
         # Account for 'validator_pool_profits' in this process
-
-
     else:
         new_validators_per_epoch = validator_process(run, timestep * dt)
         number_of_validators_in_activation_queue += new_validators_per_epoch * dt
 
         # @Ross
-        # If simulating with pool compoundings, this code block combines and allocates the new validators from validator_process and from 
-        # shared validator instances, and renormalizes the percentage distribution.
-        if(avg_pool_size not None):
-
-            # State Variables (move to top)
-            shared_validator_instances = previous_state["shared_validator_instances"]
-            number_of_shared_validator_instances = shared_validator_instances.sum() # sum the array
-            validator_count_distribution = previous_state["validator_count_distribution"] # array
-            validator_percentage_distribution = previous_state["validator_percentage_distribution"]
-
-            number_of_validator_environments = len(validator_environments)
-
+        # If simulating with pool compounding (model extension #5), this code block combines and allocates both the new validators from validator_process and from 
+        # the shared validator instances from pools, and renormalizes the percentage distribution.
+        if(avg_pool_size is not None and number_of_shared_validator_instances > 0):
 
             validator_churn_limit = (
                 spec.get_validator_churn_limit(params, previous_state) * dt
             )
 
-            activated_validators = min(
-                number_of_validators_in_activation_queue + number_of_shared_validator_instances, validator_churn_limit
+            max_activated_validators = min(
+                (number_of_validators_in_activation_queue + number_of_shared_validator_instances), validator_churn_limit
             )
             
             # Calculate what fraction of new validators are from the validator_process
-            total_new_validators = number_of_validators_in_activation_queue + number_of_shared_validator_instances
-            validator_process_fraction = number_of_validators_in_activation_queue /  total_new_validators
-            shared_validator_instances_fraction = 1 - validator_process_fraction
+            max_new_validators = number_of_validators_in_activation_queue + number_of_shared_validator_instances
+            validator_process_fraction = number_of_validators_in_activation_queue /  max_new_validators
+            shared_validator_instances_fraction = number_of_shared_validator_instances / max_new_validators
 
             # From above, determine where new validators will be allocated
             pool_validator_indeces = [2, 3, 4] #update so we are not using hard-coded values
+            total_new_active_validators = 0
+
             for i in range(number_of_validator_environments):
-                validator_count_distribution[i] += validator_process_fraction * activated_validators # cast to int?
-                if(i in pool_validator_indeces):
-                    fraction = shared_validator_instances[i] / number_of_shared_validator_instances
-                    validator_count_distribution[i] += (shared_validator_instances_fraction * activated_validators) * fraction
-            
+                new_active_validators = int(max_activated_validators * validator_process_fraction) 
+                validator_count_distribution[i] += new_active_validators 
+                total_new_active_validators += new_active_validators
+                if(i in pool_validator_indeces): # add the shared validator instances
+                    pool_environment_fraction = shared_validator_instances[i] / number_of_shared_validator_instances 
+                    validator_count_distribution_float = max_activated_validators * shared_validator_instances_fraction * pool_environment_fraction
+                    new_active_validators = int(validator_count_distribution_float)
+                    #print(new_active_validators)
+                    validator_count_distribution[i] += new_active_validators
+                    total_new_active_validators += new_active_validators
+
+
             # Renormalize the distribution
             for i in range(number_of_validator_environments):
-                validator_percentage_distribution[i] = validator_count_distribution[i] / (number_of_active_validators + activated_validators)
+                validator_percentage_distribution[i] = validator_count_distribution[i] / (number_of_active_validators + max_activated_validators)
 
-            
+            number_of_active_validators += int(round(total_new_active_validators))
+            number_of_validators_in_activation_queue -= int(round(total_new_active_validators))
 
         else:
 

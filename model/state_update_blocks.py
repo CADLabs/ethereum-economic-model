@@ -226,7 +226,7 @@ _state_update_blocks = [
         "policies": {
             "yields": metrics.policy_validator_yields,
             # @Ross
-            "pooling": policy_validator_pooled_returns,
+            "pooling": metrics.policy_validator_pooled_returns,
         },
         "variables": {
             "validator_eth_staked": update_from_signal("validator_eth_staked"),
