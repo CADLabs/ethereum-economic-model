@@ -419,12 +419,7 @@ class Parameters:
         (len(validator_environments), 1), dtype=int
     )])
     """
-    The average number of validators in a pool.
-
-    avg_pool_size is initialized by experiments investigating compounding returns for validators in pool environments. 
-    See model extension #5, in ROADMAP.md, for more information about this implementation.
-
-    By default, validator_pool_size is set to None.
+    Description
     """
 
     # Rewards, penalties, and slashing

@@ -22,7 +22,14 @@ def policy_validator_costs(
     """
     # Parameters
     dt = params["dt"]
-    validator_percentage_distribution = params["validator_percentage_distribution"]
+
+    # @Ross
+    avg_pool_size = params["avg_pool_size"]
+    if(avg_pool_size not None):
+        validator_percentage_distribution = params["validator_percentage_distribution"]
+    else:
+        validator_percentage_distribution = previous_state["validator_percentage_distribution"]
+
     validator_hardware_costs_per_epoch = params["validator_hardware_costs_per_epoch"]
     validator_cloud_costs_per_epoch = params["validator_cloud_costs_per_epoch"]
     validator_third_party_costs_per_epoch = params[
@@ -80,7 +87,14 @@ def policy_validator_yields(
     """
     # Parameters
     dt = params["dt"]
-    validator_percentage_distribution = params["validator_percentage_distribution"]
+
+    # @Ross
+    avg_pool_size = params["avg_pool_size"]
+    if(avg_pool_size not None):
+        validator_percentage_distribution = params["validator_percentage_distribution"]
+    else:
+        validator_percentage_distribution = previous_state["validator_percentage_distribution"]
+
 
     # State Variables
     eth_price = previous_state["eth_price"]
@@ -144,6 +158,8 @@ def policy_validator_yields(
 
 
 
+
+
 # @Ross
 def policy_validator_pooled_returns(
     params, substep, state_history, previous_state
@@ -168,13 +184,18 @@ def policy_validator_pooled_returns(
     number_of_validator_environments = len(validator_environments)
     new_shared_validators = np.zeros(len(number_of_validator_environments), dtype=int)
     pool_validator_indeces = [2, 3, 4] #update so we are not using hard-coded values
+    total_pool_validators = 0 # init counter
 
     for i in pool_validator_indeces: 
-        # disaggregrate profits to individual validator
-        avg_individual_profit = (validator_profit[i] / eth_price) / validator_distribution_count[i]
-        new_pool_profit = avg_individual_profit * pool_size
 
-        # aggregrate existing pool profits
+        # Calculate total number of validators in pools
+        total_pool_validators += validator_count_distribution[i]
+
+        # disaggregrate profits to individual validator
+        avg_individual_profit = (validator_profit[i] / eth_price) / validator_distribution_count[i] 
+        new_pool_profit = avg_individual_profit * pool_size # in ETH
+
+        # aggregrate any existing pool profits
         validator_pool_profits[i] += new_pool_profit
 
         # Calculate new shared validator instances
@@ -188,6 +209,12 @@ def policy_validator_pooled_returns(
         "validator_pool_profits": validator_pool_profits,
         "shared_validator_instances": new_shared_validators
     }
+
+
+
+
+
+
 
 
 def policy_total_online_validator_rewards(
