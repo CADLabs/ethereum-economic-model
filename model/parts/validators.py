@@ -81,7 +81,7 @@ def policy_validators(params, substep, state_history, previous_state):
     shared_validator_instances = previous_state["shared_validator_instances"]
     validator_count_distribution = previous_state["validator_count_distribution"] # array
 
-    number_of_shared_validator_instances = shared_validator_instances.sum()
+    number_of_shared_validator_instances = shared_validator_instances.sum(axis=0)
     validator_percentage_distribution = previous_state["validator_percentage_distribution"]
 
     
@@ -99,20 +99,21 @@ def policy_validators(params, substep, state_history, previous_state):
         new_validators_per_epoch = validator_process(run, timestep * dt)
         number_of_validators_in_activation_queue += new_validators_per_epoch * dt
 
+        validator_churn_limit = (
+                spec.get_validator_churn_limit(params, previous_state) * dt
+            )
+
         # @Ross
         # If simulating with pool compounding (model extension #5), this code block combines and allocates both the new validators from validator_process and from 
         # the shared validator instances from pools, and renormalizes the percentage distribution.
         if(avg_pool_size is not None and number_of_shared_validator_instances > 0):
 
-            validator_churn_limit = (
-                spec.get_validator_churn_limit(params, previous_state) * dt
-            )
 
             max_activated_validators = min(
                 (number_of_validators_in_activation_queue + number_of_shared_validator_instances), validator_churn_limit
             )
             
-            # Calculate what fraction of new validators are from the validator_process
+            # Calculate what fraction of new validators are from the validator_process & compound pooling respectively:
             max_new_validators = number_of_validators_in_activation_queue + number_of_shared_validator_instances
             validator_process_fraction = number_of_validators_in_activation_queue /  max_new_validators
             shared_validator_instances_fraction = number_of_shared_validator_instances / max_new_validators
@@ -122,37 +123,31 @@ def policy_validators(params, substep, state_history, previous_state):
             total_new_active_validators = 0
 
             for i in range(number_of_validator_environments):
-                new_active_validators = int(max_activated_validators * validator_process_fraction) 
+                new_active_validators = int(max_activated_validators * validator_process_fraction * validator_percentage_distribution[i]) 
                 validator_count_distribution[i] += new_active_validators 
-                total_new_active_validators += new_active_validators
+
                 if(i in pool_validator_indeces): # add the shared validator instances
                     pool_environment_fraction = shared_validator_instances[i] / number_of_shared_validator_instances 
-                    validator_count_distribution_float = max_activated_validators * shared_validator_instances_fraction * pool_environment_fraction
-                    new_active_validators = int(validator_count_distribution_float)
-                    #print(new_active_validators)
-                    validator_count_distribution[i] += new_active_validators
-                    total_new_active_validators += new_active_validators
+                    new_active_pool_validators = int(max_activated_validators * shared_validator_instances_fraction * pool_environment_fraction)
+                    validator_count_distribution[i] += new_active_pool_validators
 
+
+            number_of_active_validators += max_activated_validators
+            number_of_validators_in_activation_queue -= max_activated_validators
 
             # Renormalize the distribution
             for i in range(number_of_validator_environments):
-                validator_percentage_distribution[i] = validator_count_distribution[i] / (number_of_active_validators + max_activated_validators)
-
-            number_of_active_validators += int(round(total_new_active_validators))
-            number_of_validators_in_activation_queue -= int(round(total_new_active_validators))
+                validator_percentage_distribution[i] = validator_count_distribution[i] / number_of_active_validators
 
         else:
 
-            validator_churn_limit = (
-            spec.get_validator_churn_limit(params, previous_state) * dt
-            )
+        
             activated_validators = min(
                 number_of_validators_in_activation_queue, validator_churn_limit
             )
 
             number_of_active_validators += activated_validators
             number_of_validators_in_activation_queue -= activated_validators
-
 
 
     # Calculate the number of "awake" validators

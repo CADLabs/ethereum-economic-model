@@ -25,10 +25,8 @@ def policy_validator_costs(
 
     # @Ross
     avg_pool_size = params["avg_pool_size"]
-    if(avg_pool_size is not None):
-        validator_percentage_distribution = previous_state["validator_percentage_distribution"]
-    else:
-        validator_percentage_distribution = params["validator_percentage_distribution"]
+    validator_percentage_distribution = previous_state["validator_percentage_distribution"]
+    
 
     validator_hardware_costs_per_epoch = params["validator_hardware_costs_per_epoch"]
     validator_cloud_costs_per_epoch = params["validator_cloud_costs_per_epoch"]
@@ -89,13 +87,8 @@ def policy_validator_yields(
     dt = params["dt"]
 
     # @Ross
-    avg_pool_size = params["avg_pool_size"]
-    if(avg_pool_size is not None):
-        validator_percentage_distribution = previous_state["validator_percentage_distribution"]
-    else:
-        validator_percentage_distribution = params["validator_percentage_distribution"]
-
-
+    validator_percentage_distribution = previous_state["validator_percentage_distribution"]
+    
     # State Variables
     eth_price = previous_state["eth_price"]
     eth_staked = previous_state["eth_staked"]
@@ -176,7 +169,7 @@ def policy_validator_pooled_returns(
     eth_price = previous_state["eth_price"]
 
     # State Variables
-    validator_profit_USD = previous_state["validator_profit"] # array
+    validator_profit_USD = previous_state["validator_profit"] * eth_price # array
     validator_pool_profits = previous_state["validator_pool_profits"] # array
     validator_count_distribution = previous_state["validator_count_distribution"] # array
 
