@@ -17,7 +17,7 @@ from experiments.default_experiment import experiment
 experiment = copy.deepcopy(experiment)
 
 DELTA_TIME = constants.epochs_per_day  # epochs per timestep
-SIMULATION_TIME_MONTHS = 12 * 10  # number of months
+SIMULATION_TIME_MONTHS = 12 * 20  # number of months
 TIMESTEPS = constants.epochs_per_month * SIMULATION_TIME_MONTHS // DELTA_TIME
 
 # Generate stochastic process realizations
@@ -25,7 +25,7 @@ eth_price_samples = create_stochastic_process_realizations("eth_price_samples", 
 
 parameter_overrides = {
     "stage": [Stage.ALL],
-    "eth_price_process": [lambda run, timestep: eth_price_samples[run - 1][timestep]],
+    #"eth_price_process": [lambda run, timestep: eth_price_samples[run - 1][timestep]],
 }
 
 # Override default experiment Simulation and System Parameters related to timing

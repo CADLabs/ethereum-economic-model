@@ -158,6 +158,7 @@ def policy_validators(params, substep, state_history, previous_state):
     # Assume a participation of more than 2/3 due to lack of inactivity leak mechanism
     assert validator_uptime >= 2 / 3, "Validator uptime must be greater than 2/3"
 
+
     return {
         "number_of_validators_in_activation_queue": number_of_validators_in_activation_queue,
         "number_of_active_validators": number_of_active_validators,
