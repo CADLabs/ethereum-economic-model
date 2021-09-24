@@ -239,9 +239,9 @@ _state_update_blocks = [
             "total_revenue_yields": update_from_signal("total_revenue_yields"),
             "total_profit_yields": update_from_signal("total_profit_yields"),
             # @Ross
-            "validator_pool_profits": update_from_signal("validator_pool_profits"),
+            "validator_pools_profits": update_from_signal("validator_pools_profits"),
             "shared_validator_instances": update_from_signal("shared_validator_instances"),
-            
+
         },
     },
 ]

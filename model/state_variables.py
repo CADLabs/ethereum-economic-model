@@ -173,7 +173,7 @@ class StateVariables:
     """The number of 'shared' validators initialised by pool environments"""
     
     # @Ross
-    validator_pool_profits: np.ndarray = np.zeros(
+    validator_pools_profits: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=ETH
     )
     """The pooled profits available per pool validator envronemnt for initializing new shared validator instances"""
