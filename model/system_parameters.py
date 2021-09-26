@@ -133,6 +133,12 @@ validator_third_party_costs_per_epoch = [
         dtype=Percentage_per_epoch,
     )
 ]
+# @Ross
+pool_validator_indeces = []
+for i in range(len(validator_environments)):
+    if "pool" in validator_environments[i].type:
+        pool_validator_indeces.append(i) 
+
 
 
 @dataclass
@@ -421,6 +427,10 @@ class Parameters:
     """
     Description
     """
+    # @Ross
+    pool_validator_indeces: List[np.array] = default(
+        [pool_validator_indeces]
+    )
 
     # Rewards, penalties, and slashing
     slashing_events_per_1000_epochs: List[int] = default([1])  # 1 / 1000 epochs

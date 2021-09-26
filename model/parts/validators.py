@@ -76,6 +76,7 @@ def policy_validators(params, substep, state_history, previous_state):
     average_effective_balance = previous_state["average_effective_balance"]
 
     # @Ross
+    pool_validator_indeces = params["pool_validator_indeces"]
     number_of_validator_environments = len(validator_environments)
     # State Variables
     shared_validator_instances = previous_state["shared_validator_instances"] # array
@@ -116,7 +117,7 @@ def policy_validators(params, substep, state_history, previous_state):
             
 
             # 2+3) Calculate new validator counts ignoring churn
-            pool_validator_indeces = [2, 3, 4] #update so we are not using hard-coded values
+            # pool_validator_indeces = [2, 3, 4] #update so we are not using hard-coded values
             max_new_validator_counts = np.zeros((number_of_validator_environments), dtype=int)
 
             for i in range(number_of_validator_environments):

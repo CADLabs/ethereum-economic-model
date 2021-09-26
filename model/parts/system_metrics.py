@@ -24,9 +24,7 @@ def policy_validator_costs(
     dt = params["dt"]
 
     # @Ross
-    avg_pool_size = params["avg_pool_size"]
     validator_percentage_distribution = previous_state["validator_percentage_distribution"]
-    
 
     validator_hardware_costs_per_epoch = params["validator_hardware_costs_per_epoch"]
     validator_cloud_costs_per_epoch = params["validator_cloud_costs_per_epoch"]
@@ -85,9 +83,6 @@ def policy_validator_yields(
     """
     # Parameters
     dt = params["dt"]
-
-    # @Ross
-    validator_percentage_distribution = previous_state["validator_percentage_distribution"]
     
     # State Variables
     eth_price = previous_state["eth_price"]
@@ -97,6 +92,8 @@ def policy_validator_yields(
     total_online_validator_rewards = previous_state["total_online_validator_rewards"]
     validator_count_distribution = previous_state["validator_count_distribution"]
     average_effective_balance = previous_state["average_effective_balance"]
+    # @Ross
+    validator_percentage_distribution = previous_state["validator_percentage_distribution"]
 
     # Calculate ETH staked per validator type
     validator_eth_staked = validator_count_distribution * average_effective_balance
@@ -166,20 +163,21 @@ def policy_validator_pooled_returns(
 
     # Parameters
     avg_pool_size = params["avg_pool_size"] # assert not > environment size?
-    eth_price = previous_state["eth_price"]
+    pool_validator_indeces = params["pool_validator_indeces"]
 
     # State Variables
+    eth_price = previous_state["eth_price"]
     validator_profit = previous_state["validator_profit"] # array (USD)
     validator_pools_profits_eth = previous_state["validator_pools_profits"] # array ()
     validator_count_distribution = previous_state["validator_count_distribution"] # array
 
     # Function variables
-    pool_validator_indeces = [2, 3, 4] #update so we are not using hard-coded values
+    #pool_validator_indeces = [2, 3, 4] #update so we are not using hard-coded values
     total_validators_in_pool_environments = 0 # init counter
     number_of_validator_environments = len(validator_environments)
     new_shared_validators = np.zeros(number_of_validator_environments, dtype=int)
     
-    if (avg_pool_size is not None):
+    if (avg_pool_size is not None and avg_pool_size > 0):
 
         for i in pool_validator_indeces: 
 
@@ -187,19 +185,17 @@ def policy_validator_pooled_returns(
             validator_pools_profits_eth[i] += validator_profit[i] / eth_price # convert to eth
             
             # Ensure avg_pool_size is not greater than the number of validators 
-            number_of_pools_in_validator_environment = int(np.ceil(validator_count_distribution[i] / avg_pool_size))
+            number_of_pools_in_validator_environment = np.ceil(validator_count_distribution[i] // avg_pool_size)
             #print((validator_pools_profits_eth[i] / constants.gwei))
 
             avg_pool_profit = validator_pools_profits_eth[i] / number_of_pools_in_validator_environment
 
             number_of_shared_validators_per_pool = int(np.floor(avg_pool_profit / (stake_requirement)))
-            
 
             # Aggregrate according to number of pools
             new_shared_validators[i] = number_of_pools_in_validator_environment * number_of_shared_validators_per_pool
 
             # Calculate actual amount to be staked across validator enviroment as a result of pooling
-            
             pooled_eth_staked = new_shared_validators[i] * stake_requirement
             validator_pools_profits_eth[i] -= pooled_eth_staked
             
