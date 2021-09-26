@@ -115,9 +115,7 @@ def policy_validators(params, substep, state_history, previous_state):
             )
             number_of_active_validators += max_activated_validators 
             
-
             # 2+3) Calculate new validator counts ignoring churn
-            # pool_validator_indeces = [2, 3, 4] #update so we are not using hard-coded values
             max_new_validator_counts = np.zeros((number_of_validator_environments), dtype=int)
 
             for i in range(number_of_validator_environments):

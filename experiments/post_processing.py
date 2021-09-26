@@ -26,7 +26,7 @@ def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameter
     ])
 
     # @Ross
-    df[[validator.type + '_validator_eth_staked' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_eth_staked), axis=1, result_type='expand').astype('float32')
+    df[[validator.type + '_eth_staked' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_eth_staked), axis=1, result_type='expand').astype('float32')
 
 
     # Dissagregate validator count

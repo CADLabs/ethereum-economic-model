@@ -172,11 +172,10 @@ def policy_validator_pooled_returns(
     validator_count_distribution = previous_state["validator_count_distribution"] # array
 
     # Function variables
-    #pool_validator_indeces = [2, 3, 4] #update so we are not using hard-coded values
     total_validators_in_pool_environments = 0 # init counter
     number_of_validator_environments = len(validator_environments)
     new_shared_validators = np.zeros(number_of_validator_environments, dtype=int)
-    
+
     if (avg_pool_size is not None and avg_pool_size > 0):
 
         for i in pool_validator_indeces: 

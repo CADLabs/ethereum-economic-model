@@ -1662,3 +1662,145 @@ def plot_network_issuance_scenarios(df, simulation_names):
     )
 
     return fig
+
+
+
+# @Ross
+def plot_profit_over_pool_size(df):
+    fig = go.Figure()
+
+    df_subset_0 = df.query("timestep == 30")
+
+    # Add traces
+    # Pool environment(s)
+    fig.add_trace(
+        go.Scatter(
+            x=df_subset_0.avg_pool_size,
+            y=df_subset_0.pool_staas_profit,
+            name=f"Pool Staas - Profit @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
+            line=dict(color=cadlabs_colorway_sequence[1]),
+        ),
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=df_subset_0.avg_pool_size,
+            y=df_subset_0.pool_hardware_profit,
+            name=f"Pool Hardware - Profit @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
+            line=dict(color=cadlabs_colorway_sequence[2]),
+        ),
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=df_subset_0.avg_pool_size,
+            y=df_subset_0.pool_cloud_profit,
+            name=f"Pool Cloud - Profit @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
+            line=dict(color=cadlabs_colorway_sequence[3]),
+        ),
+    )
+    # Non-pool environment(s)
+    fig.add_trace(
+        go.Scatter(
+            x=df_subset_0.avg_pool_size,
+            y=df_subset_0.diy_hardware_profit,
+            name=f"DIY Hardware - Profit @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
+            line=dict(color=cadlabs_colorway_sequence[4], dash="dash"),
+        ),
+    )
+    
+    update_legend_names(fig)
+
+    fig.update_layout(
+        title="Profit over AVG Pool Size",
+        xaxis_title="AVG Pool Size",
+        legend_title="Validator Environments",
+    )
+
+    # Set secondary y-axes titles
+    fig.update_yaxes(title_text="Profit (USD/<period>)")
+    fig.update_layout(hovermode="x unified")
+
+    return fig
+
+
+
+    # @Ross
+def plot_eth_staked_over_pool_size(df):
+    fig = go.Figure()
+
+    df_subset_0 = df.query("timestep == 30")
+
+    # Add traces
+    # Pool environment(s)
+    fig.add_trace(
+        go.Scatter(
+            x=df_subset_0.avg_pool_size,
+            y=df_subset_0.pool_staas_eth_staked,
+            name=f"Pool Staas @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
+            line=dict(color=cadlabs_colorway_sequence[1]),
+        ),
+    )
+    # Non-pool environment(s)
+    fig.add_trace(
+        go.Scatter(
+            x=df_subset_0.avg_pool_size,
+            y=df_subset_0.diy_hardware_eth_staked,
+            name=f"DIY Hardware @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
+            line=dict(color=cadlabs_colorway_sequence[4], dash="dash"),
+        ),
+    )
+    
+    update_legend_names(fig)
+
+    fig.update_layout(
+        title="Eth Staked over AVG Pool Size",
+        xaxis_title="AVG Pool Size",
+        legend_title="Validator Environments",
+    )
+
+    # Set secondary y-axes titles
+    fig.update_yaxes(title_text="Eth Staked (ETH/<period>)")
+    fig.update_layout(hovermode="x unified")
+
+    return fig
+
+
+
+     # @Ross
+def plot_profit_yields_over_pool_size(df):
+    fig = go.Figure()
+
+    df_subset_0 = df.query("timestep == 30")
+
+    # Add traces
+    # Pool environment(s)
+    fig.add_trace(
+        go.Scatter(
+            x=df_subset_0.avg_pool_size,
+            y=df_subset_0.pool_staas_profit_yields_pct,
+            name=f"Pool Staas @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
+            line=dict(color=cadlabs_colorway_sequence[1]),
+        ),
+    )
+    # Non-pool environment(s)
+    fig.add_trace(
+        go.Scatter(
+            x=df_subset_0.avg_pool_size,
+            y=df_subset_0.diy_hardware_profit_yields_pct,
+            name=f"DIY Hardware @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
+            line=dict(color=cadlabs_colorway_sequence[4], dash="dash"),
+        ),
+    )
+    
+    update_legend_names(fig)
+
+    fig.update_layout(
+        title="Annualized Profit Yields over AVG Pool Size",
+        xaxis_title="AVG Pool Size",
+        legend_title="Validator Environments",
+    )
+
+    # Set secondary y-axes titles
+    fig.update_yaxes(title_text="Profit Yields (%/<period>)")
+    fig.update_layout(hovermode="x unified")
+
+    return fig
