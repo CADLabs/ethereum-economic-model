@@ -180,6 +180,8 @@ def policy_validator_pooled_returns(
 
         for i in pool_validator_indeces: 
 
+            assert (avg_pool_size < validator_count_distribution[i])
+
             # aggregrate any existing pool profits 
             validator_pools_profits_eth[i] += validator_profit[i] / eth_price # convert to eth
             
