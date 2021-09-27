@@ -40,7 +40,10 @@ def policy_staking(
     # If the eth_staked_process is defined
     if eth_staked_process(0, 0) is not None:
         # Get the ETH staked sample for the current run and timestep
-        eth_staked = eth_staked_process(run, timestep * dt) + validator_pools_eth_staked.sum(axes=0)
+        eth_staked = eth_staked_process(run, timestep * dt)
+
+        # WIP Extension 5:
+        # eth_staked = eth_staked_process(run, timestep * dt) + validator_pools_eth_staked.sum(axes=0)
 
     # Else, calculate from the number of validators
     else:
