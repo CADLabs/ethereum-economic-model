@@ -54,7 +54,6 @@ state_update_block_validators = {
         ),
         "number_of_awake_validators": update_from_signal("number_of_awake_validators"),
         "validator_uptime": update_from_signal("validator_uptime"),
-        # @Ross
         "validator_percentage_distribution": update_from_signal("validator_percentage_distribution"),
         "validator_count_distribution": update_from_signal("validator_count_distribution"),
     },

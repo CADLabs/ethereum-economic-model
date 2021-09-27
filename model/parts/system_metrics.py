@@ -5,12 +5,11 @@ Calculation of metrics such as validator operational costs and yields.
 """
 
 import typing
+import numpy as np
 
 import model.constants as constants
 from model.types import Percentage, Gwei, ETH
 
-# @Ross
-import numpy as np
 from model.system_parameters import validator_environments  
 
 def policy_validator_costs(
@@ -23,9 +22,6 @@ def policy_validator_costs(
     # Parameters
     dt = params["dt"]
 
-    # @Ross
-    validator_percentage_distribution = previous_state["validator_percentage_distribution"]
-
     validator_hardware_costs_per_epoch = params["validator_hardware_costs_per_epoch"]
     validator_cloud_costs_per_epoch = params["validator_cloud_costs_per_epoch"]
     validator_third_party_costs_per_epoch = params[
@@ -36,6 +32,7 @@ def policy_validator_costs(
     eth_price = previous_state["eth_price"]
     number_of_validators = previous_state["number_of_active_validators"]
     total_online_validator_rewards = previous_state["total_online_validator_rewards"]
+    validator_percentage_distribution = previous_state["validator_percentage_distribution"]
 
     # Calculate hardware, cloud, and third-party costs per validator type
     validator_count_distribution = (
@@ -92,7 +89,6 @@ def policy_validator_yields(
     total_online_validator_rewards = previous_state["total_online_validator_rewards"]
     validator_count_distribution = previous_state["validator_count_distribution"]
     average_effective_balance = previous_state["average_effective_balance"]
-    # @Ross
     validator_percentage_distribution = previous_state["validator_percentage_distribution"]
 
     # Calculate ETH staked per validator type
