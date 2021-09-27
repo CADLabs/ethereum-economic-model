@@ -83,7 +83,7 @@ def policy_validators(params, substep, state_history, previous_state):
     validator_count_distribution = previous_state["validator_count_distribution"] # array
     validator_percentage_distribution = previous_state["validator_percentage_distribution"] # array
 
-    number_of_shared_validator_instances = shared_validator_instances.sum(axis=0)
+    number_of_shared_validator_instances = shared_validator_instances.sum(axis=0) # total number of shared validator instances from pool compounding
     
 
     # Calculate the number of validators using ETH staked
@@ -93,8 +93,6 @@ def policy_validators(params, substep, state_history, previous_state):
             round(eth_staked / (average_effective_balance / constants.gwei))
         )
 
-        # @Ross
-        # Account for 'validator_pool_profits' in this process
     else:
         new_validators_per_epoch = validator_process(run, timestep * dt)
         number_of_validators_in_activation_queue += new_validators_per_epoch * dt
@@ -104,8 +102,8 @@ def policy_validators(params, substep, state_history, previous_state):
             )
 
         # @Ross
-        # If simulating with pool compounding (model extension #5), this code block combines and allocates both the new validators from validator_process and from 
-        # the shared validator instances from pools, and renormalizes the percentage distribution.
+        # If simulating with pool compounding (model extension #5), the following code block combines and allocates both the new validators from validator_process and from 
+        # the shared validator instances initialized by pools, and renormalizes the percentage distribution.
         if(avg_pool_size is not None and number_of_shared_validator_instances > 0):
 
             number_of_validators_in_activation_queue += number_of_shared_validator_instances
@@ -115,21 +113,21 @@ def policy_validators(params, substep, state_history, previous_state):
             )
             number_of_active_validators += max_activated_validators 
             
-            # 2+3) Calculate new validator counts ignoring churn
-            max_new_validator_counts = np.zeros((number_of_validator_environments), dtype=int)
-
+            # Determine the distribution count of new validators across validator environments based on current distribution %, ignoring churn limit:
+            max_new_validator_counts = np.zeros((number_of_validator_environments), dtype=float)
             for i in range(number_of_validator_environments):
-                max_new_validator_counts[i] = round(validator_percentage_distribution[i] * number_of_validators_in_activation_queue)
+                max_new_validator_counts[i] = (validator_percentage_distribution[i] * number_of_validators_in_activation_queue)
                 if(i in pool_validator_indeces):
                     max_new_validator_counts[i] += shared_validator_instances[i]
 
-            # 4) Calculate distribution % for these new validators (ignoring churn)
+            # Update validator counts & renormalize % distribution:
             new_validator_distribution_pct = np.zeros((number_of_validator_environments), dtype=float)
             for i in range(number_of_validator_environments):
+                # Calculate distribution % for new validators
                 new_validator_distribution_pct[i] = max_new_validator_counts[i] / number_of_validators_in_activation_queue
-                # 5) Calculate new distribution counts (accounting for churn), using distribution values calculated above
-                validator_count_distribution[i] += int(new_validator_distribution_pct[i] * max_activated_validators)
-                # 6) renormalize
+                # Calculate new distribution counts (accounting for churn), using distribution % determined above
+                validator_count_distribution[i] += int(round(new_validator_distribution_pct[i] * max_activated_validators))
+                # Renormalize
                 validator_percentage_distribution[i] = validator_count_distribution[i] / number_of_active_validators
 
             number_of_validators_in_activation_queue -= max_activated_validators
