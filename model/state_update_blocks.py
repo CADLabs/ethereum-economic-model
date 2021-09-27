@@ -225,7 +225,6 @@ _state_update_blocks = [
         "post_processing": False,
         "policies": {
             "yields": metrics.policy_validator_yields,
-            # @Ross
             "pooling": metrics.policy_validator_pooled_returns,
         },
         "variables": {
@@ -238,10 +237,9 @@ _state_update_blocks = [
             "total_profit": update_from_signal("total_profit"),
             "total_revenue_yields": update_from_signal("total_revenue_yields"),
             "total_profit_yields": update_from_signal("total_profit_yields"),
-            # @Ross
             "validator_pools_profits": update_from_signal("validator_pools_profits"),
             "shared_validator_instances": update_from_signal("shared_validator_instances"),
-
+            "validator_pools_eth_staked": update_from_signal("validator_pools_eth_staked"),
         },
     },
 ]

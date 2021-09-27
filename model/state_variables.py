@@ -165,26 +165,27 @@ class StateVariables:
     """The total number of validators per validator environment"""
     
 
-
-    # @Ross
     shared_validator_instances: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=int
     )
     """The number of 'shared' validators initialised by pool environments"""
-    
-    # @Ross
     validator_pools_profits: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=ETH
     )
+    """The available pooled profits validator envronment for initializing new shared validator instances"""
+    validator_pools_eth_staked: np.ndarray = np.zeros(
+        (number_of_validator_environments, 1), dtype=ETH
+    )
     """The pooled profits available per pool validator envronemnt for initializing new shared validator instances"""
-    
-    # @Ross
     validator_percentage_distribution: np.ndarray = np.array(
         [validator.percentage_distribution for validator in validator_environments],
         dtype=Percentage,
     )
-    
-    """Description"""
+    """
+    The percentage of validators in each environment, normalized to a total of 100%.
+
+    A vector with a value for each validator environment.
+    """
 
 
     validator_hardware_costs: np.ndarray = np.zeros(

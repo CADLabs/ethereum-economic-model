@@ -133,7 +133,7 @@ validator_third_party_costs_per_epoch = [
         dtype=Percentage_per_epoch,
     )
 ]
-# @Ross
+
 pool_validator_indeces = []
 for i in range(len(validator_environments)):
     if "pool" in validator_environments[i].type:
@@ -409,8 +409,6 @@ class Parameters:
 
     A vector with a value for each validator environment.
     """
-    
-    # @Ross
     avg_pool_size: List[int] = default([None])
     """
     The average number of validators in a pool.
@@ -420,17 +418,14 @@ class Parameters:
 
     By default, validator_pool_size is set to None.
     """
-    # @Ross
-    validator_pool_sizes: List[np.zeros] = default([np.zeros(
-        (len(validator_environments), 1), dtype=int
-    )])
-    """
-    Description
-    """
-    # @Ross
     pool_validator_indeces: List[np.array] = default(
         [pool_validator_indeces]
     )
+    """
+    The index positions of pool validator environments. 
+    
+    Used for tracking & updating pool validator metrics for experiments simulating pool compounding.
+    """
 
     # Rewards, penalties, and slashing
     slashing_events_per_1000_epochs: List[int] = default([1])  # 1 / 1000 epochs

@@ -5,14 +5,12 @@ Validator processes such as validator activation, staking, and uptime.
 """
 
 import typing
+import numpy as np
 
 import model.constants as constants
 import model.parts.utils.ethereum_spec as spec
 from model.parts.utils import get_number_of_awake_validators
 from model.types import ETH, Gwei
-
-# @Ross
-import numpy as np
 from model.system_parameters import validator_environments  
 
 
@@ -37,11 +35,12 @@ def policy_staking(
     eth_supply = previous_state["eth_supply"]
     number_of_validators = previous_state["number_of_active_validators"]
     average_effective_balance = previous_state["average_effective_balance"]
+    validator_pools_eth_staked = previous_state["validator_pools_eth_staked"]
 
     # If the eth_staked_process is defined
     if eth_staked_process(0, 0) is not None:
         # Get the ETH staked sample for the current run and timestep
-        eth_staked = eth_staked_process(run, timestep * dt)
+        eth_staked = eth_staked_process(run, timestep * dt) + validator_pools_eth_staked.sum(axes=0)
 
     # Else, calculate from the number of validators
     else:
@@ -50,7 +49,9 @@ def policy_staking(
     # Assert expected conditions
     assert eth_staked <= eth_supply, f"ETH staked can't be more than ETH supply"
 
-    return {"eth_staked": eth_staked}
+    return {
+        "eth_staked": eth_staked
+    }
 
 
 def policy_validators(params, substep, state_history, previous_state):
@@ -63,8 +64,8 @@ def policy_validators(params, substep, state_history, previous_state):
     eth_staked_process = params["eth_staked_process"]
     validator_process = params["validator_process"]
     validator_uptime_process = params["validator_uptime_process"]
-    # @Ross
     avg_pool_size = params["avg_pool_size"]
+    pool_validator_indeces = params["pool_validator_indeces"]
 
     # State Variables
     run = previous_state["run"]
@@ -74,16 +75,12 @@ def policy_validators(params, substep, state_history, previous_state):
         "number_of_validators_in_activation_queue"
     ]
     average_effective_balance = previous_state["average_effective_balance"]
+    shared_validator_instances = previous_state["shared_validator_instances"]
+    validator_count_distribution = previous_state["validator_count_distribution"]
+    validator_percentage_distribution = previous_state["validator_percentage_distribution"]
 
-    # @Ross
-    pool_validator_indeces = params["pool_validator_indeces"]
     number_of_validator_environments = len(validator_environments)
-    # State Variables
-    shared_validator_instances = previous_state["shared_validator_instances"] # array
-    validator_count_distribution = previous_state["validator_count_distribution"] # array
-    validator_percentage_distribution = previous_state["validator_percentage_distribution"] # array
-
-    number_of_shared_validator_instances = shared_validator_instances.sum(axis=0) # total number of shared validator instances from pool compounding
+    number_of_shared_validator_instances = shared_validator_instances.sum(axis=0) # initialized via pool compounding
     
 
     # Calculate the number of validators using ETH staked
@@ -101,9 +98,8 @@ def policy_validators(params, substep, state_history, previous_state):
                 spec.get_validator_churn_limit(params, previous_state) * dt
             )
 
-        # @Ross
-        # If simulating with pool compounding (model extension #5), the following code block combines and allocates both the new validators from validator_process and from 
-        # the shared validator instances initialized by pools, and renormalizes the percentage distribution.
+        # If simulating with pool compounding, the following combines and allocates both the new validators from validator_process and from 
+        # the shared validator instances initialized by pools, and renormalizes the percentage distribution
         if(avg_pool_size is not None and number_of_shared_validator_instances > 0):
 
             number_of_validators_in_activation_queue += number_of_shared_validator_instances
@@ -113,19 +109,19 @@ def policy_validators(params, substep, state_history, previous_state):
             )
             number_of_active_validators += max_activated_validators 
             
-            # Determine the distribution count of new validators across validator environments based on current distribution %, ignoring churn limit:
+            # Determine the distribution of new validators across validator environments based on current distribution %, ignoring churn limit:
             max_new_validator_counts = np.zeros((number_of_validator_environments), dtype=float)
             for i in range(number_of_validator_environments):
                 max_new_validator_counts[i] = (validator_percentage_distribution[i] * number_of_validators_in_activation_queue)
                 if(i in pool_validator_indeces):
                     max_new_validator_counts[i] += shared_validator_instances[i]
 
-            # Update validator counts & renormalize % distribution:
+            # Update validator counts & renormalize (%) distribution:
             new_validator_distribution_pct = np.zeros((number_of_validator_environments), dtype=float)
             for i in range(number_of_validator_environments):
-                # Calculate distribution % for new validators
+                # Calculate distribution (%) for new validators
                 new_validator_distribution_pct[i] = max_new_validator_counts[i] / number_of_validators_in_activation_queue
-                # Calculate new distribution counts (accounting for churn), using distribution % determined above
+                # Calculate new distribution counts (accounting for churn), using distribution (%) determined above
                 validator_count_distribution[i] += int(round(new_validator_distribution_pct[i] * max_activated_validators))
                 # Renormalize
                 validator_percentage_distribution[i] = validator_count_distribution[i] / number_of_active_validators
@@ -140,7 +136,6 @@ def policy_validators(params, substep, state_history, previous_state):
 
             number_of_active_validators += activated_validators
             number_of_validators_in_activation_queue -= activated_validators
-
 
 
     # Calculate the number of "awake" validators
@@ -161,7 +156,6 @@ def policy_validators(params, substep, state_history, previous_state):
         "number_of_active_validators": number_of_active_validators,
         "number_of_awake_validators": number_of_awake_validators,
         "validator_uptime": validator_uptime,
-        # @Ross
         "validator_percentage_distribution": validator_percentage_distribution,
         "validator_count_distribution": validator_count_distribution
     }

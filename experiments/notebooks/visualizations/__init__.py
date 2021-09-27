@@ -1664,12 +1664,10 @@ def plot_network_issuance_scenarios(df, simulation_names):
     return fig
 
 
-
-# @Ross
-def plot_profit_over_pool_size(df):
+def plot_profit_over_pool_size(df, TIMESTEP_ANALYSIS):
     fig = go.Figure()
-
-    df_subset_0 = df.query("timestep == 30")
+    
+    df_subset_0 = df.query("timestep == " + str(TIMESTEP_ANALYSIS))
 
     # Add traces
     # Pool environment(s)
@@ -1722,12 +1720,10 @@ def plot_profit_over_pool_size(df):
     return fig
 
 
-
-    # @Ross
-def plot_eth_staked_over_pool_size(df):
+def plot_eth_staked_over_pool_size(df, TIMESTEP_ANALYSIS):
     fig = go.Figure()
 
-    df_subset_0 = df.query("timestep == 30")
+    df_subset_0 = df.query("timestep == " + str(TIMESTEP_ANALYSIS))
 
     # Add traces
     # Pool environment(s)
@@ -1764,12 +1760,10 @@ def plot_eth_staked_over_pool_size(df):
     return fig
 
 
-
-     # @Ross
-def plot_profit_yields_over_pool_size(df):
+def plot_profit_yields_over_pool_size(df, TIMESTEP_ANALYSIS):
     fig = go.Figure()
 
-    df_subset_0 = df.query("timestep == 30")
+    df_subset_0 = df.query("timestep == " + str(TIMESTEP_ANALYSIS))
 
     # Add traces
     # Pool environment(s)
@@ -1781,6 +1775,7 @@ def plot_profit_yields_over_pool_size(df):
             line=dict(color=cadlabs_colorway_sequence[1]),
         ),
     )
+
     # Non-pool environment(s)
     fig.add_trace(
         go.Scatter(

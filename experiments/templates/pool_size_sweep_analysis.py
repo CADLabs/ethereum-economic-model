@@ -8,7 +8,6 @@ import numpy as np
 import copy
 
 import model.constants as constants
-from experiments.simulation_configuration import TIMESTEPS, DELTA_TIME
 from model.state_variables import eth_staked, eth_supply, eth_price_max
 from experiments.default_experiment import experiment
 
@@ -21,7 +20,7 @@ TIMESTEPS = constants.epochs_per_month * SIMULATION_TIME_MONTHS // DELTA_TIME
 
 pool_size_samples = np.linspace(
     0, 
-    100,
+    150,
     100,
     dtype=int
 )

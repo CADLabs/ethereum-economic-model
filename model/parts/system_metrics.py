@@ -7,7 +7,7 @@ Calculation of metrics such as validator operational costs and yields.
 import typing
 
 import model.constants as constants
-from model.types import Percentage, Gwei
+from model.types import Percentage, Gwei, ETH
 
 # @Ross
 import numpy as np
@@ -146,73 +146,58 @@ def policy_validator_yields(
         "total_profit_yields": total_profit_yields,
     }
 
-
-
-
-
-# @Ross
 def policy_validator_pooled_returns(
     params, substep, state_history, previous_state
     ) -> typing.Dict[str, any]:
     """
     ## Validator Pooled Returns Policy Function
-    Compounding mechanism to calculate new validator instances created by pooling returns in staking pools.
+    Compounding mechanism to calculate new validator instances created by pooling returns in staking pools
+    as described in extension #5 of the model roadmap.
     """
     # Constants
     stake_requirement = constants.eth_deposited_per_validator
 
     # Parameters
-    avg_pool_size = params["avg_pool_size"] # assert not > environment size?
+    avg_pool_size = params["avg_pool_size"] 
     pool_validator_indeces = params["pool_validator_indeces"]
 
     # State Variables
     eth_price = previous_state["eth_price"]
-    validator_profit = previous_state["validator_profit"] # array (USD)
-    validator_pools_profits_eth = previous_state["validator_pools_profits"] # array ()
-    validator_count_distribution = previous_state["validator_count_distribution"] # array
+    validator_profit = previous_state["validator_profit"] # (USD)
+    validator_pools_profits_eth = previous_state["validator_pools_profits"] 
+    validator_count_distribution = previous_state["validator_count_distribution"]
 
-    # Function variables
+    # Temporary variables
     total_validators_in_pool_environments = 0 # init counter
     number_of_validator_environments = len(validator_environments)
     new_shared_validators = np.zeros(number_of_validator_environments, dtype=int)
+    validator_pools_eth_staked = np.zeros(number_of_validator_environments, dtype=ETH)
 
     if (avg_pool_size is not None and avg_pool_size > 0):
 
         for i in pool_validator_indeces: 
 
             assert (avg_pool_size < validator_count_distribution[i])
-
-            # aggregrate any existing pool profits 
-            validator_pools_profits_eth[i] += validator_profit[i] / eth_price # convert to eth
             
-            # Ensure avg_pool_size is not greater than the number of validators 
-            number_of_pools_in_validator_environment = np.ceil(validator_count_distribution[i] // avg_pool_size)
-            #print((validator_pools_profits_eth[i] / constants.gwei))
-
+            # Calculate new shared validator instances initialized via pool compounding
+            validator_pools_profits_eth[i] += validator_profit[i] / eth_price # convert to ETH
+            number_of_pools_in_validator_environment = validator_count_distribution[i] / avg_pool_size
             avg_pool_profit = validator_pools_profits_eth[i] / number_of_pools_in_validator_environment
-
-            number_of_shared_validators_per_pool = int(np.floor(avg_pool_profit / (stake_requirement)))
+            number_of_shared_validators_per_pool = np.floor(avg_pool_profit / stake_requirement)
 
             # Aggregrate according to number of pools
             new_shared_validators[i] = number_of_pools_in_validator_environment * number_of_shared_validators_per_pool
 
-            # Calculate actual amount to be staked across validator enviroment as a result of pooling
-            pooled_eth_staked = new_shared_validators[i] * stake_requirement
-            validator_pools_profits_eth[i] -= pooled_eth_staked
-            
-    
+            # Calculate actual ETH staked across validator enviroment as a result of pooling
+            validator_pools_eth_staked[i] = new_shared_validators[i] * stake_requirement
+            validator_pools_profits_eth[i] -= validator_pools_eth_staked[i]
 
     return {
         "validator_pools_profits": validator_pools_profits_eth,
         "shared_validator_instances": new_shared_validators,
+        "validator_pools_eth_staked": validator_pools_eth_staked
     }
-
-
-
-
-
-
-
+    
 
 def policy_total_online_validator_rewards(
     params, substep, state_history, previous_state

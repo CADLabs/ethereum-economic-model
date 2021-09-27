@@ -25,9 +25,7 @@ def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameter
         'avg_pool_size'
     ])
 
-    # @Ross
     df[[validator.type + '_eth_staked' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_eth_staked), axis=1, result_type='expand').astype('float32')
-
 
     # Dissagregate validator count
     df[[validator.type + '_validator_count' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_count_distribution), axis=1, result_type='expand').astype('float32')
