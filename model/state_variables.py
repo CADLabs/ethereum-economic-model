@@ -164,13 +164,20 @@ class StateVariables:
     )
     """The total number of validators per validator environment"""
     
-
+    number_of_pools_per_environment: np.ndarray = np.zeros(
+        (number_of_validator_environments, 1), dtype=int
+    )
+    """The number of pools in each validator environment (zero by default for non-pool environments)"""
+    number_of_pool_validators_awaiting_compounding: np.ndarray = np.zeros(
+        (number_of_validator_environments, 1), dtype=int
+    )
+    """Validators who have entered pool environments but have not yet initialised compounding."""
     shared_validator_instances: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=int
     )
     """The number of 'shared' validators initialised by pool environments"""
     validator_pools_profits: np.ndarray = np.zeros(
-        (number_of_validator_environments, 1), dtype=ETH
+        (number_of_validator_environments), dtype=ETH
     )
     """The available pooled profits validator envronment for initializing new shared validator instances"""
     validator_pools_eth_staked: np.ndarray = np.zeros(

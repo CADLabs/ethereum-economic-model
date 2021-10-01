@@ -87,8 +87,8 @@ def policy_validator_yields(
     validator_costs = previous_state["validator_costs"]
     total_network_costs = previous_state["total_network_costs"]
     total_online_validator_rewards = previous_state["total_online_validator_rewards"]
-    validator_count_distribution = previous_state["validator_count_distribution"]
     average_effective_balance = previous_state["average_effective_balance"]
+    validator_count_distribution = previous_state["validator_count_distribution"]
     validator_percentage_distribution = previous_state["validator_percentage_distribution"]
 
     # Calculate ETH staked per validator type
@@ -147,7 +147,7 @@ def policy_validator_pooled_returns(
     ) -> typing.Dict[str, any]:
     """
     ## Validator Pooled Returns Policy Function
-    Compounding mechanism to calculate new validator instances created by pooling returns in staking pools
+    A compounding mechanism to calculate new validator instances created by pooling returns in staking pools
     as described in extension #5 of the model roadmap.
     """
     # Constants
@@ -162,9 +162,9 @@ def policy_validator_pooled_returns(
     validator_profit = previous_state["validator_profit"] # (USD)
     validator_pools_profits_eth = previous_state["validator_pools_profits"] 
     validator_count_distribution = previous_state["validator_count_distribution"]
+    number_of_pools_per_environment = previous_state["number_of_pools_per_environment"]
 
-    # Temporary variables
-    total_validators_in_pool_environments = 0 # init counter
+    # Temp variables
     number_of_validator_environments = len(validator_environments)
     new_shared_validators = np.zeros(number_of_validator_environments, dtype=int)
     validator_pools_eth_staked = np.zeros(number_of_validator_environments, dtype=ETH)
@@ -173,20 +173,23 @@ def policy_validator_pooled_returns(
 
         for i in pool_validator_indeces: 
 
-            assert (avg_pool_size < validator_count_distribution[i])
+            assert (avg_pool_size < validator_count_distribution[i]) # pool size cannot be larger than the current validator count
             
             # Calculate new shared validator instances initialized via pool compounding
-            validator_pools_profits_eth[i] += validator_profit[i] / eth_price # convert to ETH
-            number_of_pools_in_validator_environment = validator_count_distribution[i] / avg_pool_size
-            avg_pool_profit = validator_pools_profits_eth[i] / number_of_pools_in_validator_environment
-            number_of_shared_validators_per_pool = np.floor(avg_pool_profit / stake_requirement)
+            validator_pools_profits_eth[i] += validator_profit[i] / eth_price # Aggregrate existing profits, convert from USD to ETH.
+
+            #number_of_pools_in_validator_environment = round(validator_count_distribution[i] / avg_pool_size) # Keep float for accuracy
+            avg_pool_profit = validator_pools_profits_eth[i] / number_of_pools_per_environment[i]
+            
+            number_of_shared_validators = np.floor(avg_pool_profit / stake_requirement).astype(int)
 
             # Aggregrate according to number of pools
-            new_shared_validators[i] = number_of_pools_in_validator_environment * number_of_shared_validators_per_pool
+            new_shared_validators[i] = number_of_pools_per_environment[i] * number_of_shared_validators
 
             # Calculate actual ETH staked across validator enviroment as a result of pooling
             validator_pools_eth_staked[i] = new_shared_validators[i] * stake_requirement
             validator_pools_profits_eth[i] -= validator_pools_eth_staked[i]
+    
 
     return {
         "validator_pools_profits": validator_pools_profits_eth,

@@ -56,6 +56,10 @@ state_update_block_validators = {
         "validator_uptime": update_from_signal("validator_uptime"),
         "validator_percentage_distribution": update_from_signal("validator_percentage_distribution"),
         "validator_count_distribution": update_from_signal("validator_count_distribution"),
+        
+        "number_of_pool_validators_awaiting_compounding": update_from_signal("number_of_pool_validators_awaiting_compounding"),
+        "number_of_pools_per_environment": update_from_signal("number_of_pools_per_environment"),
+
     },
 }
 

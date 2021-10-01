@@ -1,7 +1,7 @@
 """
-# Long-time horizon
+# Extended-time Horizon
 
-Executes a time-domain simulation over a period of 15 years,
+Executes a time-domain simulation over a period of 10 years,
 over all Ethereum network upgrade stages.
 """
 
