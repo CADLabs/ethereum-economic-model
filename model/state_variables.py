@@ -164,6 +164,7 @@ class StateVariables:
     )
     """The total number of validators per validator environment"""
     
+    # Variables for Pool Compounding mechanism
     number_of_pools_per_environment: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=int
     )
@@ -183,6 +184,7 @@ class StateVariables:
     validator_pools_eth_staked: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=ETH
     )
+    
     """The pooled profits available per pool validator envronemnt for initializing new shared validator instances"""
     validator_percentage_distribution: np.ndarray = np.array(
         [validator.percentage_distribution for validator in validator_environments],
@@ -193,8 +195,6 @@ class StateVariables:
 
     A vector with a value for each validator environment.
     """
-
-
     validator_hardware_costs: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=USD
     )

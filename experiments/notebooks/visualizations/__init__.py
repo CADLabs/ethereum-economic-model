@@ -1762,7 +1762,7 @@ def plot_eth_staked_over_pool_size(df, TIMESTEP_ANALYSIS):
 
 def plot_profit_yields_over_pool_size(df, TIMESTEP_ANALYSIS):
     fig = go.Figure()
-
+    yearString = str(TIMESTEP_ANALYSIS / 12)
     df_subset_0 = df.query("timestep == " + str(TIMESTEP_ANALYSIS))
 
     # Add traces
@@ -1795,7 +1795,7 @@ def plot_profit_yields_over_pool_size(df, TIMESTEP_ANALYSIS):
     )
 
     # Set secondary y-axes titles
-    fig.update_yaxes(title_text="Profit Yields (%/<period>)")
+    fig.update_yaxes(title_text="Profit Yields (%/Year)")
     fig.update_layout(hovermode="x unified")
 
     return fig
