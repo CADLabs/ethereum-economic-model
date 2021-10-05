@@ -56,13 +56,9 @@ state_update_block_validators = {
         "number_of_awake_validators": update_from_signal("number_of_awake_validators"),
         "validator_uptime": update_from_signal("validator_uptime"),
         "validator_percentage_distribution": update_from_signal("validator_percentage_distribution"),
-        "validator_count_distribution": update_from_signal("validator_count_distribution"),
-        
+        "validator_count_distribution": update_from_signal("validator_count_distribution"),     
         "number_of_pool_validators_awaiting_compounding": update_from_signal("number_of_pool_validators_awaiting_compounding"),
         "number_of_pools_per_environment": update_from_signal("number_of_pools_per_environment"),
-        
-        
-
     },
 }
 
@@ -245,7 +241,7 @@ _state_update_blocks = [
             "total_profit_yields": update_from_signal("total_profit_yields"),
             "validator_pools_profits": update_from_signal("validator_pools_profits"),
             "shared_validator_instances": update_from_signal("shared_validator_instances"),
-            "validator_pools_eth_staked": update_from_signal("validator_pools_eth_staked"),
+            #"validator_pools_eth_staked": update_from_signal("validator_pools_eth_staked"),
         },
     },
 ]
