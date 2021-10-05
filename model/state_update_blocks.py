@@ -49,6 +49,7 @@ state_update_block_validators = {
         "number_of_validators_in_activation_queue": update_from_signal(
             "number_of_validators_in_activation_queue"
         ),
+        "validators_in_activation_queue": update_from_signal("validators_in_activation_queue"),
         "number_of_active_validators": update_from_signal(
             "number_of_active_validators"
         ),
@@ -59,6 +60,8 @@ state_update_block_validators = {
         
         "number_of_pool_validators_awaiting_compounding": update_from_signal("number_of_pool_validators_awaiting_compounding"),
         "number_of_pools_per_environment": update_from_signal("number_of_pools_per_environment"),
+        
+        
 
     },
 }

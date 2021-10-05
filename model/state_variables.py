@@ -77,6 +77,10 @@ class StateVariables:
     # Validator state variables
     number_of_validators_in_activation_queue: int = 0
     """The number of validators in activation queue"""
+    validators_in_activation_queue: np.ndarray = np.zeros(
+        (number_of_validator_environments, 1), dtype=int
+    )
+    """The number of validators in activation queue across validator environments"""
     average_effective_balance: Gwei = 32 * constants.gwei
     """The validator average effective balance"""
     number_of_active_validators: int = number_of_active_validators
