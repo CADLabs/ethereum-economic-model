@@ -77,16 +77,16 @@ def policy_validators(params, substep, state_history, previous_state):
     validator_count_distribution = previous_state["validator_count_distribution"]
     validator_percentage_distribution = previous_state["validator_percentage_distribution"]
     
-    validators_in_activation_queue = previous_state["validators_in_activation_queue"] # used in pool compounding
+    # Used in pool compounding:
+    validators_in_activation_queue = previous_state["validators_in_activation_queue"] 
     number_of_pools_per_environment = previous_state["number_of_pools_per_environment"]
     number_of_pool_validators_awaiting_compounding = previous_state["number_of_pool_validators_awaiting_compounding"]
-    
-    
     # use parameter set by experiment if state variable not yet set
     if(timestep == 1): 
         number_of_pools_per_environment = params["number_of_pools_per_environment"]
         validator_count_distribution = (validator_percentage_distribution * number_of_active_validators)
         validators_in_activation_queue = validator_percentage_distribution * number_of_validators_in_activation_queue
+
 
     # Calculate the number of validators using ETH staked
     if eth_staked_process(0, 0) is not None:
@@ -105,14 +105,12 @@ def policy_validators(params, substep, state_history, previous_state):
             )
 
         # Pool Compounding mechanism (model extention #5):
+        # Calculate new active validators using both the validator-process and from 
+        # the shared validator instances initialized by pools, and renormalize the percentage distribution.
 
         # Calculate new validators from validator_process
         new_validators_from_validator_process = new_validators_per_epoch * dt
-        # Calculate total validators initialized via pool compounding 
         number_of_shared_validator_instances = shared_validator_instances.sum(axis=0) 
-
-        # Calculate new active validators using both the validator-process and from 
-        # the shared validator instances initialized by pools, and renormalize the percentage distribution.
         if(avg_pool_size is not None and avg_pool_size > 0 and number_of_shared_validator_instances > 0):
 
             # Add new shared validator instances to activation queue
@@ -133,15 +131,15 @@ def policy_validators(params, substep, state_history, previous_state):
             new_validators_distribution_pct = np.zeros((number_of_validator_environments), dtype=float)
             
             for i in range(number_of_validator_environments):
-                # Determine source of new validators and calculate the distribution across validator environments (%):
-                # 1) add from existing queue
+                # Determine source of new validators and calculate their distribution across validator environments:
+                # Add validators from existing queue
                 new_validator_counts[i] = validators_in_activation_queue[i]
-                # 2) add from validator_process
-                new_validator_counts[i] += np.round((validator_process_percentage_distribution[i] * new_validators_from_validator_process)) # add validators from validator_process
-                # 3) add from shared pool validator instances
+                # Add validators from validator_process
+                new_validator_counts[i] += np.round((validator_process_percentage_distribution[i] * new_validators_from_validator_process))
+                # Add validators from shared pool validator instances
                 if(i in pool_validator_indeces):
                     new_validator_counts[i] += shared_validator_instances[i]
-
+                # Calculate the percentage distribution
                 new_validators_distribution_pct[i] = new_validator_counts[i] / total_number_of_validators_in_activation_queue
                 
                 # Calculate new distribution counts (accounting for churn), using distribution (%) determined above:
@@ -150,8 +148,7 @@ def policy_validators(params, substep, state_history, previous_state):
                 # Renormalize
                 validator_percentage_distribution[i] = validator_count_distribution[i] / number_of_active_validators
  
-
-            # Update validator compounding queue from validator_process
+            # Calculate & update the number of pools per environment (used by the validator pooled return policy function)
             for i in pool_validator_indeces:
                 # Add new validators from validator_process to compounding queue
                 number_of_pool_validators_awaiting_compounding[i] += round(validator_percentage_distribution[i] * new_validators_from_validator_process)
@@ -192,6 +189,7 @@ def policy_validators(params, substep, state_history, previous_state):
 
     return {
         "number_of_validators_in_activation_queue": number_of_validators_in_activation_queue,
+        "validators_in_activation_queue": validators_in_activation_queue,
         "number_of_active_validators": number_of_active_validators,
         "number_of_awake_validators": number_of_awake_validators,
         "validator_uptime": validator_uptime,
@@ -199,7 +197,6 @@ def policy_validators(params, substep, state_history, previous_state):
         "validator_count_distribution": validator_count_distribution,
         "number_of_pool_validators_awaiting_compounding": number_of_pool_validators_awaiting_compounding,
         "number_of_pools_per_environment": number_of_pools_per_environment,
-        "validators_in_activation_queue": validators_in_activation_queue
     }
 
 
