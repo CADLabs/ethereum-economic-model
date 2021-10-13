@@ -33,12 +33,7 @@ def policy_validator_costs(
     number_of_validators = previous_state["number_of_active_validators"]
     total_online_validator_rewards = previous_state["total_online_validator_rewards"]
     validator_percentage_distribution = previous_state["validator_percentage_distribution"]
-    #validator_count_distribution = previous_state["validator_count_distribution"]
-
-    # Calculate hardware, cloud, and third-party costs per validator type
-    validator_count_distribution = (
-        number_of_validators * validator_percentage_distribution
-    )
+    validator_count_distribution = previous_state["validator_count_distribution"]
 
     validator_hardware_costs = (
         validator_count_distribution * validator_hardware_costs_per_epoch * dt
@@ -63,7 +58,6 @@ def policy_validator_costs(
     total_network_costs = validator_costs.sum(axis=0)
 
     return {
-        #"validator_count_distribution": validator_count_distribution,
         "validator_hardware_costs": validator_hardware_costs,
         "validator_cloud_costs": validator_cloud_costs,
         "validator_third_party_costs": validator_third_party_costs,
@@ -166,19 +160,16 @@ def policy_validator_pooled_returns(
     validator_profit = previous_state["validator_profit"] # (USD)
     validator_pools_profits_eth = previous_state["validator_pools_profits"] 
     validator_count_distribution = previous_state["validator_count_distribution"]
-    #number_of_pools_per_environment = previous_state["number_of_pools_per_environment"]
-    
 
     # Temp variables
     number_of_validator_environments = len(validator_environments)
-    new_shared_validators = np.zeros(number_of_validator_environments, dtype=int)
+    shared_validator_instances = previous_state["shared_validator_instances"]
+    new_shared_validators = shared_validator_instances * 0 # reset to zero
 
 
     if (avg_pool_size is not None and avg_pool_size > 0):
-        #print(validator_count_distribution)
-        number_of_pools_per_environment = (validator_count_distribution / avg_pool_size)
-        #print(number_of_pools_per_environment)
         
+        number_of_pools_per_environment = np.round(validator_count_distribution / avg_pool_size)
         for i in pool_validator_indeces: 
             assert (avg_pool_size < validator_count_distribution[i]) # pool size cannot be larger than the current validator count
         
@@ -189,7 +180,7 @@ def policy_validator_pooled_returns(
             new_shared_validators[i] = (number_of_pools_per_environment[i] * number_of_shared_validators_per_pool) # Aggregrate according to number of pools
             
             validator_pools_profits_eth[i] -= new_shared_validators[i] * stake_requirement # Subtract the staked ammount from the accumulated profits
-    
+
 
     return {
         "validator_pools_profits": validator_pools_profits_eth,

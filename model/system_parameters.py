@@ -134,17 +134,11 @@ validator_third_party_costs_per_epoch = [
     )
 ]
 
+# Store the indeces for pool validator environments 
 pool_validator_indeces = []
 for i in range(len(validator_environments)):
     if "pool" in validator_environments[i].type:
         pool_validator_indeces.append(i) 
-
-# number_of_pools_per_environment = [
-#     np.zeros(
-#         (len(validator_environments)),
-#         dtype=int
-#     )
-# ]
 
 
 @dataclass
@@ -428,20 +422,9 @@ class Parameters:
         [pool_validator_indeces]
     )
     """
-    The index positions of pool validator environments. 
-    
-    Used for tracking & updating pool validator metrics for experiments simulating pool compounding.
+    The indeces corresponding to pool validator environments. 
+    Used by the pool compounding mechanism.
     """
-
-    # number_of_pools_per_environment: List[np.array] = default(
-    #     [number_of_pools_per_environment]
-    # )
-    # """
-    # The initial number of pools per validator environment.
-    
-    # The parameter is overriden by experiments implementing the pool compounding mechanism, based on the 'avg_pool_size' parameter sweep.
-    # """
-
     # Rewards, penalties, and slashing
     slashing_events_per_1000_epochs: List[int] = default([1])  # 1 / 1000 epochs
     """
