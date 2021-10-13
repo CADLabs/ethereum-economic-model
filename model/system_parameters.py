@@ -139,12 +139,12 @@ for i in range(len(validator_environments)):
     if "pool" in validator_environments[i].type:
         pool_validator_indeces.append(i) 
 
-number_of_pools_per_environment = [
-    np.zeros(
-        (len(validator_environments)),
-        dtype=int
-    )
-]
+# number_of_pools_per_environment = [
+#     np.zeros(
+#         (len(validator_environments)),
+#         dtype=int
+#     )
+# ]
 
 
 @dataclass
@@ -433,14 +433,14 @@ class Parameters:
     Used for tracking & updating pool validator metrics for experiments simulating pool compounding.
     """
 
-    number_of_pools_per_environment: List[np.array] = default(
-        [number_of_pools_per_environment]
-    )
-    """
-    The initial number of pools per validator environment.
+    # number_of_pools_per_environment: List[np.array] = default(
+    #     [number_of_pools_per_environment]
+    # )
+    # """
+    # The initial number of pools per validator environment.
     
-    The parameter is overriden by experiments implementing the pool compounding mechanism, based on the 'avg_pool_size' parameter sweep.
-    """
+    # The parameter is overriden by experiments implementing the pool compounding mechanism, based on the 'avg_pool_size' parameter sweep.
+    # """
 
     # Rewards, penalties, and slashing
     slashing_events_per_1000_epochs: List[int] = default([1])  # 1 / 1000 epochs

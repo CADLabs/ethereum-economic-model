@@ -19,7 +19,7 @@ TIMESTEPS = constants.epochs_per_month * SIMULATION_TIME_MONTHS // DELTA_TIME
 
 pool_size_samples = np.linspace(
     0, 
-    100,
+    200,
     100,
     dtype=int
 )

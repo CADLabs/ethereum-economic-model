@@ -49,7 +49,7 @@ state_update_block_validators = {
         "number_of_validators_in_activation_queue": update_from_signal(
             "number_of_validators_in_activation_queue"
         ),
-        "validators_in_activation_queue": update_from_signal("validators_in_activation_queue"),
+        #"validators_in_activation_queue": update_from_signal("validators_in_activation_queue"),
         "number_of_active_validators": update_from_signal(
             "number_of_active_validators"
         ),
@@ -57,8 +57,8 @@ state_update_block_validators = {
         "validator_uptime": update_from_signal("validator_uptime"),
         "validator_percentage_distribution": update_from_signal("validator_percentage_distribution"),
         "validator_count_distribution": update_from_signal("validator_count_distribution"),     
-        "number_of_pool_validators_awaiting_compounding": update_from_signal("number_of_pool_validators_awaiting_compounding"),
-        "number_of_pools_per_environment": update_from_signal("number_of_pools_per_environment"),
+        #"number_of_pool_validators_awaiting_compounding": update_from_signal("number_of_pool_validators_awaiting_compounding"),
+        #"number_of_pools_per_environment": update_from_signal("number_of_pools_per_environment"),
     },
 }
 
@@ -208,9 +208,7 @@ _state_update_blocks = [
             "metric_validator_costs": metrics.policy_validator_costs,
         },
         "variables": {
-            "validator_count_distribution": update_from_signal(
-                "validator_count_distribution"
-            ),
+            #"validator_count_distribution": update_from_signal("validator_count_distribution"),
             "validator_hardware_costs": update_from_signal("validator_hardware_costs"),
             "validator_cloud_costs": update_from_signal("validator_cloud_costs"),
             "validator_third_party_costs": update_from_signal(
@@ -240,8 +238,7 @@ _state_update_blocks = [
             "total_revenue_yields": update_from_signal("total_revenue_yields"),
             "total_profit_yields": update_from_signal("total_profit_yields"),
             "validator_pools_profits": update_from_signal("validator_pools_profits"),
-            "shared_validator_instances": update_from_signal("shared_validator_instances"),
-            #"validator_pools_eth_staked": update_from_signal("validator_pools_eth_staked"),
+            "shared_validator_instances": update_from_signal("shared_validator_instances")
         },
     },
 ]

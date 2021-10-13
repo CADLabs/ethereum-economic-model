@@ -33,6 +33,7 @@ def policy_validator_costs(
     number_of_validators = previous_state["number_of_active_validators"]
     total_online_validator_rewards = previous_state["total_online_validator_rewards"]
     validator_percentage_distribution = previous_state["validator_percentage_distribution"]
+    #validator_count_distribution = previous_state["validator_count_distribution"]
 
     # Calculate hardware, cloud, and third-party costs per validator type
     validator_count_distribution = (
@@ -62,7 +63,7 @@ def policy_validator_costs(
     total_network_costs = validator_costs.sum(axis=0)
 
     return {
-        "validator_count_distribution": validator_count_distribution,
+        #"validator_count_distribution": validator_count_distribution,
         "validator_hardware_costs": validator_hardware_costs,
         "validator_cloud_costs": validator_cloud_costs,
         "validator_third_party_costs": validator_third_party_costs,
@@ -90,6 +91,7 @@ def policy_validator_yields(
     average_effective_balance = previous_state["average_effective_balance"]
     validator_count_distribution = previous_state["validator_count_distribution"]
     validator_percentage_distribution = previous_state["validator_percentage_distribution"]
+
 
     # Calculate ETH staked per validator type
     validator_eth_staked = validator_count_distribution * average_effective_balance
@@ -142,6 +144,8 @@ def policy_validator_yields(
         "total_profit_yields": total_profit_yields,
     }
 
+
+
 def policy_validator_pooled_returns(
     params, substep, state_history, previous_state
     ) -> typing.Dict[str, any]:
@@ -162,39 +166,34 @@ def policy_validator_pooled_returns(
     validator_profit = previous_state["validator_profit"] # (USD)
     validator_pools_profits_eth = previous_state["validator_pools_profits"] 
     validator_count_distribution = previous_state["validator_count_distribution"]
-    number_of_pools_per_environment = previous_state["number_of_pools_per_environment"]
+    #number_of_pools_per_environment = previous_state["number_of_pools_per_environment"]
+    
 
     # Temp variables
     number_of_validator_environments = len(validator_environments)
     new_shared_validators = np.zeros(number_of_validator_environments, dtype=int)
-    validator_pools_eth_staked = np.zeros(number_of_validator_environments, dtype=ETH)
+
 
     if (avg_pool_size is not None and avg_pool_size > 0):
-
+        #print(validator_count_distribution)
+        number_of_pools_per_environment = (validator_count_distribution / avg_pool_size)
+        #print(number_of_pools_per_environment)
+        
         for i in pool_validator_indeces: 
-
             assert (avg_pool_size < validator_count_distribution[i]) # pool size cannot be larger than the current validator count
-            
+        
             # Calculate new shared validator instances initialized via pool compounding
-            validator_pools_profits_eth[i] += validator_profit[i] / eth_price # Aggregrate existing profits, convert from USD to ETH.
-
-            #number_of_pools_in_validator_environment = round(validator_count_distribution[i] / avg_pool_size) # Keep float for accuracy
-            avg_pool_profit = validator_pools_profits_eth[i] / number_of_pools_per_environment[i]
+            validator_pools_profits_eth[i] += validator_profit[i] / eth_price # Aggregrate existing profits, convert from USD to ETH 
+            avg_pool_profit = validator_pools_profits_eth[i] / number_of_pools_per_environment[i] 
+            number_of_shared_validators_per_pool = np.floor(avg_pool_profit / stake_requirement).astype(int) # Calculate new shared validators initialized by pool
+            new_shared_validators[i] = (number_of_pools_per_environment[i] * number_of_shared_validators_per_pool) # Aggregrate according to number of pools
             
-            number_of_shared_validators = np.floor(avg_pool_profit / stake_requirement).astype(int)
-
-            # Aggregrate according to number of pools
-            new_shared_validators[i] = number_of_pools_per_environment[i] * number_of_shared_validators
-
-            # Calculate actual ETH staked across validator enviroment as a result of pooling
-            validator_pools_eth_staked[i] = new_shared_validators[i] * stake_requirement
-            validator_pools_profits_eth[i] -= validator_pools_eth_staked[i]
+            validator_pools_profits_eth[i] -= new_shared_validators[i] * stake_requirement # Subtract the staked ammount from the accumulated profits
     
 
     return {
         "validator_pools_profits": validator_pools_profits_eth,
-        "shared_validator_instances": new_shared_validators,
-        "validator_pools_eth_staked": validator_pools_eth_staked
+        "shared_validator_instances": new_shared_validators
     }
     
 
