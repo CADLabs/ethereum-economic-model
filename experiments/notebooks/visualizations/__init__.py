@@ -1664,6 +1664,11 @@ def plot_network_issuance_scenarios(df, simulation_names):
     return fig
 
 
+
+
+# Plots for pool compounding experiment notebook
+
+
 def plot_profit_over_pool_size(df, TIMESTEP_ANALYSIS):
     fig = go.Figure()
     
@@ -1735,6 +1740,22 @@ def plot_eth_staked_over_pool_size(df, TIMESTEP_ANALYSIS):
             line=dict(color=cadlabs_colorway_sequence[1]),
         ),
     )
+    fig.add_trace(
+        go.Scatter(
+            x=df_subset_0.avg_pool_size,
+            y=df_subset_0.pool_hardware_eth_staked,
+            name=f"Pool Hardware @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
+            line=dict(color=cadlabs_colorway_sequence[2]),
+        ),
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=df_subset_0.avg_pool_size,
+            y=df_subset_0.pool_cloud_eth_staked,
+            name=f"Pool Cloud @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
+            line=dict(color=cadlabs_colorway_sequence[3]),
+        ),
+    )
     # Non-pool environment(s)
     fig.add_trace(
         go.Scatter(
@@ -1773,6 +1794,22 @@ def plot_profit_yields_over_pool_size(df, TIMESTEP_ANALYSIS):
             y=df_subset_0.pool_staas_profit_yields_pct,
             name=f"Pool Staas @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
             line=dict(color=cadlabs_colorway_sequence[1]),
+        ),
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=df_subset_0.avg_pool_size,
+            y=df_subset_0.pool_hardware_profit_yields_pct,
+            name=f"Pool Hardware @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
+            line=dict(color=cadlabs_colorway_sequence[2]),
+        ),
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=df_subset_0.avg_pool_size,
+            y=df_subset_0.pool_cloud_profit_yields_pct,
+            name=f"Pool Cloud @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
+            line=dict(color=cadlabs_colorway_sequence[3]),
         ),
     )
 

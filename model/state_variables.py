@@ -189,17 +189,25 @@ class StateVariables:
 
     A vector with a value for each validator environment.
     """
-
     # Variables for Pool Compounding mechanism
+    validators_in_activation_queue: np.ndarray = np.zeros(
+        (number_of_validator_environments), dtype=int
+    )
+    """The validator distribution counts for queued validators.
+    
+    Used by simulations implementing the pool compounding mechanism to allocate 
+    new validators to their respective validator environments. 
+    """
     shared_validator_instances: np.ndarray = np.zeros(
         (number_of_validator_environments), dtype=int
     )
     """The number of new 'shared' validators initialised by pool environments at current timestep"""
     validator_pools_profits: np.ndarray = np.zeros(
-        (number_of_validator_environments, 1), dtype=ETH
+        (number_of_validator_environments), dtype=ETH
     )
     """The pooled profits available in validator environments for initializing new shared validator instances"""
-  
+
+
     validator_hardware_costs: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=USD
     )

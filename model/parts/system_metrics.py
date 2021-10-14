@@ -148,8 +148,6 @@ def policy_validator_pooled_returns(
     A compounding mechanism to calculate new validator instances created by pooling returns in staking pools
     as described in extension #5 of the model roadmap.
     """
-    # Constants
-    stake_requirement = constants.eth_deposited_per_validator
 
     # Parameters
     avg_pool_size = params["avg_pool_size"] 
@@ -160,10 +158,10 @@ def policy_validator_pooled_returns(
     validator_profit = previous_state["validator_profit"] # (USD)
     validator_pools_profits_eth = previous_state["validator_pools_profits"] 
     validator_count_distribution = previous_state["validator_count_distribution"]
-
-    # Temp variables
-    number_of_validator_environments = len(validator_environments)
     shared_validator_instances = previous_state["shared_validator_instances"]
+
+    # Constants & function variables
+    stake_requirement = constants.eth_deposited_per_validator
     new_shared_validators = shared_validator_instances * 0 # reset to zero
 
 
@@ -178,9 +176,8 @@ def policy_validator_pooled_returns(
             avg_pool_profit = validator_pools_profits_eth[i] / number_of_pools_per_environment[i] 
             number_of_shared_validators_per_pool = np.floor(avg_pool_profit / stake_requirement).astype(int) # Calculate new shared validators initialized by pool
             new_shared_validators[i] = (number_of_pools_per_environment[i] * number_of_shared_validators_per_pool) # Aggregrate according to number of pools
-            
             validator_pools_profits_eth[i] -= new_shared_validators[i] * stake_requirement # Subtract the staked ammount from the accumulated profits
-
+            
 
     return {
         "validator_pools_profits": validator_pools_profits_eth,
