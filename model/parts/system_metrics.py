@@ -124,6 +124,15 @@ def policy_validator_yields(
     total_profit_yields = total_profit / (eth_staked * eth_price)
     total_profit_yields *= constants.epochs_per_year / dt  # Annualize value
 
+
+    # Calculate yields for stakers using shared validators via pooling
+    number_of_shared_validators = previous_state["number_of_shared_validators"]  
+    number_of_stakers = validator_count_distribution - number_of_shared_validators
+    ratio = number_of_stakers / validator_count_distribution
+    staker_profit_yields = validator_profit / ((validator_eth_staked * ratio) * eth_price)
+    staker_profit_yields *= constants.epochs_per_year / dt  # Annualize value
+
+
     return {
         # Per validator type
         "validator_eth_staked": validator_eth_staked,
@@ -131,6 +140,7 @@ def policy_validator_yields(
         "validator_profit": validator_profit,
         "validator_revenue_yields": validator_revenue_yields,
         "validator_profit_yields": validator_profit_yields,
+        "staker_profit_yields": staker_profit_yields,
         # Aggregate
         "total_revenue": total_revenue,
         "total_profit": total_profit,
@@ -159,6 +169,7 @@ def policy_validator_pooled_returns(
     validator_pools_profits_eth = previous_state["validator_pools_profits"] 
     validator_count_distribution = previous_state["validator_count_distribution"]
     shared_validator_instances = previous_state["shared_validator_instances"]
+    number_of_shared_validators = previous_state["number_of_shared_validators"]
 
     # Constants & function variables
     stake_requirement = constants.eth_deposited_per_validator
@@ -177,11 +188,13 @@ def policy_validator_pooled_returns(
             number_of_shared_validators_per_pool = np.floor(avg_pool_profit / stake_requirement).astype(int) # Calculate new shared validators initialized by pool
             new_shared_validators[i] = (number_of_pools_per_environment[i] * number_of_shared_validators_per_pool) # Aggregrate according to number of pools
             validator_pools_profits_eth[i] -= new_shared_validators[i] * stake_requirement # Subtract the staked ammount from the accumulated profits
-            
+
+        number_of_shared_validators += new_shared_validators        
 
     return {
         "validator_pools_profits": validator_pools_profits_eth,
-        "shared_validator_instances": new_shared_validators
+        "shared_validator_instances": new_shared_validators,
+        "number_of_shared_validators": number_of_shared_validators
     }
     
 

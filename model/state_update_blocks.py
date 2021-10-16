@@ -229,6 +229,7 @@ _state_update_blocks = [
             "validator_profit": update_from_signal("validator_profit"),
             "validator_revenue_yields": update_from_signal("validator_revenue_yields"),
             "validator_profit_yields": update_from_signal("validator_profit_yields"),
+            "staker_profit_yields": update_from_signal("staker_profit_yields"), #Ross
             "total_revenue": update_from_signal("total_revenue"),
             "total_profit": update_from_signal("total_profit"),
             "total_revenue_yields": update_from_signal("total_revenue_yields"),
@@ -245,7 +246,8 @@ _state_update_blocks = [
         },
         "variables": {
             "validator_pools_profits": update_from_signal("validator_pools_profits"),
-            "shared_validator_instances": update_from_signal("shared_validator_instances")
+            "shared_validator_instances": update_from_signal("shared_validator_instances"),
+            "number_of_shared_validators": update_from_signal("number_of_shared_validators")
         },
     },
 ]

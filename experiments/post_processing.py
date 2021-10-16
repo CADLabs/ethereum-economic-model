@@ -53,10 +53,13 @@ def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameter
     # Dissagregate yields
     df[[validator.type + '_revenue_yields' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_revenue_yields), axis=1, result_type='expand').astype('float32')
     df[[validator.type + '_profit_yields' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_profit_yields), axis=1, result_type='expand').astype('float32')
+    df[[validator.type + '_staker_profit_yields' for validator in validator_environments]] = df.apply(lambda row: list(row.staker_profit_yields), axis=1, result_type='expand').astype('float32')
+    
 
     # Convert decimals to percentages
     df[[validator.type + '_revenue_yields_pct' for validator in validator_environments]] = df[[validator.type + '_revenue_yields' for validator in validator_environments]] * 100
     df[[validator.type + '_profit_yields_pct' for validator in validator_environments]] = df[[validator.type + '_profit_yields' for validator in validator_environments]] * 100
+    df[[validator.type + '_staker_profit_yields_pct' for validator in validator_environments]] = df[[validator.type + '_staker_profit_yields' for validator in validator_environments]] * 100
     df['supply_inflation_pct'] = df['supply_inflation'] * 100
     df['total_revenue_yields_pct'] = df['total_revenue_yields'] * 100
     df['total_profit_yields_pct'] = df['total_profit_yields'] * 100

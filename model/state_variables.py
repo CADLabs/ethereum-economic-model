@@ -176,6 +176,10 @@ class StateVariables:
     )
     """The total annualized profit (income received - costs) yields (percentage of investment amount)
     per validator environment"""
+    staker_profit_yields: np.ndarray = np.zeros(
+        (number_of_validator_environments, 1), dtype=int
+    )
+    """T"""
 
     validator_count_distribution: List[np.ndarray] = default(
         validator_count_distribution
@@ -202,6 +206,10 @@ class StateVariables:
         (number_of_validator_environments), dtype=int
     )
     """The number of new 'shared' validators initialised by pool environments at current timestep"""
+    number_of_shared_validators: np.ndarray = np.zeros(
+        (number_of_validator_environments), dtype=int
+    )
+    """The total number of shared validators initialised by pool environments at current timestep"""
     validator_pools_profits: np.ndarray = np.zeros(
         (number_of_validator_environments), dtype=ETH
     )
