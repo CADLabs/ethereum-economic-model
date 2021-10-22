@@ -64,7 +64,6 @@ def policy_validators(params, substep, state_history, previous_state):
     validator_process = params["validator_process"]
     validator_uptime_process = params["validator_uptime_process"]
     avg_pool_size = params["avg_pool_size"]
-    pool_validator_indeces = params["pool_validator_indeces"]
     validator_process_percentage_distribution = params["validator_percentage_distribution"]
 
     # State Variables
@@ -75,9 +74,8 @@ def policy_validators(params, substep, state_history, previous_state):
     average_effective_balance = previous_state["average_effective_balance"]
     validator_count_distribution = previous_state["validator_count_distribution"]
     validator_percentage_distribution = previous_state["validator_percentage_distribution"]
-    shared_validator_instances = previous_state["shared_validator_instances"] # initialised by pools compounding returns   
-
-    validators_in_activation_queue = previous_state["validators_in_activation_queue"]
+    shared_validator_instances = previous_state["shared_validator_instances"] 
+    validators_in_activation_queue = previous_state["validators_in_activation_queue"]   
      
 
     # Calculate the number of validators using ETH staked
@@ -115,15 +113,13 @@ def policy_validators(params, substep, state_history, previous_state):
         else:
             # Calculate the number of new validators from both validator-process and 
             # the pool compounding mechanism (model extention #5):
-
             number_of_validators_in_activation_queue = validators_in_activation_queue.sum(axis=0)
 
-            # UPDATE QUEUE (AGGREGRATE)
+            # Update queue (aggregrate):
             # 1) Calculate the number of new validators using validator process                
             validators_from_validator_process = validator_process(run, timestep * dt) * dt
             # 2) Calculate the number of new validators from pool compounding
             validators_from_pooling = shared_validator_instances.sum(axis=0)
-            
             # 3) Aggregrate
             new_validators_in_queue = validators_from_validator_process + validators_from_pooling
             # 4) Add to validator queue
@@ -140,7 +136,7 @@ def policy_validators(params, substep, state_history, previous_state):
             number_of_active_validators += activated_validators 
 
 
-            # ALLOCATE VALIDATORS ACCORDINGLY
+            # Allocate validators accordingly:
             # 1) Update count
             new_validators_count = (
                 validator_process_percentage_distribution * validators_from_validator_process # add from validator process

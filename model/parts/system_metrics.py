@@ -177,20 +177,20 @@ def policy_validator_pooled_returns(
 
 
     if (avg_pool_size is not None and avg_pool_size > 0):
-        
-        number_of_pools_per_environment = np.round(validator_count_distribution / avg_pool_size)
+                
         for i in pool_validator_indeces: 
             assert (avg_pool_size < validator_count_distribution[i]) # pool size cannot be larger than the current validator count
         
             # Calculate new shared validator instances initialized via pool compounding
+            number_of_pools_in_environment = np.round(validator_count_distribution[i] / avg_pool_size)
             validator_pools_profits_eth[i] += validator_profit[i] / eth_price # Aggregrate existing profits, convert from USD to ETH 
-            avg_pool_profit = validator_pools_profits_eth[i] / number_of_pools_per_environment[i] 
+            avg_pool_profit = validator_pools_profits_eth[i] / number_of_pools_in_environment
             number_of_shared_validators_per_pool = np.floor(avg_pool_profit / stake_requirement).astype(int) # Calculate new shared validators initialized by pool
-            new_shared_validators[i] = (number_of_pools_per_environment[i] * number_of_shared_validators_per_pool) # Aggregrate according to number of pools
+            new_shared_validators[i] = (number_of_pools_in_environment * number_of_shared_validators_per_pool) # Aggregrate according to number of pools
             validator_pools_profits_eth[i] -= new_shared_validators[i] * stake_requirement # Subtract the staked ammount from the accumulated profits
-
-        number_of_shared_validators += new_shared_validators        
-
+            
+        number_of_shared_validators += new_shared_validators 
+           
     return {
         "validator_pools_profits": validator_pools_profits_eth,
         "shared_validator_instances": new_shared_validators,

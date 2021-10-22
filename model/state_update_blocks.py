@@ -229,7 +229,7 @@ _state_update_blocks = [
             "validator_profit": update_from_signal("validator_profit"),
             "validator_revenue_yields": update_from_signal("validator_revenue_yields"),
             "validator_profit_yields": update_from_signal("validator_profit_yields"),
-            "staker_profit_yields": update_from_signal("staker_profit_yields"), #Ross
+            "staker_profit_yields": update_from_signal("staker_profit_yields"), 
             "total_revenue": update_from_signal("total_revenue"),
             "total_profit": update_from_signal("total_profit"),
             "total_revenue_yields": update_from_signal("total_revenue_yields"),
@@ -240,7 +240,7 @@ _state_update_blocks = [
         "description": """
             Accounting for shared validator instances created by pooling returns  
         """,
-        "post_processing": False,
+        #"post_processing": False,
         "policies": {
             "pooling": metrics.policy_validator_pooled_returns,
         },

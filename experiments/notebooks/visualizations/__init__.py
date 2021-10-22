@@ -1813,6 +1813,14 @@ def plot_staker_profit_yields_over_pool_size(df, TIMESTEP_ANALYSIS):
         ),
     )
 
+    fig.add_trace(
+        go.Scatter(
+            x=df_subset_0.avg_pool_size,
+            y=df_subset_0.diy_hardware_profit_yields_pct,
+            name=f"DIY hardware @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
+            line=dict(color=cadlabs_colorway_sequence[4], dash="dash"),
+        ),
+    )
     
     update_legend_names(fig)
 
