@@ -190,7 +190,8 @@ def policy_validator_pooled_returns(
             validator_pools_profits_eth[i] -= new_shared_validators[i] * stake_requirement # Subtract the staked ammount from the accumulated profits
             
         number_of_shared_validators += new_shared_validators 
-           
+
+
     return {
         "validator_pools_profits": validator_pools_profits_eth,
         "shared_validator_instances": new_shared_validators,

@@ -247,9 +247,10 @@ _state_update_blocks = [
         "variables": {
             "validator_pools_profits": update_from_signal("validator_pools_profits"),
             "shared_validator_instances": update_from_signal("shared_validator_instances"),
-            "number_of_shared_validators": update_from_signal("number_of_shared_validators")
+            "number_of_shared_validators": update_from_signal("number_of_shared_validators"),
         },
     },
+    
 ]
 
 # Conditionally update the order of the State Update Blocks using a ternary operator

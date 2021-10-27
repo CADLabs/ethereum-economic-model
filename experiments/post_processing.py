@@ -49,6 +49,11 @@ def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameter
     # Dissagregate revenue and profit
     df[[validator.type + '_revenue' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_revenue), axis=1, result_type='expand').astype('float32')
     df[[validator.type + '_profit' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_profit), axis=1, result_type='expand').astype('float32')
+    df[[validator.type + '_pools_profit' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_pools_profits), axis=1, result_type='expand').astype('float32')
+
+
+    df[[validator.type + '_shared_validators' for validator in validator_environments]] = df.apply(lambda row: list(row.number_of_shared_validators), axis=1, result_type='expand').astype('float32')
+    
 
     # Dissagregate yields
     df[[validator.type + '_revenue_yields' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_revenue_yields), axis=1, result_type='expand').astype('float32')
