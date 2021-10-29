@@ -49,14 +49,20 @@ state_update_block_validators = {
         "number_of_validators_in_activation_queue": update_from_signal(
             "number_of_validators_in_activation_queue"
         ),
-        "validators_in_activation_queue": update_from_signal("validators_in_activation_queue"),
+        "validators_in_activation_queue": update_from_signal(
+            "validators_in_activation_queue"
+        ),
         "number_of_active_validators": update_from_signal(
             "number_of_active_validators"
         ),
         "number_of_awake_validators": update_from_signal("number_of_awake_validators"),
         "validator_uptime": update_from_signal("validator_uptime"),
-        "validator_percentage_distribution": update_from_signal("validator_percentage_distribution"),
-        "validator_count_distribution": update_from_signal("validator_count_distribution"), 
+        "validator_percentage_distribution": update_from_signal(
+            "validator_percentage_distribution"
+        ),
+        "validator_count_distribution": update_from_signal(
+            "validator_count_distribution"
+        ),
     },
 }
 
@@ -229,7 +235,8 @@ _state_update_blocks = [
             "validator_profit": update_from_signal("validator_profit"),
             "validator_revenue_yields": update_from_signal("validator_revenue_yields"),
             "validator_profit_yields": update_from_signal("validator_profit_yields"),
-            "staker_profit_yields": update_from_signal("staker_profit_yields"), 
+            "stakers_profit": update_from_signal("stakers_profit"),
+            "stakers_profit_yields": update_from_signal("stakers_profit_yields"),
             "total_revenue": update_from_signal("total_revenue"),
             "total_profit": update_from_signal("total_profit"),
             "total_revenue_yields": update_from_signal("total_revenue_yields"),
@@ -240,17 +247,20 @@ _state_update_blocks = [
         "description": """
             Accounting for shared validator instances created by pooling returns  
         """,
-        #"post_processing": False,
+        "post_processing": False,
         "policies": {
             "pooling": metrics.policy_validator_pooled_returns,
         },
         "variables": {
             "validator_pools_profits": update_from_signal("validator_pools_profits"),
-            "shared_validator_instances": update_from_signal("shared_validator_instances"),
-            "number_of_shared_validators": update_from_signal("number_of_shared_validators"),
+            "shared_validator_instances": update_from_signal(
+                "shared_validator_instances"
+            ),
+            "number_of_shared_validators": update_from_signal(
+                "number_of_shared_validators"
+            ),
         },
     },
-    
 ]
 
 # Conditionally update the order of the State Update Blocks using a ternary operator

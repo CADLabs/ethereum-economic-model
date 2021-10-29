@@ -14,7 +14,7 @@ from datetime import datetime
 
 import model.constants as constants
 from model.utils import default
-from model.types import (List)
+from model.types import List
 import data.api.beaconchain as beaconchain
 import data.api.etherscan as etherscan
 import model.system_parameters as system_parameters
@@ -43,14 +43,17 @@ eth_supply: ETH = etherscan.get_eth_supply(default=116_250_000e18) / constants.w
 
 
 validator_count_distribution = np.array(
-        [(validator.percentage_distribution * number_of_active_validators) for validator in validator_environments],
-        dtype=int,
-    )
+    [
+        (validator.percentage_distribution * number_of_active_validators)
+        for validator in validator_environments
+    ],
+    dtype=int,
+)
 
 validator_percentage_distribution = np.array(
-        [validator.percentage_distribution for validator in validator_environments],
-        dtype=float,
-    )
+    [validator.percentage_distribution for validator in validator_environments],
+    dtype=float,
+)
 
 
 @dataclass
@@ -176,10 +179,15 @@ class StateVariables:
     )
     """The total annualized profit (income received - costs) yields (percentage of investment amount)
     per validator environment"""
-    staker_profit_yields: np.ndarray = np.zeros(
+    stakers_profit: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=int
     )
-    """T"""
+    """The total profit (income received - costs) for stakers in pools per validator environment"""
+    stakers_profit_yields: np.ndarray = np.zeros(
+        (number_of_validator_environments, 1), dtype=int
+    )
+    """The total annualized profit (income received - costs) yields (percentage of investment amount) 
+    for stakers in pool validator environments"""
 
     validator_count_distribution: List[np.ndarray] = default(
         validator_count_distribution
@@ -205,16 +213,15 @@ class StateVariables:
     shared_validator_instances: np.ndarray = np.zeros(
         (number_of_validator_environments), dtype=int
     )
-    """The number of new 'shared' validators initialised by pool environments at current timestep"""
+    """The number of new 'shared' validators initialised by pool environments"""
     number_of_shared_validators: np.ndarray = np.zeros(
         (number_of_validator_environments), dtype=int
     )
-    """The total number of shared validators initialised by pool environments at current timestep"""
+    """The total number of shared validators initialised by pool environments"""
     validator_pools_profits: np.ndarray = np.zeros(
         (number_of_validator_environments), dtype=ETH
     )
     """The pooled profits available in validator environments for initializing new shared validator instances"""
-
 
     validator_hardware_costs: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=USD

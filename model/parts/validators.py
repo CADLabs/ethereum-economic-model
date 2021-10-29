@@ -76,7 +76,6 @@ def policy_validators(params, substep, state_history, previous_state):
     validator_percentage_distribution = previous_state["validator_percentage_distribution"]
     shared_validator_instances = previous_state["shared_validator_instances"] 
     validators_in_activation_queue = previous_state["validators_in_activation_queue"]   
-     
 
     # Calculate the number of validators using ETH staked
     if eth_staked_process(0, 0) is not None:
@@ -113,51 +112,42 @@ def policy_validators(params, substep, state_history, previous_state):
         else:
             # Calculate the number of new validators from both validator-process and 
             # the pool compounding mechanism (model extention #5):
-            number_of_validators_in_activation_queue = validators_in_activation_queue.sum(axis=0)
 
-            # Update queue (aggregrate):
-            # 1) Calculate the number of new validators using validator process                
+
+            # Update validator queue:
             validators_from_validator_process = validator_process(run, timestep * dt) * dt
-            # 2) Calculate the number of new validators from pool compounding
-            validators_from_pooling = shared_validator_instances.sum(axis=0)
-            # 3) Aggregrate
-            new_validators_in_queue = validators_from_validator_process + validators_from_pooling
-            # 4) Add to validator queue
-            number_of_validators_in_activation_queue += new_validators_in_queue
-            # 5) Determine activated validators, accounting for churn limit.
+            new_validators_from_validator_process = np.round(validator_process_percentage_distribution * validators_from_validator_process).astype(int)
+            new_validators_distribution = new_validators_from_validator_process + shared_validator_instances
+            
+            validators_in_activation_queue += new_validators_distribution
+            number_of_validators_in_activation_queue = validators_in_activation_queue.sum(axis=0)
+            
+            # Calculate churn limit and update active validator count:
             validator_churn_limit = (
                 spec.get_validator_churn_limit(params, previous_state) * dt
             )
-
             activated_validators = min(
                 (number_of_validators_in_activation_queue), validator_churn_limit
             )
-            # 6) Update total activated validator count
             number_of_active_validators += activated_validators 
 
 
+
             # Allocate validators accordingly:
-            # 1) Update count
-            new_validators_count = (
-                validator_process_percentage_distribution * validators_from_validator_process # add from validator process
+            new_validators_distribution_pct = ( # Calculate distribution percentage for new validators
+                new_validators_distribution / new_validators_distribution.sum(axis=0)
             )
-            new_validators_count = new_validators_count + shared_validator_instances # add from pooling
-        
-            # 2) Calculate distribution percentage for new validators
-            new_validators_distribution_pct = (
-                new_validators_count / new_validators_in_queue
-            )
-            # 3) Allocate new validators to respective validator environments 
-            validator_count_distribution = validator_count_distribution + (
-                np.round(new_validators_distribution_pct * activated_validators).astype(int)
-            )
-            # 4) Calculate percentage distribution
+            # Allocate new validators to respective validator environments 
+            validator_count_distribution +=  (
+                new_validators_distribution_pct * activated_validators
+            ).astype(int)
+            # Calculate percentage distribution
             validator_percentage_distribution = (
                 validator_count_distribution / number_of_active_validators
             )
             # Update the validator activation queue 
-            number_of_validators_in_activation_queue -= activated_validators
-            validators_in_activation_queue = np.round(new_validators_distribution_pct * number_of_validators_in_activation_queue)
+            validators_in_activation_queue -= np.round(new_validators_distribution_pct * activated_validators).astype(int)
+            
 
 
     # Calculate the number of "awake" validators
@@ -200,3 +190,5 @@ def policy_average_effective_balance(
     average_effective_balance = total_active_balance / number_of_validators
 
     return {"average_effective_balance": average_effective_balance}
+
+

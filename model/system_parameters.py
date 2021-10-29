@@ -134,11 +134,11 @@ validator_third_party_costs_per_epoch = [
     )
 ]
 
-# Store the indeces for pool validator environments 
+# Store the indeces for pool validator environments
 pool_validator_indeces = []
 for i in range(len(validator_environments)):
     if "pool" in validator_environments[i].type:
-        pool_validator_indeces.append(i) 
+        pool_validator_indeces.append(i)
 
 
 @dataclass
@@ -418,9 +418,7 @@ class Parameters:
 
     By default, validator_pool_size is set to None.
     """
-    pool_validator_indeces: List[np.array] = default(
-        [pool_validator_indeces]
-    )
+    pool_validator_indeces: List[np.array] = default([pool_validator_indeces])
     """
     The indeces corresponding to pool validator environments. 
     Used by the pool compounding mechanism.

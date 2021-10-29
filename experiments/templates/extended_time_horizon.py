@@ -16,7 +16,7 @@ from experiments.default_experiment import experiment
 experiment = copy.deepcopy(experiment)
 
 DELTA_TIME = constants.epochs_per_week  # epochs per timestep
-SIMULATION_TIME_MONTHS = 12 * 10  # number of months
+SIMULATION_TIME_MONTHS = 10 * 12  # number of months
 TIMESTEPS = constants.epochs_per_month * SIMULATION_TIME_MONTHS // DELTA_TIME
 
 parameter_overrides = {
