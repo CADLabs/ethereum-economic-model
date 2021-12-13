@@ -1725,7 +1725,7 @@ def plot_eth_staked_over_pool_size(df, TIMESTEP_ANALYSIS):
     return fig
 
 
-def plot_staker_profit_over_pool_size(df, TIMESTEP_ANALYSIS):
+def plot_pool_profit_over_pool_size(df, TIMESTEP_ANALYSIS):
     fig = go.Figure()
     
     df_subset_0 = df.query("timestep == " + str(TIMESTEP_ANALYSIS))
@@ -1735,7 +1735,7 @@ def plot_staker_profit_over_pool_size(df, TIMESTEP_ANALYSIS):
     fig.add_trace(
         go.Scatter(
             x=df_subset_0.avg_pool_size,
-            y=df_subset_0.pool_staas_stakers_profit,
+            y=df_subset_0.pool_staas_pool_profit,
             name=f"Pool Staas - Profit @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
             line=dict(color=cadlabs_colorway_sequence[1]),
         ),
@@ -1743,7 +1743,7 @@ def plot_staker_profit_over_pool_size(df, TIMESTEP_ANALYSIS):
     fig.add_trace(
         go.Scatter(
             x=df_subset_0.avg_pool_size,
-            y=df_subset_0.pool_hardware_stakers_profit,
+            y=df_subset_0.pool_hardware_pool_profit,
             name=f"Pool Hardware - Profit @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
             line=dict(color=cadlabs_colorway_sequence[2]),
         ),
@@ -1751,37 +1751,28 @@ def plot_staker_profit_over_pool_size(df, TIMESTEP_ANALYSIS):
     fig.add_trace(
         go.Scatter(
             x=df_subset_0.avg_pool_size,
-            y=df_subset_0.pool_cloud_stakers_profit,
+            y=df_subset_0.pool_cloud_pool_profit,
             name=f"Pool Cloud - Profit @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
             line=dict(color=cadlabs_colorway_sequence[3]),
-        ),
-    )
-    # Non-pool environment(s)
-    fig.add_trace(
-        go.Scatter(
-            x=df_subset_0.avg_pool_size,
-            y=df_subset_0.diy_hardware_profit,
-            name=f"DIY Hardware - Profit @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
-            line=dict(color=cadlabs_colorway_sequence[4], dash="dash"),
         ),
     )
     
     update_legend_names(fig)
 
     fig.update_layout(
-        title="Staker Profit over AVG Pool Size",
-        xaxis_title="AVG Pool Size",
+        title="AVG Pool Profit over initial Pool Size",
+        xaxis_title="AVG Iniitial Pool Size",
         legend_title="Validator Environments",
     )
 
     # Set secondary y-axes titles
-    fig.update_yaxes(title_text="Profit (USD/<period>)")
+    fig.update_yaxes(title_text="Profit (USD)")
     fig.update_layout(hovermode="x unified")
 
     return fig
 
 
-def plot_staker_profit_yields_over_pool_size(df, TIMESTEP_ANALYSIS):
+def plot_pool_profit_yields_over_pool_size(df, TIMESTEP_ANALYSIS):
     fig = go.Figure()
     yearString = str(TIMESTEP_ANALYSIS / 12)
     df_subset_0 = df.query("timestep == " + str(TIMESTEP_ANALYSIS))
@@ -1791,7 +1782,7 @@ def plot_staker_profit_yields_over_pool_size(df, TIMESTEP_ANALYSIS):
     fig.add_trace(
         go.Scatter(
             x=df_subset_0.avg_pool_size,
-            y=df_subset_0.pool_staas_stakers_profit_yields_pct,
+            y=df_subset_0.pool_staas_pool_profit_yields_pct,
             name=f"Pool Staas @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
             line=dict(color=cadlabs_colorway_sequence[1]),
         ),
@@ -1799,7 +1790,7 @@ def plot_staker_profit_yields_over_pool_size(df, TIMESTEP_ANALYSIS):
     fig.add_trace(
         go.Scatter(
             x=df_subset_0.avg_pool_size,
-            y=df_subset_0.pool_hardware_stakers_profit_yields_pct,
+            y=df_subset_0.pool_hardware_pool_profit_yields_pct,
             name=f"Pool Hardware @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
             line=dict(color=cadlabs_colorway_sequence[2]),
         ),
@@ -1807,26 +1798,18 @@ def plot_staker_profit_yields_over_pool_size(df, TIMESTEP_ANALYSIS):
     fig.add_trace(
         go.Scatter(
             x=df_subset_0.avg_pool_size,
-            y=df_subset_0.pool_cloud_stakers_profit_yields_pct,
+            y=df_subset_0.pool_cloud_pool_profit_yields_pct,
             name=f"Pool Cloud @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
             line=dict(color=cadlabs_colorway_sequence[3]),
         ),
     )
 
-    fig.add_trace(
-        go.Scatter(
-            x=df_subset_0.avg_pool_size,
-            y=df_subset_0.diy_hardware_profit_yields_pct,
-            name=f"DIY hardware @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
-            line=dict(color=cadlabs_colorway_sequence[4], dash="dash"),
-        ),
-    )
     
     update_legend_names(fig)
 
     fig.update_layout(
-        title="Annualized Staker Profit Yields over AVG Pool Size",
-        xaxis_title="AVG Pool Size",
+        title="AVG Annualized Pool Profit Yields over initial Pool Size",
+        xaxis_title="AVG Initial Pool Size",
         legend_title="Validator Environments",
     )
 
@@ -1836,3 +1819,51 @@ def plot_staker_profit_yields_over_pool_size(df, TIMESTEP_ANALYSIS):
 
     return fig
 
+
+
+def plot_pool_cumulative_yields_over_pool_size(df, TIMESTEP_ANALYSIS):
+    fig = go.Figure()
+    yearString = str(TIMESTEP_ANALYSIS / 12)
+    df_subset_0 = df.query("timestep == " + str(TIMESTEP_ANALYSIS))
+
+    # Add traces
+    # Pool environment(s)
+    fig.add_trace(
+        go.Scatter(
+            x=df_subset_0.avg_pool_size,
+            y=df_subset_0.pool_staas_pool_cumulative_yields_pct,
+            name=f"Pool Staas @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
+            line=dict(color=cadlabs_colorway_sequence[1]),
+        ),
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=df_subset_0.avg_pool_size,
+            y=df_subset_0.pool_hardware_pool_cumulative_yields_pct,
+            name=f"Pool Hardware @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
+            line=dict(color=cadlabs_colorway_sequence[2]),
+        ),
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=df_subset_0.avg_pool_size,
+            y=df_subset_0.pool_cloud_pool_cumulative_yields_pct,
+            name=f"Pool Cloud @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
+            line=dict(color=cadlabs_colorway_sequence[3]),
+        ),
+    )
+
+    
+    update_legend_names(fig)
+
+    fig.update_layout(
+        title="AVG Cumulative Annualized Pool Profit Yields over initial Pool Size",
+        xaxis_title="AVG Initial Pool Size",
+        legend_title="Validator Environments",
+    )
+
+    # Set secondary y-axes titles
+    fig.update_yaxes(title_text="Profit Yields (%/Year)")
+    fig.update_layout(hovermode="x unified")
+
+    return fig

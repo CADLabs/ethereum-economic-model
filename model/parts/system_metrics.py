@@ -164,61 +164,80 @@ def policy_staker_yields(
     # Parameters
     dt = params["dt"]
     avg_pool_size = params["avg_pool_size"]
-    number_of_pools_per_validator_environment = params["number_of_pools_per_validator_environment"]
+    number_of_pools_param = params["number_of_pools"]
     pool_validator_indeces = params["pool_validator_indeces"]
     eth_price = previous_state["eth_price"]
 
-
     # Variables
-    stakers_pool_profit = previous_state["stakers_pool_profit"]
-    stakers_pool_profit_yields = previous_state["stakers_pool_profit_yields"]
-    individual_staker_profit = previous_state["individual_staker_profit"]
-    individual_staker_profit_yields = previous_state["individual_staker_profit_yields"]
-    
+
     validator_count_distribution = previous_state["validator_count_distribution"]
     validator_pools_available_profits_eth = previous_state["validator_pools_available_profits_eth"]
     number_of_shared_validators = previous_state["number_of_shared_validators"]
     average_effective_balance = previous_state["average_effective_balance"]
+    
+    validator_pool_eth_staked = previous_state["validator_pool_eth_staked"]
+    validator_pool_profit = previous_state["validator_pool_profit"]
+    validator_pool_profit_yields = previous_state["validator_pool_profit_yields"]
+    number_of_pools = previous_state["number_of_pools"]
+    pool_size = previous_state["pool_size"]
+    validator_profit = previous_state["validator_profit"]
+    stakers_per_pool = previous_state["stakers_per_pool"]
+    shared_validators_per_pool = previous_state["shared_validators_per_pool"]
+    pool_cumulative_yields = previous_state["pool_cumulative_yields"]
 
-    number_of_stakers = validator_count_distribution - number_of_shared_validators
+    if avg_pool_size is not None and avg_pool_size > 0: # returns true if analysis is not investigating compounding yields (see model extension #5) 
 
-    shared_validators_eth_staked = number_of_shared_validators * (
-        average_effective_balance / constants.gwei
-    )
+        # Use param value if state variable not yet determined
+        if(number_of_pools.sum(axis=0) == 0): 
+            number_of_pools = number_of_pools_param
 
-    stakers_per_pool = number_of_stakers / number_of_pools_per_validator_environment
+        shared_validators_eth_staked = number_of_shared_validators * (
+            average_effective_balance / constants.gwei
+        )
 
+        stake_requirement = constants.eth_deposited_per_validator
 
-    if avg_pool_size is not None and avg_pool_size > 0: # avoid unnecessary computation if analysis is not investigating compounding
-        for i in pool_validator_indeces:
+        number_of_stakers = validator_count_distribution - number_of_shared_validators
 
-            # Calculate yields for stakers in pools
-            stakers_pool_profit[i] = (validator_pools_available_profits_eth[i] + 
-                shared_validators_eth_staked[i]) / number_of_pools_per_validator_environment[i] * eth_price # total staker profit validator environment, in USD
+        # Calculate pool sizes across environments (validators from validator process assemble new pools. See assumptions in experiment notebook #4):
+        number_of_pools = np.floor(number_of_stakers / avg_pool_size)
+
+    
+        for i in pool_validator_indeces: # avoids division by zero where pooling does not apply
+
+            stakers_per_pool[i] = number_of_stakers[i] / number_of_pools[i]
+            shared_validators_per_pool[i] = number_of_shared_validators[i] / number_of_pools[i]
+
+            pool_size[i] = stakers_per_pool[i] + shared_validators_per_pool[i] 
+
+            # Calculate average ETH staked for a pool
+            validator_pool_eth_staked[i] = np.round(validator_count_distribution[i] / number_of_pools[i] * average_effective_balance / constants.gwei)
+
+            #initial_staked = stakers_per_pool[i] * stake_requirement # Initial investment
+
+            # Calculate average profit per pool
+            validator_pool_profit[i] = (validator_profit[i] / number_of_pools[i])
+            #validator_pool_profit[i] = ((shared_validators_per_pool[i] * average_effective_balance / constants.gwei) * eth_price) + (validator_pools_available_profits_eth[i] * eth_price)
             
-            stakers_pool_profit_yields[i] = stakers_pool_profit[i] / (
-                number_of_stakers[i] * constants.eth_deposited_per_validator)
-            
-            stakers_pool_profit_yields[i] *= constants.epochs_per_year / dt  # Annualize value
-            
+            # Calculate average profit yields per pool
+            validator_pool_profit_yields[i] = validator_pool_profit[i] / (stakers_per_pool[i] * stake_requirement * eth_price) 
+            validator_pool_profit_yields[i] *= constants.epochs_per_year / dt  # Annualize value
 
-            # Calculate yields for individual stakers
-            individual_staker_profit[i] = stakers_pool_profit[i] / stakers_per_pool[i]
-
-            individual_staker_profit_yields[i] = individual_staker_profit[i] / (
-                constants.eth_deposited_per_validator) 
-            
+            pool_cumulative_yields[i] += validator_pool_profit_yields[i]
 
             #constants.gwei
 
 
 
     return {
-        "stakers_pool_profit": stakers_pool_profit,
-        "stakers_pool_profit_yields": stakers_pool_profit_yields,
+        "validator_pool_eth_staked": validator_pool_eth_staked,
+        "validator_pool_profit": validator_pool_profit,
+        "validator_pool_profit_yields": validator_pool_profit_yields,
+        "pool_cumulative_yields": pool_cumulative_yields,
 
-        "individual_staker_profit": individual_staker_profit,
-        "individual_staker_profit_yields": individual_staker_profit_yields,
+        "stakers_per_pool": stakers_per_pool,
+        "shared_validators_per_pool": shared_validators_per_pool,
+        "pool_size": pool_size,
     }
 
 
@@ -240,7 +259,7 @@ def policy_validator_pooled_returns(
     # Parameters
     avg_pool_size = params["avg_pool_size"]
     pool_validator_indeces = params["pool_validator_indeces"]
-    number_of_pools_per_validator_environment = params["number_of_pools_per_validator_environment"]
+    number_of_pools_param = params["number_of_pools"]
 
     # State Variables
     eth_price = previous_state["eth_price"]
@@ -251,6 +270,7 @@ def policy_validator_pooled_returns(
     validator_percentage_distribution = previous_state[
         "validator_percentage_distribution"
     ]
+    number_of_pools = previous_state["number_of_pools"]
     
 
     validator_costs = previous_state["validator_costs"]
@@ -270,7 +290,9 @@ def policy_validator_pooled_returns(
     # Calculate the profit per validator type
     validator_profit_eth = validator_revenue - validator_costs
 
-
+    # Use param value if state variable not yet determined
+    if(number_of_pools.sum(axis=0) == 0): 
+        number_of_pools = number_of_pools_param
 
 
     if avg_pool_size is not None and avg_pool_size > 0: # avoid unnecessary computation if analysis is not investigating compounding
@@ -285,19 +307,21 @@ def policy_validator_pooled_returns(
                 validator_profit[i] / eth_price
             )  
             avg_pool_profit = (
-                validator_pools_available_profits_eth[i] / number_of_pools_per_validator_environment[i]
+                validator_pools_available_profits_eth[i] / number_of_pools[i]
             )
             new_shared_validators_per_pool = np.floor(
                 avg_pool_profit / stake_requirement
             )  # Calculate new shared validators initialized by pool
             
-            new_shared_validators[i] = number_of_pools_per_validator_environment[i] * new_shared_validators_per_pool
+
+            new_shared_validators[i] = number_of_pools[i] * new_shared_validators_per_pool
               # Aggregrate according to number of pools
             validator_pools_available_profits_eth[i] -= (
                 new_shared_validators[i] * stake_requirement
             )  # Subtract the staked ammount from the accumulated available profits
 
         number_of_shared_validators += new_shared_validators
+
 
     return {
         "validator_pools_available_profits_eth": validator_pools_available_profits_eth,

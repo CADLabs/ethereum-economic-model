@@ -66,6 +66,8 @@ state_update_block_validators = {
     },
 }
 
+
+
 _state_update_blocks = [
     {
         "description": """
@@ -228,7 +230,6 @@ _state_update_blocks = [
         "post_processing": False,
         "policies": {
             "yields": metrics.policy_validator_yields,
-            "staker_yields": metrics.policy_staker_yields
         },
         "variables": {
             "validator_eth_staked": update_from_signal("validator_eth_staked"),
@@ -240,13 +241,32 @@ _state_update_blocks = [
             "total_profit": update_from_signal("total_profit"),
             "total_revenue_yields": update_from_signal("total_revenue_yields"),
             "total_profit_yields": update_from_signal("total_profit_yields"),
-
-            "stakers_pool_profit": update_from_signal("stakers_pool_profit"),
-            "stakers_pool_profit_yields": update_from_signal("stakers_pool_profit_yields"),
-            "individual_staker_profit": update_from_signal("individual_staker_profit"),
-            "individual_staker_profit_yields": update_from_signal("individual_staker_profit_yields"),
         },
     },
+
+
+    {
+        "description": """
+            Accounting of validator pools yield metrics
+        """,
+        "post_processing": False,
+        "policies": {
+            "staker_yields": metrics.policy_staker_yields
+        },
+        "variables": {
+            "validator_pool_eth_staked": update_from_signal("validator_pool_eth_staked"),
+            "validator_pool_profit": update_from_signal("validator_pool_profit"),
+            "validator_pool_profit_yields": update_from_signal("validator_pool_profit_yields"),
+            "pool_cumulative_yields": update_from_signal("pool_cumulative_yields"),
+
+            "stakers_per_pool": update_from_signal("stakers_per_pool"),
+            "shared_validators_per_pool": update_from_signal("shared_validators_per_pool"),
+            "pool_size": update_from_signal("pool_size"),
+
+        },
+    },
+
+    
     {
         "description": """
             Accounting of validator yield metrics associated with pooling returns  
@@ -266,6 +286,8 @@ _state_update_blocks = [
             ),
         },
     },
+
+
 ]
 
 # Conditionally update the order of the State Update Blocks using a ternary operator

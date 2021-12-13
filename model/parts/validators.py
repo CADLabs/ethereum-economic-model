@@ -77,6 +77,7 @@ def policy_validators(params, substep, state_history, previous_state):
     shared_validator_instances = previous_state["shared_validator_instances"] 
     validators_in_activation_queue = previous_state["validators_in_activation_queue"]   
 
+
     # Calculate the number of validators using ETH staked
     if eth_staked_process(0, 0) is not None:
         eth_staked = eth_staked_process(run, timestep * dt)
@@ -147,6 +148,9 @@ def policy_validators(params, substep, state_history, previous_state):
             validators_in_activation_queue -= np.round(new_validators_distribution_pct * activated_validators).astype(int)
             
 
+            
+            
+
 
     # Calculate the number of "awake" validators
     # See proposal: https://ethresear.ch/t/simplified-active-validator-cap-and-rotation-proposal
@@ -168,7 +172,7 @@ def policy_validators(params, substep, state_history, previous_state):
         "number_of_awake_validators": number_of_awake_validators,
         "validator_uptime": validator_uptime,
         "validator_percentage_distribution": validator_percentage_distribution,
-        "validator_count_distribution": validator_count_distribution
+        "validator_count_distribution": validator_count_distribution,
     }
 
 

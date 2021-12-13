@@ -148,7 +148,7 @@ for i in range(len(validator_environments)):
         pool_validator_indeces.append(i)
 
 
-number_of_pools_per_validator_environment = [
+number_of_pools = [
     np.array(
         [0 for validator in validator_environments],
         dtype=int,
@@ -434,8 +434,8 @@ class Parameters:
 
     By default, validator_pool_size is set to None.
     """
-    number_of_pools_per_validator_environment: List[np.ndarray] = default(
-        number_of_pools_per_validator_environment
+    number_of_pools: List[np.ndarray] = default(
+        number_of_pools
     )
     """
     """
