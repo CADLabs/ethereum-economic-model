@@ -69,3 +69,4 @@ class ValidatorEnvironment:
     hardware_costs_per_epoch: USD_per_epoch = 0.0
     cloud_costs_per_epoch: USD_per_epoch = 0.0
     third_party_costs_per_epoch: Percentage_per_epoch = 0.0
+    avg_validators_per_individual: int = 1

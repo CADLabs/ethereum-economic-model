@@ -228,6 +228,7 @@ _state_update_blocks = [
         "post_processing": False,
         "policies": {
             "yields": metrics.policy_validator_yields,
+            "staker_yields": metrics.policy_staker_yields
         },
         "variables": {
             "validator_eth_staked": update_from_signal("validator_eth_staked"),
@@ -235,24 +236,28 @@ _state_update_blocks = [
             "validator_profit": update_from_signal("validator_profit"),
             "validator_revenue_yields": update_from_signal("validator_revenue_yields"),
             "validator_profit_yields": update_from_signal("validator_profit_yields"),
-            "stakers_profit": update_from_signal("stakers_profit"),
-            "stakers_profit_yields": update_from_signal("stakers_profit_yields"),
             "total_revenue": update_from_signal("total_revenue"),
             "total_profit": update_from_signal("total_profit"),
             "total_revenue_yields": update_from_signal("total_revenue_yields"),
             "total_profit_yields": update_from_signal("total_profit_yields"),
+
+            "stakers_pool_profit": update_from_signal("stakers_pool_profit"),
+            "stakers_pool_profit_yields": update_from_signal("stakers_pool_profit_yields"),
+            "individual_staker_profit": update_from_signal("individual_staker_profit"),
+            "individual_staker_profit_yields": update_from_signal("individual_staker_profit_yields"),
         },
     },
     {
         "description": """
-            Accounting for shared validator instances created by pooling returns  
+            Accounting of validator yield metrics associated with pooling returns  
+            & initializing new shared validator instances
         """,
         "post_processing": False,
         "policies": {
             "pooling": metrics.policy_validator_pooled_returns,
         },
         "variables": {
-            "validator_pools_profits": update_from_signal("validator_pools_profits"),
+            "validator_pools_available_profits_eth": update_from_signal("validator_pools_available_profits_eth"),
             "shared_validator_instances": update_from_signal(
                 "shared_validator_instances"
             ),

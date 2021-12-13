@@ -57,36 +57,43 @@ validator_environments = [
         type="diy_hardware",
         percentage_distribution=0.37,
         hardware_costs_per_epoch=0.0014,
+        avg_validators_per_individual=2,
     ),
     ValidatorEnvironment(
         type="diy_cloud",
         percentage_distribution=0.13,
         cloud_costs_per_epoch=0.00027,
+        avg_validators_per_individual=20,
     ),
     ValidatorEnvironment(
         type="pool_staas",
         percentage_distribution=0.27,
         third_party_costs_per_epoch=0.12,
+        avg_validators_per_individual=1,
     ),
     ValidatorEnvironment(
         type="pool_hardware",
         percentage_distribution=0.05,
         hardware_costs_per_epoch=0.0007,
+        avg_validators_per_individual=4,
     ),
     ValidatorEnvironment(
         type="pool_cloud",
         percentage_distribution=0.02,
         cloud_costs_per_epoch=0.00136,
+        avg_validators_per_individual=4,
     ),
     ValidatorEnvironment(
         type="staas_full",
         percentage_distribution=0.08,
         third_party_costs_per_epoch=0.15,
+        avg_validators_per_individual=2,
     ),
     ValidatorEnvironment(
         type="staas_self_custodied",
         percentage_distribution=0.08,
         third_party_costs_per_epoch=0.12,
+        avg_validators_per_individual=2,
     ),
 ]
 """Validator environment configuration
@@ -139,6 +146,15 @@ pool_validator_indeces = []
 for i in range(len(validator_environments)):
     if "pool" in validator_environments[i].type:
         pool_validator_indeces.append(i)
+
+
+number_of_pools_per_validator_environment = [
+    np.array(
+        [0 for validator in validator_environments],
+        dtype=int,
+    )
+]
+
 
 
 @dataclass
@@ -411,13 +427,19 @@ class Parameters:
     """
     avg_pool_size: List[int] = default([None])
     """
-    The average number of validators in a pool.
+    The average, initial number of validators per pool. 
 
     avg_pool_size is initialized by experiments investigating compounding returns for validators in pool environments. 
     See model extension #5, in ROADMAP.md, for more information about this implementation.
 
     By default, validator_pool_size is set to None.
     """
+    number_of_pools_per_validator_environment: List[np.ndarray] = default(
+        number_of_pools_per_validator_environment
+    )
+    """
+    """
+
     pool_validator_indeces: List[np.array] = default([pool_validator_indeces])
     """
     The indeces corresponding to pool validator environments. 

@@ -90,7 +90,7 @@ def policy_validators(params, substep, state_history, previous_state):
     else:
         
         # Calculate the number of validators using the validator process
-        if(avg_pool_size == None or avg_pool_size < 1):
+        if(avg_pool_size == None or avg_pool_size < 1): # returns true if analysis is not investigating compounding yields (see model extension #5) 
             new_validators_per_epoch = validator_process(run, timestep * dt)
             number_of_validators_in_activation_queue += new_validators_per_epoch * dt
 
@@ -113,11 +113,10 @@ def policy_validators(params, substep, state_history, previous_state):
             # Calculate the number of new validators from both validator-process and 
             # the pool compounding mechanism (model extention #5):
 
-
             # Update validator queue:
             validators_from_validator_process = validator_process(run, timestep * dt) * dt
-            new_validators_from_validator_process = np.round(validator_process_percentage_distribution * validators_from_validator_process).astype(int)
-            new_validators_distribution = new_validators_from_validator_process + shared_validator_instances
+            validators_from_validator_process_per_environment = np.round(validator_process_percentage_distribution * validators_from_validator_process).astype(int)
+            new_validators_distribution = validators_from_validator_process_per_environment + shared_validator_instances
             
             validators_in_activation_queue += new_validators_distribution
             number_of_validators_in_activation_queue = validators_in_activation_queue.sum(axis=0)
@@ -130,7 +129,6 @@ def policy_validators(params, substep, state_history, previous_state):
                 (number_of_validators_in_activation_queue), validator_churn_limit
             )
             number_of_active_validators += activated_validators 
-
 
 
             # Allocate validators accordingly:

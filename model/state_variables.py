@@ -55,6 +55,9 @@ validator_percentage_distribution = np.array(
     dtype=float,
 )
 
+# Set default value
+number_of_pools_per_validator_environment = 0 * validator_count_distribution 
+
 
 @dataclass
 class StateVariables:
@@ -179,15 +182,29 @@ class StateVariables:
     )
     """The total annualized profit (income received - costs) yields (percentage of investment amount)
     per validator environment"""
-    stakers_profit: np.ndarray = np.zeros(
+    stakers_pool_profit: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=int
     )
-    """The total profit (income received - costs) for stakers in pools per validator environment"""
-    stakers_profit_yields: np.ndarray = np.zeros(
+    """The total average annaualized profit (income received - costs) for stakers per pool per validator environment"""
+    stakers_pool_profit_yields: np.ndarray = np.zeros(
+        (number_of_validator_environments, 1), dtype=float
+    )
+    """The total average annualized profit (income received - costs) yields (percentage of investment amount) 
+    for stakers per pool per validator environments"""
+
+
+
+    individual_staker_profit: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=int
     )
-    """The total annualized profit (income received - costs) yields (percentage of investment amount) 
-    for stakers in pool validator environments"""
+    """The total average annaualized profit (income received - costs) for an individual staker in a pool per validator environment"""
+    individual_staker_profit_yields: np.ndarray = np.zeros(
+        (number_of_validator_environments, 1), dtype=int
+    )
+    """The total average annualized profit (income received - costs) yields (percentage of investment amount) 
+    for an individual staker per pool per validator environments"""
+
+
 
     validator_count_distribution: List[np.ndarray] = default(
         validator_count_distribution
@@ -213,12 +230,12 @@ class StateVariables:
     shared_validator_instances: np.ndarray = np.zeros(
         (number_of_validator_environments), dtype=int
     )
-    """The number of new 'shared' validators initialised by pool environments"""
+    """New 'shared' validators initialised by pool environments leveraging compounding"""
     number_of_shared_validators: np.ndarray = np.zeros(
         (number_of_validator_environments), dtype=int
     )
-    """The total number of shared validators initialised by pool environments"""
-    validator_pools_profits: np.ndarray = np.zeros(
+    """The total number of shared validators initialised by pool environments leveraging compounding"""
+    validator_pools_available_profits_eth: np.ndarray = np.zeros(
         (number_of_validator_environments), dtype=ETH
     )
     """The pooled profits available in validator environments for initializing new shared validator instances"""
