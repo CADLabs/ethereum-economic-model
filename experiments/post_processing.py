@@ -53,12 +53,10 @@ def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameter
     df[[validator.type + '_revenue' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_revenue), axis=1, result_type='expand').astype('float32')
     df[[validator.type + '_profit' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_profit), axis=1, result_type='expand').astype('float32')
     
+    # Dissagregate pool metrics
     df[[validator.type + '_pool_profit' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_pool_profit), axis=1, result_type='expand').astype('float32')
     df[[validator.type + '_pool_profit_yields' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_pool_profit_yields), axis=1, result_type='expand').astype('float32')
     df[[validator.type + '_pool_cumulative_yields' for validator in validator_environments]] = df.apply(lambda row: list(row.pool_cumulative_yields), axis=1, result_type='expand').astype('float32')
-
-
-
     df[[validator.type + '_stakers_per_pool' for validator in validator_environments]] = df.apply(lambda row: list(row.stakers_per_pool), axis=1, result_type='expand').astype('float32')
     df[[validator.type + '_shared_validators_per_pool' for validator in validator_environments]] = df.apply(lambda row: list(row.shared_validators_per_pool), axis=1, result_type='expand').astype('float32')
     df[[validator.type + '_pool_size' for validator in validator_environments]] = df.apply(lambda row: list(row.pool_size), axis=1, result_type='expand').astype('float32')
@@ -75,7 +73,6 @@ def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameter
     
     df[[validator.type + '_pool_profit_yields_pct' for validator in validator_environments]] = df[[validator.type + '_pool_profit_yields' for validator in validator_environments]] * 100
     df[[validator.type + '_pool_cumulative_yields_pct' for validator in validator_environments]] = df[[validator.type + '_pool_cumulative_yields' for validator in validator_environments]] * 100
-
 
     df['supply_inflation_pct'] = df['supply_inflation'] * 100
     df['total_revenue_yields_pct'] = df['total_revenue_yields'] * 100

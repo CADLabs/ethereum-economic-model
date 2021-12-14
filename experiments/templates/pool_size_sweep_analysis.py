@@ -20,8 +20,8 @@ SIMULATION_TIME_MONTHS = 5 * 12  # number of months
 TIMESTEPS = constants.epochs_per_month * SIMULATION_TIME_MONTHS // DELTA_TIME
 
 pool_size_samples = np.linspace(
-    10, 
-    1000,
+    1, 
+    200,
     10,
     dtype=int
 )

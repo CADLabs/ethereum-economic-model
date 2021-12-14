@@ -56,7 +56,7 @@ validator_percentage_distribution = np.array(
 )
 
 # Set default value
-number_of_pools_per_validator_environment = 0 * validator_count_distribution 
+number_of_pools_per_validator_environment = 0 * validator_count_distribution
 
 
 @dataclass
@@ -182,8 +182,6 @@ class StateVariables:
     )
     """The total annualized profit (income received - costs) yields (percentage of investment amount)
     per validator environment"""
- 
-
 
     validator_count_distribution: List[np.ndarray] = default(
         validator_count_distribution
@@ -197,17 +195,15 @@ class StateVariables:
 
     A vector with a value for each validator environment.
     """
-    #Variables for Pool Compounding mechanism
+    # Variables for Pool Compounding mechanism
 
-    
     number_of_pools: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=int
     )
     """The number of pools per validator environment"""
 
-
     validator_pool_eth_staked: np.ndarray = np.zeros(
-        (number_of_validator_environments, 1), dtype=int
+        (number_of_validator_environments, 1), dtype=float
     )
     """The average ETH staked in pools, per validator environment"""
     validator_pool_profit: np.ndarray = np.zeros(
@@ -222,12 +218,8 @@ class StateVariables:
         (number_of_validator_environments, 1), dtype=float
     )
     """The cumulative profit yields (%) per pool, per validator environment"""
-    pool_size: np.ndarray = np.zeros(
-        (number_of_validator_environments), dtype=int
-    )
+    pool_size: np.ndarray = np.zeros((number_of_validator_environments), dtype=int)
     """"""
-
-
 
     stakers_per_pool: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=int
@@ -237,8 +229,6 @@ class StateVariables:
         (number_of_validator_environments, 1), dtype=int
     )
     """"""
-
-
 
     validators_in_activation_queue: np.ndarray = np.zeros(
         (number_of_validator_environments), dtype=int

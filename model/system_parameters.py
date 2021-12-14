@@ -156,7 +156,6 @@ number_of_pools = [
 ]
 
 
-
 @dataclass
 class Parameters:
     """System Parameters
@@ -434,9 +433,7 @@ class Parameters:
 
     By default, validator_pool_size is set to None.
     """
-    number_of_pools: List[np.ndarray] = default(
-        number_of_pools
-    )
+    number_of_pools: List[np.ndarray] = default(number_of_pools)
     """
     """
 

@@ -67,7 +67,6 @@ state_update_block_validators = {
 }
 
 
-
 _state_update_blocks = [
     {
         "description": """
@@ -243,30 +242,6 @@ _state_update_blocks = [
             "total_profit_yields": update_from_signal("total_profit_yields"),
         },
     },
-
-
-    {
-        "description": """
-            Accounting of validator pools yield metrics
-        """,
-        "post_processing": False,
-        "policies": {
-            "staker_yields": metrics.policy_staker_yields
-        },
-        "variables": {
-            "validator_pool_eth_staked": update_from_signal("validator_pool_eth_staked"),
-            "validator_pool_profit": update_from_signal("validator_pool_profit"),
-            "validator_pool_profit_yields": update_from_signal("validator_pool_profit_yields"),
-            "pool_cumulative_yields": update_from_signal("pool_cumulative_yields"),
-
-            "stakers_per_pool": update_from_signal("stakers_per_pool"),
-            "shared_validators_per_pool": update_from_signal("shared_validators_per_pool"),
-            "pool_size": update_from_signal("pool_size"),
-
-        },
-    },
-
-    
     {
         "description": """
             Accounting of validator yield metrics associated with pooling returns  
@@ -274,10 +249,12 @@ _state_update_blocks = [
         """,
         "post_processing": False,
         "policies": {
-            "pooling": metrics.policy_validator_pooled_returns,
+            "pooling": metrics.policy_shared_validators,
         },
         "variables": {
-            "validator_pools_available_profits_eth": update_from_signal("validator_pools_available_profits_eth"),
+            "validator_pools_available_profits_eth": update_from_signal(
+                "validator_pools_available_profits_eth"
+            ),
             "shared_validator_instances": update_from_signal(
                 "shared_validator_instances"
             ),
@@ -286,8 +263,28 @@ _state_update_blocks = [
             ),
         },
     },
-
-
+    {
+        "description": """
+            Accounting of validator pools yield metrics
+        """,
+        "post_processing": False,
+        "policies": {"staker_yields": metrics.policy_pool_yields},
+        "variables": {
+            "validator_pool_eth_staked": update_from_signal(
+                "validator_pool_eth_staked"
+            ),
+            "validator_pool_profit": update_from_signal("validator_pool_profit"),
+            "validator_pool_profit_yields": update_from_signal(
+                "validator_pool_profit_yields"
+            ),
+            "pool_cumulative_yields": update_from_signal("pool_cumulative_yields"),
+            "stakers_per_pool": update_from_signal("stakers_per_pool"),
+            "shared_validators_per_pool": update_from_signal(
+                "shared_validators_per_pool"
+            ),
+            "pool_size": update_from_signal("pool_size"),
+        },
+    },
 ]
 
 # Conditionally update the order of the State Update Blocks using a ternary operator
