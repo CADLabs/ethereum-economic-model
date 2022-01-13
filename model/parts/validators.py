@@ -111,7 +111,7 @@ def policy_validators(params, substep, state_history, previous_state):
 
 
         else:
-            # Calculate the number of new validators from both validator-process and 
+            # Agregrate new validators from both validator-process and 
             # the pool compounding mechanism (model extention #5):
 
             # Update validator queue:
@@ -140,15 +140,12 @@ def policy_validators(params, substep, state_history, previous_state):
             validator_count_distribution +=  (
                 new_validators_distribution_pct * activated_validators
             ).astype(int)
-            # Calculate percentage distribution
+            # Determine new percentage distribution
             validator_percentage_distribution = (
                 validator_count_distribution / number_of_active_validators
             )
             # Update the validator activation queue 
             validators_in_activation_queue -= np.round(new_validators_distribution_pct * activated_validators).astype(int)
-            
-
-            
             
 
 

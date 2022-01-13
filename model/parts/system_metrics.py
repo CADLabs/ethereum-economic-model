@@ -179,10 +179,10 @@ def policy_pool_yields(
 
     if (
         avg_pool_size is not None and avg_pool_size > 0
-    ):  # returns true if analysis is not investigating compounding yields (see model extension #5)
+    ):  # returns true if analysis is investigating compounding yields (see model extension #5)
 
         # Use param value if state variable not yet determined
-        if number_of_pools.sum(axis=0) == 0:
+        if number_of_pools.sum() == 0:
             number_of_pools = number_of_pools_param
 
         shared_validators_eth_staked = number_of_shared_validators * (
@@ -195,6 +195,7 @@ def policy_pool_yields(
 
         # Calculate pool sizes across environments (validators from validator process assemble new pools. See assumptions in experiment notebook #4):
         number_of_pools = np.floor(number_of_stakers / avg_pool_size)
+        
 
         for (
             i
@@ -224,7 +225,6 @@ def policy_pool_yields(
             validator_pool_profit_yields[i] = validator_pool_profit[i] / (
                 stakers_per_pool[i] * stake_requirement * eth_price
             )
-            # validator_pool_profit_yields[i] = validator_pool_profit[i] / (validator_pool_eth_staked[i] - (shared_validators_per_pool[i] * stake_requirement * eth_price))
             validator_pool_profit_yields[i] *= (
                 constants.epochs_per_year / dt
             )  # Annualize value
@@ -298,18 +298,18 @@ def policy_shared_validators(
             validator_pools_available_profits_eth[i] += validator_profit_eth[i]
             avg_pool_profit = (
                 validator_pools_available_profits_eth[i] / number_of_pools[i]
-            )
+            ) # Disaggregrate profits to individual pool
             new_shared_validators_per_pool = np.floor(
                 avg_pool_profit / stake_requirement
             )  # Calculate new shared validators initialized by pool
 
             new_shared_validators[i] = (
                 number_of_pools[i] * new_shared_validators_per_pool
-            )
-            # Aggregrate according to number of pools
+            ) # Aggregrate 
+            
             validator_pools_available_profits_eth[i] -= (
                 new_shared_validators[i] * stake_requirement
-            )  # Subtract the staked ammount from the accumulated available profits
+            )  # Subtract the staked ammount from the available accumulated profits
 
         number_of_shared_validators += new_shared_validators
 
