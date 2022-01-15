@@ -147,9 +147,9 @@ def policy_pool_yields(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, any]:
     """
-    ## Description
+    ## Pool-level validator Yields Policy Function
 
-    See extension #5 in the 'model extension roadmap'.
+    Calculate the profit yields for pools across validator pool environemnts.
     """
 
     # Parameters
@@ -175,7 +175,6 @@ def policy_pool_yields(
     validator_profit = previous_state["validator_profit"]
     stakers_per_pool = previous_state["stakers_per_pool"]
     shared_validators_per_pool = previous_state["shared_validators_per_pool"]
-    pool_cumulative_yields = previous_state["pool_cumulative_yields"]
 
     if (
         avg_pool_size is not None and avg_pool_size > 0
@@ -195,7 +194,6 @@ def policy_pool_yields(
 
         # Calculate pool sizes across environments (validators from validator process assemble new pools. See assumptions in experiment notebook #4):
         number_of_pools = np.floor(number_of_stakers / avg_pool_size)
-        
 
         for (
             i
@@ -222,20 +220,17 @@ def policy_pool_yields(
             validator_pool_profit[i] = validator_profit[i] / number_of_pools[i]
 
             # Calculate average profit yields per pool
-            validator_pool_profit_yields[i] = validator_pool_profit[i] / (
-                stakers_per_pool[i] * stake_requirement * eth_price
-            )
+            initStaked = stakers_per_pool[i] * stake_requirement * eth_price
+            validator_pool_profit_yields[i] = (validator_pool_profit[i]) / initStaked
+
             validator_pool_profit_yields[i] *= (
                 constants.epochs_per_year / dt
             )  # Annualize value
-
-            pool_cumulative_yields[i] += validator_pool_profit_yields[i]
 
     return {
         "validator_pool_eth_staked": validator_pool_eth_staked,
         "validator_pool_profit": validator_pool_profit,
         "validator_pool_profit_yields": validator_pool_profit_yields,
-        "pool_cumulative_yields": pool_cumulative_yields,
         "stakers_per_pool": stakers_per_pool,
         "shared_validators_per_pool": shared_validators_per_pool,
         "pool_size": pool_size,
@@ -281,7 +276,7 @@ def policy_shared_validators(
 
     validator_profit_eth = validator_profit / eth_price
 
-    # Use param value if state variable not yet determined
+    # Use param value if state variable not yet determined (i.e. at start of simulation)
     if number_of_pools.sum(axis=0) == 0:
         number_of_pools = number_of_pools_param
 
@@ -290,23 +285,24 @@ def policy_shared_validators(
     ):  # avoid unnecessary computation if analysis is not investigating compounding
 
         for i in pool_validator_indeces:
+
             assert avg_pool_size < validator_count_distribution[i]
 
             # Calculate new shared validator instances initialized via pool compounding:
 
-            # Aggregrate existing profits, convert from USD to ETH
+            # Aggregate existing profits, convert from USD to ETH
             validator_pools_available_profits_eth[i] += validator_profit_eth[i]
             avg_pool_profit = (
                 validator_pools_available_profits_eth[i] / number_of_pools[i]
-            ) # Disaggregrate profits to individual pool
+            )  # Disaggregate profits to individual pool
             new_shared_validators_per_pool = np.floor(
                 avg_pool_profit / stake_requirement
             )  # Calculate new shared validators initialized by pool
 
             new_shared_validators[i] = (
                 number_of_pools[i] * new_shared_validators_per_pool
-            ) # Aggregrate 
-            
+            )  # Aggregate
+
             validator_pools_available_profits_eth[i] -= (
                 new_shared_validators[i] * stake_requirement
             )  # Subtract the staked ammount from the available accumulated profits

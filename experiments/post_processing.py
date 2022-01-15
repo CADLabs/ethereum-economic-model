@@ -56,7 +56,7 @@ def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameter
     # Dissagregate pool metrics
     df[[validator.type + '_pool_profit' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_pool_profit), axis=1, result_type='expand').astype('float32')
     df[[validator.type + '_pool_profit_yields' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_pool_profit_yields), axis=1, result_type='expand').astype('float32')
-    df[[validator.type + '_pool_cumulative_yields' for validator in validator_environments]] = df.apply(lambda row: list(row.pool_cumulative_yields), axis=1, result_type='expand').astype('float32')
+    # df[[validator.type + '_pool_cumulative_yields' for validator in validator_environments]] = df.apply(lambda row: list(row.pool_cumulative_yields), axis=1, result_type='expand').astype('float32')
     df[[validator.type + '_stakers_per_pool' for validator in validator_environments]] = df.apply(lambda row: list(row.stakers_per_pool), axis=1, result_type='expand').astype('float32')
     df[[validator.type + '_shared_validators_per_pool' for validator in validator_environments]] = df.apply(lambda row: list(row.shared_validators_per_pool), axis=1, result_type='expand').astype('float32')
     df[[validator.type + '_pool_size' for validator in validator_environments]] = df.apply(lambda row: list(row.pool_size), axis=1, result_type='expand').astype('float32')
@@ -72,7 +72,7 @@ def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameter
     df[[validator.type + '_profit_yields_pct' for validator in validator_environments]] = df[[validator.type + '_profit_yields' for validator in validator_environments]] * 100
     
     df[[validator.type + '_pool_profit_yields_pct' for validator in validator_environments]] = df[[validator.type + '_pool_profit_yields' for validator in validator_environments]] * 100
-    df[[validator.type + '_pool_cumulative_yields_pct' for validator in validator_environments]] = df[[validator.type + '_pool_cumulative_yields' for validator in validator_environments]] * 100
+    # df[[validator.type + '_pool_cumulative_yields_pct' for validator in validator_environments]] = df[[validator.type + '_pool_cumulative_yields' for validator in validator_environments]] * 100
 
     df['supply_inflation_pct'] = df['supply_inflation'] * 100
     df['total_revenue_yields_pct'] = df['total_revenue_yields'] * 100
@@ -104,9 +104,20 @@ def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameter
     # Calculate cumulative revenue and profit yields
     df["daily_revenue_yields_pct"] = df["total_revenue_yields_pct"] / (constants.epochs_per_year / df['dt'])
     df["cumulative_revenue_yields_pct"] = df.groupby('subset')["daily_revenue_yields_pct"].transform('cumsum')
+
     df["daily_profit_yields_pct"] = df["total_profit_yields_pct"] / (constants.epochs_per_year / df['dt'])
     df["cumulative_profit_yields_pct"] = df.groupby('subset')["daily_profit_yields_pct"].transform('cumsum')
 
+    df['validator_daily_profit_yield_pct'] = df['validator_profit_yields'] / (constants.epochs_per_year / df['dt']) * 100
+    df[[validator.type + '_daily_profit_yields_pct' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_daily_profit_yield_pct), axis=1, result_type='expand').astype('float32')
+    df[[validator.type + '_cumulative_profit_yields_pct' for validator in validator_environments]] = df.groupby('subset')[[validator.type + '_daily_profit_yields_pct' for validator in validator_environments]].transform('cumsum')
+
+    # AVG Cumulative yields per pool
+    df['validator_pool_daily_profit_yield_pct'] = df['validator_pool_profit_yields'] / (constants.epochs_per_year / df['dt']) * 100 
+    df[[validator.type + '_pool_daily_profit_yields_pct' for validator in validator_environments]] = df.apply(lambda row: list(row.validator_pool_daily_profit_yield_pct), axis=1, result_type='expand').astype('float32')
+    df[[validator.type + '_pool_cumulative_profit_yields_pct' for validator in validator_environments]] = df.groupby('subset')[[validator.type + '_pool_daily_profit_yields_pct' for validator in validator_environments]].transform('cumsum')
+
+    
     # Drop the initial state for plotting
     if drop_timestep_zero:
         df = df.drop(df.query('timestep == 0').index)
