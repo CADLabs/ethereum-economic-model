@@ -277,7 +277,6 @@ _state_update_blocks = [
             "validator_pool_profit_yields": update_from_signal(
                 "validator_pool_profit_yields"
             ),
-            "pool_cumulative_yields": update_from_signal("pool_cumulative_yields"),
             "stakers_per_pool": update_from_signal("stakers_per_pool"),
             "shared_validators_per_pool": update_from_signal(
                 "shared_validators_per_pool"

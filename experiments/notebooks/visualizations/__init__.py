@@ -1528,7 +1528,6 @@ def plot_profit_yields_by_environment_over_time(df):
 
     return fig
 
-# @Ross
 def plot_validator_count_by_environment_over_time(df):
     validator_count = [
         validator.type + "_validator_count" for validator in validator_environments
@@ -1557,7 +1556,6 @@ def plot_validator_count_by_environment_over_time(df):
     return fig
 
 
-# @Ross
 def plot_profit_by_environment_over_time(df):
     validator_profit = [
         validator.type + "_profit" for validator in validator_environments
@@ -1569,8 +1567,8 @@ def plot_profit_by_environment_over_time(df):
         fig.add_trace(
             go.Scatter(
                 x=df["timestamp"],
-                y=df[key]
-                #name=legend_state_variable_name_mapping[key],
+                y=df[key],
+                name=legend_state_variable_name_mapping[key],
             )
         )
 
@@ -1584,6 +1582,8 @@ def plot_profit_by_environment_over_time(df):
     )
 
     return fig
+
+
 
 
 def plot_network_issuance_scenarios(df, simulation_names):
@@ -1821,34 +1821,46 @@ def plot_pool_profit_yields_over_pool_size(df, TIMESTEP_ANALYSIS):
 
 
 
-def plot_pool_cumulative_yields_over_pool_size(df, TIMESTEP_ANALYSIS):
+def plot_pool_cumulative_yields_over_pool_size(df, TIMESTEP_ANALYSIS, poolSize):
+
+
+
     fig = go.Figure()
     yearString = str(TIMESTEP_ANALYSIS / 12)
-    df_subset_0 = df.query("timestep == " + str(TIMESTEP_ANALYSIS))
+    df_subset = df.query("timestep == " + str(TIMESTEP_ANALYSIS))
 
     # Add traces
     # Pool environment(s)
     fig.add_trace(
         go.Scatter(
-            x=df_subset_0.avg_pool_size,
-            y=df_subset_0.pool_staas_pool_cumulative_yields_pct,
-            name=f"Pool Staas @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
+            x=df_subset.avg_pool_size,
+            y=df_subset.pool_staas_pool_cumulative_profit_yields_pct,
+            name=f"Pool Staas @ {df_subset.eth_price.iloc[0]:.0f} USD/ETH",
             line=dict(color=cadlabs_colorway_sequence[1]),
         ),
     )
     fig.add_trace(
         go.Scatter(
-            x=df_subset_0.avg_pool_size,
-            y=df_subset_0.pool_hardware_pool_cumulative_yields_pct,
-            name=f"Pool Hardware @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
+            x=df_subset.avg_pool_size,
+            y=df_subset.pool_hardware_pool_cumulative_profit_yields_pct,
+            name=f"Pool Hardware @ {df_subset.eth_price.iloc[0]:.0f} USD/ETH",
             line=dict(color=cadlabs_colorway_sequence[2]),
         ),
     )
     fig.add_trace(
         go.Scatter(
-            x=df_subset_0.avg_pool_size,
-            y=df_subset_0.pool_cloud_pool_cumulative_yields_pct,
-            name=f"Pool Cloud @ {df_subset_0.eth_price.iloc[0]:.0f} USD/ETH",
+            x=df_subset.avg_pool_size,
+            y=df_subset.pool_cloud_pool_cumulative_profit_yields_pct,
+            name=f"Pool Cloud @ {df_subset.eth_price.iloc[0]:.0f} USD/ETH",
+            line=dict(color=cadlabs_colorway_sequence[3]),
+        ),
+    )
+
+    fig.add_trace(
+        go.Scatter(
+            x=df_subset.avg_pool_size,
+            y=df_subset.diy_hardware_cumulative_profit_yields_pct,
+            name=f"Pool Cloud @ {df_subset.eth_price.iloc[0]:.0f} USD/ETH",
             line=dict(color=cadlabs_colorway_sequence[3]),
         ),
     )

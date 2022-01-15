@@ -206,6 +206,7 @@ class StateVariables:
         (number_of_validator_environments, 1), dtype=float
     )
     """The average ETH staked in pools, per validator environment"""
+
     validator_pool_profit: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=float
     )
@@ -214,10 +215,7 @@ class StateVariables:
         (number_of_validator_environments, 1), dtype=float
     )
     """The average profit yields (%) per pool, per validator environment"""
-    pool_cumulative_yields: np.ndarray = np.zeros(
-        (number_of_validator_environments, 1), dtype=float
-    )
-    """The cumulative profit yields (%) per pool, per validator environment"""
+
     pool_size: np.ndarray = np.zeros((number_of_validator_environments), dtype=int)
     """"""
 
