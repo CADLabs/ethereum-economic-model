@@ -29,6 +29,7 @@ Wei = int
 Gwei = float
 Gwei_per_Gas = float
 ETH = float
+POLYGN = float
 
 
 class Stage(Enum):
@@ -48,6 +49,7 @@ class Stage(Enum):
 USD = float
 USD_per_ETH = float
 USD_per_epoch = float
+USD_per_token_A = float
 
 # Simulation types
 Run = int

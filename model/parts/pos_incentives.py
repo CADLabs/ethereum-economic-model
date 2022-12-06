@@ -257,6 +257,7 @@ def policy_block_proposal_reward(
     return {"block_proposer_reward": block_proposer_reward}
 
 
+# Edited
 def policy_slashing(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
@@ -299,70 +300,43 @@ def policy_slashing(
     dt = params["dt"]
     slashing_events_per_1000_epochs = params["slashing_events_per_1000_epochs"]
     MIN_SLASHING_PENALTY_QUOTIENT = params["MIN_SLASHING_PENALTY_QUOTIENT"]
-    PROPORTIONAL_SLASHING_MULTIPLIER = params["PROPORTIONAL_SLASHING_MULTIPLIER"]
-    EFFECTIVE_BALANCE_INCREMENT = params["EFFECTIVE_BALANCE_INCREMENT"]
-    WHISTLEBLOWER_REWARD_QUOTIENT = params["WHISTLEBLOWER_REWARD_QUOTIENT"]
-    PROPOSER_WEIGHT = params["PROPOSER_WEIGHT"]
-    WEIGHT_DENOMINATOR = params["WEIGHT_DENOMINATOR"]
+
 
     # State Variables
     average_effective_balance = previous_state["average_effective_balance"]
 
     # Calculate slashing, whistleblower, and proposer reward for a single slashing event
+    
     slashing = Gwei(average_effective_balance // MIN_SLASHING_PENALTY_QUOTIENT)
-    whistleblower_reward = Gwei(
-        average_effective_balance // WHISTLEBLOWER_REWARD_QUOTIENT
-    )
-    proposer_reward = Gwei(whistleblower_reward * PROPOSER_WEIGHT // WEIGHT_DENOMINATOR)
-    whistleblower_reward = Gwei(whistleblower_reward - proposer_reward)
 
     # Calculate number of slashing events for current epoch
     number_of_slashing_events = slashing_events_per_1000_epochs / 1000
 
-    # Calculate the individual penalty proportional to total slashings
-    # in current time period using `PROPORTIONAL_SLASHING_MULTIPLIER`
-    total_balance = spec.get_total_active_balance(params, previous_state)
-    adjusted_total_slashing_balance = min(
-        slashing * number_of_slashing_events * PROPORTIONAL_SLASHING_MULTIPLIER,
-        total_balance,
-    )
-    increment = EFFECTIVE_BALANCE_INCREMENT
-    penalty_numerator = (
-        average_effective_balance // increment * adjusted_total_slashing_balance
-    )
-    proportional_penalty = penalty_numerator // total_balance * increment
 
     # Scale penalty by the number of slashing events per epoch
-    amount_slashed = (slashing + proportional_penalty) * number_of_slashing_events
-    # Scale rewards by the number of slashing events per epoch
-    whistleblower_reward *= number_of_slashing_events
-    proposer_reward *= number_of_slashing_events
-
-    # The whistleblower and the block proposer who includes the slashing receive a reward
-    whistleblower_rewards = whistleblower_reward + proposer_reward
+    amount_slashed = slashing  * number_of_slashing_events
 
     return {
         "amount_slashed": amount_slashed * dt,
-        "whistleblower_rewards": whistleblower_rewards * dt,
     }
 
 
-def update_base_reward(
-    params, substep, state_history, previous_state, policy_input
-) -> typing.Tuple[str, Gwei]:
-    """
-    ## Base Reward State Update Function
-    Calculate and update base reward per validator
-    """
-    # Parameters
-    dt = params["dt"]
+# def update_base_reward(
+#     params, substep, state_history, previous_state, policy_input
+# ) -> typing.Tuple[str, Gwei]:
+#     """
+#     ## Base Reward State Update Function
+#     Calculate and update base reward per validator
+#     """
+#     # Parameters
+#     dt = params["dt"]
 
-    # Get base reward per validator
-    base_reward_per_validator: Gwei = spec.get_base_reward(params, previous_state)
+#     # Get base reward per validator
+#     base_reward_per_validator: Gwei = spec.get_base_reward(params, previous_state)
 
-    # By scaling the base reward by our unit of time dt (in epochs),
-    # we can scale all rewards and penalties by the same unit of time
-    return "base_reward", Gwei(base_reward_per_validator) * dt
+#     # By scaling the base reward by our unit of time dt (in epochs),
+#     # we can scale all rewards and penalties by the same unit of time
+#     return "base_reward", Gwei(base_reward_per_validator) * dt
 
 
 def update_validating_rewards(

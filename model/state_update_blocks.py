@@ -6,35 +6,28 @@ import model.parts.ethereum_system as ethereum
 import model.parts.pos_incentives as incentives
 import model.parts.system_metrics as metrics
 import model.parts.validators as validators
+import model.parts.treasury as treasury
 from model.system_parameters import parameters
 from model.utils import update_from_signal
 
-state_update_block_stages = {
-    "description": """
-        Transition between stages of network upgrade process
-    """,
-    "policies": {"upgrade_stages": ethereum.policy_upgrade_stages},
-    "variables": {
-        "stage": update_from_signal("stage"),
-        "timestamp": update_from_signal("timestamp"),
-    },
-}
 
-state_update_block_ethereum = {
+# Edited
+state_update_block_polygon = {
     "description": """
-        Environmental Ethereum processes:
-        * ETH price update
-        * Staking of ETH for new validators
+        Environmental Polygon processes:
+        * POLYGN price update
+        * Staking of POLYGN for new validators
     """,
     "policies": {
         "staking": validators.policy_staking,
     },
     "variables": {
-        "eth_price": ethereum.update_eth_price,
-        "eth_staked": update_from_signal("eth_staked"),
+        "polygn_price": ethereum.update_polygn_price,
+        "polygn_staked": update_from_signal("polygn_staked"),
     },
 }
 
+# Edited
 state_update_block_validators = {
     "description": """
         Environmental validator processes:
@@ -57,6 +50,37 @@ state_update_block_validators = {
     },
 }
 
+# TODO: Add update function to sync with staking hub
+state_eip1559 = {
+        "description": """
+            EIP-1559 transaction pricing for public chain
+        """,
+        "policies": {
+            "eip1559": ethereum.policy_eip1559_transaction_pricing,
+        },
+        "variables": {
+            "public_base_fee_to_domain_treasury": update_from_signal("public_base_fee_to_domain_treasury"),
+            "private_base_fee_to_domain_treasury": update_from_signal("private_base_fee_to_domain_treasury"),
+            "total_priority_fee_to_validators": update_from_signal(
+                "total_priority_fee_to_validators"
+            ),
+            "private_treasury_balance": update_from_signal("private_treasury_balance"),
+        },
+}
+
+# Added
+state_treasury = {
+        "description": """
+            Domian treasury balance
+        """,
+        "policies": {
+            "treasury": treasury.policy_domain_treasury_balance,
+        },
+        "variables": {
+            "domain_treasury_balance_locked": update_from_signal("domain_treasury_balance_locked"),
+        },
+}
+
 _state_update_blocks = [
     {
         "description": """
@@ -69,56 +93,19 @@ _state_update_blocks = [
             "average_effective_balance": update_from_signal(
                 "average_effective_balance"
             ),
-            "base_reward": incentives.update_base_reward,
         },
     },
     {
         "description": """
-            Attestation & sync committee rewards
+            Inflation amount
         """,
         "policies": {
-            "attestation": incentives.policy_attestation_rewards,
-            "sync_committee": incentives.policy_sync_committee_reward,
+            "inflation": ethereum.policy_inflation,
         },
         "variables": {
-            "source_reward": update_from_signal("source_reward"),
-            "target_reward": update_from_signal("target_reward"),
-            "head_reward": update_from_signal("head_reward"),
-            "sync_reward": update_from_signal("sync_reward"),
-        },
-    },
-    {
-        "description": """
-            Block proposal reward
-        """,
-        "policies": {
-            "block_proposal": incentives.policy_block_proposal_reward,
-        },
-        "variables": {
-            "block_proposer_reward": update_from_signal("block_proposer_reward"),
-        },
-    },
-    {
-        "description": """
-            Attestation & sync committee penalties
-        """,
-        "policies": {
-            "attestation": incentives.policy_attestation_penalties,
-            "sync_committee": incentives.policy_sync_committee_penalties,
-        },
-        "variables": {
-            "attestation_penalties": update_from_signal("attestation_penalties"),
-            "sync_committee_penalties": update_from_signal("sync_committee_penalties"),
-        },
-    },
-    {
-        "description": """
-            Validating reward & penalty aggregation
-        """,
-        "policies": {},
-        "variables": {
-            "validating_rewards": incentives.update_validating_rewards,
-            "validating_penalties": incentives.update_validating_penalties,
+            "total_inflation_to_validators": update_from_signal(
+                "total_inflation_to_validators"
+            ),
         },
     },
     {
@@ -130,41 +117,6 @@ _state_update_blocks = [
         },
         "variables": {
             "amount_slashed": update_from_signal("amount_slashed"),
-            "whistleblower_rewards": update_from_signal("whistleblower_rewards"),
-        },
-    },
-    {
-        "description": """
-            EIP-1559 transaction pricing
-        """,
-        "policies": {
-            "eip1559": ethereum.policy_eip1559_transaction_pricing,
-        },
-        "variables": {
-            "base_fee_per_gas": update_from_signal("base_fee_per_gas"),
-            "total_base_fee": update_from_signal("total_base_fee"),
-            "total_priority_fee_to_miners": update_from_signal(
-                "total_priority_fee_to_miners"
-            ),
-            "total_priority_fee_to_validators": update_from_signal(
-                "total_priority_fee_to_validators"
-            ),
-        },
-    },
-    {
-        "description": """
-            Maximum Extractable Value (MEV)
-        """,
-        "policies": {
-            "mev": ethereum.policy_mev,
-        },
-        "variables": {
-            "total_realized_mev_to_miners": update_from_signal(
-                "total_realized_mev_to_miners"
-            ),
-            "total_realized_mev_to_validators": update_from_signal(
-                "total_realized_mev_to_validators"
-            ),
         },
     },
     {
@@ -188,10 +140,7 @@ _state_update_blocks = [
             "issuance": ethereum.policy_network_issuance,
         },
         "variables": {
-            "eth_supply": ethereum.update_eth_supply,
-            "supply_inflation": metrics.update_supply_inflation,
             "network_issuance": update_from_signal("network_issuance"),
-            "pow_issuance": update_from_signal("pow_issuance"),
         },
     },
     {
@@ -224,7 +173,7 @@ _state_update_blocks = [
             "yields": metrics.policy_validator_yields,
         },
         "variables": {
-            "validator_eth_staked": update_from_signal("validator_eth_staked"),
+            "validator_polygn_staked": update_from_signal("validator_polygn_staked"),
             "validator_revenue": update_from_signal("validator_revenue"),
             "validator_profit": update_from_signal("validator_profit"),
             "validator_revenue_yields": update_from_signal("validator_revenue_yields"),
@@ -241,17 +190,20 @@ _state_update_blocks = [
 _state_update_blocks = (
     # If driving with environmental ETH staked process, structure as follows:
     [
-        state_update_block_stages,
-        state_update_block_ethereum,
+        state_eip1559,
+        state_update_block_polygon,
         state_update_block_validators,
+        state_treasury,
+        
     ]
     + _state_update_blocks
-    if parameters["eth_staked_process"][0](0, 0) is not None
+    if parameters["polygn_staked_process"][0](0, 0) is not None
     # Otherwise, if driving with validator adoption (implied ETH staked) process, switch Ethereum and validator blocks:
     else [
-        state_update_block_stages,
+        state_eip1559,
         state_update_block_validators,
-        state_update_block_ethereum,
+        state_update_block_polygon,
+        state_treasury,
     ]
     + _state_update_blocks
 )

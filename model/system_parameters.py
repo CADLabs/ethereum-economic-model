@@ -23,6 +23,7 @@ from model.types import (
     Gas,
     Gwei_per_Gas,
     ETH,
+    POLYGN,
     USD_per_epoch,
     Percentage_per_epoch,
     ValidatorEnvironment,
@@ -40,7 +41,8 @@ from data.api import subgraph
 
 
 mean_validator_deposits_per_epoch = (
-    subgraph.get_6_month_mean_validator_deposits_per_epoch(default=3)
+    ## TODO: Need to change another subgraph api
+    subgraph.get_6_month_mean_validator_deposits_per_epoch(default=3) 
 )
 
 # Configure validator environment distribution
@@ -158,38 +160,14 @@ class Parameters:
     By default set to constants.epochs_per_day (~= 225)
     """
 
-    stage: List[Stage] = default([Stage.ALL])
-    """
-    Which stage or stages of the network upgrade process to simulate.
-
-    By default set to ALL stage, which for time-domain analyses simulates
-    the transition from the current network network upgrade stage at today's date onwards
-    (i.e. the transition from the Beacon Chain Stage,
-    to the EIP-1559 Stage, to the Proof-of-Stake Stage),
-    whereas phase-space analyses simulate the current network upgrade stage
-    providing a "snapshot" of the system state at this time.
-
-    See model.types.Stage Enum for further documentation.
-    """
-
     date_start: List[datetime] = default([datetime.now()])
     """Start date for simulation as Python datetime"""
 
-    date_eip1559: List[datetime] = default(
-        [datetime.strptime("2021/08/04", "%Y/%m/%d")]
-    )
-    """
-    Expected EIP-1559 activation date as Python datetime.
-    """
 
-    date_pos: List[datetime] = default([datetime.strptime("2022/03/1", "%Y/%m/%d")])
-    """
-    Expected Eth1/Eth2 merge date as Python datetime, after which POW is disabled and POS is enabled.
-    """
 
     # Environmental processes
-    eth_price_process: List[Callable[[Run, Timestep], ETH]] = default(
-        [lambda _run, _timestep: eth_price_mean]
+    polygn_price_process: List[Callable[[Run, Timestep], POLYGN]] = default(
+        [lambda _run, _timestep: 1.0]
     )
     """
     A process that returns the ETH spot price at each epoch.
@@ -197,7 +175,7 @@ class Parameters:
     By default set to average ETH price over the last 12 months from Etherscan.
     """
 
-    eth_staked_process: List[Callable[[Run, Timestep], ETH]] = default(
+    polygn_staked_process: List[Callable[[Run, Timestep], POLYGN]] = default(
         [lambda _run, _timestep: None]
     )
     """
@@ -235,112 +213,18 @@ class Parameters:
     See https://etherscan.io/chart/blockreward
     """
 
-    mev_per_block: List[ETH] = default([0])
-    """
-    By default the realized Maximum Extractable Value (MEV) per block is set to zero
-    to only consider the influence of Proof-of-Stake (PoS) incentives on validator yields.
-    
-    To investigate the influence of MEV on validator yields,
-    set this parameter to a reasonable value for the realized MEV per block / slot.
-    
-    The realized MEV per block is allocated to miners pre-PoS and validators post-PoS,
-    increasing the effective yields of those miners / validators
-    that use MEV clients such as Flashbots' MEV-geth.
-    
-    An example of a valid assumption for the realized MEV
-    would be the 30-day realized MEV from https://explore.flashbots.net/,
-    this value can then be calculated per-block to set the `mev_per_block` parameter.
-    """
-
-    # Parameters from the Eth2 specification
-    # Uppercase used for all parameters from Eth2 specification
-    BASE_REWARD_FACTOR: List[int] = default([64])
-    """
-    A parameter used to change the issuance rate of the Ethereum PoS system.
-
-    Most validator rewards and penalties are calculated in terms of the base reward.
-    """
-    MAX_EFFECTIVE_BALANCE: List[Gwei] = default([32 * constants.gwei])
-    """
-    A validators effective balance is used to calculate incentives, and for voting,
-    and is a value less than the total stake/balance.
-
-    The max effective balance of a validator is 32 ETH.
-    """
-    EFFECTIVE_BALANCE_INCREMENT: List[Gwei] = default([1 * constants.gwei])
-    """
-    A validators effective balance can only change in steps of EFFECTIVE_BALANCE_INCREMENT,
-    which reduces the computational load for state updates.
-    """
-    PROPOSER_REWARD_QUOTIENT: List[int] = default([8])
-    """
-    Used to calculate the proportion of rewards distributed between attesters and proposers.
-    """
-    WHISTLEBLOWER_REWARD_QUOTIENT: List[int] = default([512])
-    """
-    Used to calculate the proportion of the effective balance of the slashed validator
-    distributed between the whistleblower and the proposer.
-    """
-    MIN_SLASHING_PENALTY_QUOTIENT: List[int] = default([2 ** 6])
-    """
-    Used to calculate the penalty applied for a slashable offence.
-    """
-    PROPORTIONAL_SLASHING_MULTIPLIER: List[int] = default([2])
-    """
-    Scales the slashing penalty proportional to the total slashings for the current epoch
-
-    i.e. the more slashing events there are, the greater the individual penalty
-    """
-    TIMELY_HEAD_WEIGHT: List[int] = default([14])
-    """
-    Used to calculate the reward received for getting a head vote in time and correctly.
-
-    `head_reward = (TIMELY_HEAD_WEIGHT / WEIGHT_DENOMINATOR) * base_reward`
-    """
-    TIMELY_SOURCE_WEIGHT: List[int] = default([14])
-    """
-    Used to calculate the reward received for getting a source vote in time and correctly.
-
-    `source_reward = (TIMELY_SOURCE_WEIGHT / WEIGHT_DENOMINATOR) * base_reward`
-    """
-    TIMELY_TARGET_WEIGHT: List[int] = default([26])
-    """
-    Used to calculate the reward received for getting a target vote in time and correctly.
-
-    `target_reward = (TIMELY_TARGET_WEIGHT / WEIGHT_DENOMINATOR) * base_reward`
-    """
-    SYNC_REWARD_WEIGHT: List[int] = default([2])
-    """
-    Used to calculate the reward received for attesting as part of a sync committee.
-    """
-    PROPOSER_WEIGHT: List[int] = default([8])
-    """
-    Used to calculate the reward received for successfully proposing a block.
-    """
-    WEIGHT_DENOMINATOR: List[int] = default([64])
-    """
-    Used as the denominator in incentive calculations to calculate reward and penalty proportions.
-    """
     MIN_PER_EPOCH_CHURN_LIMIT: List[int] = default([4])
     """
     Used to calculate the churn limit for validator entry and exit. The maximum number of validators that can
     enter or exit the system per epoch.
-
     In this system it is used for the validator activation queue process.
     """
-    CHURN_LIMIT_QUOTIENT: List[int] = default([2 ** 16])
+    ## TODO: the number is arbitrary, need to find a source for this
+    MIN_SLASHING_PENALTY_QUOTIENT: List[int] = default([1e7])
     """
-    Used in the calculation of the churn limit to set a point at which the limit increases.
+    Used to calculate the penalty applied for a slashable offence.
     """
-    BASE_FEE_MAX_CHANGE_DENOMINATOR: List[int] = default([8])
-    """
-    Used to set the maximum rate at which the EIP-1559 base fee can change per block, approx. 12.5%.
-    """
-    ELASTICITY_MULTIPLIER: List[int] = default([2])
-    """
-    Used to calculate gas limit from EIP-1559 gas target
-    """
-    MAX_VALIDATOR_COUNT: List[int] = default([None])
+    MAX_VALIDATOR_COUNT: List[int] = default([100])
     """
     A proposal to set the maximum validators (2**19 == 524,288 validators)
     that are validating ("awake") at any given time. This proposal does not stop validators from 
@@ -358,6 +242,34 @@ class Parameters:
     See https://ethresear.ch/t/simplified-active-validator-cap-and-rotation-proposal
     
     > The goal of this proposal is to cap the active validator set to some fixed value...
+    """
+    ELASTICITY_MULTIPLIER: List[int] = default([2])
+    """
+    Used to calculate gas limit from EIP-1559 gas target
+    """
+    MAX_EFFECTIVE_BALANCE: Gwei = default([10_000_000_000 * 10 ** 9])
+    EFFECTIVE_BALANCE_INCREMENT: Gwei = default([1_000_000 * 10 ** 9])
+
+    # PoS Inflation Parameters:
+    inflationary_rate_per_year: List[Percentage] = default([0.01 * constants.gwei])
+    """
+    The annual rate of inflation for the PoS system.
+    """
+
+    # Treasury parameters
+    BASE_FEE_PUBLIC_QUOTIENT: List[float] = default([1])
+    """
+    The parameter of quotient of transaction fees from public chains committed to Polygon Treasury
+    """
+    BASE_FEE_PRIVATE_QUOTIENTT: List[float] = default([0.1])
+    """
+    The parameter of quotient of transaction fees from public chains committed to Polygon Treasury
+    """
+    domain_treasury_monthly_unlock_process: List[Callable[[Run, Timestep], float]] = default(
+        [lambda _run, _timestep: 0.01]  # Gwei per gas
+    )
+    """
+    A process that returns the monthly unlock percentage of the total treasury balance.
     """
 
     # Validator parameters

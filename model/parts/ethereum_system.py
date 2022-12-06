@@ -7,6 +7,7 @@ the EIP-1559 transaction pricing mechanism, and updating the ETH price and ETH s
 
 import typing
 import datetime
+import numpy as np
 
 from model import constants as constants
 from model.types import ETH, USD_per_ETH, Gwei, Stage
@@ -80,6 +81,7 @@ def policy_upgrade_stages(params, substep, state_history, previous_state):
     }
 
 
+# Edited
 def policy_network_issuance(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, ETH]:
@@ -89,38 +91,20 @@ def policy_network_issuance(
     Calculate the total network issuance and issuance from Proof of Work block rewards.
     """
 
-    # Parameters
-    dt = params["dt"]
-    daily_pow_issuance = params["daily_pow_issuance"]
 
     # State Variables
-    stage = previous_state["stage"]
     amount_slashed = previous_state["amount_slashed"]
-    total_base_fee = previous_state["total_base_fee"]
-    total_priority_fee_to_validators = previous_state[
-        "total_priority_fee_to_validators"
-    ]
-    total_online_validator_rewards = previous_state["total_online_validator_rewards"]
+    inflation_rewards = previous_state["total_inflation_to_validators"]
 
     # Calculate network issuance in ETH
     network_issuance = (
-        # Remove priority fee to validators which is not issuance (ETH transferred rather than minted)
-        (total_online_validator_rewards - total_priority_fee_to_validators)
+        inflation_rewards
         - amount_slashed
-        - total_base_fee
     ) / constants.gwei
 
-    # Calculate Proof of Work issuance
-    pow_issuance = (
-        daily_pow_issuance / constants.epochs_per_day
-        if Stage(stage) in [Stage.BEACON_CHAIN, Stage.EIP1559]
-        else 0
-    )
-    network_issuance += pow_issuance * dt
 
     return {
         "network_issuance": network_issuance,
-        "pow_issuance": pow_issuance,
     }
 
 
@@ -162,6 +146,7 @@ def policy_mev(params, substep, state_history, previous_state) -> typing.Dict[st
     }
 
 
+# Edited
 def policy_eip1559_transaction_pricing(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
@@ -176,57 +161,52 @@ def policy_eip1559_transaction_pricing(
     * https://eips.ethereum.org/EIPS/eip-1559
     """
 
-    stage = Stage(previous_state["stage"])
-    if stage not in [Stage.EIP1559, Stage.PROOF_OF_STAKE]:
-        return {
-            "base_fee_per_gas": 0,
-            "total_base_fee": 0,
-            "total_priority_fee_to_miners": 0,
-            "total_priority_fee_to_validators": 0,
-        }
-
     # Parameters
     dt = params["dt"]
     gas_target_process = params["gas_target_process"]  # Gas
     ELASTICITY_MULTIPLIER = params["ELASTICITY_MULTIPLIER"]
     base_fee_process = params["base_fee_process"]
     priority_fee_process = params["priority_fee_process"]
+    public_chain_treasury_extraction_rate = params["BASE_FEE_PUBLIC_QUOTIENT"]
+    private_chain_treasury_extraction_rate = params["BASE_FEE_PRIVATE_QUOTIENTT"]
 
     # State Variables
     run = previous_state["run"]
     timestep = previous_state["timestep"]
+    public_chain_number = previous_state["PUBLIC_CHAINS_CNT"]
+    private_chain_number = previous_state["PRIVATE_CHAINS_CNT"]
+    private_treasury_balance = previous_state["private_treasury_balance"]
+
+
+    total_chain_number = public_chain_number + private_chain_number
 
     # Get samples for current run and timestep from base fee, priority fee, and transaction processes
     base_fee_per_gas = base_fee_process(run, timestep * dt)  # Gwei per Gas
 
     gas_target = gas_target_process(run, timestep * dt)  # Gas
 
-    # Ensure basefee changes by no more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %
-    _BASE_FEE_MAX_CHANGE_DENOMINATOR = params["BASE_FEE_MAX_CHANGE_DENOMINATOR"]
-    # assert (
-    #     abs(basefee - previous_basefee) / previous_basefee
-    #     <= constants.slots_per_epoch / BASE_FEE_MAX_CHANGE_DENOMINATOR
-    #     if timestep > 1
-    #     else True
-    # ), "basefee changed by more than 1 / BASE_FEE_MAX_CHANGE_DENOMINATOR %"
-
     avg_priority_fee_per_gas = priority_fee_process(run, timestep * dt)  # Gwei per Gas
 
-    if stage in [Stage.EIP1559]:
-        gas_used = constants.pow_blocks_per_epoch * gas_target  # Gas
-    else:  # stage is Stage.PROOF_OF_STAKE
-        gas_used = constants.slots_per_epoch * gas_target  # Gas
 
-    # Calculate the total base fee and priority fee
+    gas_used = constants.slots_per_epoch * gas_target  # Gas
+
+    # Calculate the total base fee and priority fee for a single chain
     total_base_fee = gas_used * base_fee_per_gas  # Gwei
     total_priority_fee = gas_used * avg_priority_fee_per_gas  # Gwei
 
-    if stage in [Stage.PROOF_OF_STAKE]:
-        total_priority_fee_to_miners = 0
-        total_priority_fee_to_validators = total_priority_fee
-    else:
-        total_priority_fee_to_miners = total_priority_fee
-        total_priority_fee_to_validators = 0
+
+    # Calculate the fee sent to treasuries
+    public_base_fee_to_domain_treasury = total_base_fee * public_chain_treasury_extraction_rate * public_chain_number
+    private_base_fee_to_domain_treasury = total_base_fee * private_chain_treasury_extraction_rate * private_chain_number
+
+    # Calculate the total priority fee to validators from all public and private chains
+    total_priority_fee_to_validators = total_priority_fee * total_chain_number
+
+    # Calculate the remain base fee to private chain owned treasury
+    private_base_fee_to_private_treasury = np.repeat(
+        total_base_fee * (1 - private_chain_treasury_extraction_rate), private_chain_number
+    )
+
 
     # Check if the block used too much gas
     assert (
@@ -234,14 +214,39 @@ def policy_eip1559_transaction_pricing(
     ), "invalid block: too much gas used"
 
     return {
-        "base_fee_per_gas": base_fee_per_gas,
-        "total_base_fee": total_base_fee * dt,
-        "total_priority_fee_to_miners": total_priority_fee_to_miners * dt,
+        "public_base_fee_to_domain_treasury": public_base_fee_to_domain_treasury * dt,
+        "private_base_fee_to_domain_treasury": private_base_fee_to_domain_treasury * dt,
         "total_priority_fee_to_validators": total_priority_fee_to_validators * dt,
+        "private_treasury_balance": private_treasury_balance + private_base_fee_to_private_treasury * dt,
     }
 
+# Added
+def policy_inflation(params, substep, state_history, previous_state) -> typing.Dict[str, ETH]:
+    """
+    ## Inflation Policy
 
-def update_eth_price(
+    Inflation is allocated to validators post Proof-of-Stake,
+    using the `inflationary_rate_per_year` System Parameter.
+    """
+    
+    # Parameters
+    dt = params["dt"]
+    inflationary_rate_per_year = params["inflationary_rate_per_year"]
+    
+    # State Variables
+    polygn_supply = previous_state["polygn_supply"]
+
+    total_inflation_to_validators = (
+                polygn_supply * inflationary_rate_per_year / constants.epochs_per_year * dt
+    )
+
+    
+    return {
+        "total_inflation_to_validators": total_inflation_to_validators,
+    }
+
+# Edited
+def update_polygn_price(
     params, substep, state_history, previous_state, policy_input
 ) -> typing.Tuple[str, USD_per_ETH]:
     """
@@ -252,19 +257,20 @@ def update_eth_price(
 
     # Parameters
     dt = params["dt"]
-    eth_price_process = params["eth_price_process"]
+    polygn_price_process = params["polygn_price_process"]
 
     # State Variables
     run = previous_state["run"]
     timestep = previous_state["timestep"]
 
     # Get the ETH price sample for the current run and timestep
-    eth_price_sample = eth_price_process(run, timestep * dt)
+    polygn_price_sample = polygn_price_process(run, timestep * dt)
 
-    return "eth_price", eth_price_sample
+    return "polygn_price", polygn_price_sample
 
 
-def update_eth_supply(
+# Edited
+def update_polygn_supply(
     params, substep, state_history, previous_state, policy_input
 ) -> typing.Tuple[str, ETH]:
     """
@@ -277,6 +283,6 @@ def update_eth_supply(
     network_issuance = policy_input["network_issuance"]
 
     # State variables
-    eth_supply = previous_state["eth_supply"]
+    polygn_supply = previous_state["polygn_supply"]
 
-    return "eth_supply", eth_supply + network_issuance
+    return "polygn_supply", polygn_supply + network_issuance

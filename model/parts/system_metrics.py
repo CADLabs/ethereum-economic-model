@@ -9,7 +9,7 @@ import typing
 import model.constants as constants
 from model.types import Percentage, Gwei
 
-
+# Edited
 def policy_validator_costs(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, any]:
@@ -27,7 +27,7 @@ def policy_validator_costs(
     ]
 
     # State Variables
-    eth_price = previous_state["eth_price"]
+    polygn_price = previous_state["polygn_price"]
     number_of_validators = previous_state["number_of_active_validators"]
     total_online_validator_rewards = previous_state["total_online_validator_rewards"]
 
@@ -50,7 +50,7 @@ def policy_validator_costs(
         * total_online_validator_rewards
     )
     validator_third_party_costs /= constants.gwei  # Convert from Gwei to ETH
-    validator_third_party_costs *= eth_price  # Convert from ETH to Dollars
+    validator_third_party_costs *= polygn_price  # Convert from ETH to Dollars
 
     # Calculate total validator costs per validator type and total network costs
     validator_costs = (
@@ -67,7 +67,7 @@ def policy_validator_costs(
         "total_network_costs": total_network_costs,
     }
 
-
+# Edited
 def policy_validator_yields(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, any]:
@@ -80,8 +80,8 @@ def policy_validator_yields(
     validator_percentage_distribution = params["validator_percentage_distribution"]
 
     # State Variables
-    eth_price = previous_state["eth_price"]
-    eth_staked = previous_state["eth_staked"]
+    polygn_price = previous_state["polygn_price"]
+    polygn_staked = previous_state["polygn_staked"]
     validator_costs = previous_state["validator_costs"]
     total_network_costs = previous_state["total_network_costs"]
     total_online_validator_rewards = previous_state["total_online_validator_rewards"]
@@ -89,25 +89,25 @@ def policy_validator_yields(
     average_effective_balance = previous_state["average_effective_balance"]
 
     # Calculate ETH staked per validator type
-    validator_eth_staked = validator_count_distribution * average_effective_balance
-    validator_eth_staked /= constants.gwei  # Convert from Gwei to ETH
+    validator_polygn_staked = validator_count_distribution * average_effective_balance
+    validator_polygn_staked /= constants.gwei  # Convert from Gwei to ETH
 
     # Calculate the revenue per validator type
     validator_revenue = (
         validator_percentage_distribution * total_online_validator_rewards
     )
     validator_revenue /= constants.gwei  # Convert from Gwei to ETH
-    validator_revenue *= eth_price  # Convert from ETH to Dollars
+    validator_revenue *= polygn_price  # Convert from ETH to Dollars
 
     # Calculate the profit per validator type
     validator_profit = validator_revenue - validator_costs
 
     # Calculate the revenue yields per validator type
-    validator_revenue_yields = validator_revenue / (validator_eth_staked * eth_price)
+    validator_revenue_yields = validator_revenue / (validator_polygn_staked * polygn_price)
     validator_revenue_yields *= constants.epochs_per_year / dt  # Annualize value
 
     # Calculate the profit yields per validator type
-    validator_profit_yields = validator_profit / (validator_eth_staked * eth_price)
+    validator_profit_yields = validator_profit / (validator_polygn_staked * polygn_price)
     validator_profit_yields *= constants.epochs_per_year / dt  # Annualize value
 
     # Calculate the total network revenue
@@ -117,16 +117,16 @@ def policy_validator_yields(
     total_profit = total_revenue - total_network_costs
 
     # Calculate the total network revenue yields
-    total_revenue_yields = total_revenue / (eth_staked * eth_price)
+    total_revenue_yields = total_revenue / (polygn_staked * polygn_price)
     total_revenue_yields *= constants.epochs_per_year / dt  # Annualize value
 
     # Calculate the total network profit yields
-    total_profit_yields = total_profit / (eth_staked * eth_price)
+    total_profit_yields = total_profit / (polygn_staked * polygn_price)
     total_profit_yields *= constants.epochs_per_year / dt  # Annualize value
 
     return {
         # Per validator type
-        "validator_eth_staked": validator_eth_staked,
+        "validator_polygn_staked": validator_polygn_staked,
         "validator_revenue": validator_revenue,
         "validator_profit": validator_profit,
         "validator_revenue_yields": validator_revenue_yields,
@@ -139,6 +139,7 @@ def policy_validator_yields(
     }
 
 
+# Edited
 def policy_total_online_validator_rewards(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
@@ -147,28 +148,20 @@ def policy_total_online_validator_rewards(
     Calculate the aggregate total online validator rewards.
     """
     # State Variables
-    validating_rewards = previous_state["validating_rewards"]
-    validating_penalties = previous_state["validating_penalties"]
-    whistleblower_rewards = previous_state["whistleblower_rewards"]
+    inflation_rewards = previous_state["total_inflation_to_validators"]
     total_priority_fee_to_validators = previous_state[
         "total_priority_fee_to_validators"
-    ]
-    total_realized_mev_to_validators = previous_state[
-        "total_realized_mev_to_validators"
     ]
 
     # Calculate total rewards for online validators
     total_online_validator_rewards = (
-        validating_rewards
-        - validating_penalties
-        + whistleblower_rewards
+        inflation_rewards
         + total_priority_fee_to_validators
-        + total_realized_mev_to_validators * constants.gwei
     )
 
     return {"total_online_validator_rewards": total_online_validator_rewards}
 
-
+# Reviewed
 def update_supply_inflation(
     params, substep, state_history, previous_state, policy_input
 ) -> typing.Tuple[str, Percentage]:
@@ -183,10 +176,10 @@ def update_supply_inflation(
     dt = params["dt"]
 
     # State Variables
-    eth_supply = previous_state["eth_supply"]
+    polygn_supply = previous_state["polygn_supply"]
 
     # Calculate the ETH supply inflation
-    supply_inflation = network_issuance / eth_supply
+    supply_inflation = network_issuance / polygn_supply
     supply_inflation *= constants.epochs_per_year / dt  # Annualize value
 
     return "supply_inflation", supply_inflation

@@ -12,6 +12,7 @@ from model.parts.utils import get_number_of_awake_validators
 from model.types import ETH, Gwei
 
 
+# Edited
 def policy_staking(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, ETH]:
@@ -25,29 +26,30 @@ def policy_staking(
     """
     # Parameters
     dt = params["dt"]
-    eth_staked_process = params["eth_staked_process"]
+    polygn_staked_process = params["polygn_staked_process"]
 
     # State Variables
     run = previous_state["run"]
     timestep = previous_state["timestep"]
-    eth_supply = previous_state["eth_supply"]
+    polygn_supply = previous_state["polygn_supply"]
     number_of_validators = previous_state["number_of_active_validators"]
     average_effective_balance = previous_state["average_effective_balance"]
 
     # If the eth_staked_process is defined
-    if eth_staked_process(0, 0) is not None:
+    if polygn_staked_process(0, 0) is not None:
         # Get the ETH staked sample for the current run and timestep
-        eth_staked = eth_staked_process(run, timestep * dt)
+        polygn_staked = polygn_staked_process(run, timestep * dt)
     # Else, calculate from the number of validators
     else:
-        eth_staked = number_of_validators * average_effective_balance / constants.gwei
+        polygn_staked = number_of_validators * average_effective_balance / constants.gwei
 
     # Assert expected conditions
-    assert eth_staked <= eth_supply, f"ETH staked can't be more than ETH supply"
+    # assert polygn_staked <= polygn_supply, f"POLYGN staked can't be more than POLYGN supply"
 
-    return {"eth_staked": eth_staked}
+    return {"polygn_staked": polygn_staked}
 
 
+# Edited
 def policy_validators(params, substep, state_history, previous_state):
     """
     ## Validator Policy Function
@@ -55,7 +57,7 @@ def policy_validators(params, substep, state_history, previous_state):
     """
     # Parameters
     dt = params["dt"]
-    eth_staked_process = params["eth_staked_process"]
+    polygn_staked_process = params["polygn_staked_process"]
     validator_process = params["validator_process"]
     validator_uptime_process = params["validator_uptime_process"]
 
@@ -69,10 +71,10 @@ def policy_validators(params, substep, state_history, previous_state):
     average_effective_balance = previous_state["average_effective_balance"]
 
     # Calculate the number of validators using ETH staked
-    if eth_staked_process(0, 0) is not None:
-        eth_staked = eth_staked_process(run, timestep * dt)
+    if polygn_staked_process(0, 0) is not None:
+        polygn_staked = polygn_staked_process(run, timestep * dt)
         number_of_active_validators = int(
-            round(eth_staked / (average_effective_balance / constants.gwei))
+            round(polygn_staked / (average_effective_balance / constants.gwei))
         )
     else:
         new_validators_per_epoch = validator_process(run, timestep * dt)
@@ -107,7 +109,7 @@ def policy_validators(params, substep, state_history, previous_state):
         "validator_uptime": validator_uptime,
     }
 
-
+# Edited
 def policy_average_effective_balance(
     params, substep, state_history, previous_state
 ) -> typing.Dict[str, Gwei]:
