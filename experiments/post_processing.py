@@ -63,22 +63,22 @@ def post_process(df: pd.DataFrame, drop_timestep_zero=True, parameters=parameter
 
     # Convert validator rewards from Gwei to ETH
     validator_rewards = [
-        'validating_rewards',
-        'validating_penalties',
+        # 'validating_rewards',
+        # 'validating_penalties',
         'total_online_validator_rewards',
         'total_priority_fee_to_validators',
-        'source_reward',
-        'target_reward',
-        'head_reward',
-        'block_proposer_reward',
-        'sync_reward',
-        'whistleblower_rewards'
+        # 'source_reward',
+        # 'target_reward',
+        # 'head_reward',
+        # 'block_proposer_reward',
+        # 'sync_reward',
+        # 'whistleblower_rewards'
     ]
-    df[[reward + '_eth' for reward in validator_rewards]] = df[validator_rewards] / constants.gwei
+    df[[reward + '_polygn' for reward in validator_rewards]] = df[validator_rewards] / constants.gwei
 
     # Convert validator penalties from Gwei to ETH
-    validator_penalties = ['validating_penalties', 'amount_slashed']
-    df[[penalty + '_eth' for penalty in validator_penalties]] = df[validator_penalties] / constants.gwei
+    validator_penalties = ['amount_slashed']
+    df[[penalty + '_polygn' for penalty in validator_penalties]] = df[validator_penalties] / constants.gwei
 
     # Calculate cumulative revenue and profit yields
     df["daily_revenue_yields_pct"] = df["total_revenue_yields_pct"] / (constants.epochs_per_year / df['dt'])

@@ -26,3 +26,9 @@ def get_eth_supply(default=None) -> Wei:
     except requests.exceptions.HTTPError as err:
         logging.error(err)
         return default
+
+
+@cache.memoize(expire=(6 * 60 * 60))  # cached for 6 hours
+def get_polygn_supply(default=None) -> Wei:
+    default = 10_000_000_000e18
+    return default
