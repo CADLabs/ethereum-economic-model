@@ -32,7 +32,7 @@ def policy_staking(
     run = previous_state["run"]
     timestep = previous_state["timestep"]
     polygn_supply = previous_state["polygn_supply"]
-    number_of_validators = previous_state["number_of_active_validators"]
+    number_of_active_validators = previous_state["number_of_active_validators"]
     average_effective_balance = previous_state["average_effective_balance"]
 
     # If the eth_staked_process is defined
@@ -41,7 +41,7 @@ def policy_staking(
         polygn_staked = polygn_staked_process(run, timestep * dt)
     # Else, calculate from the number of validators
     else:
-        polygn_staked = number_of_validators * average_effective_balance / constants.gwei
+        polygn_staked = number_of_active_validators * average_effective_balance / constants.gwei
 
     # Assert expected conditions
     # assert polygn_staked <= polygn_supply, f"POLYGN staked can't be more than POLYGN supply"
@@ -60,6 +60,7 @@ def policy_validators(params, substep, state_history, previous_state):
     polygn_staked_process = params["polygn_staked_process"]
     validator_process = params["validator_process"]
     validator_uptime_process = params["validator_uptime_process"]
+    MAX_VALIDATOR_COUNT = params["MAX_VALIDATOR_COUNT"]
 
     # State Variables
     run = previous_state["run"]
@@ -90,6 +91,7 @@ def policy_validators(params, substep, state_history, previous_state):
         number_of_active_validators += activated_validators
         number_of_validators_in_activation_queue -= activated_validators
 
+    number_of_active_validators = min(number_of_active_validators, MAX_VALIDATOR_COUNT)
     # Calculate the number of "awake" validators
     # See proposal: https://ethresear.ch/t/simplified-active-validator-cap-and-rotation-proposal
     number_of_awake_validators = spec.get_awake_validator_indices(

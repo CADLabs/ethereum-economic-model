@@ -9,11 +9,11 @@ import experiments.simulation_configuration as simulation
 from experiments.utils import rng_generator
 
 
-def create_eth_price_process(
+def create_polygn_price_process(
     timesteps=simulation.TIMESTEPS,
     dt=simulation.DELTA_TIME,
     rng=np.random.default_rng(1),
-    minimum_eth_price=1500,
+    minimum_polygn_price=0.9,
 ):
     """Configure environmental ETH price process
 
@@ -25,9 +25,10 @@ def create_eth_price_process(
     samples = process.sample(timesteps * dt + 1)
     maximum_eth_price = max(samples)
     samples = [
-        minimum_eth_price + eth_price_sample / maximum_eth_price * minimum_eth_price
+        minimum_polygn_price + eth_price_sample / maximum_eth_price * minimum_polygn_price
         for eth_price_sample in samples
     ]
+    samples = [minimum_polygn_price + (5-minimum_polygn_price)*i/len(samples)  for i in range(len(samples))]
     return samples
 
 
@@ -65,8 +66,8 @@ def create_stochastic_process_realizations(
     """
 
     switcher = {
-        "eth_price_samples": [
-            create_eth_price_process(timesteps=timesteps, dt=dt, rng=rng_generator())
+        "polygn_price_samples": [
+            create_polygn_price_process(timesteps=timesteps, dt=dt, rng=rng_generator())
             for _ in range(runs)
         ],
         "validator_samples": [

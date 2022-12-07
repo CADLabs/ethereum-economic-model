@@ -167,7 +167,7 @@ def update_supply_inflation(
 ) -> typing.Tuple[str, Percentage]:
     """
     ## Supply Inflation State Update Function
-    Update the annualized ETH supply inflation.
+    Update the annualized POLYGN supply inflation.
     """
     # Policy Inputs
     network_issuance = policy_input["network_issuance"]

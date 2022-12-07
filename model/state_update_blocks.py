@@ -10,6 +10,16 @@ import model.parts.treasury as treasury
 from model.system_parameters import parameters
 from model.utils import update_from_signal
 
+# Edited
+state_update_block_stages = {
+    "description": """
+        Transition between stages of network upgrade process
+    """,
+    "policies": {"upgrade_stages": ethereum.policy_upgrade_stages},
+    "variables": {
+        "timestamp": update_from_signal("timestamp"),
+    },
+}
 
 # Edited
 state_update_block_polygon = {
@@ -140,7 +150,10 @@ _state_update_blocks = [
             "issuance": ethereum.policy_network_issuance,
         },
         "variables": {
+            "polygn_supply": ethereum.update_polygn_supply,
+            "supply_inflation": metrics.update_supply_inflation,
             "network_issuance": update_from_signal("network_issuance"),
+
         },
     },
     {
@@ -190,6 +203,7 @@ _state_update_blocks = [
 _state_update_blocks = (
     # If driving with environmental ETH staked process, structure as follows:
     [
+        state_update_block_stages,
         state_eip1559,
         state_update_block_polygon,
         state_update_block_validators,
@@ -200,6 +214,7 @@ _state_update_blocks = (
     if parameters["polygn_staked_process"][0](0, 0) is not None
     # Otherwise, if driving with validator adoption (implied ETH staked) process, switch Ethereum and validator blocks:
     else [
+        state_update_block_stages,
         state_eip1559,
         state_update_block_validators,
         state_update_block_polygon,
