@@ -19,7 +19,7 @@ experiment = eth_supply_analysis.experiment
 # Create a copy of the experiment simulation
 simulation = copy.deepcopy(experiment.simulations[0])
 # Default Values
-default_pos_launch_date = '2022/03/1'
+default_pos_launch_date = '2022/09/15'
 default_basefee = 30
 default_validator_adoption = 3
 default_basefee_dropdown_str = f'Enabled (Base Fee = {default_basefee})'
