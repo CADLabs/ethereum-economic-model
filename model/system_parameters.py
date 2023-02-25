@@ -182,7 +182,7 @@ class Parameters:
     Expected EIP-1559 activation date as Python datetime.
     """
 
-    date_pos: List[datetime] = default([datetime.strptime("2022/03/1", "%Y/%m/%d")])
+    date_pos: List[datetime] = default([datetime.strptime("2022/09/15", "%Y/%m/%d")])
     """
     Expected Eth1/Eth2 merge date as Python datetime, after which POW is disabled and POS is enabled.
     """
