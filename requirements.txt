@@ -17,7 +17,7 @@ jupyter-book==0.13.2
 psutil==5.8.0
 kaleido==0.2.1
 jinja2==3.0.3
-nbconvert==6.4.4
+nbconvert==6.5.1
 flask==2.0.0
 gunicorn==20.1.0
 cadCAD_tools==0.0.1.4
