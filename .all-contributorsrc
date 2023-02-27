@@ -134,6 +134,16 @@
       "contributions": [
         "content"
       ]
+    },
+    {
+      "login": "uta0x89",
+      "name": "uta",
+      "avatar_url": "https://avatars.githubusercontent.com/u/122957026?v=4",
+      "profile": "https://github.com/uta0x89",
+      "contributions": [
+        "code",
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -142,5 +152,6 @@
   "projectOwner": "CADLabs",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "skipCi": true
+  "skipCi": true,
+  "commitConvention": "angular"
 }
