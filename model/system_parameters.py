@@ -281,11 +281,11 @@ class Parameters:
     Used to calculate the proportion of the effective balance of the slashed validator
     distributed between the whistleblower and the proposer.
     """
-    MIN_SLASHING_PENALTY_QUOTIENT: List[int] = default([2 ** 6])
+    MIN_SLASHING_PENALTY_QUOTIENT: List[int] = default([2 ** 5])
     """
     Used to calculate the penalty applied for a slashable offence.
     """
-    PROPORTIONAL_SLASHING_MULTIPLIER: List[int] = default([2])
+    PROPORTIONAL_SLASHING_MULTIPLIER: List[int] = default([3])
     """
     Scales the slashing penalty proportional to the total slashings for the current epoch
 
