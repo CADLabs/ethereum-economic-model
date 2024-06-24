@@ -49,13 +49,23 @@ state_update_block_validators = {
         "number_of_validators_in_activation_queue": update_from_signal(
             "number_of_validators_in_activation_queue"
         ),
+        "validators_in_activation_queue": update_from_signal(
+            "validators_in_activation_queue"
+        ),
         "number_of_active_validators": update_from_signal(
             "number_of_active_validators"
         ),
         "number_of_awake_validators": update_from_signal("number_of_awake_validators"),
         "validator_uptime": update_from_signal("validator_uptime"),
+        "validator_percentage_distribution": update_from_signal(
+            "validator_percentage_distribution"
+        ),
+        "validator_count_distribution": update_from_signal(
+            "validator_count_distribution"
+        ),
     },
 }
+
 
 _state_update_blocks = [
     {
@@ -203,9 +213,6 @@ _state_update_blocks = [
             "metric_validator_costs": metrics.policy_validator_costs,
         },
         "variables": {
-            "validator_count_distribution": update_from_signal(
-                "validator_count_distribution"
-            ),
             "validator_hardware_costs": update_from_signal("validator_hardware_costs"),
             "validator_cloud_costs": update_from_signal("validator_cloud_costs"),
             "validator_third_party_costs": update_from_signal(
@@ -233,6 +240,48 @@ _state_update_blocks = [
             "total_profit": update_from_signal("total_profit"),
             "total_revenue_yields": update_from_signal("total_revenue_yields"),
             "total_profit_yields": update_from_signal("total_profit_yields"),
+        },
+    },
+    {
+        "description": """
+            Accounting of validator yield metrics associated with pooling returns  
+            & initializing new shared validator instances
+        """,
+        "post_processing": False,
+        "policies": {
+            "pooling": metrics.policy_shared_validators,
+        },
+        "variables": {
+            "validator_pools_available_profits_eth": update_from_signal(
+                "validator_pools_available_profits_eth"
+            ),
+            "shared_validator_instances": update_from_signal(
+                "shared_validator_instances"
+            ),
+            "number_of_shared_validators": update_from_signal(
+                "number_of_shared_validators"
+            ),
+        },
+    },
+    {
+        "description": """
+            Accounting of validator pools yield metrics
+        """,
+        "post_processing": False,
+        "policies": {"staker_yields": metrics.policy_pool_yields},
+        "variables": {
+            "validator_pool_eth_staked": update_from_signal(
+                "validator_pool_eth_staked"
+            ),
+            "validator_pool_profit": update_from_signal("validator_pool_profit"),
+            "validator_pool_profit_yields": update_from_signal(
+                "validator_pool_profit_yields"
+            ),
+            "stakers_per_pool": update_from_signal("stakers_per_pool"),
+            "shared_validators_per_pool": update_from_signal(
+                "shared_validators_per_pool"
+            ),
+            "pool_size": update_from_signal("pool_size"),
         },
     },
 ]

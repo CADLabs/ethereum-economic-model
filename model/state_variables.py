@@ -13,6 +13,8 @@ from dataclasses import dataclass
 from datetime import datetime
 
 import model.constants as constants
+from model.utils import default
+from model.types import List
 import data.api.beaconchain as beaconchain
 import data.api.etherscan as etherscan
 import model.system_parameters as system_parameters
@@ -38,6 +40,23 @@ eth_staked: ETH = (
     beaconchain.get_total_validator_balance(default=5_000_000e9) / constants.gwei
 )
 eth_supply: ETH = etherscan.get_eth_supply(default=116_250_000e18) / constants.wei
+
+
+validator_count_distribution = np.array(
+    [
+        (validator.percentage_distribution * number_of_active_validators)
+        for validator in validator_environments
+    ],
+    dtype=int,
+)
+
+validator_percentage_distribution = np.array(
+    [validator.percentage_distribution for validator in validator_environments],
+    dtype=float,
+)
+
+# Set default value
+number_of_pools_per_validator_environment = 0 * validator_count_distribution
 
 
 @dataclass
@@ -77,6 +96,10 @@ class StateVariables:
     # Validator state variables
     number_of_validators_in_activation_queue: int = 0
     """The number of validators in activation queue"""
+    validators_in_activation_queue: np.ndarray = np.zeros(
+        (number_of_validator_environments, 1), dtype=int
+    )
+    """The number of validators in activation queue across validator environments"""
     average_effective_balance: Gwei = 32 * constants.gwei
     """The validator average effective balance"""
     number_of_active_validators: int = number_of_active_validators
@@ -159,10 +182,73 @@ class StateVariables:
     )
     """The total annualized profit (income received - costs) yields (percentage of investment amount)
     per validator environment"""
-    validator_count_distribution: np.ndarray = np.zeros(
-        (number_of_validator_environments, 1), dtype=int
+
+    validator_count_distribution: List[np.ndarray] = default(
+        validator_count_distribution
     )
     """The total number of validators per validator environment"""
+    validator_percentage_distribution: List[np.ndarray] = default(
+        validator_percentage_distribution
+    )
+    """
+    The percentage of validators in each environment, normalized to a total of 100%.
+
+    A vector with a value for each validator environment.
+    """
+    # Variables for Pool Compounding mechanism
+
+    number_of_pools: np.ndarray = np.zeros(
+        (number_of_validator_environments, 1), dtype=int
+    )
+    """The number of pools per validator environment"""
+
+    validator_pool_eth_staked: np.ndarray = np.zeros(
+        (number_of_validator_environments, 1), dtype=float
+    )
+    """The average ETH staked in pools, per validator environment"""
+
+    validator_pool_profit: np.ndarray = np.zeros(
+        (number_of_validator_environments, 1), dtype=float
+    )
+    """The average profit (ETH) per pool, per validator environment"""
+    validator_pool_profit_yields: np.ndarray = np.zeros(
+        (number_of_validator_environments, 1), dtype=float
+    )
+    """The average profit yields (%) per pool, per validator environment"""
+
+    pool_size: np.ndarray = np.zeros((number_of_validator_environments), dtype=int)
+    """"""
+
+    stakers_per_pool: np.ndarray = np.zeros(
+        (number_of_validator_environments, 1), dtype=int
+    )
+    """"""
+    shared_validators_per_pool: np.ndarray = np.zeros(
+        (number_of_validator_environments, 1), dtype=int
+    )
+    """"""
+
+    validators_in_activation_queue: np.ndarray = np.zeros(
+        (number_of_validator_environments), dtype=int
+    )
+    """The validator distribution counts for queued validators.
+    
+    Used by simulations implementing the pool compounding mechanism to allocate 
+    new validators to their respective validator environments. 
+    """
+    shared_validator_instances: np.ndarray = np.zeros(
+        (number_of_validator_environments), dtype=int
+    )
+    """New 'shared' validators initialised by pool environments leveraging compounding"""
+    number_of_shared_validators: np.ndarray = np.zeros(
+        (number_of_validator_environments), dtype=int
+    )
+    """The total number of shared validators initialised by pool environments leveraging compounding"""
+    validator_pools_available_profits_eth: np.ndarray = np.zeros(
+        (number_of_validator_environments), dtype=ETH
+    )
+    """The pooled profits available in validator environments for initializing new shared validator instances"""
+
     validator_hardware_costs: np.ndarray = np.zeros(
         (number_of_validator_environments, 1), dtype=USD
     )
