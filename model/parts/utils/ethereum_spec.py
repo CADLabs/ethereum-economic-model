@@ -3,6 +3,7 @@ Relevant methods from the official [eth2.0-specs](https://github.com/ethereum/et
 
 * Phase 0: https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/beacon-chain.md
 * Altair updates: https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md
+* Bellatrix updates: https://github.com/ethereum/consensus-specs/blob/dev/specs/bellatrix/beacon-chain.md
 """
 
 import model.constants as constants

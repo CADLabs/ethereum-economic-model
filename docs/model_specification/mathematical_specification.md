@@ -194,8 +194,8 @@ All System Parameters in this category use the same uppercase snake-case variabl
 | `EFFECTIVE_BALANCE_INCREMENT` | `1e9` | $\text{Gwei}$ |
 | `PROPOSER_REWARD_QUOTIENT` | `8` | None |
 | `WHISTLEBLOWER_REWARD_QUOTIENT` | `512` | None |
-| `MIN_SLASHING_PENALTY_QUOTIENT` | `64` | None |
-| `PROPORTIONAL_SLASHING_MULTIPLIER` | `2` | None |
+| `MIN_SLASHING_PENALTY_QUOTIENT` | `32` | None |
+| `PROPORTIONAL_SLASHING_MULTIPLIER` | `3` | None |
 | `TIMELY_HEAD_WEIGHT` | `14` | None |
 | `TIMELY_SOURCE_WEIGHT` | `14` | None |
 | `TIMELY_TARGET_WEIGHT` | `26` | None |
@@ -769,8 +769,8 @@ All System Parameters in this category use the same uppercase snake-case variabl
 | `EFFECTIVE_BALANCE_INCREMENT` | `1e9` | $\text{Gwei}$ |
 | `PROPOSER_REWARD_QUOTIENT` | `8` | None |
 | `WHISTLEBLOWER_REWARD_QUOTIENT` | `512` | None |
-| `MIN_SLASHING_PENALTY_QUOTIENT` | `64` | None |
-| `PROPORTIONAL_SLASHING_MULTIPLIER` | `2` | None |
+| `MIN_SLASHING_PENALTY_QUOTIENT` | `32` | None |
+| `PROPORTIONAL_SLASHING_MULTIPLIER` | `3` | None |
 | `TIMELY_HEAD_WEIGHT` | `14` | None |
 | `TIMELY_SOURCE_WEIGHT` | `14` | None |
 | `TIMELY_TARGET_WEIGHT` | `26` | None |

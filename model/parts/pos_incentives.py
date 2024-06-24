@@ -262,12 +262,13 @@ def policy_slashing(
 ) -> typing.Dict[str, Gwei]:
     """
     ## Slashing Policy Function
-    Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#modified-slash_validator
+    Derived from https://github.com/ethereum/consensus-specs/blob/dev/specs/bellatrix/beacon-chain.md#modified-slash_validator
 
     Extract from spec:
     ```python
     state.slashings[epoch % EPOCHS_PER_SLASHINGS_VECTOR] += validator.effective_balance
-    decrease_balance(state, slashed_index, validator.effective_balance // MIN_SLASHING_PENALTY_QUOTIENT_ALTAIR)
+    slashing_penalty = validator.effective_balance // MIN_SLASHING_PENALTY_QUOTIENT_BELLATRIX  # [Modified in Bellatrix]
+    decrease_balance(state, slashed_index, slashing_penalty)
 
     # Apply proposer and whistleblower rewards
     proposer_index = get_beacon_proposer_index(state)
@@ -279,14 +280,17 @@ def policy_slashing(
     increase_balance(state, whistleblower_index, Gwei(whistleblower_reward - proposer_reward))
     ```
 
-    Derived from https://github.com/ethereum/eth2.0-specs/blob/dev/specs/altair/beacon-chain.md#slashings
+    Derived from https://github.com/ethereum/consensus-specs/blob/dev/specs/bellatrix/beacon-chain.md#slashings
 
     Extract from spec:
     ```python
     def process_slashings(state: BeaconState) -> None:
         epoch = get_current_epoch(state)
         total_balance = get_total_active_balance(state)
-        adjusted_total_slashing_balance = min(sum(state.slashings) * PROPORTIONAL_SLASHING_MULTIPLIER_ALTAIR, total_balance)
+        adjusted_total_slashing_balance = min(
+            sum(state.slashings) * PROPORTIONAL_SLASHING_MULTIPLIER_BELLATRIX,  # [Modified in Bellatrix]
+            total_balance
+        )
         for index, validator in enumerate(state.validators):
             if validator.slashed and epoch + EPOCHS_PER_SLASHINGS_VECTOR // 2 == validator.withdrawable_epoch:
                 increment = EFFECTIVE_BALANCE_INCREMENT  # Factored out from penalty numerator to avoid uint64 overflow
