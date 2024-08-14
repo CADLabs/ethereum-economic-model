@@ -7,7 +7,7 @@ kernel:
 	python3 -m ipykernel install --user --name python-cadlabs-eth-model --display-name "Python (CADLabs Ethereum Model)"
 
 plotly:
-	jupyter labextension install jupyterlab-plotly@4.14.3
+	jupyter labextension install jupyterlab-plotly@5.23.0
 
 start-lab:
 	jupyter lab
