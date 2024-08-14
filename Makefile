@@ -27,7 +27,7 @@ docs-pdoc:
 
 docs-jupyter-book:
 	jupyter-book clean docs
-	python jupyter_book.py
+	python build_docs.py
 
 serve-docs:
 	gunicorn -w 4 -b 127.0.0.1:5000 docs.server:app
