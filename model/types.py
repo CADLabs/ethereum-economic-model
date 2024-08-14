@@ -1,5 +1,5 @@
 """
-Various Python types used in the model
+Various Python types used in the model.
 """
 
 import numpy as np

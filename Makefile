@@ -20,15 +20,14 @@ test: execute-notebooks
 	# Run Pytest tests
 	python3 -m pytest -m "not api_test" tests
 
-build-docs: docs-pdoc docs-jupyter-book
+build-docs: docs-jupyter-book
 
 docs-pdoc:
 	pdoc --html model -o docs --force
 
 docs-jupyter-book:
 	jupyter-book clean docs
-	jupyter-book build --config docs/_config.yml --toc docs/_toc.yml --path-output docs .
-	cp -r ./docs/model ./docs/_build/html/docs/model
+	python build_docs.py
 
 serve-docs:
 	gunicorn -w 4 -b 127.0.0.1:5000 docs.server:app
