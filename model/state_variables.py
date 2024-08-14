@@ -26,6 +26,7 @@ from model.types import (
     Percentage,
     Stage,
 )
+from model.utils import default
 from data.historical_values import eth_price_mean, eth_price_min, eth_price_max
 
 
@@ -137,46 +138,46 @@ class StateVariables:
     """The total realized MEV to validators post Proof-of-Stake"""
 
     # System metric state variables
-    validator_eth_staked: np.ndarray = np.zeros(
-        (number_of_validator_environments, 1), dtype=int
+    validator_eth_staked: np.ndarray = default(
+        np.zeros((number_of_validator_environments, 1), dtype=int)
     )
     """The ETH staked per validator environment"""
-    validator_revenue: np.ndarray = np.zeros(
-        (number_of_validator_environments, 1), dtype=int
+    validator_revenue: np.ndarray = default(
+        np.zeros((number_of_validator_environments, 1), dtype=int)
     )
     """The total revenue (income received) for performing PoS duties per validator environment"""
-    validator_profit: np.ndarray = np.zeros(
-        (number_of_validator_environments, 1), dtype=int
+    validator_profit: np.ndarray = default(
+        np.zeros((number_of_validator_environments, 1), dtype=int)
     )
     """The total profit (income received - costs) per validator environment"""
-    validator_revenue_yields: np.ndarray = np.zeros(
-        (number_of_validator_environments, 1), dtype=int
+    validator_revenue_yields: np.ndarray = default(
+        np.zeros((number_of_validator_environments, 1), dtype=int)
     )
     """The total annualized revenue (income received) yields (percentage of investment amount)
     per validator environment"""
-    validator_profit_yields: np.ndarray = np.zeros(
-        (number_of_validator_environments, 1), dtype=int
+    validator_profit_yields: np.ndarray = default(
+        np.zeros((number_of_validator_environments, 1), dtype=int)
     )
     """The total annualized profit (income received - costs) yields (percentage of investment amount)
     per validator environment"""
-    validator_count_distribution: np.ndarray = np.zeros(
-        (number_of_validator_environments, 1), dtype=int
+    validator_count_distribution: np.ndarray = default(
+        np.zeros((number_of_validator_environments, 1), dtype=int)
     )
     """The total number of validators per validator environment"""
-    validator_hardware_costs: np.ndarray = np.zeros(
-        (number_of_validator_environments, 1), dtype=USD
+    validator_hardware_costs: np.ndarray = default(
+        np.zeros((number_of_validator_environments, 1), dtype=USD)
     )
     """The total validator hardware operation costs per validator environment"""
-    validator_cloud_costs: np.ndarray = np.zeros(
-        (number_of_validator_environments, 1), dtype=USD
+    validator_cloud_costs: np.ndarray = default(
+        np.zeros((number_of_validator_environments, 1), dtype=USD)
     )
     """The total validator cloud operation costs per validator environment"""
-    validator_third_party_costs: np.ndarray = np.zeros(
-        (number_of_validator_environments, 1), dtype=USD
+    validator_third_party_costs: np.ndarray = default(
+        np.zeros((number_of_validator_environments, 1), dtype=USD)
     )
     """The total validator third-party fee costs validator environment"""
-    validator_costs: np.ndarray = np.zeros(
-        (number_of_validator_environments, 1), dtype=USD
+    validator_costs: np.ndarray = default(
+        np.zeros((number_of_validator_environments, 1), dtype=USD)
     )
     """The total validator costs validator environment"""
 
