@@ -1,13 +1,19 @@
 format: jb-book
-root: docs/landing-page
+root: README
 parts:
+  - caption: Model Overview
+    chapters:
+    # - file: README
+    #   title: "Model README"
+    - file: ASSUMPTIONS
+    - file: ROADMAP
+    - file: CHANGELOG
   - caption: Model Specification
     chapters:
     - file: docs/model_specification/mathematical_specification
   - caption: Documentation
     chapters:
-    - url: https://cadlabs.gitlab.io/cadlabs-ethereum-model-docs/docs/index.html
-      title: Model Code Documentation
+    - file: docs/code.rst
   - caption: Experiment Notebooks
     chapters:
     - file: experiments/notebooks/0_README
